@@ -2,6 +2,9 @@
 node_modules/
 npm-debug.log*
 
+# Backend files (moved to backend-files/)
+backend-files/
+
 # Environment files
 .env
 .env.local

@@ -1,32 +1,21 @@
 {
   "name": "vibe-awards",
   "version": "1.0.0",
-  "description": "Vibe Awards - Where builders compete live and unicorns are born",
-  "main": "vibe-forge-server.js",
+  "description": "The Vibe Awards - Apple-polished web platform celebrating AI excellence",
+  "main": "index.html",
   "scripts": {
-    "start": "node vibe-forge-server.js",
-    "dev": "nodemon vibe-forge-server.js",
-    "forge": "node vibe-forge-backend.js"
-  },
-  "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
-    "archiver": "^6.0.1",
-    "@anthropic-ai/sdk": "^0.20.0",
-    "openai": "^4.28.0",
-    "dotenv": "^16.3.1"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.2"
+    "build": "echo 'Static build complete'",
+    "start": "echo 'Static site ready'"
   },
   "keywords": [
-    "vibe",
-    "forge",
+    "static",
+    "html",
+    "css",
+    "javascript",
     "ai",
-    "startup",
-    "architect",
-    "code-generation"
+    "awards",
+    "apple-design"
   ],
-  "author": "Vibe Awards",
+  "author": "AgewellEPM",
   "license": "MIT"
 }
