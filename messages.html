@@ -1074,226 +1074,169 @@
     <script src="js/database.js"></script>
 </head>
 <body>
-    <!-- Animated Background -->
-    <div class="messages-background">
-        <div class="gradient-orb orb1"></div>
-        <div class="gradient-orb orb2"></div>
-        <div class="gradient-orb orb3"></div>
+    <!-- AI Companies Bar -->
+    <div class="companies-bar">
+        <div class="companies-track">
+            <div class="companies-content">
+                <span class="company">OpenAI</span>
+                <span class="dot">•</span>
+                <span class="company">Anthropic</span>
+                <span class="dot">•</span>
+                <span class="company">Google DeepMind</span>
+                <span class="dot">•</span>
+                <span class="company">Meta AI</span>
+                <span class="dot">•</span>
+                <span class="company">Stability AI</span>
+                <span class="dot">•</span>
+                <span class="company">Midjourney</span>
+                <span class="dot">•</span>
+                <span class="company">Cohere</span>
+                <span class="dot">•</span>
+                <span class="company">Inflection AI</span>
+                <span class="dot">•</span>
+                <span class="company">Runway</span>
+                <span class="dot">•</span>
+                <span class="company">Hugging Face</span>
+                <span class="dot">•</span>
+                <span class="company">Replicate</span>
+                <span class="dot">•</span>
+                <span class="company">Character AI</span>
+                <span class="dot">•</span>
+                <span class="company">Eleven Labs</span>
+                <span class="dot">•</span>
+                <span class="company">Perplexity</span>
+                <span class="dot">•</span>
+                <span class="company">Mistral AI</span>
+                <span class="dot">•</span>
+            </div>
+            <div class="companies-content" aria-hidden="true">
+                <span class="company">OpenAI</span>
+                <span class="dot">•</span>
+                <span class="company">Anthropic</span>
+                <span class="dot">•</span>
+                <span class="company">Google DeepMind</span>
+                <span class="dot">•</span>
+                <span class="company">Meta AI</span>
+                <span class="dot">•</span>
+                <span class="company">Stability AI</span>
+                <span class="dot">•</span>
+                <span class="company">Midjourney</span>
+                <span class="dot">•</span>
+                <span class="company">Cohere</span>
+                <span class="dot">•</span>
+                <span class="company">Inflection AI</span>
+                <span class="dot">•</span>
+                <span class="company">Runway</span>
+                <span class="dot">•</span>
+                <span class="company">Hugging Face</span>
+                <span class="dot">•</span>
+                <span class="company">Replicate</span>
+                <span class="dot">•</span>
+                <span class="company">Character AI</span>
+                <span class="dot">•</span>
+                <span class="company">Eleven Labs</span>
+                <span class="dot">•</span>
+                <span class="company">Perplexity</span>
+                <span class="dot">•</span>
+                <span class="company">Mistral AI</span>
+                <span class="dot">•</span>
+            </div>
+        </div>
     </div>
+
     <!-- Navigation -->
     <nav>
-        <div class="nav-container container-fluid">
-            <a href="index.html" class="nav-logo">🏆 The Vibe Awards</a>
-            <div class="nav-links">
-                <!-- Getting Started -->
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="logo-icon">🏆</span>
+                The Vibe Awards
+            </a>
+            <div class="nav-menu">
+                <!-- Competition Dropdown -->
                 <div class="nav-dropdown">
-                    <span class="nav-dropdown-toggle">Getting Started</span>
-                    <div class="nav-dropdown-menu">
-                        <a href="getting-started.html" class="nav-dropdown-item">🚀 Getting Started Hub</a>
-                        <a href="index.html" class="nav-dropdown-item">🏆 The Vibe Awards</a>
+                    <span class="nav-link has-dropdown">Competition</span>
+                    <div class="dropdown-menu">
+                        <a href="competition.html" class="dropdown-item">Main Competition</a>
+                        <a href="battle-arena.html" class="dropdown-item">Battle Arena</a>
+                        <a href="app-battle-arena.html" class="dropdown-item">App Battles</a>
+                        <a href="challenge-mode.html" class="dropdown-item">Challenge Mode</a>
+                        <a href="tournament.html" class="dropdown-item">Tournament</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="leaderboard.html" class="dropdown-item">Leaderboard</a>
+                        <a href="winners.html" class="dropdown-item">Past Winners</a>
                     </div>
                 </div>
 
-                <!-- Toolkit / Hub -->
+                <!-- Build Dropdown -->
                 <div class="nav-dropdown">
-                    <span class="nav-dropdown-toggle">Toolkit Hub</span>
-                    <div class="nav-dropdown-menu">
-                        <a href="vibe-toolkit.html" class="nav-dropdown-item">🛠️ Vibe Toolkit</a>
-                        <a href="vibe-hub.html" class="nav-dropdown-item">🎯 Vibe Hub Central</a>
+                    <span class="nav-link has-dropdown">Build</span>
+                    <div class="dropdown-menu">
+                        <a href="vibe-forge.html" class="dropdown-item">Vibe Forge</a>
+                        <a href="vibe-toolkit.html" class="dropdown-item">Vibe Toolkit</a>
+                        <a href="getting-started.html" class="dropdown-item">Getting Started</a>
+                        <a href="brainstorm-workspace.html" class="dropdown-item">Brainstorm</a>
+                        <a href="backlog-synthesizer.html" class="dropdown-item">Backlog</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="deploy-presets.html" class="dropdown-item">Deploy Presets</a>
                     </div>
                 </div>
 
-                <!-- Profile / Messages -->
+                <!-- Community Dropdown -->
                 <div class="nav-dropdown">
-                    <span class="nav-dropdown-toggle">Profile</span>
-                    <div class="nav-dropdown-menu">
-                        <a href="profile.html" class="nav-dropdown-item">👤 My Profile</a>
-                        <a href="messages.html" class="nav-dropdown-item">💬 Messages</a>
-                        <a href="directory.html" class="nav-dropdown-item">🌐 Directory</a>
+                    <span class="nav-link has-dropdown">Community</span>
+                    <div class="dropdown-menu">
+                        <a href="team-up.html" class="dropdown-item">Team Up</a>
+                        <a href="vibe-hub.html" class="dropdown-item">Vibe Hub</a>
+                        <a href="showcase.html" class="dropdown-item">Showcase</a>
+                        <a href="gallery.html" class="dropdown-item">Gallery</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="directory.html" class="dropdown-item">Builders Directory</a>
+                        <a href="messages.html" class="dropdown-item">Messages</a>
                     </div>
                 </div>
 
-                <!-- Battle Arena / Leaderboard / Team Up -->
+                <!-- Live Dropdown -->
                 <div class="nav-dropdown">
-                    <span class="nav-dropdown-toggle">Competition</span>
-                    <div class="nav-dropdown-menu">
-                        <a href="apple-magic-battle.html" class="nav-dropdown-item">⚔️ Battle Arena</a>
-                        <a href="leaderboard.html" class="nav-dropdown-item">📊 Leaderboard</a>
-                        <a href="team-up.html" class="nav-dropdown-item">🤝 Team Up</a>
+                    <span class="nav-link has-dropdown">Live</span>
+                    <div class="dropdown-menu">
+                        <a href="stream-dashboard.html" class="dropdown-item">Stream Dashboard</a>
+                        <a href="awards-ceremony.html" class="dropdown-item">Awards Ceremony</a>
+                        <a href="random-drop-lobby.html" class="dropdown-item">Random Drop</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="voting-history.html" class="dropdown-item">Voting History</a>
                     </div>
                 </div>
 
-                <!-- Submit -->
-                <a href="submit-app.html" class="nav-submit-link">Submit App</a>
-                <a href="signup.html" class="nav-signup-btn">Sign Up</a>
+                <!-- About Dropdown -->
+                <div class="nav-dropdown">
+                    <span class="nav-link has-dropdown">About</span>
+                    <div class="dropdown-menu">
+                        <a href="about.html" class="dropdown-item">About Us</a>
+                        <a href="vibe-manifesto.html" class="dropdown-item">Manifesto</a>
+                        <a href="why-vibe-awards.html" class="dropdown-item">Why Vibe</a>
+                        <a href="roadmap.html" class="dropdown-item">Roadmap</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="contact.html" class="dropdown-item">Contact</a>
+                    </div>
+                </div>
+
+                <!-- Direct Links -->
+                <a href="awards.html" class="nav-link">Awards</a>
+
+                <!-- Actions -->
+                <div class="nav-actions">
+                    <a href="notifications.html" class="nav-icon-btn" title="Notifications">🔔</a>
+                    <a href="profile.html" class="nav-icon-btn" title="Profile">👤</a>
+                    <a href="submit-app.html" class="nav-cta">Submit App</a>
+                </div>
             </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button type="button" class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
         </div>
     </nav>
 
-    <!-- Messages Container -->
-    <div class="messages-container container-fluid">
-        <!-- Sidebar -->
-        <div class="messages-sidebar">
-            <div class="sidebar-header">
-                <h2 class="sidebar-title">Messages</h2>
-                <button type="button" class="new-message-btn btn-fluid" onclick="startNewConversation()">+ New</button>
-            </div>
-            <input type="text" class="search-box" placeholder="Search conversations..." id="searchBox" aria-label="Search conversations...">
-            <div class="conversation-list" id="conversationList">
-                <!-- Chat Rooms Section -->
-                <div class="room-section">
-                    <div class="section-header">
-                        <h3 class="section-title">
-                            🌐 Vibe Chat Rooms
-                        </h3>
-                        <div class="status-indicator">
-                            <div class="status-dot"></div>
-                            Live
-                        </div>
-                    </div>
-                    <div class="conversation-item chat-room-coders" onclick="openChatRoom('vibe-coders-lounge')">
-                        <div class="conversation-header">
-                            <span class="conversation-name">🔥 Vibe Coders Lounge</span>
-                            <div class="conversation-status">
-                                <span class="online-badge online-badge-green">247 online</span>
-                                <span class="conversation-time">now</span>
-                            </div>
-                        </div>
-                        <div class="conversation-preview">🎯 Main hangout for vibe coders - share breakthroughs, get unstuck, celebrate wins!</div>
-                    </div>
-
-                    <div class="conversation-item chat-room-wizards" onclick="openChatRoom('anthropic-claude-wizards')">
-                        <div class="conversation-header">
-                            <span class="conversation-name">🧙‍♂️ Anthropic Claude Wizards</span>
-                            <div class="conversation-status">
-                                <span class="online-badge online-badge-purple">89 online</span>
-                                <span class="conversation-time">now</span>
-                            </div>
-                        </div>
-                        <div class="conversation-preview">🎭 Master Claude prompt engineering, share epic conversations, build AI magic!</div>
-                    </div>
-
-                    <div class="conversation-item chat-room-builders" onclick="openChatRoom('ai-app-builders')">
-                        <div class="conversation-header">
-                            <span class="conversation-name">🚀 AI App Builders</span>
-                            <div class="conversation-status">
-                                <span class="online-badge online-badge-orange">156 online</span>
-                                <span class="conversation-time">now</span>
-                            </div>
-                        </div>
-                        <div class="conversation-preview">⚡ Ship AI-powered apps faster - from MVP to unicorn status!</div>
-                    </div>
-
-                    <div class="conversation-item chat-room-battle" onclick="openChatRoom('battle-arena-hype')">
-                        <div class="conversation-header">
-                            <span class="conversation-name">⚔️ Battle Arena Hype</span>
-                            <div class="conversation-status">
-                                <span class="online-badge online-badge-red">312 online</span>
-                                <span class="conversation-time">now</span>
-                            </div>
-                        </div>
-                        <div class="conversation-preview">🎮 Live battle commentary, predictions, and epic moment celebrations!</div>
-                    </div>
-
-                    <div class="conversation-item chat-room-nightcode" onclick="openChatRoom('late-night-code')">
-                        <div class="conversation-header">
-                            <span class="conversation-name">🌙 Late Night Code Sessions</span>
-                            <div class="conversation-status">
-                                <span class="online-badge online-badge-indigo">67 online</span>
-                                <span class="conversation-time">now</span>
-                            </div>
-                        </div>
-                        <div class="conversation-preview">🦉 For night owl coders - debug together, share midnight breakthroughs!</div>
-                    </div>
-
-                    <div class="conversation-item chat-room-marketplace" onclick="openChatRoom('vibe-marketplace')">
-                        <div class="conversation-header">
-                            <span class="conversation-name">💎 Vibe Marketplace</span>
-                            <div class="conversation-status">
-                                <span class="online-badge online-badge-teal">134 online</span>
-                                <span class="conversation-time">now</span>
-                            </div>
-                        </div>
-                        <div class="conversation-preview">💰 Buy/sell AI tools, prompts, templates - the vibe coder economy!</div>
-                    </div>
-
-                    <div class="conversation-item chat-room-founders" onclick="openChatRoom('founders-only')">
-                        <div class="conversation-header">
-                            <span class="conversation-name">👑 Founders Only</span>
-                            <div class="conversation-status">
-                                <span class="online-badge online-badge-yellow">23 online</span>
-                                <span class="conversation-time">now</span>
-                            </div>
-                        </div>
-                        <div class="conversation-preview">💡 Exclusive for startup founders - funding, growth hacks, unicorn strategies!</div>
-                    </div>
-
-                    <div class="conversation-item chat-room-chaos" onclick="openChatRoom('random-chaos')">
-                        <div class="conversation-header">
-                            <span class="conversation-name">🎪 Random Chaos</span>
-                            <div class="conversation-status">
-                                <span class="online-badge online-badge-pink">423 online</span>
-                                <span class="conversation-time">now</span>
-                            </div>
-                        </div>
-                        <div class="conversation-preview">🎲 Anything goes - memes, shower thoughts, existential AI debates!</div>
-                    </div>
-                </div>
-
-                <!-- Direct Messages Section -->
-                <div class="room-section">
-                    <div class="section-header">
-                        <h3 class="section-title">
-                            💬 Direct Messages
-                        </h3>
-                        <div class="status-indicator">
-                            <div class="status-dot"></div>
-                            Online
-                        </div>
-                    </div>
-                    <div class="conversation-item active" onclick="openConversation('alex-chen')">
-                        <div class="conversation-header">
-                            <span class="conversation-name">Alex Chen</span>
-                            <span class="conversation-time">2m ago</span>
-                        </div>
-                        <div class="conversation-preview">That TinkyBink breakthrough was pure vibe-coding magic! How did you...</div>
-                    </div>
-                <div class="conversation-item" onclick="openConversation('sarah-dev')">
-                    <div class="conversation-header">
-                        <span class="conversation-name">Sarah Johnson</span>
-                        <div class="conversation-unread">
-                            <span class="conversation-time">1h ago</span>
-                            <div class="unread-indicator"></div>
-                        </div>
-                    </div>
-                    <div class="conversation-preview">Your AI conversation techniques for UX are inspiring! Can we vibe-code...</div>
-                </div>
-                <div class="conversation-item" onclick="openConversation('mike-ai')">
-                    <div class="conversation-header">
-                        <span class="conversation-name">Mike Rodriguez</span>
-                        <span class="conversation-time">3h ago</span>
-                    </div>
-                    <div class="conversation-preview">The music app battle was incredible! How do you capture emotion through...</div>
-                </div>
-                <div class="conversation-item" onclick="openConversation('emily-code')">
-                    <div class="conversation-header">
-                        <span class="conversation-name">Emily Watson</span>
-                        <span class="conversation-time">1d ago</span>
-                    </div>
-                    <div class="conversation-preview">Your vibe-marketing insights could revolutionize app launches...</div>
-                </div>
-                <div class="conversation-item" onclick="openConversation('david-vibe')">
-                    <div class="conversation-header">
-                        <span class="conversation-name">David Kim</span>
-                        <span class="conversation-time">2d ago</span>
-                    </div>
-                    <div class="conversation-preview">Your storytelling about AI collaboration captures the magic perfectly!</div>
-                </div>
-            </div>
-            </div>
-        </div>
-
-        <!-- Main Chat Area -->
+    <!-- Main Chat Area -->
         <div class="chat-area" id="chatArea">
             <div class="chat-header">
                 <div class="chat-user-info">

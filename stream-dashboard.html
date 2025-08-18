@@ -1,517 +1,165 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vibe Awards - Stream Producer Dashboard</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --neon-pink: #FF10F0;
-            --neon-blue: #00FFF0;
-            --neon-purple: #9D00FF;
-            --neon-green: #39FF14;
-            --neon-orange: #FF6600;
-            --neon-yellow: #FFFF00;
-            --dark-bg: #0A0A0A;
-            --panel-bg: #1A1A1A;
-            --border-color: #333;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--dark-bg);
-            color: #F5F5F7;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* Dashboard Layout */
-        .dashboard {
-            display: grid;
-            grid-template-columns: 300px 1fr 350px;
-            grid-template-rows: 80px 1fr;
-            height: 100vh;
-            gap: 20px;
-            padding: 20px;
-        }
-
-        /* Header */
-        .header {
-            grid-column: 1 / -1;
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-        }
-
-        .header-title {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo {
-            font-size: 32px;
-        }
-
-        .title {
-            font-size: 24px;
-            font-weight: 700;
-            background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .stream-status {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .status-indicator {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 20px;
-            background: rgba(57, 255, 20, 0.1);
-            border: 1px solid var(--neon-green);
-            border-radius: 10px;
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            background: var(--neon-green);
-            border-radius: 50%;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        .viewer-stats {
-            display: flex;
-            gap: 30px;
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--neon-blue);
-        }
-
-        .stat-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.6;
-        }
-
-        /* Left Panel - Stream Controls */
-        .stream-controls {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 15px;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .panel-header {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .control-section {
-            margin-bottom: 30px;
-        }
-
-        .control-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: var(--neon-purple);
-        }
-
-        .control-btn {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: white;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .control-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
-        }
-
-        .control-btn.primary {
-            background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
-            border: none;
-        }
-
-        .control-btn.danger {
-            background: linear-gradient(135deg, #FF375F, #FF0040);
-            border: none;
-        }
-
-        .control-btn.success {
-            background: linear-gradient(135deg, var(--neon-green), #00FF00);
-            border: none;
-            color: black;
-        }
-
-        /* Center Panel - Main View */
-        .main-view {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        /* Team Grid */
-        .team-grid {
-            flex: 1;
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 15px;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .teams-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 15px;
-        }
-
-        .team-tile {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 15px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .team-tile:hover {
-            background: rgba(255, 255, 255, 0.06);
-            transform: translateY(-2px);
-        }
-
-        .team-tile.active {
-            border-color: var(--neon-green);
-            background: linear-gradient(135deg, rgba(57, 255, 20, 0.1), rgba(0, 255, 240, 0.1));
-        }
-
-        .team-tile.eliminated {
-            opacity: 0.4;
-            border-color: #FF375F;
-        }
-
-        .team-tile-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .team-name {
-            font-size: 16px;
-            font-weight: 700;
-        }
-
-        .team-score {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--neon-yellow);
-        }
-
-        .team-members-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            margin-bottom: 10px;
-        }
-
-        .member-tag {
-            padding: 3px 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            font-size: 11px;
-        }
-
-        .team-progress {
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-            overflow: hidden;
-            margin-bottom: 10px;
-        }
-
-        .team-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));
-            transition: width 0.5s ease;
-        }
-
-        .team-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .team-action-btn {
-            flex: 1;
-            padding: 6px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            color: white;
-            font-size: 11px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .team-action-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Challenge Timer */
-        .challenge-timer {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .timer-display {
-            font-size: 72px;
-            font-weight: 800;
-            font-variant-numeric: tabular-nums;
-            background: linear-gradient(90deg, var(--neon-yellow), var(--neon-green));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
-        }
-
-        .timer-controls {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .timer-btn {
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .timer-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Right Panel - Activity & Chat */
-        .right-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        /* Event Log */
-        .event-log {
-            flex: 1;
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 15px;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .event-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .event-item {
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.03);
-            border-left: 3px solid var(--neon-blue);
-            border-radius: 5px;
-            font-size: 13px;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .event-time {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 4px;
-        }
-
-        .event-item.critical {
-            border-left-color: var(--neon-orange);
-            background: rgba(255, 102, 0, 0.1);
-        }
-
-        .event-item.success {
-            border-left-color: var(--neon-green);
-            background: rgba(57, 255, 20, 0.1);
-        }
-
-        /* Quick Actions */
-        .quick-actions {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 15px;
-            padding: 20px;
-        }
-
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
-        .action-btn {
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .action-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: scale(1.05);
-        }
-
-        .action-icon {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-
-        .action-label {
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        /* Modal for announcements */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--panel-bg);
-            border: 2px solid var(--neon-purple);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-        }
-
-        .modal-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .modal-input {
-            width: 100%;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: white;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-        }
-
-        .modal-btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-        }
-
-        .modal-btn.cancel {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        .modal-btn.confirm {
-            background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
-            color: white;
-        }
-    </style>
-</head>
 <body>
+    <!-- AI Companies Bar -->
+    <div class="companies-bar">
+        <div class="companies-track">
+            <div class="companies-content">
+                <span class="company">OpenAI</span>
+                <span class="dot">•</span>
+                <span class="company">Anthropic</span>
+                <span class="dot">•</span>
+                <span class="company">Google DeepMind</span>
+                <span class="dot">•</span>
+                <span class="company">Meta AI</span>
+                <span class="dot">•</span>
+                <span class="company">Stability AI</span>
+                <span class="dot">•</span>
+                <span class="company">Midjourney</span>
+                <span class="dot">•</span>
+                <span class="company">Cohere</span>
+                <span class="dot">•</span>
+                <span class="company">Inflection AI</span>
+                <span class="dot">•</span>
+                <span class="company">Runway</span>
+                <span class="dot">•</span>
+                <span class="company">Hugging Face</span>
+                <span class="dot">•</span>
+                <span class="company">Replicate</span>
+                <span class="dot">•</span>
+                <span class="company">Character AI</span>
+                <span class="dot">•</span>
+                <span class="company">Eleven Labs</span>
+                <span class="dot">•</span>
+                <span class="company">Perplexity</span>
+                <span class="dot">•</span>
+                <span class="company">Mistral AI</span>
+                <span class="dot">•</span>
+            </div>
+            <div class="companies-content" aria-hidden="true">
+                <span class="company">OpenAI</span>
+                <span class="dot">•</span>
+                <span class="company">Anthropic</span>
+                <span class="dot">•</span>
+                <span class="company">Google DeepMind</span>
+                <span class="dot">•</span>
+                <span class="company">Meta AI</span>
+                <span class="dot">•</span>
+                <span class="company">Stability AI</span>
+                <span class="dot">•</span>
+                <span class="company">Midjourney</span>
+                <span class="dot">•</span>
+                <span class="company">Cohere</span>
+                <span class="dot">•</span>
+                <span class="company">Inflection AI</span>
+                <span class="dot">•</span>
+                <span class="company">Runway</span>
+                <span class="dot">•</span>
+                <span class="company">Hugging Face</span>
+                <span class="dot">•</span>
+                <span class="company">Replicate</span>
+                <span class="dot">•</span>
+                <span class="company">Character AI</span>
+                <span class="dot">•</span>
+                <span class="company">Eleven Labs</span>
+                <span class="dot">•</span>
+                <span class="company">Perplexity</span>
+                <span class="dot">•</span>
+                <span class="company">Mistral AI</span>
+                <span class="dot">•</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="logo-icon">🏆</span>
+                The Vibe Awards
+            </a>
+            <div class="nav-menu">
+                <!-- Competition Dropdown -->
+                <div class="nav-dropdown">
+                    <span class="nav-link has-dropdown">Competition</span>
+                    <div class="dropdown-menu">
+                        <a href="competition.html" class="dropdown-item">Main Competition</a>
+                        <a href="battle-arena.html" class="dropdown-item">Battle Arena</a>
+                        <a href="app-battle-arena.html" class="dropdown-item">App Battles</a>
+                        <a href="challenge-mode.html" class="dropdown-item">Challenge Mode</a>
+                        <a href="tournament.html" class="dropdown-item">Tournament</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="leaderboard.html" class="dropdown-item">Leaderboard</a>
+                        <a href="winners.html" class="dropdown-item">Past Winners</a>
+                    </div>
+                </div>
+
+                <!-- Build Dropdown -->
+                <div class="nav-dropdown">
+                    <span class="nav-link has-dropdown">Build</span>
+                    <div class="dropdown-menu">
+                        <a href="vibe-forge.html" class="dropdown-item">Vibe Forge</a>
+                        <a href="vibe-toolkit.html" class="dropdown-item">Vibe Toolkit</a>
+                        <a href="getting-started.html" class="dropdown-item">Getting Started</a>
+                        <a href="brainstorm-workspace.html" class="dropdown-item">Brainstorm</a>
+                        <a href="backlog-synthesizer.html" class="dropdown-item">Backlog</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="deploy-presets.html" class="dropdown-item">Deploy Presets</a>
+                    </div>
+                </div>
+
+                <!-- Community Dropdown -->
+                <div class="nav-dropdown">
+                    <span class="nav-link has-dropdown">Community</span>
+                    <div class="dropdown-menu">
+                        <a href="team-up.html" class="dropdown-item">Team Up</a>
+                        <a href="vibe-hub.html" class="dropdown-item">Vibe Hub</a>
+                        <a href="showcase.html" class="dropdown-item">Showcase</a>
+                        <a href="gallery.html" class="dropdown-item">Gallery</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="directory.html" class="dropdown-item">Builders Directory</a>
+                        <a href="messages.html" class="dropdown-item">Messages</a>
+                    </div>
+                </div>
+
+                <!-- Live Dropdown -->
+                <div class="nav-dropdown">
+                    <span class="nav-link has-dropdown">Live</span>
+                    <div class="dropdown-menu">
+                        <a href="stream-dashboard.html" class="dropdown-item">Stream Dashboard</a>
+                        <a href="awards-ceremony.html" class="dropdown-item">Awards Ceremony</a>
+                        <a href="random-drop-lobby.html" class="dropdown-item">Random Drop</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="voting-history.html" class="dropdown-item">Voting History</a>
+                    </div>
+                </div>
+
+                <!-- About Dropdown -->
+                <div class="nav-dropdown">
+                    <span class="nav-link has-dropdown">About</span>
+                    <div class="dropdown-menu">
+                        <a href="about.html" class="dropdown-item">About Us</a>
+                        <a href="vibe-manifesto.html" class="dropdown-item">Manifesto</a>
+                        <a href="why-vibe-awards.html" class="dropdown-item">Why Vibe</a>
+                        <a href="roadmap.html" class="dropdown-item">Roadmap</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="contact.html" class="dropdown-item">Contact</a>
+                    </div>
+                </div>
+
+                <!-- Direct Links -->
+                <a href="awards.html" class="nav-link">Awards</a>
+
+                <!-- Actions -->
+                <div class="nav-actions">
+                    <a href="notifications.html" class="nav-icon-btn" title="Notifications">🔔</a>
+                    <a href="profile.html" class="nav-icon-btn" title="Profile">👤</a>
+                    <a href="submit-app.html" class="nav-cta">Submit App</a>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button type="button" class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+        </div>
+    </nav>
     <div class="dashboard">
         <!-- Header -->
         <div class="header">
