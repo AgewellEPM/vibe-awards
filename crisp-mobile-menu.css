@@ -1,0 +1,209 @@
+/* Crisp Mobile Menu - Clean & Reliable */
+
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 8px;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.mobile-menu-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu-toggle:active {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 999999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    padding-top: 88px;
+    overflow-y: auto;
+}
+
+.mobile-menu.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Mobile Menu Content */
+.mobile-menu-content {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Mobile Menu Sections */
+.mobile-menu-section {
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 20px;
+}
+
+.mobile-menu-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.mobile-menu-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #888888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+
+/* Mobile Menu Links */
+.mobile-menu-link {
+    display: block;
+    padding: 12px 0;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 400;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease;
+}
+
+.mobile-menu-link:last-child {
+    border-bottom: none;
+}
+
+.mobile-menu-link:hover {
+    color: #007AFF;
+    padding-left: 10px;
+}
+
+.mobile-menu-link:active {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Mobile Menu Actions */
+.mobile-menu-actions {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu-cta {
+    display: block;
+    background: #007AFF;
+    color: white;
+    text-decoration: none;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 15px;
+    transition: background-color 0.2s ease;
+}
+
+.mobile-menu-cta:hover {
+    background: #0056CC;
+}
+
+.mobile-menu-cta:active {
+    background: #004499;
+}
+
+.mobile-menu-secondary {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.mobile-menu-icon-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #ffffff;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.mobile-menu-icon-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.mobile-menu-icon-btn:active {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1068px) {
+    .nav-menu {
+        display: none !important;
+    }
+
+    .mobile-menu-toggle {
+        display: flex !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-content {
+        padding: 15px;
+    }
+    
+    .mobile-menu-link {
+        font-size: 16px;
+        padding: 10px 0;
+    }
+    
+    .mobile-menu-cta {
+        padding: 12px 16px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .mobile-menu-content {
+        padding: 12px;
+    }
+    
+    .mobile-menu-section {
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+    }
+    
+    .mobile-menu-link {
+        font-size: 15px;
+        padding: 8px 0;
+    }
+    
+    .mobile-menu-icon-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+}

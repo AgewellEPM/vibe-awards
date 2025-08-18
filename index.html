@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <link rel="stylesheet" href="enhanced-mobile-menu.css">
+    <link rel="stylesheet" href="crisp-mobile-menu.css">
     <title>Vibe Coders Platform | The Vibe Awards - Where Vibe Coding Happens</title>
     <meta name="description" content="The ultimate Vibe Coders platform for vibe coding competitions. Join 10,000+ vibe coders building revolutionary AI products. Where vibe coding meets Anthropic-powered innovation.">
     
@@ -2045,58 +2045,9 @@
     <script src="js/vibe-modal-system.js"></script>
     
     
-    <script src="enhanced-mobile-menu.js"></script>
+    <script src="crisp-mobile-menu.js"></script>
 <script>
-        // Mobile menu functionality with Apple-level polish
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const toggle = document.querySelector('.mobile-menu-toggle');
-            const body = document.body;
-            
-            // Toggle menu state
-            const isActive = menu.classList.toggle('active');
-            
-            // Update toggle button with smooth animation
-            toggle.style.transform = 'scale(0.8)';
-            setTimeout(() => {
-                toggle.textContent = isActive ? '✕' : '☰';
-                toggle.style.transform = 'scale(1)';
-            }, 150);
-            
-            // Prevent body scroll when menu is open
-            if (isActive) {
-                body.style.overflow = 'hidden';
-                // Focus trap for accessibility
-                setTimeout(() => {
-                    const firstLink = menu.querySelector('.mobile-menu-link');
-                    if (firstLink) firstLink.focus();
-                }, 400);
-            } else {
-                body.style.overflow = '';
-            }
-        }
-
-        // Enhanced mobile menu interactions
-        document.addEventListener('DOMContentLoaded', function() {
-            const menu = document.getElementById('mobileMenu');
-            const toggle = document.querySelector('.mobile-menu-toggle');
-            
-            // Close mobile menu when clicking a link
-            document.querySelectorAll('.mobile-menu-link, .mobile-menu-cta, .mobile-menu-icon-btn').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    // Add haptic feedback effect
-                    e.target.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        e.target.style.transform = '';
-                    }, 150);
-                    
-                    // Close menu after short delay for feedback
-                    setTimeout(() => {
-                        menu.classList.remove('active');
-                        toggle.textContent = '☰';
-                        document.body.style.overflow = '';
-                    }, 200);
-                });
+        
             });
             
             // Close menu when clicking backdrop
