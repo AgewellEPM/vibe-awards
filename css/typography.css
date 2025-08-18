@@ -5,17 +5,29 @@
 
 /* Typography Scale */
 :root {
-    /* Font Sizes - Apple-inspired scale */
-    --text-xs: 12px;
-    --text-sm: 14px;
-    --text-base: 16px;
-    --text-lg: 18px;
-    --text-xl: 20px;
-    --text-2xl: 24px;
-    --text-3xl: 32px;
-    --text-4xl: 40px;
-    --text-5xl: 48px;
-    --text-6xl: 64px;
+    /* Font Sizes - Apple's SF Pro scale */
+    --fs-xs: 12px;
+    --fs-sm: 14px;
+    --fs-base: 16px;
+    --fs-lg: 18px;
+    --fs-xl: 20px;
+    --fs-2xl: 24px;
+    --fs-3xl: 32px;
+    --fs-4xl: 40px;
+    --fs-5xl: 48px;
+    --fs-6xl: 64px;
+    
+    /* Legacy support */
+    --text-xs: var(--fs-xs);
+    --text-sm: var(--fs-sm);
+    --text-base: var(--fs-base);
+    --text-lg: var(--fs-lg);
+    --text-xl: var(--fs-xl);
+    --text-2xl: var(--fs-2xl);
+    --text-3xl: var(--fs-3xl);
+    --text-4xl: var(--fs-4xl);
+    --text-5xl: var(--fs-5xl);
+    --text-6xl: var(--fs-6xl);
     
     /* Line Heights */
     --leading-tight: 1.1;
@@ -39,7 +51,7 @@
     --font-bold: 700;
     --font-extrabold: 800;
     
-    /* Spacing Scale */
+    /* Apple's 4px spacing grid system */
     --space-xs: 4px;
     --space-sm: 8px;
     --space-md: 16px;
@@ -49,26 +61,35 @@
     --space-3xl: 64px;
     --space-4xl: 80px;
     --space-5xl: 120px;
+    
+    /* Gap system for flexbox/grid */
+    --gap-xs: 4px;
+    --gap-sm: 8px;
+    --gap-md: 16px;
+    --gap-lg: 24px;
+    --gap-xl: 32px;
 }
 
 /* Base Typography */
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
-    font-size: var(--text-base);
+    font-size: var(--fs-base);
     line-height: var(--leading-normal);
     font-weight: var(--font-normal);
     letter-spacing: var(--tracking-normal);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
 }
 
-/* Heading Styles */
+/* Heading Styles - Apple SF Pro Display */
 .heading-1, h1 {
-    font-size: var(--text-6xl);
+    font-size: var(--fs-6xl);
     font-weight: var(--font-bold);
     line-height: var(--leading-tight);
     letter-spacing: var(--tracking-tighter);
     margin-bottom: var(--space-lg);
+    font-feature-settings: 'kern' 1, 'liga' 1, 'dlig' 1;
 }
 
 .heading-2, h2 {

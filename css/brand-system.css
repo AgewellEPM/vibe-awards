@@ -6,7 +6,7 @@
 /* === BRAND FOUNDATION === */
 
 :root {
-    /* Primary Brand Colors - Apple-inspired palette */
+    /* Primary Brand Colors - Apple's semantic color system */
     --vibe-blue: #0071E3;
     --vibe-blue-light: #409CFF;
     --vibe-blue-dark: #0056B3;
@@ -72,11 +72,12 @@
     --vibe-border-secondary: rgba(255, 255, 255, 0.2);
     --vibe-border-tertiary: rgba(255, 255, 255, 0.3);
     
-    /* Shadow Colors */
-    --vibe-shadow-small: 0 4px 16px rgba(0, 0, 0, 0.12);
-    --vibe-shadow-medium: 0 8px 32px rgba(0, 0, 0, 0.16);
-    --vibe-shadow-large: 0 16px 64px rgba(0, 0, 0, 0.24);
-    --vibe-shadow-glow: 0 0 40px rgba(0, 113, 227, 0.3);
+    /* Shadow Colors - Apple's layered shadow system */
+    --vibe-shadow-small: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    --vibe-shadow-medium: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    --vibe-shadow-large: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    --vibe-shadow-hero: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    --vibe-shadow-glow: 0 0 20px rgba(0, 113, 227, 0.5), 0 0 40px rgba(0, 113, 227, 0.3);
     
     /* Brand Gradients */
     --vibe-gradient-primary: linear-gradient(135deg, var(--vibe-blue), var(--vibe-teal));

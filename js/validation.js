@@ -205,9 +205,13 @@ class VibeValidation {
             errorElement.style.transform = 'translateY(0)';
         }, 10);
 
-        // Shake animation
-        if (window.vibeAnimations) {
-            window.vibeAnimations.shakeElement(field);
+        // Shake animation with error handling
+        try {
+            if (window.vibeAnimations && typeof window.vibeAnimations.shakeElement === 'function') {
+                window.vibeAnimations.shakeElement(field);
+            }
+        } catch (error) {
+            console.warn('Animation failed:', error);
         }
     }
 
@@ -252,10 +256,14 @@ class VibeValidation {
             return;
         }
 
-        // Show loading state
+        // Show loading state with error handling
         this.isSubmitting = true;
-        if (window.vibeAnimations) {
-            window.vibeAnimations.showLoading(submitButton);
+        try {
+            if (window.vibeAnimations && typeof window.vibeAnimations.showLoading === 'function') {
+                window.vibeAnimations.showLoading(submitButton);
+            }
+        } catch (error) {
+            console.warn('Loading animation failed:', error);
         }
 
         try {
@@ -278,8 +286,12 @@ class VibeValidation {
             this.showFormError(form, error.message || 'An error occurred. Please try again.');
         } finally {
             this.isSubmitting = false;
-            if (window.vibeAnimations) {
-                window.vibeAnimations.hideLoading(submitButton);
+            try {
+                if (window.vibeAnimations && typeof window.vibeAnimations.hideLoading === 'function') {
+                    window.vibeAnimations.hideLoading(submitButton);
+                }
+            } catch (error) {
+                console.warn('Hide loading animation failed:', error);
             }
         }
     }

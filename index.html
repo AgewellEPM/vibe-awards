@@ -1260,6 +1260,36 @@
                 display: none;
             }
         }
+
+        /* Screen reader only content */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .sr-only-focusable:focus {
+            position: static;
+            width: auto;
+            height: auto;
+            padding: 8px 16px;
+            margin: 0;
+            overflow: visible;
+            clip: auto;
+            white-space: normal;
+            background: var(--apple-blue);
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            z-index: 10001;
+        }
     </style>
 </head>
 <body>
@@ -1334,6 +1364,7 @@
     </div>
 
     <!-- Navigation -->
+    <a href="#main-content" class="sr-only sr-only-focusable">Skip to main content</a>
     <nav>
         <div class="nav-container">
             <a href="index.html" class="nav-logo">
@@ -1485,13 +1516,13 @@
     </div>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" id="main-content">
         <div class="hero-content">
             <div class="hero-badge">
                 <div class="badge-icon"></div>
-                <span>Live Now: 247 Vibe Coders Building</span>
+                <span aria-live="polite">Live Now: 247 Vibe Coders Building</span>
             </div>
-            <h1 class="hero-headline">The Vibe Awards</h1>
+            <h1 class="hero-headline" id="hero-title">The Vibe Awards</h1>
             <p class="hero-subhead">Where Vibe Coders Compete in Live Vibe Coding Competitions</p>
             <div class="hero-cta">
                 <a href="competition.html" class="btn btn-primary">Enter Competition</a>
@@ -1504,19 +1535,19 @@
     <section class="stats-section">
         <div class="stats-grid">
             <div class="stat-item">
-                <div class="stat-number">10K+</div>
+                <div class="stat-number" aria-label="Over 10 thousand">10K+</div>
                 <div class="stat-label">Active Vibe Coders</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">$2.5M</div>
+                <div class="stat-number" aria-label="2.5 million dollars">$2.5M</div>
                 <div class="stat-label">Total Prizes</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">500+</div>
+                <div class="stat-number" aria-label="Over 500">500+</div>
                 <div class="stat-label">Funded Startups</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">24/7</div>
+                <div class="stat-number" aria-label="24 hours a day, 7 days a week">24/7</div>
                 <div class="stat-label">Live Vibe Coding</div>
             </div>
         </div>

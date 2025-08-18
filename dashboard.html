@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Dashboard - The Vibe Awards</title>
+    <title>Competition Control Center - The Vibe Awards</title>
     <link rel="stylesheet" href="css/typography.css">
     <link rel="stylesheet" href="css/brand-system.css">
     <link rel="stylesheet" href="css/apple-magic.css">
@@ -589,6 +589,53 @@
             animation: pulse 1s infinite;
         }
 
+        /* Screen reader only content */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .sr-only-focusable:focus {
+            position: static;
+            width: auto;
+            height: auto;
+            padding: 8px 16px;
+            margin: 0;
+            overflow: visible;
+            clip: auto;
+            white-space: normal;
+            background: var(--apple-blue);
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            z-index: 10001;
+        }
+
+        /* Button styling for stat cards */
+        button.stat-card {
+            border: none;
+            background: transparent;
+            text-align: left;
+            width: 100%;
+        }
+
+        button.stat-card:hover {
+            cursor: pointer;
+        }
+
+        button.stat-card:focus {
+            outline: 2px solid var(--apple-blue);
+            outline-offset: 2px;
+        }
+
         /* Responsive */
         @media (max-width: clamp(614px, 64rem, 1024px)) {
             .dashboard-container {
@@ -634,6 +681,10 @@
 </head>
 <body>
     <!-- AI Companies Bar -->
+    <div class="sr-only">
+        <h1>The Vibe Awards Dashboard - Competition Control Center</h1>
+        <p>Real-time tracking of competitions, battles, and voting activity</p>
+    </div>
     <div class="companies-bar">
         <div class="companies-track">
             <div class="companies-content">
@@ -704,6 +755,7 @@
     </div>
 
     <!-- Navigation -->
+    <a href="#main-content" class="sr-only sr-only-focusable">Skip to main content</a>
     <nav>
         <div class="nav-container">
             <a href="index.html" class="nav-logo">
@@ -795,7 +847,7 @@
         </div>
     </nav>
 
-    <main role="main" class="main-content">
+    <main role="main" class="main-content" id="main-content">
             <!-- Welcome Header -->
             <div class="welcome-header">
                 <h1 class="welcome-title" style="font-size: var(--fs-4xl);">Competition Control Center 🎯</h1>
@@ -823,41 +875,41 @@
 
             <!-- Stats Grid -->
             <div class="stats-grid ultra-grid-responsive">
-                <div class="stat-card card-fluid" onclick="showActiveCompetitions()">
+                <button class="stat-card card-fluid" onclick="showActiveCompetitions()" aria-label="View 12 active competitions">
                     <div class="stat-icon">🎯</div>
                     <div class="stat-value" id="activeCompetitions">12</div>
                     <div class="stat-label">Active Competitions</div>
                     <span class="stat-change">+3 since yesterday</span>
-                </div>
+                </button>
 
-                <div class="stat-card card-fluid" onclick="showLiveBattles()">
+                <button class="stat-card card-fluid" onclick="showLiveBattles()" aria-label="View 8 live battles">
                     <div class="stat-icon">⚔️</div>
                     <div class="stat-value" id="liveBattles">8</div>
                     <div class="stat-label">Live Battles</div>
                     <span class="stat-change">4 starting soon</span>
-                </div>
+                </button>
 
-                <div class="stat-card card-fluid" onclick="showVotingActivity()">
+                <button class="stat-card card-fluid" onclick="showVotingActivity()" aria-label="View 847K total votes today">
                     <div class="stat-icon">🗳️</div>
                     <div class="stat-value" id="totalVotes">847K</div>
                     <div class="stat-label">Total Votes Today</div>
                     <span class="stat-change">+12.3K last hour</span>
-                </div>
+                </button>
 
-                <div class="stat-card card-fluid" onclick="showParticipants()">
+                <button class="stat-card card-fluid" onclick="showParticipants()" aria-label="View 2.3K active participants">
                     <div class="stat-icon">👥</div>
                     <div class="stat-value" id="activeUsers">2.3K</div>
                     <div class="stat-label">Active Participants</div>
                     <span class="stat-change">Peak: 3.1K today</span>
-                </div>
+                </button>
             </div>
 
             <!-- Live Competition Tracking Section -->
             <div class="section-header container-fluid">
                 <h2 class="section-title" style="font-size: var(--fs-3xl);">Live Competition Tracking</h2>
                 <div style="display: flex; gap: var(--gap-sm);">
-                    <button class="btn-primary btn-fluid" onclick="startNewBattle()">⚔️ Start Battle</button>
-                    <button class="btn-primary btn-fluid" onclick="openVotingCenter()" style="background: var(--apple-purple);">🗳️ Voting Center</button>
+                    <button class="btn-primary btn-fluid" onclick="startNewBattle()" aria-label="Start new battle competition">⚔️ Start Battle</button>
+                    <button class="btn-primary btn-fluid" onclick="openVotingCenter()" style="background: var(--apple-purple);" aria-label="Open voting center for all competitions">🗳️ Voting Center</button>
                 </div>
             </div>
 
@@ -877,7 +929,7 @@
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span style="color: rgba(245, 245, 247, 0.7);">12,547 votes • 2 min left</span>
-                        <button class="btn-primary" onclick="watchLive()" style="padding: var(--space-xs) 16px; font-size: var(--fs-sm);">👁️ Watch</button>
+                        <button class="btn-primary" onclick="watchLive()" style="padding: var(--space-xs) 16px; font-size: var(--fs-sm);" aria-label="Watch TinkyBink AAC vs MindSync Pro live battle">👁️ Watch</button>
                     </div>
                 </div>
 
@@ -891,7 +943,7 @@
                     <div style="color: rgba(245, 245, 247, 0.7); margin-bottom: 20px;">Education Category • Round of 16</div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span style="color: rgba(245, 245, 247, 0.7);">3,247 pre-votes</span>
-                        <button class="btn-primary" onclick="joinBattle()" style="background: var(--apple-orange); padding: var(--space-xs) 16px; font-size: var(--fs-sm);">🔔 Notify Me</button>
+                        <button class="btn-primary" onclick="joinBattle()" style="background: var(--apple-orange); padding: var(--space-xs) 16px; font-size: var(--fs-sm);" aria-label="Get notified when StudyBuddy AI vs EduGenius battle starts">🔔 Notify Me</button>
                     </div>
                 </div>
 
@@ -909,7 +961,7 @@
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span style="color: rgba(245, 245, 247, 0.7);">Ended 10 min ago</span>
-                        <button class="btn-primary" onclick="viewResults()" style="background: var(--apple-green); padding: var(--space-xs) 16px; font-size: var(--fs-sm);">📊 Results</button>
+                        <button class="btn-primary" onclick="viewResults()" style="background: var(--apple-green); padding: var(--space-xs) 16px; font-size: var(--fs-sm);" aria-label="View results of PixelQuest Pro vs GameForge battle">📊 Results</button>
                     </div>
                 </div>
             </div>
@@ -919,13 +971,13 @@
                 <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 24px;">
                     <h3 style="font-size: var(--fs-xl);">Competition Feed</h3>
                     <div style="display: flex; gap: var(--gap-xs);">
-                        <button class="filter-btn active" data-filter="all" style="padding: var(--space-xs) 12px; background: var(--apple-blue); color: white; border: none; border-radius: 8px; font-size: var(--fs-xs);">All</button>
-                        <button class="filter-btn" data-filter="battles" style="padding: var(--space-xs) 12px; background: rgba(255, 255, 255, 0.1); color: white; border: none; border-radius: 8px; font-size: var(--fs-xs);">Battles</button>
-                        <button class="filter-btn" data-filter="votes" style="padding: var(--space-xs) 12px; background: rgba(255, 255, 255, 0.1); color: white; border: none; border-radius: 8px; font-size: var(--fs-xs);">Votes</button>
+                        <button class="filter-btn active" data-filter="all" style="padding: var(--space-xs) 12px; background: var(--apple-blue); color: white; border: none; border-radius: 8px; font-size: var(--fs-xs);" aria-label="Filter all feed items" aria-pressed="true">All</button>
+                        <button class="filter-btn" data-filter="battles" style="padding: var(--space-xs) 12px; background: rgba(255, 255, 255, 0.1); color: white; border: none; border-radius: 8px; font-size: var(--fs-xs);" aria-label="Filter battle feed items" aria-pressed="false">Battles</button>
+                        <button class="filter-btn" data-filter="votes" style="padding: var(--space-xs) 12px; background: rgba(255, 255, 255, 0.1); color: white; border: none; border-radius: 8px; font-size: var(--fs-xs);" aria-label="Filter voting feed items" aria-pressed="false">Votes</button>
                     </div>
                 </div>
                 
-                <div class="feed-items" id="competitionFeed">
+                <div class="feed-items" id="competitionFeed" role="log" aria-live="polite" aria-label="Competition activity feed">
                     <!-- Feed items will be dynamically populated -->
                 </div>
             </div>

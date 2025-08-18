@@ -410,6 +410,42 @@
             }
         }
 
+        /* Screen reader only content */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .sr-only-focusable:focus {
+            position: static;
+            width: auto;
+            height: auto;
+            padding: 8px 16px;
+            margin: 0;
+            overflow: visible;
+            clip: auto;
+            white-space: normal;
+            background: var(--apple-blue);
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            z-index: 10001;
+        }
+
+        /* Enhanced focus states */
+        .decision-btn:focus {
+            outline: 2px solid var(--apple-blue);
+            outline-offset: 2px;
+        }
+
         @media (max-width: 734px) {
             .hero-headline {
                 font-size: 48px;
@@ -514,6 +550,7 @@
     </div>
 
     <!-- Navigation -->
+    <a href="#main-content" class="sr-only sr-only-focusable">Skip to main content</a>
     <nav>
         <div class="nav-container">
             <a href="index.html" class="nav-logo">
@@ -605,7 +642,7 @@
         </div>
     </nav>
 
-    <section class="hero">
+    <section class="hero" id="main-content">
         <div class="hero-label">No Demo. No Pitch. Just Test It.</div>
         <h1 class="hero-headline">Test The App</h1>
         <p class="hero-subhead">Scan the QR code. Use the app for real.<br>You decide if it makes the cut.</p>
@@ -616,7 +653,7 @@
         <div class="qr-container">
             <div class="qr-left">
                 <div class="qr-box">
-                    <div class="qr-placeholder">
+                    <div class="qr-placeholder" role="img" aria-label="QR code placeholder for app testing">
                         <div class="qr-icon">📱</div>
                         <div class="qr-text">QR Code Here</div>
                     </div>
@@ -656,12 +693,14 @@
         <p class="decision-subhead">You've tested it. You've felt the vibe. Now make the call.</p>
         
         <div class="decision-buttons">
-            <button class="decision-btn btn-yes" onclick="voteYes()">
+            <button class="decision-btn btn-yes" onclick="voteYes()" aria-describedby="vote-yes-description">
                 ✅ Yes, This Competes
             </button>
-            <button class="decision-btn btn-no" onclick="voteNo()">
+            <button class="decision-btn btn-no" onclick="voteNo()" aria-describedby="vote-no-description">
                 ❌ Not Ready Yet
             </button>
+            <div id="vote-yes-description" class="sr-only">Vote that this app is ready to compete in The Vibe Awards</div>
+            <div id="vote-no-description" class="sr-only">Vote that this app needs improvement before competing</div>
         </div>
 
         <div class="criteria-grid">

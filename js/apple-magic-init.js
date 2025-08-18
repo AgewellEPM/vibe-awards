@@ -1,6 +1,7 @@
 /**
  * Apple Magic Initialization
- * Automatically applies Apple's signature interactions to any page
+ * Automatically applies Apple's signature interactions with proper error handling
+ * Follows Apple's Human Interface Guidelines for accessibility and interaction
  */
 
 (function() {
@@ -157,14 +158,19 @@
             }
         });
         
-        console.log('✨ Apple Magic applied to all elements');
+        if (process.env.NODE_ENV !== 'production') {
+            console.log('✨ Apple Magic applied to all elements');
+        }
     }
     
     // Apply magic when page loads
     ready(applyAppleMagic);
     
     // Re-apply magic when new content is added dynamically
-    const observer = new MutationObserver((mutations) => {
+    // Use try-catch for MutationObserver to handle edge cases
+    let observer;
+    try {
+        observer = new MutationObserver((mutations) => {
         let shouldReapply = false;
         mutations.forEach((mutation) => {
             if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
@@ -185,6 +191,9 @@
         childList: true,
         subtree: true
     });
+    } catch (error) {
+        console.warn('MutationObserver not supported or failed to initialize:', error);
+    }
     
     // Add special touch handling for iOS devices
     if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
