@@ -375,6 +375,8 @@
     </style>
     <!-- Modal System -->
     <script src="js/vibe-modal-system.js"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/database.js"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -602,6 +604,35 @@
                 // Analyze nomination quality
                 const analysisResult = analyzeNomination(data);
 
+                // Save to database
+                let dbSaved = false;
+                try {
+                    const nominationData = {
+                        category: analysisResult.category,
+                        nominee_name: data.aiName,
+                        nominee_email: data.contactEmail,
+                        project_title: data.aiName,
+                        project_description: data.achievements,
+                        project_url: data.websiteUrl,
+                        impact_description: data.achievements,
+                        nominator_name: data.nominatorName,
+                        nominator_email: data.nominatorEmail,
+                        status: 'pending'
+                    };
+
+                    await supabase
+                        .from('nominations')
+                        .insert(nominationData);
+                    
+                    dbSaved = true;
+                    submitBtn.textContent = '✅ Saved to database!';
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                } catch (error) {
+                    console.error('Database save error:', error);
+                    submitBtn.textContent = '⚠️ Proceeding without database...';
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+
                 // Show enhanced success modal with analysis
                 vibeSuccess(
                     'Nomination Submitted!',
@@ -613,8 +644,10 @@
                                 <li>Innovation Score: ${analysisResult.innovationScore}/10</li>
                                 <li>Category: ${analysisResult.category}</li>
                                 <li>Evaluation Timeline: ${analysisResult.timeline}</li>
+                                <li>Database Status: ${dbSaved ? '✅ Saved' : '⚠️ Demo Mode'}</li>
                             </ul>
                             <p style="font-size: 14px; opacity: 0.8;">Our AI evaluation committee will review this submission and notify you of the results.</p>
+                            ${dbSaved ? '' : '<p style="font-size: 12px; color: #ff6b35; margin-top: 10px;">💡 Set up Supabase to enable database persistence!</p>'}
                         </div>
                     `
                 );

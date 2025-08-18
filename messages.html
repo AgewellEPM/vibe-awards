@@ -1070,6 +1070,8 @@
     </style>
     <!-- Modal System -->
     <script src="js/vibe-modal-system.js"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/database.js"></script>
 </head>
 <body>
     <!-- Animated Background -->
@@ -1360,13 +1362,17 @@
             this.style.height = this.scrollHeight + 'px';
         });
 
-        // Send message
-        function sendMessage(event) {
+        // Send message with database integration
+        async function sendMessage(event) {
             event.preventDefault();
             const input = document.getElementById('messageInput');
             const message = input.value.trim();
 
             if (message) {
+                const currentRoom = getCurrentRoom();
+                const username = getCurrentUser();
+                
+                // Add message to UI immediately
                 const messagesContainer = document.getElementById('messagesContainer');
                 const messageElement = document.createElement('div');
                 messageElement.className = 'message sent';
@@ -1383,11 +1389,25 @@
                 input.value = '';
                 input.style.height = 'auto';
 
-                // Show message sending feedback
-                vibeInfo('Message Sent', 'Your message has been delivered successfully!');
+                // Save to database
+                try {
+                    await supabase
+                        .from('chat_messages')
+                        .insert({
+                            room_id: currentRoom,
+                            username: username,
+                            message: message,
+                            avatar: '👤'
+                        });
+                    
+                    vibeSuccess('Message Sent', 'Your message has been saved to the database!');
+                } catch (error) {
+                    console.error('Database save error:', error);
+                    vibeInfo('Message Sent', 'Your message has been delivered successfully!');
+                }
 
                 // Simulate intelligent response after delay
-                setTimeout(() => {
+                setTimeout(async () => {
                     const responses = [
                         "Thanks for your message! I'll get back to you soon about the collaboration details.",
                         "That sounds like an amazing project! I'd love to learn more about your approach.",
@@ -1410,10 +1430,33 @@
                     messagesContainer.appendChild(responseElement);
                     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-                    // Show notification for new message
-                    vibeSuccess('New Message', 'You received a reply from Alex Chen!');
-                }, Math.random() * 3000 + 2000); // Random delay between 2-5 seconds
+                    // Save AI response to database
+                    try {
+                        await supabase
+                            .from('chat_messages')
+                            .insert({
+                                room_id: currentRoom,
+                                username: 'AI Assistant',
+                                message: randomResponse,
+                                avatar: '👨‍💻'
+                            });
+                    } catch (error) {
+                        console.error('AI response save error:', error);
+                    }
+
+                    vibeSuccess('New Message', 'You received a reply from AI Assistant!');
+                }, Math.random() * 3000 + 2000);
             }
+        }
+
+        // Helper functions
+        function getCurrentRoom() {
+            const activeRoom = document.querySelector('.chat-room.active');
+            return activeRoom ? activeRoom.getAttribute('data-room') : 'vibe-coders-lounge';
+        }
+
+        function getCurrentUser() {
+            return localStorage.getItem('vibe_username') || 'Anonymous User';
         }
 
         // Chat room data
@@ -1457,8 +1500,8 @@
             }
         };
 
-        // Open chat room
-        function openChatRoom(roomId) {
+        // Open chat room with database integration
+        async function openChatRoom(roomId) {
             // Remove active class from all conversations
             document.querySelectorAll('.conversation-item').forEach(item => {
                 item.classList.remove('active');
@@ -1482,24 +1525,71 @@
                 <button class="chat-action-btn btn-fluid" onclick="inviteToRoom()">➕ Invite Friends</button>
             `;
 
-            // Load room messages
+            // Show loading state
             const messagesContainer = document.getElementById('messagesContainer');
-            messagesContainer.innerHTML = '';
+            messagesContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--apple-gray);">🔄 Loading messages...</div>';
 
-            room.messages.forEach((msg, index) => {
-                const messageElement = document.createElement('div');
-                messageElement.className = 'message room-message';
-                messageElement.style.animationDelay = `${index * 0.15}s`;
-                messageElement.innerHTML = `
-                    <div class="message-avatar">${msg.avatar}</div>
-                    <div class="message-content">
-                        <div class="room-username">${msg.user}</div>
-                        <div class="room-message-text">${msg.message}</div>
-                        <div class="message-time room-message-time">${msg.time}</div>
-                    </div>
-                `;
-                messagesContainer.appendChild(messageElement);
-            });
+            try {
+                // Load messages from database
+                const dbMessages = await supabase
+                    .from('chat_messages')
+                    .select('*')
+                    .eq('room_id', roomId)
+                    .order('created_at', { ascending: true })
+                    .limit(50);
+
+                // Clear loading state
+                messagesContainer.innerHTML = '';
+
+                // Use database messages if available, otherwise fall back to static data
+                const messages = dbMessages.length > 0 ? dbMessages : room.messages;
+
+                messages.forEach((msg, index) => {
+                    const messageElement = document.createElement('div');
+                    messageElement.className = 'message room-message';
+                    messageElement.style.animationDelay = `${index * 0.15}s`;
+                    
+                    // Handle both database and static message formats
+                    const isDbMessage = msg.created_at ? true : false;
+                    const timeDisplay = isDbMessage ? 
+                        formatMessageTime(msg.created_at) : 
+                        msg.time;
+                    
+                    messageElement.innerHTML = `
+                        <div class="message-avatar">${msg.avatar}</div>
+                        <div class="message-content">
+                            <div class="room-username">${isDbMessage ? msg.username : msg.user}</div>
+                            <div class="room-message-text">${msg.message}</div>
+                            <div class="message-time room-message-time">${timeDisplay}</div>
+                        </div>
+                    `;
+                    messagesContainer.appendChild(messageElement);
+                });
+
+                vibeSuccess('Chat Loaded', `✅ Loaded ${messages.length} messages from database!`);
+                
+            } catch (error) {
+                console.error('Database error:', error);
+                
+                // Fall back to static messages
+                messagesContainer.innerHTML = '';
+                room.messages.forEach((msg, index) => {
+                    const messageElement = document.createElement('div');
+                    messageElement.className = 'message room-message';
+                    messageElement.style.animationDelay = `${index * 0.15}s`;
+                    messageElement.innerHTML = `
+                        <div class="message-avatar">${msg.avatar}</div>
+                        <div class="message-content">
+                            <div class="room-username">${msg.user}</div>
+                            <div class="room-message-text">${msg.message}</div>
+                            <div class="message-time room-message-time">${msg.time}</div>
+                        </div>
+                    `;
+                    messagesContainer.appendChild(messageElement);
+                });
+
+                vibeInfo('Chat Loaded', 'Using demo messages - set up Supabase to enable persistence!');
+            }
 
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
@@ -1514,6 +1604,22 @@
             }, 100);
 
             vibeInfo('Joined Chat Room', `Welcome to ${room.name}! 🎉 ${room.members} vibe coders are online and ready to collaborate.`);
+        }
+
+        // Helper function to format message timestamps
+        function formatMessageTime(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffHours < 24) return `${diffHours}h ago`;
+            if (diffDays < 7) return `${diffDays}d ago`;
+            return date.toLocaleDateString();
         }
 
         // Room functions with Apple-quality feedback
