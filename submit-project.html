@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Submit Your Project - The Vibe Awards</title>
+    <link rel="stylesheet" href="css/brand-system.css">
+    <link rel="stylesheet" href="css/apple-magic.css">
+    <link rel="stylesheet" href="css/typography.css">
+    <link rel="stylesheet" href="css/mobile-responsive.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-green: #30D158;
+            --apple-purple: #BF5AF2;
+            --apple-orange: #FF9F0A;
+            --apple-red: #FF375F;
+            --apple-gray: #86868B;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.47059;
+        }
+
+        /* Companies Bar at Top */
+        .companies-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 36px;
+            background: #000000;
+            z-index: 10000;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .companies-track {
+            display: flex;
+            animation: scroll-companies 30s linear infinite;
+        }
+
+        .company {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            font-weight: 500;
+            margin: 0 20px;
+            opacity: 0.7;
+            white-space: nowrap;
+        }
+
+        @keyframes scroll-companies {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 36px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            z-index: 9999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 22px;
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: #F5F5F7;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 96px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .page-title {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #F5F5F7, rgba(245, 245, 247, 0.7));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 21px;
+            color: rgba(245, 245, 247, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Form Sections */
+        .form-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #F5F5F7;
+        }
+
+        .section-description {
+            color: rgba(245, 245, 247, 0.7);
+            margin-bottom: 24px;
+            font-size: 16px;
+        }
+
+        /* GitHub Integration */
+        .github-connect {
+            margin-bottom: 32px;
+        }
+
+        .github-btn {
+            width: 100%;
+            padding: 20px;
+            background: #24292e;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .github-btn:hover {
+            background: #2f363d;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(36, 41, 46, 0.3);
+        }
+
+        .github-connected {
+            background: var(--apple-green) !important;
+        }
+
+        .github-preview {
+            margin-top: 24px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+        }
+
+        .repo-selector {
+            margin-top: 16px;
+        }
+
+        .repo-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 12px;
+        }
+
+        .repo-item {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .repo-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--apple-blue);
+        }
+
+        .repo-item.selected {
+            background: rgba(0, 113, 227, 0.1);
+            border-color: var(--apple-blue);
+        }
+
+        .repo-name {
+            font-weight: 600;
+            color: #F5F5F7;
+        }
+
+        .repo-description {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.7);
+            margin-top: 4px;
+        }
+
+        .repo-stats {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+            font-size: 12px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        /* Form Fields */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #F5F5F7;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #F5F5F7;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--apple-blue);
+            box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Category Selection */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .category-option {
+            position: relative;
+        }
+
+        .category-card {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .category-card:hover {
+            border-color: var(--apple-blue);
+            background: rgba(0, 113, 227, 0.05);
+        }
+
+        .category-option input[type="radio"]:checked + .category-card {
+            border-color: var(--apple-blue);
+            background: rgba(0, 113, 227, 0.1);
+        }
+
+        .category-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .category-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .category-desc {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.7);
+        }
+
+        /* Submit Button */
+        .submit-section {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-purple));
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 200px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 113, 227, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Repository Preview */
+        .repo-preview {
+            margin-top: 24px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .preview-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .preview-title {
+            font-weight: 600;
+            color: #F5F5F7;
+        }
+
+        .preview-badges {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            font-size: 12px;
+            color: rgba(245, 245, 247, 0.8);
+        }
+
+        .preview-description {
+            color: rgba(245, 245, 247, 0.7);
+            margin-bottom: 16px;
+        }
+
+        .preview-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 40px;
+            }
+            
+            .container {
+                padding: 20px 16px;
+            }
+            
+            .form-section {
+                padding: 24px;
+                margin-bottom: 24px;
+            }
+            
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- AI Companies Bar -->
+    <div class="companies-bar">
+        <div class="companies-track">
+            <span class="company">OpenAI</span>
+            <span class="company">Anthropic</span>
+            <span class="company">Google DeepMind</span>
+            <span class="company">Meta AI</span>
+            <span class="company">Stability AI</span>
+            <span class="company">Midjourney</span>
+            <span class="company">Cohere</span>
+            <span class="company">Inflection AI</span>
+            <span class="company">Runway</span>
+            <span class="company">Hugging Face</span>
+            <span class="company">Replicate</span>
+            <span class="company">Character AI</span>
+            <span class="company">Eleven Labs</span>
+            <span class="company">Perplexity</span>
+            <span class="company">Mistral AI</span>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span>🏆</span>
+                The Vibe Awards
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Submit Your Project</h1>
+                <p class="page-subtitle">Show off your amazing work and compete for recognition in the Vibe Awards</p>
+            </div>
+
+            <form id="submitForm">
+                <!-- GitHub Integration Section -->
+                <div class="form-section">
+                    <h2 class="section-title">🚀 Connect Your Repository</h2>
+                    <p class="section-description">Connect your GitHub account to automatically import repository details and showcase your code.</p>
+                    
+                    <div class="github-connect">
+                        <button type="button" class="github-btn" onclick="connectGitHub()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                            Connect GitHub Repository
+                        </button>
+                        
+                        <!-- GitHub Preview -->
+                        <div id="githubPreview" class="github-preview">
+                            <div class="repo-selector">
+                                <label class="form-label">Select Repository:</label>
+                                <div id="repoList" class="repo-list">
+                                    <!-- Repositories will be populated here -->
+                                </div>
+                            </div>
+                            
+                            <!-- Selected Repository Preview -->
+                            <div id="repoPreview" class="repo-preview" style="display: none;">
+                                <div class="preview-header">
+                                    <span class="preview-title" id="previewTitle">Repository Name</span>
+                                </div>
+                                <div class="preview-badges" id="previewBadges">
+                                    <!-- Language badges will be added here -->
+                                </div>
+                                <div class="preview-description" id="previewDescription">
+                                    Repository description will appear here
+                                </div>
+                                <div class="preview-stats" id="previewStats">
+                                    <!-- Stats will be added here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Details Section -->
+                <div class="form-section">
+                    <h2 class="section-title">📝 Project Details</h2>
+                    <p class="section-description">Tell us about your project and what makes it special.</p>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Project Name *</label>
+                        <input type="text" class="form-input" name="projectName" id="projectName" placeholder="My Awesome Project" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Project Description *</label>
+                        <textarea class="form-textarea" name="description" id="description" placeholder="Describe what your project does, what problem it solves, and what makes it unique..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Live Demo URL</label>
+                        <input type="url" class="form-input" name="demoUrl" id="demoUrl" placeholder="https://myproject.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Video Demo URL (YouTube, Vimeo, etc.)</label>
+                        <input type="url" class="form-input" name="videoUrl" id="videoUrl" placeholder="https://youtube.com/watch?v=...">
+                    </div>
+                </div>
+
+                <!-- Category Selection -->
+                <div class="form-section">
+                    <h2 class="section-title">🎯 Project Category</h2>
+                    <p class="section-description">Choose the category that best fits your project.</p>
+                    
+                    <div class="category-grid">
+                        <div class="category-option">
+                            <input type="radio" name="category" id="ai-ml" value="ai-ml" required hidden>
+                            <label for="ai-ml" class="category-card">
+                                <div class="category-icon">🤖</div>
+                                <div class="category-name">AI & Machine Learning</div>
+                                <div class="category-desc">LLMs, computer vision, NLP</div>
+                            </label>
+                        </div>
+                        
+                        <div class="category-option">
+                            <input type="radio" name="category" id="web-app" value="web-app" required hidden>
+                            <label for="web-app" class="category-card">
+                                <div class="category-icon">🌐</div>
+                                <div class="category-name">Web Application</div>
+                                <div class="category-desc">Websites, web apps, PWAs</div>
+                            </label>
+                        </div>
+                        
+                        <div class="category-option">
+                            <input type="radio" name="category" id="mobile-app" value="mobile-app" required hidden>
+                            <label for="mobile-app" class="category-card">
+                                <div class="category-icon">📱</div>
+                                <div class="category-name">Mobile App</div>
+                                <div class="category-desc">iOS, Android, React Native</div>
+                            </label>
+                        </div>
+                        
+                        <div class="category-option">
+                            <input type="radio" name="category" id="developer-tool" value="developer-tool" required hidden>
+                            <label for="developer-tool" class="category-card">
+                                <div class="category-icon">🛠️</div>
+                                <div class="category-name">Developer Tool</div>
+                                <div class="category-desc">APIs, libraries, frameworks</div>
+                            </label>
+                        </div>
+                        
+                        <div class="category-option">
+                            <input type="radio" name="category" id="design" value="design" required hidden>
+                            <label for="design" class="category-card">
+                                <div class="category-icon">🎨</div>
+                                <div class="category-name">Design & Creative</div>
+                                <div class="category-desc">UI/UX, graphics, creative tools</div>
+                            </label>
+                        </div>
+                        
+                        <div class="category-option">
+                            <input type="radio" name="category" id="other" value="other" required hidden>
+                            <label for="other" class="category-card">
+                                <div class="category-icon">💡</div>
+                                <div class="category-name">Other Innovation</div>
+                                <div class="category-desc">Something unique and different</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Section -->
+                <div class="submit-section">
+                    <button type="submit" class="submit-btn">
+                        Submit Project for Review
+                    </button>
+                    <p style="margin-top: 16px; color: rgba(245, 245, 247, 0.6); font-size: 14px;">
+                        Your project will be reviewed by our team and the community
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let selectedRepo = null;
+        let userRepos = [];
+
+        // GitHub Integration
+        function connectGitHub() {
+            const githubBtn = document.querySelector('.github-btn');
+            githubBtn.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                Connecting to GitHub...
+            `;
+            githubBtn.disabled = true;
+
+            // Simulate GitHub OAuth and API calls
+            setTimeout(() => {
+                // Mock repositories data
+                userRepos = [
+                    {
+                        name: 'awesome-ai-chatbot',
+                        description: 'An intelligent chatbot powered by GPT-4 with custom personality training',
+                        language: 'Python',
+                        stars: 234,
+                        forks: 45,
+                        size: 2048,
+                        updated: '2024-01-15'
+                    },
+                    {
+                        name: 'react-portfolio-builder',
+                        description: 'A drag-and-drop portfolio builder for developers and designers',
+                        language: 'TypeScript',
+                        stars: 156,
+                        forks: 23,
+                        size: 1532,
+                        updated: '2024-01-10'
+                    },
+                    {
+                        name: 'voice-expense-tracker',
+                        description: 'Track expenses using voice commands with AI categorization',
+                        language: 'JavaScript',
+                        stars: 89,
+                        forks: 12,
+                        size: 876,
+                        updated: '2024-01-08'
+                    },
+                    {
+                        name: 'code-review-assistant',
+                        description: 'AI-powered code review tool that integrates with GitHub PRs',
+                        language: 'Go',
+                        stars: 312,
+                        forks: 67,
+                        size: 3421,
+                        updated: '2024-01-12'
+                    }
+                ];
+
+                displayRepositories();
+                
+                githubBtn.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    GitHub Connected
+                `;
+                githubBtn.classList.add('github-connected');
+                githubBtn.disabled = false;
+                
+                document.getElementById('githubPreview').style.display = 'block';
+            }, 2000);
+        }
+
+        function displayRepositories() {
+            const repoList = document.getElementById('repoList');
+            repoList.innerHTML = '';
+
+            userRepos.forEach((repo, index) => {
+                const repoItem = document.createElement('div');
+                repoItem.className = 'repo-item';
+                repoItem.onclick = () => selectRepository(index);
+                
+                repoItem.innerHTML = `
+                    <div class="repo-name">${repo.name}</div>
+                    <div class="repo-description">${repo.description}</div>
+                    <div class="repo-stats">
+                        <span>⭐ ${repo.stars}</span>
+                        <span>🍴 ${repo.forks}</span>
+                        <span>💾 ${repo.size} KB</span>
+                        <span>📅 ${repo.updated}</span>
+                    </div>
+                `;
+                
+                repoList.appendChild(repoItem);
+            });
+        }
+
+        function selectRepository(index) {
+            // Remove previous selection
+            document.querySelectorAll('.repo-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Select new repository
+            document.querySelectorAll('.repo-item')[index].classList.add('selected');
+            selectedRepo = userRepos[index];
+            
+            // Update preview
+            updateRepositoryPreview(selectedRepo);
+            
+            // Auto-fill form fields
+            document.getElementById('projectName').value = selectedRepo.name.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            document.getElementById('description').value = selectedRepo.description;
+        }
+
+        function updateRepositoryPreview(repo) {
+            const preview = document.getElementById('repoPreview');
+            const title = document.getElementById('previewTitle');
+            const badges = document.getElementById('previewBadges');
+            const description = document.getElementById('previewDescription');
+            const stats = document.getElementById('previewStats');
+            
+            title.textContent = repo.name;
+            description.textContent = repo.description;
+            
+            // Language badge
+            badges.innerHTML = `<span class="badge">${repo.language}</span>`;
+            
+            // Stats
+            stats.innerHTML = `
+                <span>⭐ ${repo.stars} stars</span>
+                <span>🍴 ${repo.forks} forks</span>
+                <span>📅 Updated ${repo.updated}</span>
+            `;
+            
+            preview.style.display = 'block';
+            preview.style.animation = 'slideIn 0.3s ease-out';
+        }
+
+        // Form submission
+        document.getElementById('submitForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const projectData = {
+                projectName: formData.get('projectName'),
+                description: formData.get('description'),
+                category: formData.get('category'),
+                demoUrl: formData.get('demoUrl'),
+                videoUrl: formData.get('videoUrl'),
+                repository: selectedRepo
+            };
+            
+            // Simulate submission
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.innerHTML = 'Submitting...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                alert('🎉 Project submitted successfully! You\'ll receive an email confirmation shortly.');
+                submitBtn.innerHTML = 'Submit Project for Review';
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+
+        // Add slide-in animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
