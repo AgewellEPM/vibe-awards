@@ -94,6 +94,243 @@
             color: #F5F5F7;
         }
 
+        /* GitHub Repository Cards */
+        .github-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .github-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--apple-blue);
+            box-shadow: 0 20px 40px rgba(0, 113, 227, 0.2);
+        }
+
+        .github-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--apple-blue), var(--apple-purple), var(--apple-teal));
+        }
+
+        .repo-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .repo-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #F5F5F7;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .repo-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.7);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .repo-description {
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .repo-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .repo-badges {
+            display: flex;
+            gap: 8px;
+        }
+
+        .badge {
+            padding: 4px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge.language {
+            background: var(--apple-blue);
+            color: white;
+        }
+
+        .badge.framework {
+            background: var(--apple-green);
+            color: white;
+        }
+
+        .repo-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #F5F5F7;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--apple-blue);
+            border-color: var(--apple-blue);
+        }
+
+        /* Filter and Search */
+        .controls-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #F5F5F7;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--apple-blue);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: rgba(245, 245, 247, 0.8);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--apple-blue);
+            border-color: var(--apple-blue);
+            color: white;
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 32px;
+            margin-bottom: 80px;
+        }
+
+        /* Live Indicators */
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 8px;
+            background: var(--apple-green);
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Achievement Badges */
+        .achievement-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+        }
+
         /* Hero Section */
         .hero-section {
             padding: 120px 24px 40px;
@@ -471,35 +708,198 @@
 
     <!-- Hero Section -->
     <section class="hero-section">
-        <h1 class="hero-title">Battle Gallery</h1>
-        <p class="hero-subtitle">Explore the history of epic app battles and legendary victories</p>
+        <h1 class="hero-title">Project Showcase</h1>
+        <p class="hero-subtitle">Discover amazing projects from our community of builders and innovators</p>
     </section>
 
-    <!-- Filter Section -->
-    <div class="filter-section">
-        <div class="filter-tabs">
-            <div class="filter-tab active">All Battles</div>
-            <div class="filter-tab">Epic Battles</div>
-            <div class="filter-tab">Close Calls</div>
-            <div class="filter-tab">Upsets</div>
-            <div class="filter-tab">Championship</div>
+    <!-- Search and Filter Controls -->
+    <div class="controls-section">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" placeholder="Search projects, technologies, or developers..." id="searchInput">
         </div>
-        <div class="date-filter">
-            <select class="date-select">
-                <option>This Week</option>
-                <option>This Month</option>
-                <option>Last 3 Months</option>
-                <option>2024</option>
-                <option>All Time</option>
-            </select>
-            <select class="date-select">
-                <option>All Categories</option>
-                <option>Healthcare</option>
-                <option>Education</option>
-                <option>Entertainment</option>
-                <option>Productivity</option>
-                <option>Finance</option>
-            </select>
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">All Projects</button>
+            <button class="filter-btn" data-filter="ai">🤖 AI & ML</button>
+            <button class="filter-btn" data-filter="web">🌐 Web Apps</button>
+            <button class="filter-btn" data-filter="mobile">📱 Mobile</button>
+            <button class="filter-btn" data-filter="tools">🛠️ Dev Tools</button>
+            <button class="filter-btn" data-filter="featured">⭐ Featured</button>
+        </div>
+    </div>
+
+    <!-- Project Gallery Grid -->
+    <div class="gallery-grid" id="projectGallery">
+        <!-- Featured GitHub Projects -->
+        <div class="github-card">
+            <div class="achievement-badge">🏆</div>
+            <div class="repo-header">
+                <div class="repo-name">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                    </svg>
+                    awesome-ai-chatbot
+                </div>
+                <div class="repo-stats">
+                    <div class="stat-item">⭐ 234</div>
+                    <div class="stat-item">🍴 45</div>
+                    <div class="stat-item">👁️ 23</div>
+                </div>
+            </div>
+            <p class="repo-description">An intelligent chatbot powered by GPT-4 with custom personality training and advanced conversation management</p>
+            <div class="repo-footer">
+                <div class="repo-badges">
+                    <span class="badge language">Python</span>
+                    <span class="badge framework">OpenAI</span>
+                    <span class="live-indicator">
+                        <div class="live-dot"></div>
+                        Live Demo
+                    </span>
+                </div>
+                <div class="repo-actions">
+                    <a href="#" class="action-btn">🔗 Demo</a>
+                    <a href="#" class="action-btn">📂 Code</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="github-card">
+            <div class="repo-header">
+                <div class="repo-name">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                    </svg>
+                    react-portfolio-builder
+                </div>
+                <div class="repo-stats">
+                    <div class="stat-item">⭐ 156</div>
+                    <div class="stat-item">🍴 23</div>
+                    <div class="stat-item">👁️ 12</div>
+                </div>
+            </div>
+            <p class="repo-description">A drag-and-drop portfolio builder for developers and designers with real-time preview and deployment</p>
+            <div class="repo-footer">
+                <div class="repo-badges">
+                    <span class="badge language">TypeScript</span>
+                    <span class="badge framework">React</span>
+                </div>
+                <div class="repo-actions">
+                    <a href="#" class="action-btn">🔗 Demo</a>
+                    <a href="#" class="action-btn">📂 Code</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="github-card">
+            <div class="repo-header">
+                <div class="repo-name">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                    </svg>
+                    voice-expense-tracker
+                </div>
+                <div class="repo-stats">
+                    <div class="stat-item">⭐ 89</div>
+                    <div class="stat-item">🍴 12</div>
+                    <div class="stat-item">👁️ 8</div>
+                </div>
+            </div>
+            <p class="repo-description">Track expenses using voice commands with AI categorization and smart budgeting insights</p>
+            <div class="repo-footer">
+                <div class="repo-badges">
+                    <span class="badge language">JavaScript</span>
+                    <span class="badge framework">Node.js</span>
+                </div>
+                <div class="repo-actions">
+                    <a href="#" class="action-btn">🔗 Demo</a>
+                    <a href="#" class="action-btn">📂 Code</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="github-card">
+            <div class="repo-header">
+                <div class="repo-name">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                    </svg>
+                    code-review-assistant
+                </div>
+                <div class="repo-stats">
+                    <div class="stat-item">⭐ 312</div>
+                    <div class="stat-item">🍴 67</div>
+                    <div class="stat-item">👁️ 45</div>
+                </div>
+            </div>
+            <p class="repo-description">AI-powered code review tool that integrates with GitHub PRs and provides intelligent feedback</p>
+            <div class="repo-footer">
+                <div class="repo-badges">
+                    <span class="badge language">Go</span>
+                    <span class="badge framework">GitHub API</span>
+                    <span class="live-indicator">
+                        <div class="live-dot"></div>
+                        Live Demo
+                    </span>
+                </div>
+                <div class="repo-actions">
+                    <a href="#" class="action-btn">🔗 Demo</a>
+                    <a href="#" class="action-btn">📂 Code</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="github-card">
+            <div class="repo-header">
+                <div class="repo-name">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                    </svg>
+                    ml-image-classifier
+                </div>
+                <div class="repo-stats">
+                    <div class="stat-item">⭐ 178</div>
+                    <div class="stat-item">🍴 34</div>
+                    <div class="stat-item">👁️ 19</div>
+                </div>
+            </div>
+            <p class="repo-description">Real-time image classification using TensorFlow with web interface and mobile deployment</p>
+            <div class="repo-footer">
+                <div class="repo-badges">
+                    <span class="badge language">Python</span>
+                    <span class="badge framework">TensorFlow</span>
+                </div>
+                <div class="repo-actions">
+                    <a href="#" class="action-btn">🔗 Demo</a>
+                    <a href="#" class="action-btn">📂 Code</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="github-card">
+            <div class="repo-header">
+                <div class="repo-name">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                    </svg>
+                    blockchain-voting-system
+                </div>
+                <div class="repo-stats">
+                    <div class="stat-item">⭐ 245</div>
+                    <div class="stat-item">🍴 56</div>
+                    <div class="stat-item">👁️ 28</div>
+                </div>
+            </div>
+            <p class="repo-description">Secure and transparent voting system built on Ethereum with smart contract verification</p>
+            <div class="repo-footer">
+                <div class="repo-badges">
+                    <span class="badge language">Solidity</span>
+                    <span class="badge framework">Ethereum</span>
+                </div>
+                <div class="repo-actions">
+                    <a href="#" class="action-btn">🔗 Demo</a>
+                    <a href="#" class="action-btn">📂 Code</a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -507,300 +907,247 @@
     <div class="stats-section">
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-icon">⚔️</div>
-                <div class="stat-value">1,247</div>
-                <div class="stat-label">Total Battles</div>
+                <div class="stat-icon">📂</div>
+                <div class="stat-value">247</div>
+                <div class="stat-label">GitHub Projects</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon">🗳️</div>
-                <div class="stat-value">3.2M</div>
-                <div class="stat-label">Votes Cast</div>
+                <div class="stat-icon">⭐</div>
+                <div class="stat-value">12.3K</div>
+                <div class="stat-label">Total Stars</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon">🏅</div>
-                <div class="stat-value">347</div>
-                <div class="stat-label">Unique Winners</div>
+                <div class="stat-icon">🍴</div>
+                <div class="stat-value">1,847</div>
+                <div class="stat-label">Total Forks</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon">🔥</div>
-                <div class="stat-value">89</div>
-                <div class="stat-label">Perfect Victories</div>
+                <div class="stat-icon">👨‍💻</div>
+                <div class="stat-value">156</div>
+                <div class="stat-label">Active Developers</div>
             </div>
         </div>
     </div>
 
-    <!-- Gallery Grid -->
-    <div class="gallery-container">
-        <div class="battles-grid">
-            <!-- Battle Card 1 -->
-            <div class="battle-card">
-                <div class="battle-header">
-                    <div class="battle-date">December 15, 2024 • Final Round</div>
-                    <span class="battle-category health">Healthcare</span>
-                </div>
-                <div class="battle-apps">
-                    <div class="app-vs-app">
-                        <div class="app-contestant winner">
-                            <div class="winner-badge">👑</div>
-                            <div class="app-icon">🗣️</div>
-                            <div class="app-info">
-                                <div class="app-name">TinkyBink AAC</div>
-                                <div class="app-developer">Luke Kist</div>
-                            </div>
-                        </div>
-                        <div class="vs-divider">VS</div>
-                        <div class="app-contestant">
-                            <div class="app-icon">🧠</div>
-                            <div class="app-info">
-                                <div class="app-name">MindSync Pro</div>
-                                <div class="app-developer">Neural Labs</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="battle-results">
-                    <div class="result-bar">
-                        <div class="result-fill winner" style="width: 68%">68%</div>
-                        <div class="result-fill loser" style="width: 32%">32%</div>
-                    </div>
-                    <span class="total-votes">45.2K votes</span>
-                </div>
-            </div>
-
-            <!-- Battle Card 2 -->
-            <div class="battle-card">
-                <div class="battle-header">
-                    <div class="battle-date">December 14, 2024 • Semi-Final</div>
-                    <span class="battle-category education">Education</span>
-                </div>
-                <div class="battle-apps">
-                    <div class="app-vs-app">
-                        <div class="app-contestant winner">
-                            <div class="winner-badge">🏆</div>
-                            <div class="app-icon">📚</div>
-                            <div class="app-info">
-                                <div class="app-name">StudyBuddy AI</div>
-                                <div class="app-developer">EduTech Labs</div>
-                            </div>
-                        </div>
-                        <div class="vs-divider">VS</div>
-                        <div class="app-contestant">
-                            <div class="app-icon">🎓</div>
-                            <div class="app-info">
-                                <div class="app-name">LearnMaster Pro</div>
-                                <div class="app-developer">Academic Co</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="battle-results">
-                    <div class="result-bar">
-                        <div class="result-fill winner" style="width: 52%">52%</div>
-                        <div class="result-fill loser" style="width: 48%">48%</div>
-                    </div>
-                    <span class="total-votes">38.7K votes</span>
-                </div>
-            </div>
-
-            <!-- Battle Card 3 -->
-            <div class="battle-card">
-                <div class="battle-header">
-                    <div class="battle-date">December 13, 2024 • Quarter-Final</div>
-                    <span class="battle-category entertainment">Entertainment</span>
-                </div>
-                <div class="battle-apps">
-                    <div class="app-vs-app">
-                        <div class="app-contestant winner">
-                            <div class="winner-badge">⭐</div>
-                            <div class="app-icon">🎵</div>
-                            <div class="app-info">
-                                <div class="app-name">BeatMaker Studio</div>
-                                <div class="app-developer">Sonic Innovations</div>
-                            </div>
-                        </div>
-                        <div class="vs-divider">VS</div>
-                        <div class="app-contestant">
-                            <div class="app-icon">🎮</div>
-                            <div class="app-info">
-                                <div class="app-name">PixelQuest Pro</div>
-                                <div class="app-developer">GameForge</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="battle-results">
-                    <div class="result-bar">
-                        <div class="result-fill winner" style="width: 71%">71%</div>
-                        <div class="result-fill loser" style="width: 29%">29%</div>
-                    </div>
-                    <span class="total-votes">29.4K votes</span>
-                </div>
-            </div>
-
-            <!-- Battle Card 4 -->
-            <div class="battle-card">
-                <div class="battle-header">
-                    <div class="battle-date">December 12, 2024 • Daily Battle</div>
-                    <span class="battle-category productivity">Productivity</span>
-                </div>
-                <div class="battle-apps">
-                    <div class="app-vs-app">
-                        <div class="app-contestant">
-                            <div class="app-icon">📝</div>
-                            <div class="app-info">
-                                <div class="app-name">TaskMaster AI</div>
-                                <div class="app-developer">Productivity Inc</div>
-                            </div>
-                        </div>
-                        <div class="vs-divider">VS</div>
-                        <div class="app-contestant winner">
-                            <div class="winner-badge">🏅</div>
-                            <div class="app-icon">📊</div>
-                            <div class="app-info">
-                                <div class="app-name">FlowState Pro</div>
-                                <div class="app-developer">Focus Labs</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="battle-results">
-                    <div class="result-bar">
-                        <div class="result-fill loser" style="width: 44%">44%</div>
-                        <div class="result-fill winner" style="width: 56%">56%</div>
-                    </div>
-                    <span class="total-votes">22.1K votes</span>
-                </div>
-            </div>
-
-            <!-- Battle Card 5 -->
-            <div class="battle-card">
-                <div class="battle-header">
-                    <div class="battle-date">December 11, 2024 • Epic Battle</div>
-                    <span class="battle-category finance">Finance</span>
-                </div>
-                <div class="battle-apps">
-                    <div class="app-vs-app">
-                        <div class="app-contestant winner">
-                            <div class="winner-badge">💎</div>
-                            <div class="app-icon">💰</div>
-                            <div class="app-info">
-                                <div class="app-name">WealthWise AI</div>
-                                <div class="app-developer">FinTech Pioneers</div>
-                            </div>
-                        </div>
-                        <div class="vs-divider">VS</div>
-                        <div class="app-contestant">
-                            <div class="app-icon">📈</div>
-                            <div class="app-info">
-                                <div class="app-name">InvestSmart</div>
-                                <div class="app-developer">Capital Tech</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="battle-results">
-                    <div class="result-bar">
-                        <div class="result-fill winner" style="width: 63%">63%</div>
-                        <div class="result-fill loser" style="width: 37%">37%</div>
-                    </div>
-                    <span class="total-votes">34.5K votes</span>
-                </div>
-            </div>
-
-            <!-- Battle Card 6 -->
-            <div class="battle-card">
-                <div class="battle-header">
-                    <div class="battle-date">December 10, 2024 • Upset Victory</div>
-                    <span class="battle-category health">Healthcare</span>
-                </div>
-                <div class="battle-apps">
-                    <div class="app-vs-app">
-                        <div class="app-contestant">
-                            <div class="app-icon">💊</div>
-                            <div class="app-info">
-                                <div class="app-name">MediTrack AI</div>
-                                <div class="app-developer">HealthTech Solutions</div>
-                            </div>
-                        </div>
-                        <div class="vs-divider">VS</div>
-                        <div class="app-contestant winner">
-                            <div class="winner-badge">🌟</div>
-                            <div class="app-icon">🏃</div>
-                            <div class="app-info">
-                                <div class="app-name">FitGenius Pro</div>
-                                <div class="app-developer">FitTech Inc</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="battle-results">
-                    <div class="result-bar">
-                        <div class="result-fill loser" style="width: 49%">49%</div>
-                        <div class="result-fill winner" style="width: 51%">51%</div>
-                    </div>
-                    <span class="total-votes">41.2K votes</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="load-more-section">
-            <button class="load-more-btn">Load More Battles</button>
-        </div>
+    <div class="load-more-section">
+        <button class="load-more-btn">Load More Projects</button>
     </div>
 
     <script>
-        // Filter functionality
-        document.querySelectorAll('.filter-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        // GitHub Projects Data
+        const githubProjects = [
+            {
+                name: 'awesome-ai-chatbot',
+                description: 'An intelligent chatbot powered by GPT-4 with custom personality training and advanced conversation management',
+                language: 'Python',
+                framework: 'OpenAI',
+                stars: 234,
+                forks: 45,
+                watchers: 23,
+                category: 'ai',
+                featured: true,
+                hasDemo: true
+            },
+            {
+                name: 'react-portfolio-builder',
+                description: 'A drag-and-drop portfolio builder for developers and designers with real-time preview and deployment',
+                language: 'TypeScript',
+                framework: 'React',
+                stars: 156,
+                forks: 23,
+                watchers: 12,
+                category: 'web',
+                featured: false,
+                hasDemo: true
+            },
+            {
+                name: 'voice-expense-tracker',
+                description: 'Track expenses using voice commands with AI categorization and smart budgeting insights',
+                language: 'JavaScript',
+                framework: 'Node.js',
+                stars: 89,
+                forks: 12,
+                watchers: 8,
+                category: 'mobile',
+                featured: false,
+                hasDemo: false
+            },
+            {
+                name: 'code-review-assistant',
+                description: 'AI-powered code review tool that integrates with GitHub PRs and provides intelligent feedback',
+                language: 'Go',
+                framework: 'GitHub API',
+                stars: 312,
+                forks: 67,
+                watchers: 45,
+                category: 'tools',
+                featured: true,
+                hasDemo: true
+            },
+            {
+                name: 'ml-image-classifier',
+                description: 'Real-time image classification using TensorFlow with web interface and mobile deployment',
+                language: 'Python',
+                framework: 'TensorFlow',
+                stars: 178,
+                forks: 34,
+                watchers: 19,
+                category: 'ai',
+                featured: false,
+                hasDemo: false
+            },
+            {
+                name: 'blockchain-voting-system',
+                description: 'Secure and transparent voting system built on Ethereum with smart contract verification',
+                language: 'Solidity',
+                framework: 'Ethereum',
+                stars: 245,
+                forks: 56,
+                watchers: 28,
+                category: 'web',
+                featured: false,
+                hasDemo: false
+            }
+        ];
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const projectGallery = document.getElementById('projectGallery');
+
+        let currentFilter = 'all';
+        let currentSearch = '';
+
+        searchInput.addEventListener('input', function() {
+            currentSearch = this.value.toLowerCase();
+            filterProjects();
+        });
+
+        // Filter button functionality
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterButtons.forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
+                currentFilter = this.getAttribute('data-filter');
+                filterProjects();
+            });
+        });
+
+        function filterProjects() {
+            const filteredProjects = githubProjects.filter(project => {
+                const matchesSearch = project.name.toLowerCase().includes(currentSearch) ||
+                                    project.description.toLowerCase().includes(currentSearch) ||
+                                    project.language.toLowerCase().includes(currentSearch);
                 
-                // Filter logic would go here
-                console.log('Filter:', this.textContent);
+                const matchesFilter = currentFilter === 'all' ||
+                                    project.category === currentFilter ||
+                                    (currentFilter === 'featured' && project.featured);
+                
+                return matchesSearch && matchesFilter;
             });
-        });
 
-        // Animate battle results on scroll
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const fills = entry.target.querySelectorAll('.result-fill');
-                    fills.forEach(fill => {
-                        const width = fill.style.width;
-                        fill.style.width = '0';
-                        setTimeout(() => {
-                            fill.style.width = width;
-                        }, 100);
-                    });
-                    observer.unobserve(entry.target);
-                }
+            renderProjects(filteredProjects);
+        }
+
+        function renderProjects(projects) {
+            projectGallery.innerHTML = projects.map(project => `
+                <div class="github-card" data-category="${project.category}">
+                    ${project.featured ? '<div class="achievement-badge">🏆</div>' : ''}
+                    <div class="repo-header">
+                        <div class="repo-name">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                            </svg>
+                            ${project.name}
+                        </div>
+                        <div class="repo-stats">
+                            <div class="stat-item">⭐ ${project.stars}</div>
+                            <div class="stat-item">🍴 ${project.forks}</div>
+                            <div class="stat-item">👁️ ${project.watchers}</div>
+                        </div>
+                    </div>
+                    <p class="repo-description">${project.description}</p>
+                    <div class="repo-footer">
+                        <div class="repo-badges">
+                            <span class="badge language">${project.language}</span>
+                            <span class="badge framework">${project.framework}</span>
+                            ${project.hasDemo ? `
+                                <span class="live-indicator">
+                                    <div class="live-dot"></div>
+                                    Live Demo
+                                </span>
+                            ` : ''}
+                        </div>
+                        <div class="repo-actions">
+                            ${project.hasDemo ? '<a href="#" class="action-btn">🔗 Demo</a>' : ''}
+                            <a href="#" class="action-btn">📂 Code</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add click handlers to new cards
+            document.querySelectorAll('.github-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    // Navigate to project details or GitHub repo
+                    console.log('Project clicked:', this.querySelector('.repo-name').textContent.trim());
+                });
             });
-        });
+        }
 
-        document.querySelectorAll('.battle-results').forEach(result => {
-            observer.observe(result);
-        });
-
-        // Battle card click handler
-        document.querySelectorAll('.battle-card').forEach(card => {
-            card.addEventListener('click', function() {
-                // Navigate to battle details
-                window.location.href = 'apple-magic-battle.html';
+        // GitHub card hover effects
+        function addCardAnimations() {
+            document.querySelectorAll('.github-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
             });
-        });
+        }
 
         // Load more functionality
         document.querySelector('.load-more-btn').addEventListener('click', function() {
             this.textContent = 'Loading...';
             
-            // Simulate loading more battles
             setTimeout(() => {
-                this.textContent = 'Load More Battles';
-                // Add more battle cards here
+                // Add more mock projects
+                const newProjects = [
+                    {
+                        name: 'smart-home-hub',
+                        description: 'IoT hub for smart home automation with voice control and mobile app',
+                        language: 'JavaScript',
+                        framework: 'Node.js',
+                        stars: 134,
+                        forks: 29,
+                        watchers: 15,
+                        category: 'mobile',
+                        featured: false,
+                        hasDemo: true
+                    },
+                    {
+                        name: 'crypto-portfolio-tracker',
+                        description: 'Real-time cryptocurrency portfolio tracking with advanced analytics',
+                        language: 'TypeScript',
+                        framework: 'Vue.js',
+                        stars: 198,
+                        forks: 41,
+                        watchers: 22,
+                        category: 'web',
+                        featured: false,
+                        hasDemo: true
+                    }
+                ];
+
+                githubProjects.push(...newProjects);
+                filterProjects();
+                this.textContent = 'Load More Projects';
             }, 1000);
         });
 
-        // Animate stats on load
+        // Stats animation
         function animateValue(element, start, end, duration) {
             const range = end - start;
             const increment = range / (duration / 16);
@@ -813,9 +1160,7 @@
                     clearInterval(timer);
                 }
                 
-                if (element.textContent.includes('M')) {
-                    element.textContent = (current / 1000000).toFixed(1) + 'M';
-                } else if (element.textContent.includes('K')) {
+                if (element.textContent.includes('K')) {
                     element.textContent = (current / 1000).toFixed(1) + 'K';
                 } else {
                     element.textContent = Math.round(current).toLocaleString();
@@ -823,7 +1168,7 @@
             }, 16);
         }
 
-        // Animate stats when they come into view
+        // Stats observer
         const statsObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -831,9 +1176,7 @@
                     const text = value.textContent;
                     let num = 0;
                     
-                    if (text.includes('M')) {
-                        num = parseFloat(text) * 1000000;
-                    } else if (text.includes('K')) {
+                    if (text.includes('K')) {
                         num = parseFloat(text) * 1000;
                     } else {
                         num = parseInt(text.replace(/,/g, ''));
@@ -848,6 +1191,28 @@
         document.querySelectorAll('.stat-card').forEach(card => {
             statsObserver.observe(card);
         });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            filterProjects();
+            addCardAnimations();
+        });
+
+        // Real-time GitHub stats simulation
+        function updateGitHubStats() {
+            const projects = githubProjects.filter(p => currentFilter === 'all' || p.category === currentFilter || (currentFilter === 'featured' && p.featured));
+            const totalStars = projects.reduce((sum, p) => sum + p.stars, 0);
+            const totalForks = projects.reduce((sum, p) => sum + p.forks, 0);
+            
+            // Update stats with small random changes
+            setTimeout(() => {
+                document.querySelector('.stat-value:nth-child(2)').textContent = (totalStars / 1000).toFixed(1) + 'K';
+                document.querySelector('.stat-value:nth-child(3)').textContent = totalForks.toLocaleString();
+            }, 100);
+        }
+
+        // Update stats every 30 seconds
+        setInterval(updateGitHubStats, 30000);
     </script>
 </body>
 </html>

@@ -225,6 +225,65 @@
             overflow: hidden;
         }
 
+        /* Live Stats Bar */
+        .live-stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .live-stat {
+            text-align: center;
+            position: relative;
+        }
+
+        .live-stat-value {
+            display: block;
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+
+        .live-stat-label {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.7);
+            font-weight: 500;
+        }
+
+        .live-indicator-dot {
+            position: absolute;
+            top: 0;
+            right: -8px;
+            width: 8px;
+            height: 8px;
+            background: var(--apple-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.5;
+                transform: scale(1.5);
+            }
+        }
+
         .hero-badge {
             display: inline-block;
             padding: var(--space-xs) 20px;
@@ -906,8 +965,29 @@
     <!-- Hero Section -->
     <section role="region" class="hero-section">
         <div class="hero-badge">🔥 Live Rankings</div>
-        <h1 class="hero-title" style="font-size: var(--fs-4xl);" style="font-size: var(--fs-4xl);">Leaderboard</h1>
+        <h1 class="hero-title" style="font-size: var(--fs-4xl);">Leaderboard</h1>
         <p class="hero-subtitle">The best apps ranked by battle performance and community votes</p>
+        
+        <!-- Live Stats Bar -->
+        <div class="live-stats-bar">
+            <div class="live-stat">
+                <span class="live-stat-value" id="activeUsers">247</span>
+                <span class="live-stat-label">Active Now</span>
+                <span class="live-indicator-dot"></span>
+            </div>
+            <div class="live-stat">
+                <span class="live-stat-value" id="ongoingBattles">12</span>
+                <span class="live-stat-label">Live Battles</span>
+            </div>
+            <div class="live-stat">
+                <span class="live-stat-value" id="todayVotes">3.2K</span>
+                <span class="live-stat-label">Votes Today</span>
+            </div>
+            <div class="live-stat">
+                <span class="live-stat-value" id="chatMessages">892</span>
+                <span class="live-stat-label">Chat Messages</span>
+            </div>
+        </div>
     </section>
 
     <!-- Category Tabs -->
@@ -1226,11 +1306,14 @@
     <script>
         let allApps = [];
         let currentCategory = 'all';
+        let liveStatsInterval;
         
         // Load data on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadLeaderboardData();
             updateUserDisplay();
+            startLiveUpdates();
+            connectToChatRooms();
         });
         
         // Animate podium cards on load
@@ -1481,6 +1564,235 @@
 
         document.querySelectorAll('.podium-stats').forEach(stats => {
             observer.observe(stats);
+        });
+
+        // Live Updates System
+        function startLiveUpdates() {
+            updateLiveStats();
+            
+            // Update every 3 seconds
+            liveStatsInterval = setInterval(() => {
+                updateLiveStats();
+                updateLiveBattles();
+            }, 3000);
+        }
+
+        function updateLiveStats() {
+            // Simulate real-time user activity
+            const activeUsers = document.getElementById('activeUsers');
+            const ongoingBattles = document.getElementById('ongoingBattles');
+            const todayVotes = document.getElementById('todayVotes');
+            const chatMessages = document.getElementById('chatMessages');
+            
+            if (activeUsers) {
+                const currentUsers = parseInt(activeUsers.textContent);
+                const change = Math.floor(Math.random() * 10) - 3;
+                const newUsers = Math.max(150, Math.min(500, currentUsers + change));
+                animateNumber(activeUsers, currentUsers, newUsers, 500);
+            }
+            
+            if (ongoingBattles) {
+                const current = parseInt(ongoingBattles.textContent);
+                const change = Math.floor(Math.random() * 3) - 1;
+                const newValue = Math.max(5, Math.min(25, current + change));
+                if (newValue !== current) {
+                    animateNumber(ongoingBattles, current, newValue, 500);
+                }
+            }
+            
+            if (todayVotes) {
+                const current = parseFloat(todayVotes.textContent.replace('K', '')) * 1000;
+                const newVotes = current + Math.floor(Math.random() * 50);
+                todayVotes.textContent = formatCompactNumber(newVotes);
+            }
+            
+            if (chatMessages) {
+                const current = parseInt(chatMessages.textContent);
+                const newMessages = current + Math.floor(Math.random() * 5);
+                animateNumber(chatMessages, current, newMessages, 300);
+            }
+        }
+
+        function animateNumber(element, start, end, duration) {
+            const range = end - start;
+            const startTime = performance.now();
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                const current = Math.floor(start + (range * progress));
+                element.textContent = current;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+
+        function formatCompactNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        // Chat Room Integration
+        function connectToChatRooms() {
+            // Simulate chat room connection
+            console.log('Connecting to Vibe Awards chat rooms...');
+            
+            // Add live chat activity indicator
+            const chatActivity = document.createElement('div');
+            chatActivity.className = 'chat-activity-indicator';
+            chatActivity.innerHTML = `
+                <div class="chat-pulse"></div>
+                <span>Live Chat Active</span>
+            `;
+            
+            // Simulate receiving chat messages
+            simulateChatActivity();
+        }
+
+        function simulateChatActivity() {
+            const chatEvents = [
+                { user: 'CodeNinja', message: 'Just voted for TinkyBink AAC!' },
+                { user: 'DesignPro', message: 'New battle starting in 2 mins' },
+                { user: 'DevMaster', message: 'StudyBuddy AI is crushing it!' },
+                { user: 'AppHunter', message: 'Anyone up for team battle?' },
+                { user: 'VibeCoder', message: 'Check out my new submission!' }
+            ];
+            
+            // Randomly show chat notifications
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    const event = chatEvents[Math.floor(Math.random() * chatEvents.length)];
+                    showChatNotification(event);
+                }
+            }, 5000);
+        }
+
+        function showChatNotification(event) {
+            // Create floating chat notification
+            const notification = document.createElement('div');
+            notification.className = 'chat-notification';
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: rgba(0, 0, 0, 0.9);
+                backdrop-filter: blur(20px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 12px;
+                padding: 12px 20px;
+                color: white;
+                font-size: 14px;
+                z-index: 10000;
+                animation: slideInRight 0.3s ease;
+                max-width: 300px;
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="color: var(--apple-blue); font-weight: 600;">${event.user}:</span>
+                    <span style="color: rgba(245, 245, 247, 0.9);">${event.message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Live Battle Updates
+        function updateLiveBattles() {
+            // Randomly update some rankings
+            if (Math.random() > 0.8) {
+                const rows = document.querySelectorAll('.ranking-row:not(.ranking-header)');
+                if (rows.length > 2) {
+                    const randomIndex = Math.floor(Math.random() * (rows.length - 1)) + 1;
+                    const row = rows[randomIndex];
+                    
+                    // Add battle animation
+                    row.style.animation = 'battlePulse 1s ease';
+                    setTimeout(() => {
+                        row.style.animation = '';
+                    }, 1000);
+                }
+            }
+        }
+
+        // Add animations
+        const animationStyles = document.createElement('style');
+        animationStyles.textContent = `
+            @keyframes slideInRight {
+                from {
+                    opacity: 0;
+                    transform: translateX(100px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+            
+            @keyframes fadeOut {
+                to {
+                    opacity: 0;
+                    transform: scale(0.9);
+                }
+            }
+            
+            @keyframes battlePulse {
+                0%, 100% {
+                    background: rgba(255, 255, 255, 0.03);
+                }
+                50% {
+                    background: rgba(0, 113, 227, 0.1);
+                    transform: scale(1.01);
+                }
+            }
+            
+            .chat-activity-indicator {
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 16px;
+                background: rgba(48, 209, 88, 0.1);
+                border: 1px solid var(--apple-green);
+                border-radius: 20px;
+                color: var(--apple-green);
+                font-size: 12px;
+                font-weight: 600;
+                z-index: 1000;
+            }
+            
+            .chat-pulse {
+                width: 8px;
+                height: 8px;
+                background: var(--apple-green);
+                border-radius: 50%;
+                animation: pulse 2s infinite;
+            }
+        `;
+        document.head.appendChild(animationStyles);
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (liveStatsInterval) {
+                clearInterval(liveStatsInterval);
+            }
         });
     </script>
     <script src="js/animations.js"></script>
