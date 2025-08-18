@@ -435,6 +435,11 @@
             color: var(--apple-red);
         }
 
+        .status-private {
+            background: rgba(134, 134, 139, 0.2);
+            color: var(--apple-gray);
+        }
+
         .project-title {
             font-size: var(--fs-xl);
             font-weight: 600;
@@ -1143,6 +1148,55 @@
                     </div>
                 </div>
 
+                <!-- GitHub Integration Section -->
+                <div class="section">
+                    <h2 class="section-title" style="font-size: var(--fs-3xl);">GitHub Activity</h2>
+                    <div class="github-section">
+                        <div class="github-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+                            <p style="color: rgba(245, 245, 247, 0.8); font-size: var(--fs-base);">Connect your GitHub profile to showcase real repositories and contributions</p>
+                            <button class="btn btn-primary" onclick="connectGitHub()" id="githubConnectBtn">🔗 Connect GitHub</button>
+                        </div>
+                        
+                        <!-- GitHub Stats Cards -->
+                        <div class="github-stats" id="githubStats" style="display: none;">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--gap-md); margin-bottom: 32px;">
+                                <div class="stat-card" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: var(--space-md); text-align: center;">
+                                    <div class="stat-number" id="githubRepos" style="font-size: var(--fs-2xl); font-weight: 700; color: var(--apple-green); margin-bottom: 8px;">-</div>
+                                    <div class="stat-label" style="font-size: var(--fs-sm); color: rgba(245, 245, 247, 0.6);">Public Repos</div>
+                                </div>
+                                <div class="stat-card" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: var(--space-md); text-align: center;">
+                                    <div class="stat-number" id="githubFollowers" style="font-size: var(--fs-2xl); font-weight: 700; color: var(--apple-blue); margin-bottom: 8px;">-</div>
+                                    <div class="stat-label" style="font-size: var(--fs-sm); color: rgba(245, 245, 247, 0.6);">Followers</div>
+                                </div>
+                                <div class="stat-card" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: var(--space-md); text-align: center;">
+                                    <div class="stat-number" id="githubFollowing" style="font-size: var(--fs-2xl); font-weight: 700; color: var(--apple-purple); margin-bottom: 8px;">-</div>
+                                    <div class="stat-label" style="font-size: var(--fs-sm); color: rgba(245, 245, 247, 0.6);">Following</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Recent Repositories -->
+                            <div class="github-repos">
+                                <h3 style="font-size: var(--fs-xl); font-weight: 600; margin-bottom: 20px; color: var(--apple-teal);">Recent Repositories</h3>
+                                <div class="repos-grid" id="reposGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--gap-md);">
+                                    <!-- Repositories will be dynamically loaded here -->
+                                </div>
+                            </div>
+                            
+                            <!-- Contribution Graph Placeholder -->
+                            <div class="contribution-graph" style="margin-top: 32px;">
+                                <h3 style="font-size: var(--fs-xl); font-weight: 600; margin-bottom: 20px; color: var(--apple-teal);">Contribution Activity</h3>
+                                <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: var(--space-lg); text-align: center; color: rgba(245, 245, 247, 0.7);">
+                                    <div style="font-size: var(--fs-lg); margin-bottom: 12px;">🔥 Contribution Graph</div>
+                                    <p>Real-time GitHub contribution data from connected profile</p>
+                                    <div style="margin-top: 20px; height: 100px; background: linear-gradient(90deg, rgba(48, 209, 88, 0.1), rgba(48, 209, 88, 0.3), rgba(48, 209, 88, 0.1)); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                        <span style="opacity: 0.7;">Contributions visualization will appear here</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Achievements Section -->
                 <div class="section">
                     <h2 class="section-title" style="font-size: var(--fs-3xl);" style="font-size: var(--fs-3xl);">Achievements & Badges</h2>
@@ -1242,7 +1296,7 @@
             document.getElementById('appStory').value = '';
         }
         
-        function addApp() {
+        async function addApp() {
             const url = document.getElementById('appUrl').value.trim();
             const story = document.getElementById('appStory').value.trim();
             
@@ -1251,38 +1305,85 @@
                 return;
             }
             
-            // Simulate app metadata extraction
-            const appData = extractAppData(url);
+            // Show loading state
+            const addButton = document.querySelector('button[onclick="addApp()"]');
+            const originalText = addButton.textContent;
+            addButton.textContent = 'Fetching app data...';
+            addButton.disabled = true;
             
-            // Create app card
-            const showcaseGrid = document.getElementById('showcaseGrid');
-            const appCard = createAppCard(appData, story);
-            showcaseGrid.appendChild(appCard);
-            
-            // Save to localStorage
-            saveAppToProfile(appData, story);
-            
-            closeAppUploader();
-            
-            // Success message
-            showNotification('App added to your showcase! 🚀');
+            try {
+                // Extract app metadata (with GitHub API integration)
+                const appData = await extractAppData(url);
+                
+                // Create app card
+                const showcaseGrid = document.getElementById('showcaseGrid');
+                const appCard = createAppCard(appData, story);
+                showcaseGrid.appendChild(appCard);
+                
+                // Save to localStorage
+                saveAppToProfile(appData, story);
+                
+                closeAppUploader();
+                
+                // Success message
+                showNotification('App added to your showcase! 🚀');
+            } catch (error) {
+                console.error('Error adding app:', error);
+                showNotification('Error adding app. Please try again.');
+            } finally {
+                // Reset button
+                addButton.textContent = originalText;
+                addButton.disabled = false;
+            }
         }
         
-        function extractAppData(url) {
-            // Simulate metadata extraction based on URL
+        async function extractAppData(url) {
             const domain = new URL(url).hostname;
             
             if (domain.includes('github.com')) {
-                const repoName = url.split('/').pop();
-                return {
-                    title: repoName.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-                    type: 'Repository',
-                    url: url,
-                    icon: '📱',
-                    status: 'Open Source',
-                    description: 'Vibe-coded through AI conversation',
-                    tech: ['AI Collaboration', 'GitHub', 'Open Source']
-                };
+                const pathParts = url.split('/');
+                const username = pathParts[3];
+                const repoName = pathParts[4];
+                
+                try {
+                    // Fetch real GitHub repository data
+                    const repoResponse = await fetch(`https://api.github.com/repos/${username}/${repoName}`);
+                    const repoData = await repoResponse.json();
+                    
+                    // Determine primary language and tech stack
+                    const languagesResponse = await fetch(`https://api.github.com/repos/${username}/${repoName}/languages`);
+                    const languages = await languagesResponse.json();
+                    const primaryLanguage = Object.keys(languages)[0] || 'Code';
+                    
+                    // Get tech tags from languages
+                    const techTags = Object.keys(languages).slice(0, 3);
+                    if (!techTags.includes('AI Collaboration')) techTags.push('AI Collaboration');
+                    
+                    return {
+                        title: repoData.name.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+                        type: 'Repository',
+                        url: url,
+                        icon: getLanguageIcon(primaryLanguage),
+                        status: repoData.private ? 'Private' : 'Open Source',
+                        description: repoData.description || 'Vibe-coded through AI conversation',
+                        tech: techTags.length > 0 ? techTags : ['GitHub', 'Open Source'],
+                        stars: repoData.stargazers_count,
+                        forks: repoData.forks_count,
+                        language: primaryLanguage,
+                        updated: new Date(repoData.updated_at).toLocaleDateString()
+                    };
+                } catch (error) {
+                    console.log('GitHub API rate limit or error, using fallback');
+                    return {
+                        title: repoName.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+                        type: 'Repository',
+                        url: url,
+                        icon: '📱',
+                        status: 'Open Source',
+                        description: 'Vibe-coded through AI conversation',
+                        tech: ['AI Collaboration', 'GitHub', 'Open Source']
+                    };
+                }
             } else if (domain.includes('vercel.app') || domain.includes('netlify.app') || domain.includes('herokuapp.com')) {
                 return {
                     title: 'Web App',
@@ -1306,6 +1407,32 @@
             }
         }
         
+        function getLanguageIcon(language) {
+            const icons = {
+                'JavaScript': '💛',
+                'TypeScript': '💙',
+                'Python': '🐍',
+                'Java': '☕',
+                'C++': '⚡',
+                'C#': '🔷',
+                'PHP': '🐘',
+                'Ruby': '💎',
+                'Go': '🔵',
+                'Rust': '🦀',
+                'Swift': '🦉',
+                'Kotlin': '🟠',
+                'Dart': '🎯',
+                'HTML': '🌐',
+                'CSS': '🎨',
+                'Vue': '💚',
+                'React': '⚛️',
+                'Angular': '🅰️',
+                'Flutter': '🦋',
+                'Unity': '🎮'
+            };
+            return icons[language] || '📱';
+        }
+        
         function createAppCard(appData, story) {
             const card = document.createElement('div');
             card.className = 'project-card';
@@ -1326,8 +1453,12 @@
                     ${appData.tech.map(tech => `<span style="padding: var(--space-xs) 12px; background: rgba(191, 90, 242, 0.2); color: var(--apple-purple); border-radius: 16px; font-size: var(--fs-xs); border: 1px solid rgba(191, 90, 242, 0.3); transition: all 0.2s ease;">${tech}</span>`).join('')}
                 </div>
                 <div class="project-meta">
-                    <a href="${appData.url}" target="_blank" style="color: var(--apple-teal); text-decoration: none; font-weight: 600; transition: all 0.2s ease;">View ${appData.type} →</a>
-                    <span class="project-date">Just added</span>
+                    <div style="display: flex; gap: var(--gap-sm); align-items: center;">
+                        ${appData.stars !== undefined ? `<span style="color: var(--apple-teal); font-size: var(--fs-sm);">⭐ ${appData.stars}</span>` : ''}
+                        ${appData.forks !== undefined ? `<span style="color: var(--apple-teal); font-size: var(--fs-sm);">🍴 ${appData.forks}</span>` : ''}
+                        <a href="${appData.url}" target="_blank" style="color: var(--apple-teal); text-decoration: none; font-weight: 600; transition: all 0.2s ease;">View ${appData.type} →</a>
+                    </div>
+                    <span class="project-date">${appData.updated || 'Just added'}</span>
                 </div>
             `;
             
@@ -1542,6 +1673,182 @@
         // Override the existing functions
         window.openAppUploader = openAppUploader;
         window.closeAppUploader = closeAppUploader;
+        
+        // GitHub Integration Functions
+        async function connectGitHub() {
+            const username = prompt('Enter your GitHub username:');
+            if (!username) return;
+            
+            const button = document.getElementById('githubConnectBtn');
+            const originalText = button.textContent;
+            button.textContent = '⏳ Connecting...';
+            button.disabled = true;
+            
+            try {
+                await loadGitHubProfile(username);
+                showNotification('GitHub profile connected! 🔗');
+                
+                // Update button
+                button.textContent = '✅ Connected';
+                button.style.background = 'var(--apple-green)';
+                
+                // Show GitHub stats section
+                document.getElementById('githubStats').style.display = 'block';
+                
+                // Save username to localStorage
+                localStorage.setItem('githubUsername', username);
+                
+            } catch (error) {
+                console.error('GitHub connection error:', error);
+                showNotification('Failed to connect GitHub profile. Please try again.');
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        }
+        
+        async function loadGitHubProfile(username) {
+            try {
+                // Fetch user profile
+                const userResponse = await fetch(`https://api.github.com/users/${username}`);
+                const userData = await userResponse.json();
+                
+                if (!userResponse.ok) {
+                    throw new Error(`GitHub API error: ${userData.message}`);
+                }
+                
+                // Update stats
+                document.getElementById('githubRepos').textContent = userData.public_repos;
+                document.getElementById('githubFollowers').textContent = userData.followers;
+                document.getElementById('githubFollowing').textContent = userData.following;
+                
+                // Fetch repositories
+                const reposResponse = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`);
+                const reposData = await reposResponse.json();
+                
+                if (reposResponse.ok) {
+                    displayGitHubRepos(reposData);
+                }
+                
+                // Animate stats
+                animateGitHubStats();
+                
+            } catch (error) {
+                console.error('Error loading GitHub profile:', error);
+                throw error;
+            }
+        }
+        
+        function displayGitHubRepos(repos) {
+            const reposGrid = document.getElementById('reposGrid');
+            reposGrid.innerHTML = '';
+            
+            repos.forEach((repo, index) => {
+                const repoCard = document.createElement('div');
+                repoCard.className = 'project-card';
+                repoCard.style.opacity = '0';
+                repoCard.style.transform = 'translateY(30px)';
+                repoCard.style.cursor = 'pointer';
+                
+                const primaryLanguage = repo.language || 'Code';
+                const updatedDate = new Date(repo.updated_at).toLocaleDateString();
+                
+                repoCard.innerHTML = `
+                    <div class="project-header">
+                        <div class="project-icon">${getLanguageIcon(primaryLanguage)}</div>
+                        <div class="project-status ${repo.private ? 'status-private' : 'status-live'}">${repo.private ? 'Private' : 'Public'}</div>
+                    </div>
+                    <h3 class="project-title">${repo.name}</h3>
+                    <p class="project-description">
+                        ${repo.description || 'No description available'}
+                    </p>
+                    <div class="project-tech" style="display: flex; flex-wrap: wrap; gap: var(--gap-xs); margin: var(--space-sm) 0;">
+                        ${repo.language ? `<span style="padding: var(--space-xs) 12px; background: rgba(191, 90, 242, 0.2); color: var(--apple-purple); border-radius: 16px; font-size: var(--fs-xs); border: 1px solid rgba(191, 90, 242, 0.3);">${repo.language}</span>` : ''}
+                        ${repo.topics.slice(0, 2).map(topic => `<span style="padding: var(--space-xs) 12px; background: rgba(48, 209, 88, 0.2); color: var(--apple-green); border-radius: 16px; font-size: var(--fs-xs); border: 1px solid rgba(48, 209, 88, 0.3);">${topic}</span>`).join('')}
+                    </div>
+                    <div class="project-meta">
+                        <div style="display: flex; gap: var(--gap-sm); align-items: center;">
+                            <span style="color: var(--apple-teal); font-size: var(--fs-sm);">⭐ ${repo.stargazers_count}</span>
+                            <span style="color: var(--apple-teal); font-size: var(--fs-sm);">🍴 ${repo.forks_count}</span>
+                            <a href="${repo.html_url}" target="_blank" style="color: var(--apple-teal); text-decoration: none; font-weight: 600;">View Repo →</a>
+                        </div>
+                        <span class="project-date">${updatedDate}</span>
+                    </div>
+                `;
+                
+                // Add click handler
+                repoCard.addEventListener('click', function(e) {
+                    if (e.target.tagName !== 'A' && e.target.tagName !== 'SPAN') {
+                        window.open(repo.html_url, '_blank');
+                    }
+                });
+                
+                reposGrid.appendChild(repoCard);
+                
+                // Animate in with delay
+                setTimeout(() => {
+                    repoCard.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                    repoCard.style.opacity = '1';
+                    repoCard.style.transform = 'translateY(0)';
+                }, 100 + (index * 100));
+            });
+        }
+        
+        function animateGitHubStats() {
+            const statNumbers = document.querySelectorAll('#githubStats .stat-number');
+            
+            statNumbers.forEach((stat, index) => {
+                const targetValue = parseInt(stat.textContent);
+                stat.textContent = '0';
+                
+                setTimeout(() => {
+                    animateNumber(stat, 0, targetValue, 1500);
+                }, index * 200);
+            });
+        }
+        
+        function animateNumber(element, start, end, duration) {
+            const startTime = performance.now();
+            
+            function updateNumber(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                const currentValue = Math.floor(start + (end - start) * progress);
+                element.textContent = currentValue;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateNumber);
+                }
+            }
+            
+            requestAnimationFrame(updateNumber);
+        }
+        
+        // Check for saved GitHub username on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedUsername = localStorage.getItem('githubUsername');
+            if (savedUsername) {
+                // Auto-load saved GitHub profile
+                setTimeout(async () => {
+                    try {
+                        await loadGitHubProfile(savedUsername);
+                        
+                        // Update button state
+                        const button = document.getElementById('githubConnectBtn');
+                        button.textContent = '✅ Connected';
+                        button.style.background = 'var(--apple-green)';
+                        
+                        // Show GitHub stats section
+                        document.getElementById('githubStats').style.display = 'block';
+                        
+                    } catch (error) {
+                        console.error('Auto-load GitHub profile failed:', error);
+                        // Clear saved username if it's invalid
+                        localStorage.removeItem('githubUsername');
+                    }
+                }, 1000);
+            }
+        });
     </script>
     <script src="js/animations.js"></script>
     <script src="js/apple-magic-init.js"></script>
