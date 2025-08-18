@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deploy Presets - Vibe Toolkit</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Semantic Colors */
+            --surface-primary: rgba(255, 255, 255, 0.03);
+            --surface-secondary: rgba(255, 255, 255, 0.06);
+            --surface-tertiary: rgba(255, 255, 255, 0.09);
+            --border-primary: rgba(255, 255, 255, 0.08);
+            --border-secondary: rgba(255, 255, 255, 0.15);
+            --text-primary: #F5F5F7;
+            --text-secondary: rgba(245, 245, 247, 0.8);
+            --text-tertiary: rgba(245, 245, 247, 0.6);
+            
+            /* Brand Colors */
+            --accent-primary: #0071E3;
+            --accent-secondary: #007AFF;
+            --success: #30D158;
+            --warning: #FF9F0A;
+            --danger: #FF375F;
+            --info: #5AC8FA;
+            --purple: #BF5AF2;
+            --indigo: #5856D6;
+            --green: #00C896;
+            --orange: #FF6B35;
+            
+            /* Mode Colors */
+            --cheap-color: #00C896;
+            --scale-color: #0071E3;
+            --indie-color: #BF5AF2;
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--accent-primary), var(--purple));
+            --gradient-secondary: linear-gradient(135deg, var(--purple), var(--indigo));
+            --gradient-success: linear-gradient(135deg, var(--success), var(--green));
+            --gradient-cheap: linear-gradient(135deg, var(--cheap-color), #00FF88);
+            --gradient-scale: linear-gradient(135deg, var(--scale-color), #0080FF);
+            --gradient-indie: linear-gradient(135deg, var(--indie-color), #DA70D6);
+            
+            /* Transitions */
+            --transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --transition-smooth: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
+            --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 16px 64px rgba(0, 0, 0, 0.25);
+            --shadow-glow: 0 0 32px rgba(0, 113, 227, 0.3);
+            
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+            background: #0A0A0A;
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 80%, rgba(0, 200, 150, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(0, 113, 227, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(191, 90, 242, 0.1) 0%, transparent 70%);
+            animation: backgroundShift 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { 
+                transform: rotate(0deg) scale(1);
+                filter: hue-rotate(0deg);
+            }
+            50% { 
+                transform: rotate(180deg) scale(1.1);
+                filter: hue-rotate(60deg);
+            }
+        }
+
+        /* Header */
+        .header {
+            background: var(--surface-primary);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-lg) var(--space-xl);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .brand-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-success);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 0 32px rgba(0, 200, 150, 0.4);
+            animation: iconFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(10deg); }
+        }
+
+        .brand-text h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: var(--space-xs);
+            background: var(--gradient-success);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text p {
+            color: var(--text-tertiary);
+            font-size: 16px;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: var(--space-md);
+        }
+
+        .nav-btn {
+            padding: 12px 20px;
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition-base);
+        }
+
+        .nav-btn:hover {
+            background: var(--surface-tertiary);
+            border-color: var(--border-secondary);
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-2xl);
+        }
+
+        /* Project Input Section */
+        .project-section {
+            background: var(--surface-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 24px;
+            padding: var(--space-2xl);
+            margin-bottom: var(--space-2xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-success);
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: var(--space-lg);
+            background: var(--gradient-success);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .project-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-xl);
+            margin-bottom: var(--space-xl);
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .input-label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        .input-field {
+            padding: 16px 20px;
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: var(--transition-base);
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.15);
+        }
+
+        /* Deploy Modes */
+        .modes-section {
+            margin-bottom: var(--space-2xl);
+        }
+
+        .modes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: var(--space-xl);
+        }
+
+        .mode-card {
+            background: var(--surface-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 20px;
+            padding: var(--space-xl);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+
+        .mode-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .mode-card.selected {
+            border-color: var(--success);
+            box-shadow: 0 0 32px rgba(0, 200, 150, 0.3);
+        }
+
+        .mode-card.cheap::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-cheap);
+        }
+
+        .mode-card.scale::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-scale);
+        }
+
+        .mode-card.indie::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-indie);
+        }
+
+        .mode-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-lg);
+        }
+
+        .mode-info {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .mode-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .mode-icon.cheap {
+            background: var(--gradient-cheap);
+        }
+
+        .mode-icon.scale {
+            background: var(--gradient-scale);
+        }
+
+        .mode-icon.indie {
+            background: var(--gradient-indie);
+        }
+
+        .mode-details h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: var(--space-xs);
+        }
+
+        .mode-details p {
+            color: var(--text-tertiary);
+            font-size: 14px;
+        }
+
+        .mode-price {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .mode-description {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
+            line-height: 1.6;
+        }
+
+        .mode-features {
+            margin-bottom: var(--space-lg);
+        }
+
+        .features-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .features-list li {
+            padding: var(--space-xs) 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .features-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .tech-stack {
+            background: var(--surface-secondary);
+            border-radius: 12px;
+            padding: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .tech-title {
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+            color: var(--accent-primary);
+            font-size: 14px;
+        }
+
+        .tech-tags {
+            display: flex;
+            gap: var(--space-xs);
+            flex-wrap: wrap;
+        }
+
+        .tech-tag {
+            background: rgba(0, 113, 227, 0.15);
+            color: var(--accent-primary);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .tech-tag.cheap {
+            background: rgba(0, 200, 150, 0.15);
+            color: var(--cheap-color);
+        }
+
+        .tech-tag.scale {
+            background: rgba(0, 113, 227, 0.15);
+            color: var(--scale-color);
+        }
+
+        .tech-tag.indie {
+            background: rgba(191, 90, 242, 0.15);
+            color: var(--indie-color);
+        }
+
+        .select-mode-btn {
+            width: 100%;
+            padding: 12px 20px;
+            background: var(--gradient-success);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+
+        .select-mode-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .select-mode-btn.selected {
+            background: var(--gradient-primary);
+        }
+
+        /* Configuration Section */
+        .config-section {
+            background: var(--surface-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 24px;
+            padding: var(--space-2xl);
+            margin-bottom: var(--space-2xl);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition-smooth);
+        }
+
+        .config-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .config-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-xl);
+        }
+
+        .config-group {
+            background: var(--surface-secondary);
+            border-radius: 16px;
+            padding: var(--space-lg);
+        }
+
+        .config-title {
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .config-options {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .config-option {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm);
+            background: var(--surface-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+
+        .config-option:hover {
+            background: var(--surface-tertiary);
+        }
+
+        .config-option input[type="radio"] {
+            margin: 0;
+        }
+
+        /* Code Generation Section */
+        .code-section {
+            background: var(--surface-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 24px;
+            padding: var(--space-2xl);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition-smooth);
+        }
+
+        .code-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .code-tabs {
+            display: flex;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-xl);
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .code-tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: var(--text-tertiary);
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: var(--transition-base);
+        }
+
+        .code-tab.active {
+            color: var(--accent-primary);
+            border-bottom-color: var(--accent-primary);
+        }
+
+        .code-tab:hover {
+            color: var(--text-secondary);
+        }
+
+        .code-content {
+            display: none;
+        }
+
+        .code-content.active {
+            display: block;
+        }
+
+        .code-block {
+            background: #1a1a1a;
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: var(--space-lg);
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: var(--space-md);
+            right: var(--space-md);
+            padding: 6px 12px;
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 6px;
+            color: var(--text-tertiary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+
+        .copy-btn:hover {
+            background: var(--surface-tertiary);
+            color: var(--text-primary);
+        }
+
+        /* Action Buttons */
+        .actions-section {
+            text-align: center;
+            margin-top: var(--space-2xl);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: var(--space-md);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: 16px 32px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-base);
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .action-btn.secondary {
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            color: var(--text-primary);
+        }
+
+        .action-btn.secondary:hover {
+            background: var(--surface-tertiary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container {
+                padding: var(--space-xl);
+            }
+            
+            .project-inputs {
+                grid-template-columns: 1fr;
+            }
+            
+            .config-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: var(--space-md);
+                text-align: center;
+            }
+            
+            .container {
+                padding: var(--space-lg);
+            }
+            
+            .modes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Animation Classes */
+        .animate-in {
+            animation: slideInUp 0.6s ease-out forwards;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <!-- Modal System -->
+    <script src="js/vibe-modal-system.js"></script>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-canvas"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-brand">
+                <div class="brand-icon">🚀</div>
+                <div class="brand-text">
+                    <h1>Deploy Presets</h1>
+                    <p>Smart deployment configurations for any scale</p>
+                </div>
+            </div>
+            <nav class="header-nav">
+                <a href="vibe-toolkit.html" class="nav-btn">← Back to Toolkit</a>
+                <a href="funding-card-generator.html" class="nav-btn">Funding Tool</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Project Configuration -->
+        <section class="project-section">
+            <h2 class="section-title">
+                <span>⚙️</span>
+                Project Configuration
+            </h2>
+            
+            <div class="project-inputs">
+                <div class="input-group">
+                    <label class="input-label">Project Name</label>
+                    <input type="text" class="input-field" id="projectName" placeholder="TaskFlow AI" value="TaskFlow AI">
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Project Type</label>
+                    <select class="input-field" id="projectType">
+                        <option value="web-app">Web Application</option>
+                        <option value="api">API/Backend</option>
+                        <option value="fullstack">Full-Stack App</option>
+                        <option value="static-site">Static Website</option>
+                        <option value="microservices">Microservices</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Deploy Modes -->
+        <section class="modes-section">
+            <h2 class="section-title">
+                <span>🎯</span>
+                Choose Your Deployment Mode
+            </h2>
+            
+            <div class="modes-grid">
+                <!-- Cheap Mode -->
+                <div class="mode-card cheap" data-mode="cheap">
+                    <div class="mode-header">
+                        <div class="mode-info">
+                            <div class="mode-icon cheap">💰</div>
+                            <div class="mode-details">
+                                <h3>Cheap Mode</h3>
+                                <p>Budget-friendly for MVPs</p>
+                            </div>
+                        </div>
+                        <div class="mode-price">$5-20/mo</div>
+                    </div>
+                    
+                    <div class="mode-description">
+                        Perfect for MVPs, prototypes, and side projects. Get started quickly with minimal costs while maintaining good performance and reliability.
+                    </div>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-title">💻 Tech Stack</div>
+                        <div class="tech-tags">
+                            <span class="tech-tag cheap">Fly.io</span>
+                            <span class="tech-tag cheap">SQLite</span>
+                            <span class="tech-tag cheap">Redis</span>
+                            <span class="tech-tag cheap">Cloudflare</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mode-features">
+                        <ul class="features-list">
+                            <li>Single server deployment</li>
+                            <li>SQLite database (file-based)</li>
+                            <li>Basic monitoring</li>
+                            <li>SSL termination</li>
+                            <li>CDN for static assets</li>
+                            <li>Automatic backups</li>
+                        </ul>
+                    </div>
+                    
+                    <button class="select-mode-btn" onclick="selectMode('cheap')">Select Cheap Mode</button>
+                </div>
+
+                <!-- Scale Mode -->
+                <div class="mode-card scale" data-mode="scale">
+                    <div class="mode-header">
+                        <div class="mode-info">
+                            <div class="mode-icon scale">📈</div>
+                            <div class="mode-details">
+                                <h3>Scale Mode</h3>
+                                <p>Enterprise-ready infrastructure</p>
+                            </div>
+                        </div>
+                        <div class="mode-price">$200-1000/mo</div>
+                    </div>
+                    
+                    <div class="mode-description">
+                        Production-ready with high availability, compliance features, and enterprise-grade security. Built for scale with HIPAA/SOC2 compliance.
+                    </div>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-title">🏢 Tech Stack</div>
+                        <div class="tech-tags">
+                            <span class="tech-tag scale">GCP/Azure</span>
+                            <span class="tech-tag scale">PostgreSQL</span>
+                            <span class="tech-tag scale">Kubernetes</span>
+                            <span class="tech-tag scale">Terraform</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mode-features">
+                        <ul class="features-list">
+                            <li>Auto-scaling clusters</li>
+                            <li>Managed PostgreSQL</li>
+                            <li>HIPAA/SOC2 compliance</li>
+                            <li>Advanced monitoring</li>
+                            <li>Multi-region deployment</li>
+                            <li>Disaster recovery</li>
+                            <li>24/7 support</li>
+                        </ul>
+                    </div>
+                    
+                    <button class="select-mode-btn" onclick="selectMode('scale')">Select Scale Mode</button>
+                </div>
+
+                <!-- Indie Mode -->
+                <div class="mode-card indie" data-mode="indie">
+                    <div class="mode-header">
+                        <div class="mode-info">
+                            <div class="mode-icon indie">🎨</div>
+                            <div class="mode-details">
+                                <h3>Indie Mode</h3>
+                                <p>Self-hosted with full control</p>
+                            </div>
+                        </div>
+                        <div class="mode-price">$50-200/mo</div>
+                    </div>
+                    
+                    <div class="mode-description">
+                        Complete control with Docker Compose setup. Perfect for indie hackers who want flexibility and customization without vendor lock-in.
+                    </div>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-title">🛠️ Tech Stack</div>
+                        <div class="tech-tags">
+                            <span class="tech-tag indie">Docker</span>
+                            <span class="tech-tag indie">Traefik</span>
+                            <span class="tech-tag indie">PostgreSQL</span>
+                            <span class="tech-tag indie">Portainer</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mode-features">
+                        <ul class="features-list">
+                            <li>Docker Compose setup</li>
+                            <li>Reverse proxy with SSL</li>
+                            <li>Container orchestration</li>
+                            <li>Easy local development</li>
+                            <li>One-click deployment</li>
+                            <li>Full source code access</li>
+                        </ul>
+                    </div>
+                    
+                    <button class="select-mode-btn" onclick="selectMode('indie')">Select Indie Mode</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Configuration Options -->
+        <section class="config-section" id="configSection">
+            <h2 class="section-title">
+                <span>🔧</span>
+                <span id="configModeTitle">Deployment Configuration</span>
+            </h2>
+            
+            <div class="config-grid">
+                <div class="config-group">
+                    <div class="config-title">
+                        <span>🌍</span>
+                        <span>Region & Environment</span>
+                    </div>
+                    <div class="config-options">
+                        <label class="config-option">
+                            <input type="radio" name="region" value="us-east" checked>
+                            <span>US East (Virginia)</span>
+                        </label>
+                        <label class="config-option">
+                            <input type="radio" name="region" value="us-west">
+                            <span>US West (California)</span>
+                        </label>
+                        <label class="config-option">
+                            <input type="radio" name="region" value="eu-west">
+                            <span>EU West (Ireland)</span>
+                        </label>
+                        <label class="config-option">
+                            <input type="radio" name="region" value="asia-pacific">
+                            <span>Asia Pacific (Singapore)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="config-group">
+                    <div class="config-title">
+                        <span>🔒</span>
+                        <span>Security & Compliance</span>
+                    </div>
+                    <div class="config-options">
+                        <label class="config-option">
+                            <input type="checkbox" name="ssl" checked>
+                            <span>SSL/TLS Encryption</span>
+                        </label>
+                        <label class="config-option">
+                            <input type="checkbox" name="waf">
+                            <span>Web Application Firewall</span>
+                        </label>
+                        <label class="config-option">
+                            <input type="checkbox" name="hipaa">
+                            <span>HIPAA Compliance</span>
+                        </label>
+                        <label class="config-option">
+                            <input type="checkbox" name="backup" checked>
+                            <span>Automated Backups</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="config-group">
+                    <div class="config-title">
+                        <span>📊</span>
+                        <span>Monitoring & Logging</span>
+                    </div>
+                    <div class="config-options">
+                        <label class="config-option">
+                            <input type="checkbox" name="monitoring" checked>
+                            <span>Basic Monitoring</span>
+                        </label>
+                        <label class="config-option">
+                            <input type="checkbox" name="logging">
+                            <span>Centralized Logging</span>
+                        </label>
+                        <label class="config-option">
+                            <input type="checkbox" name="alerts">
+                            <span>Alert Management</span>
+                        </label>
+                        <label class="config-option">
+                            <input type="checkbox" name="apm">
+                            <span>Application Performance</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="config-group">
+                    <div class="config-title">
+                        <span>⚡</span>
+                        <span>Performance & Scaling</span>
+                    </div>
+                    <div class="config-options">
+                        <label class="config-option">
+                            <input type="checkbox" name="cdn" checked>
+                            <span>CDN Integration</span>
+                        </label>
+                        <label class="config-option">
+                            <input type="checkbox" name="cache">
+                            <span>Redis Caching</span>
+                        </label>
+                        <label class="config-option">
+                            <input type="checkbox" name="autoscale">
+                            <span>Auto-scaling</span>
+                        </label>
+                        <label class="config-option">
+                            <input type="checkbox" name="loadbalancer">
+                            <span>Load Balancing</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Generated Code -->
+        <section class="code-section" id="codeSection">
+            <h2 class="section-title">
+                <span>💻</span>
+                Generated Deployment Code
+            </h2>
+            
+            <div class="code-tabs">
+                <button class="code-tab active" data-tab="dockerfile">Dockerfile</button>
+                <button class="code-tab" data-tab="compose">docker-compose.yml</button>
+                <button class="code-tab" data-tab="config">deploy.config</button>
+                <button class="code-tab" data-tab="scripts">Scripts</button>
+            </div>
+
+            <!-- Dockerfile -->
+            <div class="code-content active" id="dockerfile">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode('dockerfile-code')">Copy</button>
+                    <pre id="dockerfile-code"># Multi-stage build for TaskFlow AI
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+
+COPY . .
+RUN npm run build
+
+FROM node:18-alpine AS runner
+
+WORKDIR /app
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+ENV PORT 3000
+
+CMD ["node", "server.js"]</pre>
+                </div>
+            </div>
+
+            <!-- Docker Compose -->
+            <div class="code-content" id="compose">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode('compose-code')">Copy</button>
+                    <pre id="compose-code">version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://user:pass@db:5432/taskflow
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: taskflow
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+  traefik:
+    image: traefik:v3.0
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=your@email.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - letsencrypt:/letsencrypt
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  letsencrypt:</pre>
+                </div>
+            </div>
+
+            <!-- Config -->
+            <div class="code-content" id="config">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode('config-code')">Copy</button>
+                    <pre id="config-code"># TaskFlow AI Deployment Configuration
+
+PROJECT_NAME=taskflow-ai
+ENVIRONMENT=production
+VERSION=1.0.0
+
+# Database Configuration
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=taskflow
+DB_USER=user
+DB_PASSWORD=secure_password_here
+
+# Redis Configuration
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
+# Application Configuration
+APP_PORT=3000
+APP_HOST=0.0.0.0
+JWT_SECRET=your-super-secret-jwt-key
+API_BASE_URL=https://api.taskflow.ai
+
+# Monitoring
+ENABLE_METRICS=true
+LOG_LEVEL=info
+SENTRY_DSN=your_sentry_dsn_here
+
+# Feature Flags
+ENABLE_AI_FEATURES=true
+ENABLE_ANALYTICS=true
+ENABLE_NOTIFICATIONS=true</pre>
+                </div>
+            </div>
+
+            <!-- Scripts -->
+            <div class="code-content" id="scripts">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode('scripts-code')">Copy</button>
+                    <pre id="scripts-code">#!/bin/bash
+# TaskFlow AI Deployment Scripts
+
+# deploy.sh - Main deployment script
+deploy() {
+    echo "🚀 Deploying TaskFlow AI..."
+    
+    # Build and deploy based on mode
+    if [ "$DEPLOY_MODE" = "cheap" ]; then
+        deploy_cheap
+    elif [ "$DEPLOY_MODE" = "scale" ]; then
+        deploy_scale
+    elif [ "$DEPLOY_MODE" = "indie" ]; then
+        deploy_indie
+    fi
+}
+
+# Cheap mode deployment (Fly.io)
+deploy_cheap() {
+    echo "💰 Deploying in Cheap Mode to Fly.io..."
+    fly deploy --config fly.toml
+    fly volumes create data --size 10
+    fly secrets set DATABASE_URL=$DATABASE_URL
+}
+
+# Scale mode deployment (GCP/Kubernetes)
+deploy_scale() {
+    echo "📈 Deploying in Scale Mode to GCP..."
+    gcloud builds submit --tag gcr.io/$PROJECT_ID/taskflow-ai
+    kubectl apply -f k8s/
+    kubectl set image deployment/taskflow-api taskflow-api=gcr.io/$PROJECT_ID/taskflow-ai:latest
+}
+
+# Indie mode deployment (Docker Compose)
+deploy_indie() {
+    echo "🎨 Deploying in Indie Mode with Docker Compose..."
+    docker-compose down
+    docker-compose build --no-cache
+    docker-compose up -d
+}
+
+# Health check
+health_check() {
+    curl -f http://localhost:3000/health || exit 1
+}
+
+# Backup script
+backup() {
+    pg_dump $DATABASE_URL | gzip > backup_$(date +%Y%m%d_%H%M%S).sql.gz
+}
+
+# Run deployment
+deploy</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Actions -->
+        <div class="actions-section">
+            <div class="action-buttons">
+                <button class="action-btn" onclick="generateCode()">
+                    <span>🔄</span>
+                    <span>Regenerate Code</span>
+                </button>
+                <a href="#" class="action-btn secondary" onclick="downloadZip()">
+                    <span>📦</span>
+                    <span>Download Package</span>
+                </a>
+                <a href="#" class="action-btn secondary" onclick="deployNow()">
+                    <span>🚀</span>
+                    <span>Deploy Now</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedMode = null;
+
+        // Mode selection
+        function selectMode(mode) {
+            selectedMode = mode;
+            
+            // Update UI
+            document.querySelectorAll('.mode-card').forEach(card => {
+                card.classList.remove('selected');
+                card.querySelector('.select-mode-btn').classList.remove('selected');
+                card.querySelector('.select-mode-btn').textContent = `Select ${card.dataset.mode.charAt(0).toUpperCase() + card.dataset.mode.slice(1)} Mode`;
+            });
+            
+            const selectedCard = document.querySelector(`.mode-card[data-mode="${mode}"]`);
+            selectedCard.classList.add('selected');
+            selectedCard.querySelector('.select-mode-btn').classList.add('selected');
+            selectedCard.querySelector('.select-mode-btn').textContent = `${mode.charAt(0).toUpperCase() + mode.slice(1)} Mode Selected ✓`;
+            
+            // Show configuration section
+            const configSection = document.getElementById('configSection');
+            const codeSection = document.getElementById('codeSection');
+            configSection.classList.add('visible');
+            codeSection.classList.add('visible');
+            
+            // Update config title
+            document.getElementById('configModeTitle').textContent = `${mode.charAt(0).toUpperCase() + mode.slice(1)} Mode Configuration`;
+            
+            // Update configurations based on mode
+            updateConfigForMode(mode);
+            
+            // Generate code
+            generateCodeForMode(mode);
+            
+            // Scroll to configuration
+            configSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Update configuration options based on mode
+        function updateConfigForMode(mode) {
+            const hipaaCheckbox = document.querySelector('input[name="hipaa"]');
+            const autoscaleCheckbox = document.querySelector('input[name="autoscale"]');
+            const loadbalancerCheckbox = document.querySelector('input[name="loadbalancer"]');
+            const wafCheckbox = document.querySelector('input[name="waf"]');
+            const apmCheckbox = document.querySelector('input[name="apm"]');
+            
+            if (mode === 'cheap') {
+                hipaaCheckbox.checked = false;
+                hipaaCheckbox.disabled = true;
+                autoscaleCheckbox.checked = false;
+                autoscaleCheckbox.disabled = true;
+                loadbalancerCheckbox.checked = false;
+                loadbalancerCheckbox.disabled = true;
+                wafCheckbox.checked = false;
+                apmCheckbox.checked = false;
+            } else if (mode === 'scale') {
+                hipaaCheckbox.disabled = false;
+                autoscaleCheckbox.disabled = false;
+                autoscaleCheckbox.checked = true;
+                loadbalancerCheckbox.disabled = false;
+                loadbalancerCheckbox.checked = true;
+                wafCheckbox.checked = true;
+                apmCheckbox.checked = true;
+            } else if (mode === 'indie') {
+                hipaaCheckbox.disabled = false;
+                autoscaleCheckbox.checked = false;
+                autoscaleCheckbox.disabled = true;
+                loadbalancerCheckbox.checked = false;
+                loadbalancerCheckbox.disabled = true;
+                wafCheckbox.checked = false;
+                apmCheckbox.checked = false;
+            }
+        }
+
+        // Tab switching for code sections
+        document.querySelectorAll('.code-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.dataset.tab;
+                
+                // Update active tab
+                document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Update active content
+                document.querySelectorAll('.code-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabName).classList.add('active');
+            });
+        });
+
+        // Generate code based on selected mode
+        function generateCodeForMode(mode) {
+            if (mode === 'cheap') {
+                generateCheapModeCode();
+            } else if (mode === 'scale') {
+                generateScaleModeCode();
+            } else if (mode === 'indie') {
+                generateIndieModeCode();
+            }
+        }
+
+        function generateCheapModeCode() {
+            // Update Dockerfile for Fly.io
+            document.getElementById('dockerfile-code').textContent = `# Optimized for Fly.io deployment
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Install dependencies
+COPY package*.json ./
+RUN npm ci --only=production && npm cache clean --force
+
+# Copy app source
+COPY . .
+RUN npm run build
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+
+# Change ownership
+RUN chown -R nextjs:nodejs /app
+USER nextjs
+
+EXPOSE 8080
+
+CMD ["npm", "start"]`;
+
+            // Update compose for Fly.io
+            document.getElementById('compose-code').textContent = `# fly.toml - Fly.io configuration
+app = "taskflow-ai"
+primary_region = "iad"
+
+[build]
+  image = "taskflow-ai:latest"
+
+[env]
+  NODE_ENV = "production"
+  PORT = "8080"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 256
+
+[mounts]
+  source = "data"
+  destination = "/data"`;
+        }
+
+        function generateScaleModeCode() {
+            // Update Dockerfile for Kubernetes
+            document.getElementById('dockerfile-code').textContent = `# Multi-stage production build
+FROM node:18-alpine AS dependencies
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM gcr.io/distroless/nodejs18-debian11
+WORKDIR /app
+COPY --from=dependencies /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/package.json ./
+
+USER 1001
+EXPOSE 8080
+
+CMD ["dist/index.js"]`;
+
+            // Update for Kubernetes deployment
+            document.getElementById('compose-code').textContent = `# kubernetes.yaml - GKE deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: taskflow-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: taskflow-api
+  template:
+    metadata:
+      labels:
+        app: taskflow-api
+    spec:
+      containers:
+      - name: taskflow-api
+        image: gcr.io/PROJECT_ID/taskflow-ai:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: taskflow-secrets
+              key: database-url
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: taskflow-service
+spec:
+  selector:
+    app: taskflow-api
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: LoadBalancer`;
+        }
+
+        function generateIndieModeCode() {
+            // Keep the default Docker Compose setup
+            // Already optimized for indie/self-hosted deployment
+        }
+
+        // Copy code functionality
+        function copyCode(elementId) {
+            const code = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                // Show feedback
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.style.background = 'var(--gradient-success)';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            });
+        }
+
+        // Generate updated code
+        function generateCode() {
+            if (selectedMode) {
+                generateCodeForMode(selectedMode);
+            }
+        }
+
+        // Download deployment package
+        function downloadZip() {
+            // In a real implementation, this would generate and download a zip file
+            const projectName = document.getElementById('projectName').value;
+            const mode = selectedMode;
+            
+            // Create deployment package data
+            const packageData = {
+                mode: mode,
+                project: projectName,
+                files: {
+                    'Dockerfile': document.getElementById('dockerfile-code').textContent,
+                    'docker-compose.yml': document.getElementById('compose-code').textContent,
+                    'deploy.config': document.getElementById('config-code').textContent,
+                    'deploy.sh': document.getElementById('scripts-code').textContent
+                }
+            };
+            
+            const blob = new Blob([JSON.stringify(packageData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${projectName}-${mode}-deployment.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Deploy now (placeholder)
+        function deployNow() {
+            if (!selectedMode) {
+                vibeError('Deployment Mode Required', 'Please select a deployment mode (Indie, Growth, or Pro) before deploying your project.');
+                return;
+            }
+            
+            const projectName = document.getElementById('projectName').value;
+            vibeSuccess(
+                '🚀 Deployment Initiated!',
+                `
+                    <div style="text-align: left;">
+                        <p style="margin-bottom: 15px;"><strong>Project:</strong> ${projectName}</p>
+                        <p style="margin-bottom: 15px;"><strong>Mode:</strong> ${selectedMode}</p>
+                        <p style="margin-bottom: 15px;">Your deployment is being processed...</p>
+                        <p style="font-size: 14px; opacity: 0.8;">Full implementation will include:</p>
+                        <ul style="font-size: 14px; opacity: 0.8; margin-left: 20px; margin-top: 8px;">
+                            <li>Automated CI/CD pipeline setup</li>
+                            <li>Environment configuration</li>
+                            <li>SSL certificate provisioning</li>
+                            <li>Database setup and migrations</li>
+                            <li>Live deployment monitoring</li>
+                        </ul>
+                    </div>
+                `
+            );
+        }
+
+        // Ultra-Premium Particle System (DevOps Theme)
+        class DevOpsParticles {
+            constructor() {
+                this.canvas = document.createElement('canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.mouse = { x: 0, y: 0 };
+                this.init();
+            }
+            
+            init() {
+                this.canvas.style.position = 'fixed';
+                this.canvas.style.top = '0';
+                this.canvas.style.left = '0';
+                this.canvas.style.width = '100%';
+                this.canvas.style.height = '100%';
+                this.canvas.style.pointerEvents = 'none';
+                this.canvas.style.zIndex = '1';
+                this.canvas.style.opacity = '0.6';
+                document.body.appendChild(this.canvas);
+                
+                this.resize();
+                this.createParticles();
+                this.animate();
+                
+                window.addEventListener('resize', () => this.resize());
+                document.addEventListener('mousemove', (e) => {
+                    this.mouse.x = e.clientX;
+                    this.mouse.y = e.clientY;
+                });
+            }
+            
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+            
+            createParticles() {
+                const count = Math.min(35, window.innerWidth / 30);
+                const symbols = ['🚀', '⚙️', '🔧', '💻', '⚡', '🌐', '🔗', '📡'];
+                for (let i = 0; i < count; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 0.4,
+                        vy: (Math.random() - 0.5) * 0.4,
+                        size: Math.random() * 2 + 1,
+                        opacity: Math.random() * 0.5 + 0.2,
+                        hue: Math.random() * 60 + 180, // Blue to cyan (tech theme)
+                        symbol: symbols[Math.floor(Math.random() * symbols.length)],
+                        rotation: Math.random() * Math.PI * 2
+                    });
+                }
+            }
+            
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                this.particles.forEach((particle, index) => {
+                    // Update position and rotation
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    particle.rotation += 0.02;
+                    
+                    // Mouse interaction (tech magnetism)
+                    const dx = this.mouse.x - particle.x;
+                    const dy = this.mouse.y - particle.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        const force = (100 - distance) / 100;
+                        particle.vx += dx * force * 0.0003;
+                        particle.vy += dy * force * 0.0003;
+                    }
+                    
+                    // Boundary wrapping
+                    if (particle.x < 0) particle.x = this.canvas.width;
+                    if (particle.x > this.canvas.width) particle.x = 0;
+                    if (particle.y < 0) particle.y = this.canvas.height;
+                    if (particle.y > this.canvas.height) particle.y = 0;
+                    
+                    // Draw particle
+                    this.ctx.save();
+                    this.ctx.globalAlpha = particle.opacity;
+                    this.ctx.translate(particle.x, particle.y);
+                    this.ctx.rotate(particle.rotation);
+                    
+                    if (Math.random() > 0.7) {
+                        // Draw emoji symbols
+                        this.ctx.font = `${particle.size * 8}px Arial`;
+                        this.ctx.textAlign = 'center';
+                        this.ctx.fillText(particle.symbol, 0, 0);
+                    } else {
+                        // Draw geometric shapes
+                        this.ctx.fillStyle = `hsl(${particle.hue}, 70%, 60%)`;
+                        this.ctx.fillRect(-particle.size, -particle.size, particle.size * 2, particle.size * 2);
+                    }
+                    this.ctx.restore();
+                });
+                
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // Enhanced button interactions with tech theme
+        function addTechRipple(event) {
+            const element = event.currentTarget;
+            const ripple = document.createElement('div');
+            const rect = element.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+            
+            ripple.className = 'tech-ripple';
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            
+            element.style.position = 'relative';
+            element.style.overflow = 'hidden';
+            element.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 900);
+        }
+
+        // Initialize deployment-specific features
+        function initializeDeployPremium() {
+            // Add tech-themed particle system
+            new DevOpsParticles();
+            
+            // Add tech ripple effects to buttons
+            document.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', addTechRipple);
+            });
+            
+            // Enhanced mode card animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationDelay = Math.random() * 0.4 + 's';
+                        entry.target.classList.add('slide-in-tech');
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.mode-card, .code-section').forEach(el => {
+                observer.observe(el);
+            });
+            
+            // Add typing effect to code blocks
+            addTypingEffect();
+            
+            console.log('🚀 Deploy Presets Ultra-Premium Experience Loaded');
+        }
+
+        function addTypingEffect() {
+            const codeBlocks = document.querySelectorAll('pre code');
+            codeBlocks.forEach(block => {
+                block.addEventListener('mouseenter', () => {
+                    if (!block.dataset.typed) {
+                        const text = block.textContent;
+                        block.textContent = '';
+                        let i = 0;
+                        const typeInterval = setInterval(() => {
+                            block.textContent += text[i];
+                            i++;
+                            if (i >= text.length) {
+                                clearInterval(typeInterval);
+                                block.dataset.typed = 'true';
+                            }
+                        }, 10);
+                    }
+                });
+            });
+        }
+
+        // Auto-select cheap mode for demo
+        setTimeout(() => {
+            selectMode('cheap');
+            initializeDeployPremium();
+        }, 1000);
+        
+        // Add deployment-themed CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slide-in-tech {
+                from {
+                    opacity: 0;
+                    transform: translateX(-30px) rotateY(-15deg);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0) rotateY(0deg);
+                }
+            }
+            
+            .slide-in-tech {
+                animation: slide-in-tech 1s ease-out forwards;
+            }
+            
+            @keyframes tech-ripple {
+                from {
+                    transform: scale(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+            
+            .tech-ripple {
+                position: absolute;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(0, 255, 255, 0.7) 0%, transparent 70%);
+                animation: tech-ripple 0.9s ease-out;
+                pointer-events: none;
+            }
+            
+            @keyframes server-pulse {
+                0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
+                50% { box-shadow: 0 0 40px rgba(0, 255, 255, 0.7); }
+            }
+            
+            /* Enhanced hover effects with tech theme */
+            .mode-card {
+                transition: all var(--transition-smooth);
+                will-change: transform;
+                transform-style: preserve-3d;
+            }
+            
+            .mode-card:hover {
+                transform: translateY(-12px) rotateX(5deg);
+                box-shadow: var(--shadow-lg);
+                animation: server-pulse 1.5s infinite;
+            }
+            
+            .mode-card.selected {
+                animation: server-pulse 2s infinite;
+            }
+            
+            button {
+                will-change: transform, filter;
+                transition: all var(--transition-base);
+                position: relative;
+            }
+            
+            button:hover {
+                transform: translateY(-2px);
+                filter: brightness(1.15);
+                box-shadow: 0 8px 25px rgba(0, 255, 255, 0.3);
+            }
+            
+            /* Code block enhancements */
+            pre {
+                transition: all 0.3s ease;
+                border-left: 3px solid transparent;
+            }
+            
+            pre:hover {
+                border-left-color: #00FFFF;
+                background: rgba(0, 255, 255, 0.05);
+            }
+            
+            /* Deploy button special effects */
+            .deploy-button:hover {
+                background: linear-gradient(135deg, #00FFFF, #0080FF);
+                color: #000;
+                font-weight: bold;
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            }
+            
+            /* Loading animation for deployment */
+            @keyframes deploy-loading {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+            
+            .deploying::after {
+                content: '⚙️';
+                display: inline-block;
+                animation: deploy-loading 1s linear infinite;
+                margin-left: 8px;
+            }
+            
+            /* Reduced motion support */
+            @media (prefers-reduced-motion: reduce) {
+                .slide-in-tech, .tech-ripple, .server-pulse, .deploy-loading {
+                    animation: none;
+                }
+                
+                .mode-card:hover {
+                    transform: scale(1.02);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

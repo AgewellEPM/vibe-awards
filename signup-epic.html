@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Fighter - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-pink: #FF10F0;
+            --neon-blue: #00FFF0;
+            --neon-purple: #9D00FF;
+            --neon-green: #39FF14;
+            --neon-orange: #FF6600;
+            --neon-yellow: #FFFF00;
+            --dark-bg: #0A0A0A;
+            --glow-intensity: 1;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark-bg);
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Epic Gaming Background */
+        .game-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .cyber-grid {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background-image: 
+                linear-gradient(rgba(157, 0, 255, 0.03) 2px, transparent 2px),
+                linear-gradient(90deg, rgba(157, 0, 255, 0.03) 2px, transparent 2px);
+            background-size: 100px 100px;
+            transform: perspective(1000px) rotateX(60deg);
+            animation: gridScroll 20s linear infinite;
+        }
+
+        @keyframes gridScroll {
+            0% { transform: perspective(1000px) rotateX(60deg) translateZ(0); }
+            100% { transform: perspective(1000px) rotateX(60deg) translateZ(100px); }
+        }
+
+        .energy-orbs {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 16, 240, 0.3), transparent);
+            top: -200px;
+            left: -200px;
+        }
+
+        .orb2 {
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 255, 240, 0.3), transparent);
+            bottom: -300px;
+            right: -300px;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -50px) scale(1.1); }
+            66% { transform: translate(-30px, 30px) scale(0.9); }
+        }
+
+        /* Main Container */
+        .signup-container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        /* Epic Title */
+        .epic-header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: titleDrop 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes titleDrop {
+            from {
+                opacity: 0;
+                transform: translateY(-100px) scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .game-title {
+            font-size: 72px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            background: linear-gradient(180deg, 
+                var(--neon-pink) 0%, 
+                var(--neon-purple) 50%, 
+                var(--neon-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(157, 0, 255, 0.5);
+            margin-bottom: 10px;
+            animation: titleGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { 
+                filter: brightness(1);
+                transform: scale(1);
+            }
+            50% { 
+                filter: brightness(1.2);
+                transform: scale(1.02);
+            }
+        }
+
+        .game-subtitle {
+            font-size: 24px;
+            color: var(--neon-blue);
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            animation: subtitlePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes subtitlePulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        /* Character Selection Grid */
+        .character-selection {
+            width: 100%;
+            max-width: 1400px;
+            margin-bottom: 60px;
+        }
+
+        .selection-label {
+            text-align: center;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--neon-yellow);
+            margin-bottom: 30px;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .character-card {
+            position: relative;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.05));
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .character-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                var(--neon-pink), 
+                var(--neon-purple), 
+                var(--neon-blue), 
+                var(--neon-purple), 
+                var(--neon-pink));
+            border-radius: 20px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+            animation: borderRotate 3s linear infinite;
+        }
+
+        @keyframes borderRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .character-card:hover::before {
+            opacity: 0.5;
+        }
+
+        .character-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            border-color: transparent;
+            box-shadow: 
+                0 20px 40px rgba(157, 0, 255, 0.3),
+                0 0 60px rgba(0, 255, 240, 0.2);
+        }
+
+        .character-card.selected {
+            transform: translateY(-10px) scale(1.08);
+            border-color: var(--neon-green);
+            background: linear-gradient(135deg, 
+                rgba(57, 255, 20, 0.1), 
+                rgba(0, 255, 240, 0.1));
+            box-shadow: 
+                0 20px 60px rgba(57, 255, 20, 0.4),
+                0 0 100px rgba(57, 255, 20, 0.2),
+                inset 0 0 30px rgba(57, 255, 20, 0.1);
+        }
+
+        .character-card.selected::before {
+            opacity: 1;
+            background: linear-gradient(45deg, 
+                var(--neon-green), 
+                var(--neon-blue), 
+                var(--neon-green));
+        }
+
+        .character-avatar {
+            font-size: 80px;
+            text-align: center;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px currentColor);
+            animation: avatarFloat 3s ease-in-out infinite;
+        }
+
+        .character-card:nth-child(1) .character-avatar { 
+            animation-delay: 0s; 
+            color: var(--neon-blue);
+        }
+        .character-card:nth-child(2) .character-avatar { 
+            animation-delay: 0.5s; 
+            color: var(--neon-pink);
+        }
+        .character-card:nth-child(3) .character-avatar { 
+            animation-delay: 1s; 
+            color: var(--neon-orange);
+        }
+        .character-card:nth-child(4) .character-avatar { 
+            animation-delay: 1.5s; 
+            color: var(--neon-purple);
+        }
+        .character-card:nth-child(5) .character-avatar { 
+            animation-delay: 2s; 
+            color: var(--neon-yellow);
+        }
+
+        @keyframes avatarFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .character-class {
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .character-tagline {
+            font-size: 12px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        /* Power Stats */
+        .power-stats {
+            margin-top: 20px;
+        }
+
+        .stat-bar {
+            margin-bottom: 12px;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 4px;
+        }
+
+        .stat-track {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .stat-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+            animation: statShine 2s linear infinite;
+        }
+
+        @keyframes statShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .stat-creativity { 
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-purple)); 
+        }
+        .stat-speed { 
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green)); 
+        }
+        .stat-impact { 
+            background: linear-gradient(90deg, var(--neon-orange), var(--neon-yellow)); 
+        }
+
+        /* Special Abilities */
+        .abilities {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            justify-content: center;
+        }
+
+        .ability {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .ability:hover {
+            transform: scale(1.2);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .ability-tooltip {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .ability:hover .ability-tooltip {
+            opacity: 1;
+        }
+
+        /* Form Section */
+        .form-section {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 40px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                var(--neon-green), 
+                transparent);
+            animation: scanline 2s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            color: var(--neon-blue);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--neon-green);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.3);
+        }
+
+        /* Skill Level Selection */
+        .skill-selector {
+            display: flex;
+            gap: 15px;
+        }
+
+        .skill-level {
+            flex: 1;
+            position: relative;
+        }
+
+        .skill-level input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .skill-level-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .skill-level-label:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+        }
+
+        .skill-level input:checked + .skill-level-label {
+            border-color: var(--neon-green);
+            background: linear-gradient(135deg, 
+                rgba(57, 255, 20, 0.2), 
+                rgba(0, 255, 240, 0.1));
+            box-shadow: 0 10px 30px rgba(57, 255, 20, 0.3);
+        }
+
+        .skill-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .skill-name {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .skill-xp {
+            font-size: 10px;
+            color: var(--neon-yellow);
+            margin-top: 4px;
+        }
+
+        /* Ready Button */
+        .ready-section {
+            text-align: center;
+        }
+
+        .ready-btn {
+            padding: 20px 80px;
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));
+            border: none;
+            border-radius: 100px;
+            font-size: 24px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: black;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: readyPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes readyPulse {
+            0%, 100% { 
+                box-shadow: 0 0 40px rgba(57, 255, 20, 0.5);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 80px rgba(57, 255, 20, 0.8);
+                transform: scale(1.02);
+            }
+        }
+
+        .ready-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .ready-btn:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .ready-btn:hover {
+            transform: scale(1.05);
+            letter-spacing: 6px;
+        }
+
+        .ready-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            animation: none;
+        }
+
+        /* Loading State */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 100px;
+            height: 100px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--neon-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 30px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            animation: loadingPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loadingPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .character-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .game-title {
+                font-size: 48px;
+            }
+            
+            .character-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .character-avatar {
+                font-size: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .character-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Epic Gaming Background -->
+    <div class="game-background">
+        <div class="cyber-grid"></div>
+        <div class="energy-orbs">
+            <div class="orb orb1"></div>
+            <div class="orb orb2"></div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="signup-container">
+        <!-- Epic Header -->
+        <div class="epic-header">
+            <h1 class="game-title">Choose Your Fighter</h1>
+            <p class="game-subtitle">Select Your Class</p>
+        </div>
+
+        <!-- Character Selection -->
+        <div class="character-selection">
+            <div class="selection-label">⚡ Pick Your Role ⚡</div>
+            
+            <div class="character-grid">
+                <!-- Coder Class -->
+                <div class="character-card" onclick="selectCharacter('coder', this)">
+                    <div class="character-avatar">⚔️</div>
+                    <div class="character-class">Coder</div>
+                    <div class="character-tagline">"Ship Fast, Break Things"</div>
+                    
+                    <div class="power-stats">
+                        <div class="stat-bar">
+                            <div class="stat-label">Creativity</div>
+                            <div class="stat-track">
+                                <div class="stat-fill stat-creativity" style="width: 70%"></div>
+                            </div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-label">Speed</div>
+                            <div class="stat-track">
+                                <div class="stat-fill stat-speed" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-label">Impact</div>
+                            <div class="stat-track">
+                                <div class="stat-fill stat-impact" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="abilities">
+                        <div class="ability">
+                            💻
+                            <span class="ability-tooltip">Full-Stack Power</span>
+                        </div>
+                        <div class="ability">
+                            ⚡
+                            <span class="ability-tooltip">Speed Coding</span>
+                        </div>
+                        <div class="ability">
+                            🔥
+                            <span class="ability-tooltip">Debug Master</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Designer Class -->
+                <div class="character-card" onclick="selectCharacter('designer', this)">
+                    <div class="character-avatar">🎨</div>
+                    <div class="character-class">Designer</div>
+                    <div class="character-tagline">"Pixels Are My Weapon"</div>
+                    
+                    <div class="power-stats">
+                        <div class="stat-bar">
+                            <div class="stat-label">Creativity</div>
+                            <div class="stat-track">
+                                <div class="stat-fill stat-creativity" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-label">Speed</div>
+                            <div class="stat-track">
+                                <div class="stat-fill stat-speed" style="width: 70%"></div>
+                            </div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-label">Impact</div>
+                            <div class="stat-track">
+                                <div class="stat-fill stat-impact" style="width: 90%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="abilities">
+                        <div class="ability">
+                            ✨
+                            <span class="ability-tooltip">Visual Magic</span>
+                        </div>
+                        <div class="ability">
+                            🎯
+                            <span class="ability-tooltip">Pixel Perfect</span>
+                        </div>
+                        <div class="ability">
+                            🌈
+                            <span class="ability-tooltip">Color Master</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Marketer Class -->
+                <div class="character-card" onclick="selectCharacter('marketer', this)">
+                    <div class="character-avatar">📈</div>
+                    <div class="character-class">Marketer</div>
+                    <div class="character-tagline">"Growth Is My Religion"</div>
+                    
+                    <div class="power-stats">
+                        <div class="stat-bar">
+                            <div class="stat-label">Creativity</div>
+                            <div class="stat-track">
+                                <div class="stat-fill stat-creativity" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-label">Speed</div>
+                            <div class="stat-track">
+                                <div class="stat-fill stat-speed" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-label">Impact</div>
+                            <div class="stat-track">
+                                <div class="stat-fill stat-impact" style="width: 95%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="abilities">
+                        <div class="ability">
+                            🚀
+                            <span class="ability-tooltip">Viral Launch</span>
+                        </div>
+                        <div class="ability">
+                            💰
+                            <span class="ability-tooltip">Revenue Boost</span>
+                        </div>
+                        <div class="ability">
+                            📊
+                            <span class="ability-tooltip">Data Wizard</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Video Class -->
+                <div class="character-card" onclick="selectCharacter('video', this)">
+                    <div class="character-avatar">🎬</div>
+                    <div class="character-class">Video</div>
+                    <div class="character-tagline">"Lights, Camera, Ship It"</div>
+                    
+                    <div class="power-stats">
+                        <div class="stat-bar">
+                            <div class="stat-label">Creativity</div>
+                            <div class="stat-track">
+                                <div class="stat-fill stat-creativity" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-label">Speed</div>
+                            <div class="stat-track">
+                                <div class="stat-fill stat-speed" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-label">Impact</div>
+                            <div class="stat-track">
+                                <div class="stat-fill stat-impact" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="abilities">
+                        <div class="ability">
+                            🎥
+                            <span class="ability-tooltip">Demo Master</span>
+                        </div>
+                        <div class="ability">
+                            ✂️
+                            <span class="ability-tooltip">Edit God</span>
+                        </div>
+                        <div class="ability">
+                            🎭
+                            <span class="ability-tooltip">Story Teller</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Biz Ops Class -->
+                <div class="character-card" onclick="selectCharacter('bizops', this)">
+                    <div class="character-avatar">👑</div>
+                    <div class="character-class">Biz Ops</div>
+                    <div class="character-tagline">"Strategy Wins Wars"</div>
+                    
+                    <div class="power-stats">
+                        <div class="stat-bar">
+                            <div class="stat-label">Creativity</div>
+                            <div class="stat-track">
+                                <div class="stat-fill stat-creativity" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-label">Speed</div>
+                            <div class="stat-track">
+                                <div class="stat-fill stat-speed" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-label">Impact</div>
+                            <div class="stat-track">
+                                <div class="stat-fill stat-impact" style="width: 90%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="abilities">
+                        <div class="ability">
+                            💡
+                            <span class="ability-tooltip">Strategy Master</span>
+                        </div>
+                        <div class="ability">
+                            📈
+                            <span class="ability-tooltip">Scale Expert</span>
+                        </div>
+                        <div class="ability">
+                            🎯
+                            <span class="ability-tooltip">Vision Setter</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-section">
+            <div class="form-group">
+                <label class="form-label">Gamer Tag</label>
+                <input type="text" class="form-input" placeholder="Enter your battle name..." id="gamerTag" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Battle Email</label>
+                <input type="email" class="form-input" placeholder="warrior@vibeawards.com" id="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Create War Cry (Password)</label>
+                <input type="password" class="form-input" placeholder="Make it legendary..." id="password" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Experience Level</label>
+                <div class="skill-selector">
+                    <div class="skill-level">
+                        <input type="radio" name="skill" id="noob" value="beginner">
+                        <label for="noob" class="skill-level-label">
+                            <span class="skill-icon">🌱</span>
+                            <span class="skill-name">Noob</span>
+                            <span class="skill-xp">0-1000 XP</span>
+                        </label>
+                    </div>
+                    
+                    <div class="skill-level">
+                        <input type="radio" name="skill" id="warrior" value="intermediate">
+                        <label for="warrior" class="skill-level-label">
+                            <span class="skill-icon">⚔️</span>
+                            <span class="skill-name">Warrior</span>
+                            <span class="skill-xp">1000-5000 XP</span>
+                        </label>
+                    </div>
+                    
+                    <div class="skill-level">
+                        <input type="radio" name="skill" id="legend" value="expert">
+                        <label for="legend" class="skill-level-label">
+                            <span class="skill-icon">👑</span>
+                            <span class="skill-name">Legend</span>
+                            <span class="skill-xp">5000+ XP</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ready Button -->
+        <div class="ready-section">
+            <button class="ready-btn" id="readyBtn" onclick="enterArena()" disabled>
+                ENTER THE ARENA
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Entering Arena...</div>
+        </div>
+    </div>
+
+    <script>
+        let selectedRole = null;
+        let formComplete = false;
+
+        // Character selection
+        function selectCharacter(role, element) {
+            // Remove previous selection
+            document.querySelectorAll('.character-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selection to clicked character
+            element.classList.add('selected');
+            selectedRole = role;
+            
+            // Epic selection sound effect (simulated)
+            animateSelection(element);
+            
+            // Check if form is complete
+            checkFormComplete();
+        }
+
+        // Animate selection
+        function animateSelection(element) {
+            element.style.animation = 'none';
+            setTimeout(() => {
+                element.style.animation = 'selectionPulse 0.5s ease';
+            }, 10);
+        }
+
+        // Add selection pulse animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes selectionPulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.2); }
+                100% { transform: scale(1.08); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Check form completion
+        function checkFormComplete() {
+            const gamerTag = document.getElementById('gamerTag').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const skill = document.querySelector('input[name="skill"]:checked');
+            
+            if (selectedRole && gamerTag && email && password && skill) {
+                document.getElementById('readyBtn').disabled = false;
+            } else {
+                document.getElementById('readyBtn').disabled = true;
+            }
+        }
+
+        // Add event listeners to form inputs
+        document.querySelectorAll('.form-input, input[name="skill"]').forEach(input => {
+            input.addEventListener('input', checkFormComplete);
+            input.addEventListener('change', checkFormComplete);
+        });
+
+        // Enter the arena
+        function enterArena() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.classList.add('active');
+            
+            // Collect all data
+            const userData = {
+                role: selectedRole,
+                gamerTag: document.getElementById('gamerTag').value,
+                email: document.getElementById('email').value,
+                skill: document.querySelector('input[name="skill"]:checked').value
+            };
+            
+            // Store user data
+            localStorage.setItem('isAuthenticated', 'true');
+            localStorage.setItem('userRole', userData.role);
+            localStorage.setItem('gamerTag', userData.gamerTag);
+            localStorage.setItem('userSkill', userData.skill);
+            
+            // Epic entrance delay
+            setTimeout(() => {
+                window.location.href = 'random-drop-lobby.html';
+            }, 2000);
+        }
+
+        // Add epic entrance animation on load
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.character-card').forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(50px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 200 * index);
+            });
+        });
+
+        // Add hover sound effects (visual feedback for now)
+        document.querySelectorAll('.character-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.filter = 'brightness(1.2)';
+            });
+            card.addEventListener('mouseleave', () => {
+                if (!card.classList.contains('selected')) {
+                    card.style.filter = 'brightness(1)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Awards Ceremony - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #FFD700;
+            --silver: #C0C0C0;
+            --bronze: #CD7F32;
+            --neon-pink: #FF10F0;
+            --neon-blue: #00FFF0;
+            --neon-purple: #9D00FF;
+            --neon-green: #39FF14;
+            --dark-bg: #0A0A0A;
+            --panel-bg: #1A1A1A;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: var(--dark-bg);
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .ceremony-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 25% 25%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 75% 75%, rgba(255, 16, 240, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 50% 50%, rgba(0, 255, 240, 0.05) 0%, transparent 70%);
+            animation: particleFloat 15s ease-in-out infinite;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--gold);
+            animation: confettiFall 3s linear infinite;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Header */
+        .ceremony-header {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .ceremony-logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--gold), var(--neon-pink));
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            margin-bottom: 30px;
+            animation: logoGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 0 60px rgba(255, 215, 0, 0.8); }
+        }
+
+        .ceremony-title {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, var(--gold), var(--neon-pink), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleShimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes titleShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .ceremony-subtitle {
+            font-size: 20px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 30px;
+        }
+
+        .ceremony-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--gold);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Stage Container */
+        .stage-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Winners Podium */
+        .winners-podium {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr 1fr;
+            gap: 30px;
+            margin-bottom: 60px;
+            align-items: end;
+        }
+
+        .podium-place {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .podium-place:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .podium-place.first {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+            border: 2px solid var(--gold);
+            order: 2;
+            min-height: 400px;
+        }
+
+        .podium-place.second {
+            background: linear-gradient(135deg, rgba(192, 192, 192, 0.1), rgba(192, 192, 192, 0.05));
+            border: 2px solid var(--silver);
+            order: 1;
+            min-height: 350px;
+        }
+
+        .podium-place.third {
+            background: linear-gradient(135deg, rgba(205, 127, 50, 0.1), rgba(205, 127, 50, 0.05));
+            border: 2px solid var(--bronze);
+            order: 3;
+            min-height: 300px;
+        }
+
+        .place-number {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .first .place-number {
+            background: var(--gold);
+            color: black;
+        }
+
+        .second .place-number {
+            background: var(--silver);
+            color: black;
+        }
+
+        .third .place-number {
+            background: var(--bronze);
+            color: white;
+        }
+
+        .winner-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 20px auto;
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            animation: avatarPulse 2s ease-in-out infinite;
+        }
+
+        .first .winner-avatar {
+            width: 120px;
+            height: 120px;
+            font-size: 50px;
+        }
+
+        @keyframes avatarPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .winner-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .first .winner-name {
+            font-size: 28px;
+        }
+
+        .winner-app {
+            font-size: 18px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 15px;
+        }
+
+        .winner-score {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .first .winner-score {
+            font-size: 42px;
+            color: var(--gold);
+        }
+
+        .second .winner-score {
+            color: var(--silver);
+        }
+
+        .third .winner-score {
+            color: var(--bronze);
+        }
+
+        .winner-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .first .winner-badge {
+            background: linear-gradient(135deg, var(--gold), #FFA500);
+            color: black;
+        }
+
+        .second .winner-badge {
+            background: linear-gradient(135deg, var(--silver), #A0A0A0);
+            color: black;
+        }
+
+        .third .winner-badge {
+            background: linear-gradient(135deg, var(--bronze), #B8860B);
+            color: white;
+        }
+
+        /* Category Winners */
+        .category-winners {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            background: linear-gradient(90deg, var(--neon-purple), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-purple), var(--neon-blue), var(--neon-green));
+        }
+
+        .category-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .category-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--neon-blue);
+        }
+
+        .category-winner {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .category-app {
+            font-size: 16px;
+            color: rgba(245, 245, 247, 0.7);
+            margin-bottom: 15px;
+        }
+
+        .category-score {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        /* Special Awards */
+        .special-awards {
+            margin-bottom: 60px;
+        }
+
+        .special-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .special-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .special-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--neon-pink);
+        }
+
+        .special-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .special-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--neon-pink);
+        }
+
+        .special-winner {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.9);
+        }
+
+        /* Spotlight Section */
+        .spotlight-section {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .spotlight-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, var(--gold), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .spotlight-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .spotlight-video {
+            width: 100%;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            font-size: 64px;
+            color: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .spotlight-video:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--neon-blue);
+        }
+
+        /* Action Buttons */
+        .ceremony-actions {
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            margin: 0 10px;
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(157, 0, 255, 0.3);
+        }
+
+        .action-btn.secondary {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .action-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Live Stream Integration */
+        .live-stream {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 200px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--neon-green);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .live-stream:hover {
+            transform: scale(1.05);
+        }
+
+        .stream-indicator {
+            text-align: center;
+        }
+
+        .stream-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .ceremony-title {
+                font-size: 32px;
+            }
+
+            .winners-podium {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+            }
+
+            .podium-place.first {
+                order: 1;
+            }
+
+            .podium-place.second {
+                order: 2;
+            }
+
+            .podium-place.third {
+                order: 3;
+            }
+
+            .ceremony-stats {
+                gap: 20px;
+            }
+
+            .live-stream {
+                width: 200px;
+                height: 120px;
+            }
+        }
+
+        /* Trophy Animation */
+        .trophy {
+            animation: trophyFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes trophyFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        /* Celebration Effects */
+        .celebration-active .ceremony-logo {
+            animation: celebrationSpin 2s linear infinite;
+        }
+
+        @keyframes celebrationSpin {
+            from { transform: rotate(0deg) scale(1); }
+            to { transform: rotate(360deg) scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="ceremony-background">
+        <div class="bg-particles"></div>
+    </div>
+
+    <!-- Header -->
+    <div class="ceremony-header">
+        <div class="ceremony-logo trophy">🏆</div>
+        <h1 class="ceremony-title">The Vibe Awards 2024</h1>
+        <p class="ceremony-subtitle">Celebrating Innovation, Creativity, and Excellence</p>
+        
+        <div class="ceremony-stats">
+            <div class="stat-item">
+                <span class="stat-value">1,247</span>
+                <span class="stat-label">Apps Submitted</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">89,423</span>
+                <span class="stat-label">Total Votes</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">45,678</span>
+                <span class="stat-label">Voters</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">15</span>
+                <span class="stat-label">Categories</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stage Container -->
+    <div class="stage-container">
+        <!-- Winners Podium -->
+        <div class="winners-podium">
+            <!-- Second Place -->
+            <div class="podium-place second">
+                <div class="place-number">2</div>
+                <div class="winner-avatar">🎨</div>
+                <div class="winner-name">Sarah Chen</div>
+                <div class="winner-app">DesignFlow Pro</div>
+                <div class="winner-score">8,431</div>
+                <div class="winner-badge">
+                    <span>🥈</span>
+                    <span>Silver Medal</span>
+                </div>
+            </div>
+
+            <!-- First Place -->
+            <div class="podium-place first">
+                <div class="place-number">1</div>
+                <div class="winner-avatar">👨‍💻</div>
+                <div class="winner-name">Alex Rodriguez</div>
+                <div class="winner-app">TaskFlow AI</div>
+                <div class="winner-score">12,847</div>
+                <div class="winner-badge">
+                    <span>🥇</span>
+                    <span>Gold Medal</span>
+                </div>
+            </div>
+
+            <!-- Third Place -->
+            <div class="podium-place third">
+                <div class="place-number">3</div>
+                <div class="winner-avatar">🎮</div>
+                <div class="winner-name">Marcus Johnson</div>
+                <div class="winner-app">Quantum Quest</div>
+                <div class="winner-score">6,924</div>
+                <div class="winner-badge">
+                    <span>🥉</span>
+                    <span>Bronze Medal</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Winners -->
+        <div class="category-winners">
+            <h2 class="section-title">🏅 Category Winners</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <div class="category-icon">📱</div>
+                    <div class="category-title">Best Mobile App</div>
+                    <div class="category-winner">Emma Thompson</div>
+                    <div class="category-app">MindfulMoments</div>
+                    <div class="category-score">9,234</div>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">🌐</div>
+                    <div class="category-title">Best Web Application</div>
+                    <div class="category-winner">David Park</div>
+                    <div class="category-app">CodeCollab Live</div>
+                    <div class="category-score">8,765</div>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">🎮</div>
+                    <div class="category-title">Best Game</div>
+                    <div class="category-winner">Lisa Wang</div>
+                    <div class="category-app">EcoWorld Builder</div>
+                    <div class="category-score">8,432</div>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">🎨</div>
+                    <div class="category-title">Best Design</div>
+                    <div class="category-winner">Carlos Rivera</div>
+                    <div class="category-app">Palette AI</div>
+                    <div class="category-score">8,198</div>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">🚀</div>
+                    <div class="category-title">Most Innovative</div>
+                    <div class="category-winner">Priya Sharma</div>
+                    <div class="category-app">Neural Translator</div>
+                    <div class="category-score">7,892</div>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">🌱</div>
+                    <div class="category-title">Social Impact</div>
+                    <div class="category-winner">James Mitchell</div>
+                    <div class="category-app">CleanAir Monitor</div>
+                    <div class="category-score">7,654</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Special Awards -->
+        <div class="special-awards">
+            <h2 class="section-title">✨ Special Recognition</h2>
+            <div class="special-grid">
+                <div class="special-card">
+                    <div class="special-icon">👥</div>
+                    <div class="special-title">People's Choice</div>
+                    <div class="special-winner">TaskFlow AI by Alex Rodriguez</div>
+                </div>
+
+                <div class="special-card">
+                    <div class="special-icon">⭐</div>
+                    <div class="special-title">Rising Star</div>
+                    <div class="special-winner">VoiceNote Pro by Maya Patel</div>
+                </div>
+
+                <div class="special-card">
+                    <div class="special-icon">🔥</div>
+                    <div class="special-title">Most Trending</div>
+                    <div class="special-winner">FitTrack Social by Tom Brown</div>
+                </div>
+
+                <div class="special-card">
+                    <div class="special-icon">🎯</div>
+                    <div class="special-title">Best UX</div>
+                    <div class="special-winner">SimpleBank by Anna Kim</div>
+                </div>
+
+                <div class="special-card">
+                    <div class="special-icon">⚡</div>
+                    <div class="special-title">Technical Excellence</div>
+                    <div class="special-winner">CloudSync Pro by Mike Zhang</div>
+                </div>
+
+                <div class="special-card">
+                    <div class="special-icon">💡</div>
+                    <div class="special-title">Most Creative</div>
+                    <div class="special-winner">AR Story Builder by Sam Lee</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Spotlight Section -->
+        <div class="spotlight-section">
+            <h2 class="spotlight-title">🎬 Winner Spotlight</h2>
+            <div class="spotlight-content">
+                <div class="spotlight-video" onclick="playSpotlight()">
+                    ▶️
+                    <div style="margin-left: 20px; font-size: 18px;">
+                        Watch Alex's Journey to Victory
+                    </div>
+                </div>
+                <p style="font-size: 16px; line-height: 1.6; color: rgba(245, 245, 247, 0.8);">
+                    From a simple idea to revolutionizing productivity workflows, see how TaskFlow AI 
+                    captured the hearts of thousands of voters and emerged as this year's champion.
+                </p>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="ceremony-actions">
+            <a href="leaderboard.html" class="action-btn">
+                <span>📊</span>
+                <span>View Full Results</span>
+            </a>
+            <a href="dashboard.html" class="action-btn secondary">
+                <span>🏠</span>
+                <span>Back to Dashboard</span>
+            </a>
+            <button class="action-btn" onclick="shareResults()">
+                <span>📤</span>
+                <span>Share Results</span>
+            </button>
+            <button class="action-btn secondary" onclick="downloadCertificate()">
+                <span>📜</span>
+                <span>Download Certificate</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Live Stream Widget -->
+    <div class="live-stream" onclick="toggleLiveStream()">
+        <div class="stream-indicator">
+            <div class="stream-dot"></div>
+            <div style="font-size: 14px; font-weight: 600;">LIVE STREAM</div>
+            <div style="font-size: 12px; opacity: 0.7;">Click to expand</div>
+        </div>
+    </div>
+
+    <script>
+        // Confetti animation
+        function createConfetti() {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.backgroundColor = [
+                '#FFD700', '#FF10F0', '#00FFF0', '#9D00FF', '#39FF14'
+            ][Math.floor(Math.random() * 5)];
+            confetti.style.animationDelay = Math.random() * 3 + 's';
+            
+            document.querySelector('.ceremony-background').appendChild(confetti);
+            
+            setTimeout(() => {
+                confetti.remove();
+            }, 3000);
+        }
+
+        // Create confetti periodically
+        setInterval(createConfetti, 200);
+
+        // Celebration mode
+        let celebrationMode = false;
+
+        function toggleCelebration() {
+            celebrationMode = !celebrationMode;
+            document.body.classList.toggle('celebration-active', celebrationMode);
+            
+            if (celebrationMode) {
+                // Burst of confetti
+                for (let i = 0; i < 20; i++) {
+                    setTimeout(createConfetti, i * 50);
+                }
+            }
+        }
+
+        // Auto-trigger celebration on load
+        setTimeout(toggleCelebration, 1000);
+
+        // Winner spotlight
+        function playSpotlight() {
+            const video = document.querySelector('.spotlight-video');
+            video.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 48px; margin-bottom: 20px;">🎥</div>
+                    <div style="font-size: 18px;">Playing Alex's Victory Story...</div>
+                    <div style="font-size: 14px; margin-top: 10px; opacity: 0.7;">
+                        In a real implementation, this would show the winner's video
+                    </div>
+                </div>
+            `;
+            
+            // Simulate video playing
+            setTimeout(() => {
+                video.innerHTML = `
+                    ▶️
+                    <div style="margin-left: 20px; font-size: 18px;">
+                        Watch Alex's Journey to Victory
+                    </div>
+                `;
+            }, 3000);
+        }
+
+        // Share results
+        function shareResults() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'The Vibe Awards 2024 Results',
+                    text: 'Check out the winners of The Vibe Awards 2024! Amazing innovation and creativity on display.',
+                    url: window.location.href
+                });
+            } else {
+                // Fallback for browsers without Web Share API
+                navigator.clipboard.writeText(window.location.href);
+                alert('Results link copied to clipboard!');
+            }
+        }
+
+        // Download certificate
+        function downloadCertificate() {
+            // In a real implementation, this would generate and download a PDF certificate
+            alert('Certificate download will be available soon! 📜');
+        }
+
+        // Live stream toggle
+        function toggleLiveStream() {
+            const stream = document.querySelector('.live-stream');
+            const isExpanded = stream.style.width === '600px';
+            
+            if (isExpanded) {
+                stream.style.width = '300px';
+                stream.style.height = '200px';
+            } else {
+                stream.style.width = '600px';
+                stream.style.height = '400px';
+            }
+        }
+
+        // Animate podium entries
+        function animatePodiumEntries() {
+            const places = document.querySelectorAll('.podium-place');
+            places.forEach((place, index) => {
+                place.style.opacity = '0';
+                place.style.transform = 'translateY(50px)';
+                
+                setTimeout(() => {
+                    place.style.transition = 'all 0.8s ease';
+                    place.style.opacity = '1';
+                    place.style.transform = 'translateY(0)';
+                }, index * 300);
+            });
+        }
+
+        // Animate category cards
+        function animateCategoryCards() {
+            const cards = document.querySelectorAll('.category-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 1000 + (index * 150));
+            });
+        }
+
+        // Initialize animations
+        setTimeout(animatePodiumEntries, 500);
+        setTimeout(animateCategoryCards, 1500);
+
+        // Update live stats
+        function updateLiveStats() {
+            const statValues = document.querySelectorAll('.stat-value');
+            statValues.forEach(stat => {
+                if (!stat.textContent.includes('.')) {
+                    const current = parseInt(stat.textContent.replace(',', ''));
+                    const increment = Math.floor(Math.random() * 10) + 1;
+                    const newValue = current + increment;
+                    stat.textContent = newValue.toLocaleString();
+                }
+            });
+        }
+
+        // Update stats every 10 seconds
+        setInterval(updateLiveStats, 10000);
+
+        // Award sound effects (placeholder)
+        function playAwardSound(type) {
+            // In a real implementation, this would play actual sound effects
+            console.log(`Playing ${type} award sound effect`);
+        }
+
+        // Trigger award sounds for top 3
+        setTimeout(() => playAwardSound('bronze'), 2000);
+        setTimeout(() => playAwardSound('silver'), 2500);
+        setTimeout(() => playAwardSound('gold'), 3000);
+
+        // Social media integration
+        function shareOnTwitter() {
+            const text = "🏆 The Vibe Awards 2024 Results are here! Congratulations to all winners! #VibeAwards2024 #Innovation";
+            const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`;
+            window.open(url, '_blank');
+        }
+
+        function shareOnLinkedIn() {
+            const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
+            window.open(url, '_blank');
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'c' && e.ctrlKey) {
+                toggleCelebration();
+            } else if (e.key === 's' && e.ctrlKey) {
+                e.preventDefault();
+                shareResults();
+            } else if (e.key === ' ') {
+                e.preventDefault();
+                playSpotlight();
+            }
+        });
+
+        // Add keyboard shortcut hints
+        console.log('🎉 Keyboard shortcuts:');
+        console.log('Ctrl+C: Toggle celebration mode');
+        console.log('Ctrl+S: Share results');
+        console.log('Space: Play/pause spotlight video');
+    </script>
+</body>
+</html>

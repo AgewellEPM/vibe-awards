@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TinkyBink AAC - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-gray: #86868B;
+            --apple-light-gray: #F5F5F7;
+            --apple-dark: #1D1D1F;
+            --apple-green: #30D158;
+            --apple-red: #FF375F;
+            --apple-orange: #FF9F0A;
+            --apple-purple: #BF5AF2;
+            --apple-teal: #5AC8FA;
+            --apple-indigo: #5856D6;
+            --gold: #FFD700;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Background */
+        .app-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: radial-gradient(circle at 30% 20%, rgba(88, 86, 214, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(191, 90, 242, 0.2) 0%, transparent 50%);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 9999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #F5F5F7;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-link {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #F5F5F7;
+        }
+
+        /* App Details Container */
+        .app-details-container {
+            max-width: 1400px;
+            margin: 100px auto 80px;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 32px;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        /* App Header */
+        .app-header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 32px;
+        }
+
+        .app-header-top {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .app-icon-large {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #4A90E2, #7B68EE);
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            flex-shrink: 0;
+        }
+
+        .app-info-section {
+            flex: 1;
+        }
+
+        .app-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .app-developer {
+            font-size: 18px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 16px;
+        }
+
+        .app-badges {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge.winner {
+            background: linear-gradient(135deg, var(--gold), var(--apple-orange));
+        }
+
+        .badge.top-rated {
+            background: var(--apple-green);
+        }
+
+        .app-rating {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .stars {
+            display: flex;
+            gap: 2px;
+            font-size: 18px;
+            color: var(--apple-orange);
+        }
+
+        .rating-text {
+            font-size: 16px;
+            color: rgba(245, 245, 247, 0.8);
+        }
+
+        .app-actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 113, 227, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Screenshots */
+        .screenshots-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 24px;
+        }
+
+        .screenshots-scroll {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding: 16px 0;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+        }
+
+        .screenshot {
+            min-width: 300px;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(88, 86, 214, 0.3), rgba(191, 90, 242, 0.3));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .screenshot:hover {
+            transform: scale(1.05);
+        }
+
+        /* Tabs Section */
+        .tabs-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .tabs-header {
+            display: flex;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 16px;
+            background: none;
+            border: none;
+            color: rgba(245, 245, 247, 0.6);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab-btn.active {
+            color: white;
+            border-bottom: 2px solid var(--apple-blue);
+        }
+
+        .tab-content {
+            padding: 24px;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Description Tab */
+        .description {
+            font-size: 16px;
+            line-height: 1.6;
+            color: rgba(245, 245, 247, 0.9);
+        }
+
+        .features-list {
+            margin-top: 24px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--apple-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* Reviews Tab */
+        .reviews-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .review-summary {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .review-average {
+            font-size: 48px;
+            font-weight: 700;
+        }
+
+        .review-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .reviewer-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .reviewer-name {
+            font-weight: 500;
+        }
+
+        .review-date {
+            font-size: 12px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .review-text {
+            line-height: 1.5;
+            color: rgba(245, 245, 247, 0.9);
+        }
+
+        /* Discussion Tab (Reddit-style) */
+        .discussion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .sort-options {
+            display: flex;
+            gap: 12px;
+        }
+
+        .sort-btn {
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: rgba(245, 245, 247, 0.8);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .sort-btn.active {
+            background: var(--apple-blue);
+            color: white;
+            border-color: transparent;
+        }
+
+        .comment-form {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .comment-textarea {
+            width: 100%;
+            min-height: 100px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            padding: 12px;
+            font-size: 14px;
+            resize: vertical;
+            margin-bottom: 12px;
+        }
+
+        .comment-thread {
+            margin-bottom: 24px;
+        }
+
+        .comment {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .comment-votes {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .vote-btn {
+            background: none;
+            border: none;
+            color: rgba(245, 245, 247, 0.6);
+            cursor: pointer;
+            font-size: 18px;
+            transition: color 0.2s ease;
+        }
+
+        .vote-btn:hover {
+            color: white;
+        }
+
+        .vote-btn.upvoted {
+            color: var(--apple-orange);
+        }
+
+        .vote-btn.downvoted {
+            color: var(--apple-blue);
+        }
+
+        .vote-count {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .comment-content {
+            flex: 1;
+        }
+
+        .comment-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .comment-author {
+            font-weight: 500;
+        }
+
+        .comment-time {
+            font-size: 12px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .comment-text {
+            line-height: 1.5;
+            color: rgba(245, 245, 247, 0.9);
+            margin-bottom: 12px;
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .comment-action {
+            background: none;
+            border: none;
+            color: rgba(245, 245, 247, 0.6);
+            font-size: 14px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .comment-action:hover {
+            color: white;
+        }
+
+        .replies {
+            margin-left: 40px;
+            padding-left: 20px;
+            border-left: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .sidebar-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 24px;
+        }
+
+        .sidebar-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: rgba(245, 245, 247, 0.6);
+            font-size: 14px;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .recent-battles {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .battle-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .battle-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .battle-opponent {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .battle-result {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .battle-result.won {
+            color: var(--apple-green);
+        }
+
+        .battle-result.lost {
+            color: var(--apple-red);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .app-details-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .app-header-top {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .app-icon-large {
+                margin: 0 auto;
+            }
+
+            .app-actions {
+                flex-direction: column;
+            }
+
+            .screenshots-scroll {
+                gap: 8px;
+            }
+
+            .screenshot {
+                min-width: 200px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="app-background"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index-magic.html" class="nav-logo">
+                <span>🏆</span>
+                <span>The Vibe Awards</span>
+            </a>
+            <div class="nav-menu">
+                <a href="index-magic.html" class="nav-link">Home</a>
+                <a href="apple-magic-battle.html" class="nav-link">Battle Arena</a>
+                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+                <a href="gallery.html" class="nav-link">Gallery</a>
+                <a href="categories.html" class="nav-link">Categories</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- App Details Container -->
+    <div class="app-details-container">
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- App Header -->
+            <div class="app-header">
+                <div class="app-header-top">
+                    <div class="app-icon-large">🗣️</div>
+                    <div class="app-info-section">
+                        <h1 class="app-title">TinkyBink AAC</h1>
+                        <p class="app-developer">by Luke Kist</p>
+                        <div class="app-badges">
+                            <span class="badge winner">🏆 #1 Healthcare</span>
+                            <span class="badge top-rated">Editor's Choice</span>
+                            <span class="badge">HIPAA Compliant</span>
+                        </div>
+                        <div class="app-rating">
+                            <div class="stars">
+                                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                            </div>
+                            <span class="rating-text">4.9 out of 5 (2,456 ratings)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-actions">
+                    <button class="btn btn-primary" onclick="nominateApp()">Nominate for Battle</button>
+                    <button class="btn btn-secondary" onclick="likeApp()">❤️ Like App</button>
+                    <button class="btn btn-secondary" onclick="visitWebsite()">Visit Website</button>
+                </div>
+            </div>
+
+            <!-- Screenshots -->
+            <div class="screenshots-section">
+                <h3 style="margin-bottom: 16px; font-size: 20px;">Screenshots</h3>
+                <div class="screenshots-scroll">
+                    <div class="screenshot">📱 Screenshot 1</div>
+                    <div class="screenshot">📱 Screenshot 2</div>
+                    <div class="screenshot">📱 Screenshot 3</div>
+                    <div class="screenshot">📱 Screenshot 4</div>
+                    <div class="screenshot">📱 Screenshot 5</div>
+                </div>
+            </div>
+
+            <!-- Tabs Section -->
+            <div class="tabs-section">
+                <div class="tabs-header">
+                    <button class="tab-btn active" onclick="switchTab('description')">Description</button>
+                    <button class="tab-btn" onclick="switchTab('reviews')">Reviews</button>
+                    <button class="tab-btn" onclick="switchTab('discussion')">Discussion</button>
+                    <button class="tab-btn" onclick="switchTab('updates')">Updates</button>
+                </div>
+
+                <!-- Description Tab -->
+                <div class="tab-content active" id="description">
+                    <div class="description">
+                        <p>Revolutionary AI-powered Augmentative and Alternative Communication platform that transforms speech therapy through predictive analytics and real-time family engagement. TinkyBink AAC features automated IEP goal generation, breakthrough prediction algorithms, and seamless insurance billing integration.</p>
+                        
+                        <p style="margin-top: 16px;">Our platform revolutionizes therapy with five game-changing features that save therapists hours of work while improving patient outcomes. The AI can generate complete IEP goals in 30 seconds, predict therapy breakthroughs 2 weeks in advance with 89.3% accuracy, and automatically process insurance claims during sessions.</p>
+                    </div>
+                    
+                    <div class="features-list">
+                        <h4 style="margin-bottom: 16px;">Key Features</h4>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <div>
+                                <strong>AI-Generated IEP Goals</strong> - Transform 4+ hours of work into 30 seconds
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <div>
+                                <strong>Breakthrough Prediction</strong> - Predicts therapy breakthroughs 2 weeks early (89.3% accuracy)
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <div>
+                                <strong>Real-Time Auto-Billing</strong> - Processes insurance claims during sessions
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <div>
+                                <strong>Live Parent Updates</strong> - Real-time family engagement with breakthrough alerts
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <div>
+                                <strong>Research Publication Generator</strong> - Turns therapy data into publishable research
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reviews Tab -->
+                <div class="tab-content" id="reviews">
+                    <div class="reviews-header">
+                        <div class="review-summary">
+                            <div class="review-average">4.9</div>
+                            <div>
+                                <div class="stars" style="font-size: 24px;">
+                                    ★★★★★
+                                </div>
+                                <div style="color: rgba(245, 245, 247, 0.6); font-size: 14px;">2,456 ratings</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary">Write a Review</button>
+                    </div>
+
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <div class="reviewer-avatar">S</div>
+                                <div>
+                                    <div class="reviewer-name">Sarah Johnson, SLP</div>
+                                    <div class="review-date">2 days ago</div>
+                                </div>
+                            </div>
+                            <div class="stars">★★★★★</div>
+                        </div>
+                        <p class="review-text">This app has completely transformed my practice! The AI-generated IEP goals save me hours every week, and the breakthrough prediction feature is absolutely incredible. My patients' families love the real-time updates.</p>
+                    </div>
+
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <div class="reviewer-avatar">M</div>
+                                <div>
+                                    <div class="reviewer-name">Michael Chen, Parent</div>
+                                    <div class="review-date">1 week ago</div>
+                                </div>
+                            </div>
+                            <div class="stars">★★★★★</div>
+                        </div>
+                        <p class="review-text">As a parent of a non-verbal child, TinkyBink has been life-changing. The real-time updates during therapy sessions give me peace of mind, and I can see exactly how my child is progressing.</p>
+                    </div>
+
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <div class="reviewer-avatar">D</div>
+                                <div>
+                                    <div class="reviewer-name">Dr. Emily Roberts</div>
+                                    <div class="review-date">2 weeks ago</div>
+                                </div>
+                            </div>
+                            <div class="stars">★★★★☆</div>
+                        </div>
+                        <p class="review-text">Excellent platform with revolutionary features. The auto-billing integration works seamlessly with our practice management system. Would love to see more customization options for tile layouts.</p>
+                    </div>
+                </div>
+
+                <!-- Discussion Tab -->
+                <div class="tab-content" id="discussion">
+                    <div class="discussion-header">
+                        <h3>Community Discussion</h3>
+                        <div class="sort-options">
+                            <button class="sort-btn active">Hot</button>
+                            <button class="sort-btn">New</button>
+                            <button class="sort-btn">Top</button>
+                        </div>
+                    </div>
+
+                    <div class="comment-form">
+                        <textarea class="comment-textarea" placeholder="Join the discussion..."></textarea>
+                        <button class="btn btn-primary">Post Comment</button>
+                    </div>
+
+                    <div class="comment-thread">
+                        <div class="comment">
+                            <div class="comment-votes">
+                                <button class="vote-btn upvoted">▲</button>
+                                <span class="vote-count">247</span>
+                                <button class="vote-btn">▼</button>
+                            </div>
+                            <div class="comment-content">
+                                <div class="comment-header">
+                                    <span class="comment-author">TechTherapist</span>
+                                    <span class="comment-time">• 3 hours ago</span>
+                                </div>
+                                <p class="comment-text">Just saw TinkyBink destroy the competition in today's battle! The breakthrough prediction feature is what sets it apart from every other AAC app. As an SLP who's tried them all, this is the real deal.</p>
+                                <div class="comment-actions">
+                                    <button class="comment-action">Reply</button>
+                                    <button class="comment-action">Share</button>
+                                    <button class="comment-action">Award</button>
+                                </div>
+                                
+                                <div class="replies">
+                                    <div class="comment">
+                                        <div class="comment-votes">
+                                            <button class="vote-btn">▲</button>
+                                            <span class="vote-count">89</span>
+                                            <button class="vote-btn">▼</button>
+                                        </div>
+                                        <div class="comment-content">
+                                            <div class="comment-header">
+                                                <span class="comment-author">ParentAdvocate</span>
+                                                <span class="comment-time">• 2 hours ago</span>
+                                            </div>
+                                            <p class="comment-text">Agreed! My daughter's therapist started using it last month and the progress has been incredible. The real-time parent updates are a game changer.</p>
+                                            <div class="comment-actions">
+                                                <button class="comment-action">Reply</button>
+                                                <button class="comment-action">Share</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="comment">
+                            <div class="comment-votes">
+                                <button class="vote-btn">▲</button>
+                                <span class="vote-count">156</span>
+                                <button class="vote-btn">▼</button>
+                            </div>
+                            <div class="comment-content">
+                                <div class="comment-header">
+                                    <span class="comment-author">DevReviewer</span>
+                                    <span class="comment-time">• 5 hours ago</span>
+                                </div>
+                                <p class="comment-text">The technical implementation is impressive. HIPAA compliance + real-time sync + AI predictions all working seamlessly. Would love to see the team do an AMA about their tech stack!</p>
+                                <div class="comment-actions">
+                                    <button class="comment-action">Reply</button>
+                                    <button class="comment-action">Share</button>
+                                    <button class="comment-action">Award</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="comment">
+                            <div class="comment-votes">
+                                <button class="vote-btn">▲</button>
+                                <span class="vote-count">98</span>
+                                <button class="vote-btn">▼</button>
+                            </div>
+                            <div class="comment-content">
+                                <div class="comment-header">
+                                    <span class="comment-author">CompetitorFan</span>
+                                    <span class="comment-time">• 8 hours ago</span>
+                                </div>
+                                <p class="comment-text">Great app but MindSync Pro gave it a good fight yesterday! The healthcare category is getting so competitive. Can't wait for the rematch!</p>
+                                <div class="comment-actions">
+                                    <button class="comment-action">Reply</button>
+                                    <button class="comment-action">Share</button>
+                                    <button class="comment-action">Award</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Updates Tab -->
+                <div class="tab-content" id="updates">
+                    <h3 style="margin-bottom: 20px;">Recent Updates</h3>
+                    
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <div class="reviewer-avatar">📱</div>
+                                <div>
+                                    <div class="reviewer-name">Version 3.2.0</div>
+                                    <div class="review-date">December 10, 2024</div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="review-text">
+                            • Added new AI breakthrough prediction model with 89.3% accuracy<br>
+                            • Improved real-time family engagement dashboard<br>
+                            • Enhanced HIPAA compliance features<br>
+                            • Fixed minor bugs in tile customization
+                        </p>
+                    </div>
+
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <div class="reviewer-avatar">🚀</div>
+                                <div>
+                                    <div class="reviewer-name">Version 3.1.0</div>
+                                    <div class="review-date">November 28, 2024</div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="review-text">
+                            • Launched Research Publication Generator<br>
+                            • Added support for 15 new languages<br>
+                            • Improved auto-billing integration<br>
+                            • Performance optimizations
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Stats Card -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">Battle Statistics</h3>
+                <div class="stat-row">
+                    <span class="stat-label">Current Rank</span>
+                    <span class="stat-value">#1</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Battles Won</span>
+                    <span class="stat-value">312</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Win Rate</span>
+                    <span class="stat-value">92%</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Total Votes</span>
+                    <span class="stat-value">124.5K</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Category</span>
+                    <span class="stat-value">Healthcare</span>
+                </div>
+            </div>
+
+            <!-- Recent Battles -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">Recent Battles</h3>
+                <div class="recent-battles">
+                    <div class="battle-item">
+                        <div class="battle-opponent">
+                            <span>🧠</span>
+                            <span>vs MindSync Pro</span>
+                        </div>
+                        <span class="battle-result won">Won 68%</span>
+                    </div>
+                    <div class="battle-item">
+                        <div class="battle-opponent">
+                            <span>💊</span>
+                            <span>vs MediTrack AI</span>
+                        </div>
+                        <span class="battle-result won">Won 71%</span>
+                    </div>
+                    <div class="battle-item">
+                        <div class="battle-opponent">
+                            <span>🏥</span>
+                            <span>vs HealthHub Pro</span>
+                        </div>
+                        <span class="battle-result won">Won 64%</span>
+                    </div>
+                    <div class="battle-item">
+                        <div class="battle-opponent">
+                            <span>📊</span>
+                            <span>vs TherapyTracker</span>
+                        </div>
+                        <span class="battle-result lost">Lost 48%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Developer Info -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">Developer</h3>
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                    <div style="width: 48px; height: 48px; background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo)); border-radius: 12px; display: flex; align-items: center; justify-content: center;">👨‍💻</div>
+                    <div>
+                        <div style="font-weight: 600;">Luke Kist</div>
+                        <div style="font-size: 14px; color: rgba(245, 245, 247, 0.6);">Healthcare Innovation</div>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" style="width: 100%;">View All Apps</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Script -->
+    <script src="js/api.js"></script>
+    
+    <script>
+        // Global app data
+        let currentApp = null;
+        
+        // Load app on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAppData();
+            updateUserDisplay();
+        });
+        
+        async function loadAppData() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const appId = urlParams.get('id') || '1'; // Default to first app
+                
+                showLoading(document.querySelector('.app-title'));
+                const app = await vibeAPI.getApp(appId);
+                currentApp = app;
+                
+                updateAppDisplay(app);
+                loadReviews(app.id);
+                loadComments(app.id);
+                
+            } catch (error) {
+                console.error('Error loading app:', error);
+                showNotification('Failed to load app details', 'error');
+            }
+        }
+        
+        function updateAppDisplay(app) {
+            // Update app header
+            document.querySelector('.app-title').textContent = app.name;
+            document.querySelector('.app-developer').textContent = `by ${app.developer_name}`;
+            
+            // Update description
+            const descriptionText = document.querySelector('#description .description p');
+            if (descriptionText) {
+                descriptionText.textContent = app.full_description;
+            }
+            
+            // Update features if available
+            if (app.features && app.features.length > 0) {
+                const featuresList = document.querySelector('.features-list');
+                const existingFeatures = featuresList.querySelectorAll('.feature-item');
+                
+                // Clear existing features after the header
+                existingFeatures.forEach(item => item.remove());
+                
+                app.features.forEach(feature => {
+                    const featureItem = document.createElement('div');
+                    featureItem.className = 'feature-item';
+                    featureItem.innerHTML = `
+                        <div class="feature-icon">✓</div>
+                        <div><strong>${feature}</strong></div>
+                    `;
+                    featuresList.appendChild(featureItem);
+                });
+            }
+            
+            // Update screenshots
+            if (app.screenshots && app.screenshots.length > 0) {
+                const screenshotsScroll = document.querySelector('.screenshots-scroll');
+                screenshotsScroll.innerHTML = '';
+                
+                app.screenshots.forEach((screenshot, index) => {
+                    const screenshotDiv = document.createElement('div');
+                    screenshotDiv.className = 'screenshot';
+                    screenshotDiv.innerHTML = `<img src="${screenshot.url}" alt="Screenshot ${index + 1}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 16px;">`;
+                    screenshotsScroll.appendChild(screenshotDiv);
+                });
+            }
+            
+            // Update stats
+            document.querySelector('.stat-row:nth-child(1) .stat-value').textContent = '#1'; // Rank
+            document.querySelector('.stat-row:nth-child(4) .stat-value').textContent = formatNumber(app.like_count || 0);
+            document.querySelector('.stat-row:nth-child(5) .stat-value').textContent = app.category;
+            
+            // Update rating
+            const ratingText = document.querySelector('.rating-text');
+            if (ratingText) {
+                const avgRating = app.avg_rating || 4.9;
+                const reviewCount = app.review_count || 2456;
+                ratingText.textContent = `${avgRating.toFixed(1)} out of 5 (${formatNumber(reviewCount)} ratings)`;
+            }
+        }
+        
+        async function loadReviews(appId) {
+            // For now, keep the existing static reviews
+            // In a full implementation, you'd load real reviews from the API
+        }
+        
+        async function loadComments(appId) {
+            // For now, keep the existing static comments
+            // In a full implementation, you'd load real comments from the API
+        }
+        
+        // Tab switching
+        function switchTab(tabName) {
+            // Remove active class from all tabs and contents
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to selected tab
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Voting system
+        document.querySelectorAll('.vote-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const isUpvote = this.textContent === '▲';
+                const voteCount = this.parentElement.querySelector('.vote-count');
+                let count = parseInt(voteCount.textContent);
+                
+                if (this.classList.contains('upvoted') || this.classList.contains('downvoted')) {
+                    this.classList.remove('upvoted', 'downvoted');
+                    count += isUpvote ? -1 : 1;
+                } else {
+                    this.classList.add(isUpvote ? 'upvoted' : 'downvoted');
+                    count += isUpvote ? 1 : -1;
+                    
+                    // Remove opposite vote if exists
+                    const opposite = isUpvote ? 
+                        this.parentElement.querySelector('.vote-btn:last-child') : 
+                        this.parentElement.querySelector('.vote-btn:first-child');
+                    if (opposite.classList.contains(isUpvote ? 'downvoted' : 'upvoted')) {
+                        opposite.classList.remove('upvoted', 'downvoted');
+                        count += isUpvote ? 1 : -1;
+                    }
+                }
+                
+                voteCount.textContent = count;
+            });
+        });
+
+        // Sort buttons
+        document.querySelectorAll('.sort-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // App action handlers
+        async function nominateApp() {
+            if (!currentApp) return;
+            
+            try {
+                await vibeAPI.nominateApp(currentApp.uuid);
+                showNotification('App nominated for battle!', 'success');
+            } catch (error) {
+                console.error('Error nominating app:', error);
+                showNotification(error.message || 'Failed to nominate app', 'error');
+            }
+        }
+        
+        async function likeApp() {
+            if (!currentApp) return;
+            
+            try {
+                const result = await vibeAPI.likeApp(currentApp.uuid);
+                showNotification(result.liked ? 'App liked!' : 'Like removed', 'success');
+                
+                // Update like count in UI
+                const likeCountElement = document.querySelector('.stat-row:nth-child(4) .stat-value');
+                if (likeCountElement && currentApp.like_count !== undefined) {
+                    currentApp.like_count += result.liked ? 1 : -1;
+                    likeCountElement.textContent = formatNumber(currentApp.like_count);
+                }
+            } catch (error) {
+                console.error('Error liking app:', error);
+                showNotification(error.message || 'Failed to like app', 'error');
+            }
+        }
+        
+        function visitWebsite() {
+            if (currentApp && currentApp.website_url) {
+                window.open(currentApp.website_url, '_blank');
+            } else {
+                showNotification('Website URL not available', 'info');
+            }
+        }
+        
+        // Battle item clicks
+        document.querySelectorAll('.battle-item').forEach(item => {
+            item.addEventListener('click', function() {
+                window.location.href = 'gallery.html';
+            });
+        });
+
+        // Screenshot hover effect
+        document.querySelectorAll('.screenshot').forEach(screenshot => {
+            screenshot.addEventListener('click', function() {
+                // Open lightbox or expand screenshot
+                console.log('Open screenshot');
+            });
+        });
+    </script>
+</body>
+</html>

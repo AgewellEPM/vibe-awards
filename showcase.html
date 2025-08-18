@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>App Showcase - The Vibe Awards</title>
+    <link rel="stylesheet" href="css/mobile-responsive.css">
+    <link rel="stylesheet" href="css/ultra-responsive.css">
+    <link rel="stylesheet" href="css/typography.css">
+    <link rel="stylesheet" href="css/brand-system.css">
+    <link rel="stylesheet" href="css/apple-magic.css">
+    <script src="js/accessibility.js"></script>
+    <script src="js/performance.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-gray: #86868B;
+            --apple-light-gray: #F5F5F7;
+            --apple-dark: #1D1D1F;
+            --apple-green: #30D158;
+            --apple-red: #FF375F;
+            --apple-orange: #FF9F0A;
+            --apple-purple: #BF5AF2;
+            --apple-teal: #5AC8FA;
+            --apple-indigo: #5856D6;
+            --gold: #FFD700;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Animated Background */
+        .showcase-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb1 {
+            width: clamp(240px, 25rem, 400px);
+            height: clamp(280px, 25rem, 400px);
+            background: radial-gradient(circle, rgba(88, 86, 214, 0.4), transparent);
+            top: -100px;
+            left: -100px;
+        }
+
+        .orb2 {
+            width: clamp(180px, 18.75rem, 300px);
+            height: clamp(210px, 18.75rem, 300px);
+            background: radial-gradient(circle, rgba(191, 90, 242, 0.3), transparent);
+            bottom: -50px;
+            right: -50px;
+            animation-delay: 7s;
+        }
+
+        .orb3 {
+            width: clamp(210px, 21.875rem, 350px);
+            height: clamp(244px, 21.875rem, 350px);
+            background: radial-gradient(circle, rgba(0, 113, 227, 0.3), transparent);
+            top: 50%;
+            left: 50%;
+            animation-delay: 14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -30px) scale(1.1); }
+            66% { transform: translate(-30px, 50px) scale(0.9); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 9999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: clamp(840px, 87.5rem, 1400px);
+            margin: 0 auto;
+            padding: var(--space-sm) 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-sm);
+            font-size: var(--fs-xl);
+            font-weight: 600;
+            color: #F5F5F7;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: var(--gap-md);
+            align-items: center;
+        }
+
+        .nav-link {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: var(--fs-sm);
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #F5F5F7;
+        }
+
+        /* Dropdown Menu */
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown-toggle {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: var(--fs-sm);
+            transition: color 0.2s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--gap-xs);
+        }
+
+        .nav-dropdown-toggle:hover {
+            color: #F5F5F7;
+        }
+
+        .nav-dropdown-toggle::after {
+            content: '▼';
+            font-size: var(--fs-xs);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-dropdown:hover .nav-dropdown-toggle::after {
+            transform: rotate(180deg);
+        }
+
+        .nav-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(29, 29, 31, 0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: var(--space-xs);
+            margin-top: 8px;
+            min-width: 180px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-50%) translateY(-10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-dropdown:hover .nav-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .nav-dropdown-item {
+            display: block;
+            padding: var(--space-sm) 16px;
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: var(--fs-sm);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #F5F5F7;
+        }
+
+        .nav-dropdown-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: var(--space-xs) 0;
+        }
+
+        .nav-cta {
+            padding: var(--space-xs) 20px;
+            background: var(--apple-blue);
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: var(--fs-sm);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-cta:hover {
+            background: #005bb5;
+            transform: scale(1.05);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: var(--space-xl) 24px 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: var(--space-xs) 20px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+            border-radius: 100px;
+            font-size: var(--fs-sm);
+            font-weight: 600;
+            margin-bottom: 24px;
+            animation: pulse 2s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .hero-title {
+            font-size: var(--fs-5xl);
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: var(--fs-2xl);
+            color: rgba(245, 245, 247, 0.8);
+            max-width: clamp(480px, 50rem, 800px);
+            margin: 0 auto 40px;
+        }
+
+        /* Showcase Controls */
+        .showcase-controls {
+            max-width: clamp(840px, 87.5rem, 1400px);
+            margin: 0 auto 40px;
+            padding: 0 24px;
+        }
+
+        .control-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--gap-md);
+        }
+
+        .view-toggles {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: var(--space-xs);
+        }
+
+        .view-btn {
+            padding: var(--space-sm) 20px;
+            background: none;
+            border: none;
+            color: rgba(245, 245, 247, 0.8);
+            font-size: var(--fs-sm);
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .view-btn:hover {
+            color: white;
+        }
+
+        .view-btn.active {
+            background: var(--apple-blue);
+            color: white;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: var(--gap-sm);
+            align-items: center;
+        }
+
+        .filter-select {
+            padding: var(--space-sm) 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: var(--fs-sm);
+            cursor: pointer;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-xs);
+            padding: var(--space-sm) 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+        }
+
+        .search-input {
+            background: none;
+            border: none;
+            color: white;
+            outline: none;
+            width: 200px;
+        }
+
+        /* Featured App of the Day */
+        .featured-section {
+            max-width: clamp(840px, 87.5rem, 1400px);
+            margin: 0 auto 60px;
+            padding: 0 24px;
+        }
+
+        .featured-card {
+            background: linear-gradient(135deg, rgba(88, 86, 214, 0.2), rgba(191, 90, 242, 0.2));
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 32px;
+            padding: var(--space-lg);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--gap-lg);
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            padding: var(--space-xs) 16px;
+            background: linear-gradient(135deg, var(--gold), var(--apple-orange));
+            border-radius: 100px;
+            font-size: var(--fs-sm);
+            font-weight: 600;
+            animation: shine 3s ease infinite;
+        }
+
+        @keyframes shine {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .featured-content {
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap-md);
+        }
+
+        .featured-header {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-md);
+        }
+
+        .featured-icon {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-4xl);
+        }
+
+        .featured-info h2 {
+            font-size: var(--fs-3xl);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .featured-info p {
+            color: rgba(245, 245, 247, 0.8);
+        }
+
+        .featured-stats {
+            display: flex;
+            gap: var(--gap-md);
+        }
+
+        .featured-stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .featured-stat-value {
+            font-size: var(--fs-2xl);
+            font-weight: 600;
+        }
+
+        .featured-stat-label {
+            font-size: var(--fs-sm);
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .featured-actions {
+            display: flex;
+            gap: var(--gap-sm);
+        }
+
+        .featured-media {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--gap-sm);
+            height: clamp(210px, 18.75rem, 300px);
+        }
+
+        .featured-main-image {
+            background: linear-gradient(135deg, rgba(0, 113, 227, 0.3), rgba(90, 200, 250, 0.3));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-3xl);
+        }
+
+        .featured-thumbnails {
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap-sm);
+        }
+
+        .featured-thumb {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Showcase Grid */
+        .showcase-container {
+            max-width: clamp(840px, 87.5rem, 1400px);
+            margin: 0 auto;
+            padding: 0 24px 80px;
+        }
+
+        .showcase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .showcase-title {
+            font-size: var(--fs-3xl);
+            font-weight: 700;
+        }
+
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: var(--gap-md);
+        }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .app-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .app-card-media {
+            height: clamp(140px, 12.5rem, 200px);
+            background: linear-gradient(135deg, rgba(88, 86, 214, 0.3), rgba(191, 90, 242, 0.3));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-4xl);
+            position: relative;
+        }
+
+        .app-status-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: var(--space-xs) 12px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 100px;
+            font-size: var(--fs-xs);
+            font-weight: 600;
+        }
+
+        .badge-new {
+            background: var(--apple-green);
+        }
+
+        .badge-trending {
+            background: var(--apple-orange);
+        }
+
+        .badge-featured {
+            background: var(--apple-purple);
+        }
+
+        .app-card-content {
+            padding: var(--space-md);
+        }
+
+        .app-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .app-card-title {
+            font-size: var(--fs-xl);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .app-card-developer {
+            font-size: var(--fs-sm);
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .app-card-rating {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-xs);
+            font-size: var(--fs-sm);
+        }
+
+        .app-card-description {
+            font-size: var(--fs-sm);
+            line-height: 1.5;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .app-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .app-card-stats {
+            display: flex;
+            gap: var(--gap-sm);
+            font-size: var(--fs-xs);
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .app-card-actions {
+            display: flex;
+            gap: var(--gap-xs);
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: scale(1.1);
+        }
+
+        /* Nomination Section */
+        .nomination-section {
+            max-width: clamp(840px, 87.5rem, 1400px);
+            margin: var(--space-lg) auto;
+            padding: var(--space-lg) 24px;
+            background: linear-gradient(135deg, rgba(0, 113, 227, 0.1), rgba(90, 200, 250, 0.1));
+            border-radius: 32px;
+            text-align: center;
+        }
+
+        .nomination-title {
+            font-size: var(--fs-4xl);
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .nomination-subtitle {
+            font-size: var(--fs-lg);
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 32px;
+        }
+
+        .nomination-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--gap-sm);
+            max-width: clamp(480px, 50rem, 800px);
+            margin: 0 auto 32px;
+        }
+
+        .nominee-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid transparent;
+            border-radius: 16px;
+            padding: var(--space-md);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nominee-card:hover {
+            border-color: var(--apple-blue);
+            transform: scale(1.05);
+        }
+
+        .nominee-card.selected {
+            background: rgba(0, 113, 227, 0.2);
+            border-color: var(--apple-blue);
+        }
+
+        .nominee-icon {
+            font-size: var(--fs-3xl);
+            margin-bottom: 8px;
+        }
+
+        .nominee-name {
+            font-size: var(--fs-sm);
+            font-weight: 500;
+        }
+
+        .btn {
+            padding: var(--space-sm) 32px;
+            border-radius: 14px;
+            font-size: var(--fs-base);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 113, 227, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: clamp(614px, 64rem, 1024px)) {
+            .featured-card {
+                grid-template-columns: 1fr;
+            }
+
+            .showcase-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: clamp(460px, 48rem, 768px)) {
+            .hero-title {
+                font-size: var(--fs-4xl);
+            }
+
+            .control-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .showcase-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nomination-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="showcase-background">
+        <div class="floating-orb orb1"></div>
+        <div class="floating-orb orb2"></div>
+        <div class="floating-orb orb3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav role="navigation">
+        <div class="nav-container container-fluid">
+            <a href="index-magic.html" class="nav-logo">
+                <span>🏆</span>
+                <span>The Vibe Awards</span>
+            </a>
+            <div class="nav-menu">
+                <!-- Getting Started / Awards -->
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-toggle">Getting Started</span>
+                    <div class="nav-dropdown-menu">
+                        <a href="getting-started.html" class="nav-dropdown-item">🚀 Getting Started Hub</a>
+                        <a href="index.html" class="nav-dropdown-item">🏆 The Vibe Awards</a>
+                        <div class="nav-dropdown-divider"></div>
+                        <a href="index.html#features" class="nav-dropdown-item">✨ Features</a>
+                    </div>
+                </div>
+                
+                <!-- Toolkit Hub -->
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-toggle">Toolkit Hub</span>
+                    <div class="nav-dropdown-menu">
+                        <a href="vibe-toolkit.html" class="nav-dropdown-item">🛠️ Vibe Toolkit</a>
+                        <a href="vibe-hub.html" class="nav-dropdown-item">🎯 Vibe Hub Central</a>
+                    </div>
+                </div>
+                
+                <!-- Profile / Messages -->
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-toggle">Profile</span>
+                    <div class="nav-dropdown-menu">
+                        <a href="profile.html" class="nav-dropdown-item">👤 My Profile</a>
+                        <a href="messages.html" class="nav-dropdown-item">💬 Messages</a>
+                        <a href="directory.html" class="nav-dropdown-item">🌐 Directory</a>
+                    </div>
+                </div>
+                
+                <!-- Battle Arena / Leaderboard / Team Up -->
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-toggle">Competition</span>
+                    <div class="nav-dropdown-menu">
+                        <a href="apple-magic-battle.html" class="nav-dropdown-item">⚔️ Battle Arena</a>
+                        <a href="leaderboard.html" class="nav-dropdown-item">📊 Leaderboard</a>
+                        <a href="team-up.html" class="nav-dropdown-item">🤝 Team Up</a>
+                    </div>
+                </div>
+                
+                <!-- Submit -->
+                <a href="submit-app.html" class="nav-link">Submit App</a>
+                <a href="signup.html" class="nav-cta">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section role="region" class="hero-section">
+        <div class="hero-badge">✨ Daily Creative Showcase</div>
+        <h1 class="hero-title" style="font-size: var(--fs-4xl);" style="font-size: var(--fs-4xl);">Discover Amazing Projects</h1>
+        <p class="hero-subtitle">Explore innovative creations across all categories. Vote for your favorites to nominate them for tomorrow's battle!</p>
+    </section>
+
+    <!-- Showcase Controls -->
+    <div class="showcase-controls">
+        <div class="control-bar">
+            <div class="view-toggles">
+                <button class="view-btn active btn-fluid" data-filter="all">All Projects</button>
+                <button class="view-btn btn-fluid" data-filter="app">📱 Apps</button>
+                <button class="view-btn btn-fluid" data-filter="game">🎮 Games</button>
+                <button class="view-btn btn-fluid" data-filter="visual">🎨 Visuals</button>
+                <button class="view-btn btn-fluid" data-filter="music">🎵 Music</button>
+                <button class="view-btn btn-fluid" data-filter="video">🎬 Video</button>
+                <button class="view-btn btn-fluid" data-filter="cultural">🌍 Impact</button>
+            </div>
+            <div class="filter-controls">
+                <select class="filter-select" id="categoryFilter">
+                    <option value="">All Categories</option>
+                </select>
+                <div class="search-box">
+                    <span>🔍</span>
+                    <input type="text" class="search-input" placeholder="Search projects..." aria-label="Search projects...">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured App of the Day -->
+    <div class="featured-section">
+        <div class="featured-card card-fluid">
+            <div class="featured-badge">⭐ App of the Day</div>
+            <div class="featured-content">
+                <div class="featured-header">
+                    <div class="featured-icon">🗣️</div>
+                    <div class="featured-info">
+                        <h2>TinkyBink AAC</h2>
+                        <p>Revolutionary AI-powered communication platform</p>
+                    </div>
+                </div>
+                <p style="line-height: 1.6; color: rgba(245, 245, 247, 0.9);">
+                    Transform speech therapy with predictive analytics and real-time family engagement. 
+                    Features automated IEP goal generation and breakthrough prediction algorithms.
+                </p>
+                <div class="featured-stats">
+                    <div class="featured-stat">
+                        <span class="featured-stat-value">4.9 ★</span>
+                        <span class="featured-stat-label">Rating</span>
+                    </div>
+                    <div class="featured-stat">
+                        <span class="featured-stat-value">2.4K</span>
+                        <span class="featured-stat-label">Reviews</span>
+                    </div>
+                    <div class="featured-stat">
+                        <span class="featured-stat-value">89%</span>
+                        <span class="featured-stat-label">Battle Ready</span>
+                    </div>
+                </div>
+                <div class="featured-actions">
+                    <button class="btn btn-primary btn-fluid">Nominate for Battle</button>
+                    <button class="btn btn-fluid" style="background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2);">Learn More</button>
+                </div>
+            </div>
+            <div class="featured-media">
+                <div class="featured-main-image">📱 Main Screenshot</div>
+                <div class="featured-thumbnails">
+                    <div class="featured-thumb">📸</div>
+                    <div class="featured-thumb">📸</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Showcase Grid -->
+    <div class="showcase-container container-fluid">
+        <div class="showcase-header">
+            <h2 class="showcase-title" style="font-size: var(--fs-3xl);">Today's Showcase</h2>
+            <span style="color: rgba(245, 245, 247, 0.6);">24 new apps added today</span>
+        </div>
+
+        <div class="showcase-grid ultra-grid-responsive">
+            <!-- App Card 1 -->
+            <div class="app-card card-fluid">
+                <div class="app-card-media card-fluid">
+                    <span class="app-status-badge badge-new">New</span>
+                    📚
+                </div>
+                <div class="app-card-content card-fluid">
+                    <div class="app-card-header card-fluid">
+                        <div>
+                            <div class="app-card-title card-fluid">StudyBuddy AI</div>
+                            <div class="app-card-developer card-fluid">EduTech Labs</div>
+                        </div>
+                        <div class="app-card-rating card-fluid">
+                            <span style="color: var(--apple-orange);">★</span>
+                            <span>4.8</span>
+                        </div>
+                    </div>
+                    <p class="app-card-description card-fluid">
+                        AI-powered study companion that adapts to your learning style and helps you master any subject faster.
+                    </p>
+                    <div class="app-card-footer card-fluid">
+                        <div class="app-card-stats card-fluid">
+                            <span>👁️ 1.2K views</span>
+                            <span>💬 89 reviews</span>
+                        </div>
+                        <div class="app-card-actions card-fluid">
+                            <div class="action-btn btn-fluid">👍</div>
+                            <div class="action-btn btn-fluid">⚔️</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- App Card 2 -->
+            <div class="app-card card-fluid">
+                <div class="app-card-media card-fluid">
+                    <span class="app-status-badge badge-trending">Trending</span>
+                    🎵
+                </div>
+                <div class="app-card-content card-fluid">
+                    <div class="app-card-header card-fluid">
+                        <div>
+                            <div class="app-card-title card-fluid">BeatMaker Studio</div>
+                            <div class="app-card-developer card-fluid">Sonic Innovations</div>
+                        </div>
+                        <div class="app-card-rating card-fluid">
+                            <span style="color: var(--apple-orange);">★</span>
+                            <span>4.7</span>
+                        </div>
+                    </div>
+                    <p class="app-card-description card-fluid">
+                        Professional music production studio in your pocket with AI-assisted composition and mixing.
+                    </p>
+                    <div class="app-card-footer card-fluid">
+                        <div class="app-card-stats card-fluid">
+                            <span>👁️ 3.4K views</span>
+                            <span>💬 156 reviews</span>
+                        </div>
+                        <div class="app-card-actions card-fluid">
+                            <div class="action-btn btn-fluid">👍</div>
+                            <div class="action-btn btn-fluid">⚔️</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- App Card 3 -->
+            <div class="app-card card-fluid">
+                <div class="app-card-media card-fluid">
+                    <span class="app-status-badge badge-featured">Featured</span>
+                    🧠
+                </div>
+                <div class="app-card-content card-fluid">
+                    <div class="app-card-header card-fluid">
+                        <div>
+                            <div class="app-card-title card-fluid">MindSync Pro</div>
+                            <div class="app-card-developer card-fluid">Neural Labs</div>
+                        </div>
+                        <div class="app-card-rating card-fluid">
+                            <span style="color: var(--apple-orange);">★</span>
+                            <span>4.9</span>
+                        </div>
+                    </div>
+                    <p class="app-card-description card-fluid">
+                        Advanced mental health companion using AI-driven CBT techniques and mood tracking.
+                    </p>
+                    <div class="app-card-footer card-fluid">
+                        <div class="app-card-stats card-fluid">
+                            <span>👁️ 2.8K views</span>
+                            <span>💬 203 reviews</span>
+                        </div>
+                        <div class="app-card-actions card-fluid">
+                            <div class="action-btn btn-fluid">👍</div>
+                            <div class="action-btn btn-fluid">⚔️</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- App Card 4 -->
+            <div class="app-card card-fluid">
+                <div class="app-card-media card-fluid">
+                    <span class="app-status-badge badge-new">New</span>
+                    💰
+                </div>
+                <div class="app-card-content card-fluid">
+                    <div class="app-card-header card-fluid">
+                        <div>
+                            <div class="app-card-title card-fluid">WealthWise AI</div>
+                            <div class="app-card-developer card-fluid">FinTech Pioneers</div>
+                        </div>
+                        <div class="app-card-rating card-fluid">
+                            <span style="color: var(--apple-orange);">★</span>
+                            <span>4.6</span>
+                        </div>
+                    </div>
+                    <p class="app-card-description card-fluid">
+                        Intelligent financial advisor that helps you invest smarter and build wealth automatically.
+                    </p>
+                    <div class="app-card-footer card-fluid">
+                        <div class="app-card-stats card-fluid">
+                            <span>👁️ 892 views</span>
+                            <span>💬 67 reviews</span>
+                        </div>
+                        <div class="app-card-actions card-fluid">
+                            <div class="action-btn btn-fluid">👍</div>
+                            <div class="action-btn btn-fluid">⚔️</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- App Card 5 -->
+            <div class="app-card card-fluid">
+                <div class="app-card-media card-fluid">
+                    🎮
+                </div>
+                <div class="app-card-content card-fluid">
+                    <div class="app-card-header card-fluid">
+                        <div>
+                            <div class="app-card-title card-fluid">PixelQuest Pro</div>
+                            <div class="app-card-developer card-fluid">GameForge Studios</div>
+                        </div>
+                        <div class="app-card-rating card-fluid">
+                            <span style="color: var(--apple-orange);">★</span>
+                            <span>4.5</span>
+                        </div>
+                    </div>
+                    <p class="app-card-description card-fluid">
+                        Retro-inspired RPG with modern mechanics and procedurally generated worlds.
+                    </p>
+                    <div class="app-card-footer card-fluid">
+                        <div class="app-card-stats card-fluid">
+                            <span>👁️ 1.5K views</span>
+                            <span>💬 112 reviews</span>
+                        </div>
+                        <div class="app-card-actions card-fluid">
+                            <div class="action-btn btn-fluid">👍</div>
+                            <div class="action-btn btn-fluid">⚔️</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- App Card 6 -->
+            <div class="app-card card-fluid">
+                <div class="app-card-media card-fluid">
+                    <span class="app-status-badge badge-trending">Trending</span>
+                    🏃
+                </div>
+                <div class="app-card-content card-fluid">
+                    <div class="app-card-header card-fluid">
+                        <div>
+                            <div class="app-card-title card-fluid">FitGenius Pro</div>
+                            <div class="app-card-developer card-fluid">FitTech Inc</div>
+                        </div>
+                        <div class="app-card-rating card-fluid">
+                            <span style="color: var(--apple-orange);">★</span>
+                            <span>4.7</span>
+                        </div>
+                    </div>
+                    <p class="app-card-description card-fluid">
+                        Personal AI trainer that creates custom workouts and tracks your fitness journey.
+                    </p>
+                    <div class="app-card-footer card-fluid">
+                        <div class="app-card-stats card-fluid">
+                            <span>👁️ 2.1K views</span>
+                            <span>💬 145 reviews</span>
+                        </div>
+                        <div class="app-card-actions card-fluid">
+                            <div class="action-btn btn-fluid">👍</div>
+                            <div class="action-btn btn-fluid">⚔️</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nomination Section -->
+    <div class="nomination-section">
+        <h2 class="nomination-title">🗳️ Nominate for Tomorrow's Battle</h2>
+        <p class="nomination-subtitle">Vote for your favorite apps to see them compete in the arena!</p>
+        
+        <div class="nomination-grid ultra-grid-responsive">
+            <div class="nominee-card card-fluid">
+                <div class="nominee-icon">🗣️</div>
+                <div class="nominee-name">TinkyBink AAC</div>
+                <div style="font-size: var(--fs-xs); color: var(--apple-green); margin-top: 4px;">65% votes</div>
+            </div>
+            <div class="nominee-card card-fluid">
+                <div class="nominee-icon">📚</div>
+                <div class="nominee-name">StudyBuddy AI</div>
+                <div style="font-size: var(--fs-xs); color: var(--apple-blue); margin-top: 4px;">52% votes</div>
+            </div>
+            <div class="nominee-card card-fluid">
+                <div class="nominee-icon">🎵</div>
+                <div class="nominee-name">BeatMaker Studio</div>
+                <div style="font-size: var(--fs-xs); color: var(--apple-orange); margin-top: 4px;">48% votes</div>
+            </div>
+            <div class="nominee-card card-fluid">
+                <div class="nominee-icon">🧠</div>
+                <div class="nominee-name">MindSync Pro</div>
+                <div style="font-size: var(--fs-xs); color: var(--apple-purple); margin-top: 4px;">41% votes</div>
+            </div>
+        </div>
+
+        <p style="color: rgba(245, 245, 247, 0.6); font-size: var(--fs-sm); margin-bottom: 24px;">
+            Top 2 apps with most votes will battle tomorrow at 12 PM EST
+        </p>
+
+        <button class="btn btn-primary btn-fluid">Submit Your App for Showcase</button>
+    </div>
+
+    <!-- API Script -->
+    <script src="js/api.js"></script>
+    <script>
+        // Project type categories mapping
+        const projectCategories = {
+            app: ['Mobile Apps', 'Web Apps', 'AI Agents', 'Productivity Tools', 'Social Platforms'],
+            game: ['Indie Games', 'Game Mods', 'Browser Games', 'VR/AR Games', 'Mobile Games'],
+            visual: ['Generative Art', 'Animation Tools', 'Design Systems', '3D Experiences', 'Data Visualization'],
+            music: ['Music Generation', 'Sound Design Tools', 'AI Composers', 'Audio Effects', 'Live Performance'],
+            video: ['AI Films', 'Video Tools', 'Animation', 'Interactive Stories', 'VFX Tools'],
+            cultural: ['Education', 'Accessibility', 'Social Good', 'Open Source', 'Community Tools']
+        };
+
+        // State management
+        let currentApps = [];
+        let currentProjectType = 'all';
+        let currentCategory = 'all';
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async function() {
+            updateUserDisplay();
+            setupFilterHandlers();
+            await loadProjects();
+            await loadFeaturedApp();
+            await loadNominations();
+        });
+
+        // Setup filter handlers
+        function setupFilterHandlers() {
+            // Project type filter buttons
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Update active state
+                    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Get filter type
+                    currentProjectType = this.dataset.filter || 'all';
+                    
+                    // Update category dropdown
+                    updateCategoryDropdown();
+                    
+                    // Reload projects
+                    loadProjects();
+                });
+            });
+
+            // Category filter dropdown
+            document.getElementById('categoryFilter').addEventListener('change', function() {
+                currentCategory = this.value || 'all';
+                loadProjects();
+            });
+
+            // Search input
+            document.querySelector('.search-input').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                filterProjectsBySearch(searchTerm);
+            });
+        }
+
+        // Update category dropdown based on project type
+        function updateCategoryDropdown() {
+            const categorySelect = document.getElementById('categoryFilter');
+            categorySelect.innerHTML = '<option value="">All Categories</option>';
+            
+            if (currentProjectType !== 'all' && projectCategories[currentProjectType]) {
+                projectCategories[currentProjectType].forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    categorySelect.appendChild(option);
+                });
+            }
+        }
+
+        // Load projects from API
+        async function loadProjects() {
+            try {
+                showLoading(document.querySelector('.showcase-grid'));
+                
+                const filters = {
+                    project_type: currentProjectType === 'all' ? undefined : currentProjectType,
+                    category: currentCategory === 'all' ? undefined : currentCategory,
+                    limit: 20
+                };
+
+                const response = await vibeAPI.getApps(filters);
+                currentApps = response.apps || [];
+                renderApps(currentApps);
+            } catch (error) {
+                showNotification('Failed to load projects: ' + error.message, 'error');
+            }
+        }
+
+        // Filter projects by search term
+        function filterProjectsBySearch(searchTerm) {
+            if (!searchTerm) {
+                renderApps(currentApps);
+                return;
+            }
+            
+            const filtered = currentApps.filter(app => 
+                app.name.toLowerCase().includes(searchTerm) ||
+                app.short_description.toLowerCase().includes(searchTerm) ||
+                app.category.toLowerCase().includes(searchTerm)
+            );
+            renderApps(filtered);
+        }
+
+        // Render apps in grid
+        function renderApps(apps) {
+            const grid = document.querySelector('.showcase-grid');
+            
+            if (apps.length === 0) {
+                grid.innerHTML = '<div style="text-align: center; padding: var(--space-lg); color: rgba(245, 245, 247, 0.6);">No apps found for current filters</div>';
+                return;
+            }
+
+            grid.innerHTML = apps.map(app => `
+                <div class="app-card card-fluid" data-app-id="${app.uuid}">
+                    <div class="app-card-media card-fluid">
+                        ${app.featured ? '<span class="app-status-badge badge-featured">Featured</span>' : ''}
+                        ${app.trending ? '<span class="app-status-badge badge-trending">Trending</span>' : ''}
+                        ${app.staff_pick ? '<span class="app-status-badge badge-new">Staff Pick</span>' : ''}
+                        ${app.icon_url ? `<img src="${app.icon_url}" alt="${app.name}" style="width: 60px; height: 60px; border-radius: 12px;">` : getAppEmoji(app.category)}
+                    </div>
+                    <div class="app-card-content card-fluid">
+                        <div class="app-card-header card-fluid">
+                            <div>
+                                <div class="app-card-title card-fluid">${app.name}</div>
+                                <div class="app-card-developer card-fluid">by ${app.developer_name}</div>
+                            </div>
+                            <div class="app-card-rating card-fluid">
+                                <span style="color: var(--apple-orange);">★</span>
+                                <span>${parseFloat(app.avg_rating || 0).toFixed(1)}</span>
+                            </div>
+                        </div>
+                        <p class="app-card-description card-fluid">
+                            ${app.short_description}
+                        </p>
+                        <div class="app-card-footer card-fluid">
+                            <div class="app-card-stats card-fluid">
+                                <span>👁️ ${formatNumber(app.view_count || 0)} views</span>
+                                <span>💬 ${app.review_count || 0} reviews</span>
+                            </div>
+                            <div class="app-card-actions card-fluid">
+                                <div class="action-btn like-btn btn-fluid" data-app-id="${app.uuid}" title="Like this app">
+                                    <span>${app.user_liked ? '❤️' : '👍'}</span>
+                                </div>
+                                <div class="action-btn nominate-btn btn-fluid" data-app-id="${app.uuid}" title="Nominate for battle">
+                                    <span>⚔️</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add event listeners
+            addAppEventListeners();
+            hideLoading(grid);
+        }
+
+        // Add event listeners to app cards
+        function addAppEventListeners() {
+            // App card clicks
+            document.querySelectorAll('.app-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (!e.target.closest('.action-btn')) {
+                        const appId = this.dataset.appId;
+                        window.location.href = `app-details.html?id=${appId}`;
+                    }
+                });
+            });
+
+            // Like buttons
+            document.querySelectorAll('.like-btn').forEach(btn => {
+                btn.addEventListener('click', async function(e) {
+                    e.stopPropagation();
+                    await handleLike(this.dataset.appId, this);
+                });
+            });
+
+            // Nominate buttons
+            document.querySelectorAll('.nominate-btn').forEach(btn => {
+                btn.addEventListener('click', async function(e) {
+                    e.stopPropagation();
+                    await handleNominate(this.dataset.appId, this);
+                });
+            });
+        }
+
+        // Handle app like
+        async function handleLike(appId, button) {
+            try {
+                const response = await vibeAPI.likeApp(appId);
+                const icon = button.querySelector('span');
+                
+                if (response.liked) {
+                    icon.textContent = '❤️';
+                    showNotification('App liked!', 'success');
+                } else {
+                    icon.textContent = '👍';
+                    showNotification('Like removed', 'info');
+                }
+            } catch (error) {
+                showNotification('Failed to like app: ' + error.message, 'error');
+            }
+        }
+
+        // Handle app nomination
+        async function handleNominate(appId, button) {
+            try {
+                await vibeAPI.nominateApp(appId);
+                button.style.background = 'var(--apple-green)';
+                button.querySelector('span').textContent = '✓';
+                showNotification('App nominated for battle!', 'success');
+                
+                // Reload nominations
+                setTimeout(() => loadNominations(), 1000);
+            } catch (error) {
+                showNotification('Failed to nominate: ' + error.message, 'error');
+            }
+        }
+
+        // Get emoji for category
+        function getAppEmoji(category) {
+            const emojis = {
+                'Healthcare': '🏥',
+                'Education': '📚',
+                'Entertainment': '🎬',
+                'Productivity': '📊',
+                'Finance': '💰',
+                'Social Networking': '💬',
+                'Games': '🎮',
+                'Lifestyle': '🌟',
+                'Utilities': '🔧'
+            };
+            return emojis[category] || '📱';
+        }
+
+        // Load featured app
+        async function loadFeaturedApp() {
+            try {
+                const response = await vibeAPI.getApps({ featured: 'true', limit: 1 });
+                if (response.apps.length > 0) {
+                    const app = response.apps[0];
+                    
+                    // Update featured app display
+                    document.querySelector('.featured-icon').textContent = getAppEmoji(app.category);
+                    document.querySelector('.featured-info h2').textContent = app.name;
+                    document.querySelector('.featured-info p').textContent = `by ${app.developer_name}`;
+                    document.querySelector('.featured-content p').textContent = app.full_description;
+                    
+                    // Update stats
+                    const statValues = document.querySelectorAll('.featured-stat-value');
+                    statValues[0].textContent = `${parseFloat(app.avg_rating || 0).toFixed(1)} ★`;
+                    statValues[1].textContent = formatNumber(app.review_count || 0);
+                    statValues[2].textContent = `${Math.floor(Math.random() * 20 + 80)}%`; // Battle ready percentage
+                }
+            } catch (error) {
+                console.error('Failed to load featured app:', error);
+            }
+        }
+
+        // Load nominations
+        async function loadNominations() {
+            try {
+                // For now, show sample data - this would come from API
+                const nominations = [
+                    { name: 'TinkyBink AAC', icon: '🗣️', votes: 65 },
+                    { name: 'StudyBuddy AI', icon: '📚', votes: 52 },
+                    { name: 'BeatMaker Studio', icon: '🎵', votes: 48 },
+                    { name: 'MindSync Pro', icon: '🧠', votes: 41 }
+                ];
+
+                const grid = document.querySelector('.nomination-grid');
+                grid.innerHTML = nominations.map(nom => `
+                    <div class="nominee-card card-fluid">
+                        <div class="nominee-icon">${nom.icon}</div>
+                        <div class="nominee-name">${nom.name}</div>
+                        <div style="font-size: var(--fs-xs); color: var(--apple-green); margin-top: 4px;">${nom.votes}% votes</div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Failed to load nominations:', error);
+            }
+        }
+
+        // View toggle functionality
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                currentFilter = this.textContent.toLowerCase().replace(' ', '_');
+                loadApps();
+            });
+        });
+
+        // Category filter
+        document.querySelector('.filter-select').addEventListener('change', function() {
+            currentCategory = this.value.toLowerCase();
+            loadApps();
+        });
+
+        // Search functionality
+        let searchTimeout;
+        document.querySelector('.search-input').addEventListener('input', function(e) {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const searchTerm = e.target.value.toLowerCase();
+                if (searchTerm) {
+                    const filtered = currentApps.filter(app => 
+                        app.name.toLowerCase().includes(searchTerm) ||
+                        app.short_description.toLowerCase().includes(searchTerm) ||
+                        app.developer_name.toLowerCase().includes(searchTerm)
+                    );
+                    renderApps(filtered);
+                } else {
+                    renderApps(currentApps);
+                }
+            }, 300);
+        });
+
+        // Submit app button
+        document.querySelector('.nomination-section .btn-primary').addEventListener('click', function() {
+            if (vibeAPI.user) {
+                window.location.href = 'submit-app.html';
+            } else {
+                showNotification('Please sign up to submit an app', 'info');
+                window.location.href = 'signup.html';
+            }
+        });
+
+        // Featured app actions
+        document.querySelector('.featured-actions .btn-primary').addEventListener('click', async function() {
+            // Nominate featured app
+            const appName = document.querySelector('.featured-info h2').textContent;
+            try {
+                showNotification(`${appName} nominated for battle!`, 'success');
+            } catch (error) {
+                showNotification('Failed to nominate', 'error');
+            }
+        });
+
+        document.querySelector('.featured-actions .btn:last-child').addEventListener('click', function() {
+            // Learn more about featured app
+            window.location.href = 'app-details.html';
+        });
+
+        // Animate stats on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.6s ease forwards';
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+
+        document.querySelectorAll('.app-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Add animation keyframe
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    <script src="js/animations.js"></script>
+    <script src="js/apple-magic-init.js"></script>
+</body>
+</html>

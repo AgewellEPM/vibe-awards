@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Vibe Awards - Excellence in AI Development</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #D4AF37;
+            --black: #000000;
+            --white: #FFFFFF;
+            --gray: #1a1a1a;
+            --light-gray: #f5f5f5;
+            --accent: #ff006e;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--white);
+            color: var(--black);
+            overflow-x: hidden;
+            /* Fixed scrolling */
+            overflow-y: auto;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 20px 40px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 300;
+            letter-spacing: 3px;
+            color: var(--black);
+        }
+
+        .logo span {
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            padding: 40px;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+            line-height: 0.9;
+        }
+
+        .hero-title .gold {
+            color: var(--gold);
+            display: block;
+            font-size: 0.7em;
+            letter-spacing: 10px;
+            font-weight: 300;
+            margin-top: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 60px;
+            justify-content: center;
+            margin-top: 60px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
+        /* Floating shapes animation */
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05));
+            border: 2px solid var(--gold);
+            animation: float 20s infinite ease-in-out;
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.2);
+        }
+
+        .shape:nth-child(1) {
+            width: 120px;
+            height: 120px;
+            top: 15%;
+            left: 10%;
+            animation-duration: 25s;
+        }
+
+        .shape:nth-child(2) {
+            width: 180px;
+            height: 180px;
+            top: 50%;
+            right: 10%;
+            animation-duration: 30s;
+            border-radius: 20px;
+            transform: rotate(45deg);
+        }
+
+        .shape:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            bottom: 25%;
+            left: 25%;
+            animation-duration: 20s;
+            transform: rotate(30deg);
+        }
+
+        .shape:nth-child(4) {
+            width: 140px;
+            height: 140px;
+            top: 70%;
+            left: 60%;
+            animation-duration: 35s;
+            border-radius: 10px;
+        }
+
+        .shape:nth-child(5) {
+            width: 90px;
+            height: 90px;
+            top: 35%;
+            right: 30%;
+            animation-duration: 28s;
+            transform: rotate(60deg);
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+            }
+            25% {
+                transform: translateY(-30px) translateX(20px) rotate(90deg) scale(1.1);
+            }
+            50% {
+                transform: translateY(20px) translateX(-20px) rotate(180deg) scale(0.95);
+            }
+            75% {
+                transform: translateY(-20px) translateX(30px) rotate(270deg) scale(1.05);
+            }
+        }
+
+        /* Categories Section */
+        .categories {
+            padding: 120px 40px;
+            background: var(--white);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            font-weight: 300;
+        }
+
+        .categories-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .category-card {
+            background: var(--white);
+            border: 1px solid #e0e0e0;
+            padding: 40px 30px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gold);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .category-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .category-description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Winners Gallery */
+        .winners {
+            background: #fafafa;
+            padding: 120px 40px;
+        }
+
+        .winner-showcase {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .winner-card {
+            background: white;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .winner-card:hover {
+            transform: scale(1.02);
+        }
+
+        .winner-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--gold), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .winner-info {
+            padding: 20px;
+        }
+
+        .winner-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .winner-meta {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        /* Judges Section */
+        .judges {
+            padding: 120px 40px;
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .judges .section-title {
+            color: var(--white);
+        }
+
+        .judges .section-subtitle {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .judges-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .judge-card {
+            text-align: center;
+        }
+
+        .judge-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--accent));
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .judge-name {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .judge-title {
+            color: var(--gold);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .judge-company {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        /* Sponsors */
+        .sponsors {
+            padding: 100px 40px;
+            background: white;
+        }
+
+        .sponsors-grid {
+            max-width: 1200px;
+            margin: 60px auto 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            align-items: center;
+        }
+
+        .sponsor-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80px;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #999;
+            transition: all 0.3s ease;
+            opacity: 0.6;
+        }
+
+        .sponsor-logo:hover {
+            opacity: 1;
+            color: var(--gold);
+            transform: scale(1.1);
+        }
+
+        /* Call to Action */
+        .cta {
+            background: linear-gradient(135deg, var(--gold), #FFD700);
+            padding: 100px 40px;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: 3rem;
+            color: var(--black);
+            margin-bottom: 20px;
+        }
+
+        .cta-subtitle {
+            font-size: 1.3rem;
+            color: rgba(0, 0, 0, 0.8);
+            margin-bottom: 40px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--black);
+            border-color: var(--black);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--black);
+            border-color: var(--black);
+        }
+
+        .btn-secondary:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        .footer-bottom {
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">THE <span>VIBE</span> AWARDS</div>
+            <ul class="nav-links">
+                <li><a href="#categories">Categories</a></li>
+                <li><a href="#winners">Winners</a></li>
+                <li><a href="#judges">Judges</a></li>
+                <li><a href="#submit">Submit</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                THE VIBE AWARDS
+                <span class="gold">2024</span>
+            </h1>
+            <p class="hero-subtitle">Celebrating Excellence in AI-Powered Development</p>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number" id="computeInvested">$47M+</div>
+                    <div class="stat-label">Compute Invested</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="projectsBuilt">10K+</div>
+                    <div class="stat-label">Projects Built</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="vibeCoders">5K+</div>
+                    <div class="stat-label">Vibe Coders</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories" id="categories">
+        <div class="section-header">
+            <h2 class="section-title">Award Categories</h2>
+            <p class="section-subtitle">Recognizing Innovation Across All Domains</p>
+        </div>
+        
+        <div class="categories-grid">
+            <div class="category-card">
+                <div class="category-icon">🏆</div>
+                <h3 class="category-title">Grand Prix</h3>
+                <p class="category-description">The ultimate achievement in vibe-coding. For the project that pushed boundaries and redefined what's possible with AI development.</p>
+            </div>
+            
+            <div class="category-card">
+                <div class="category-icon">💎</div>
+                <h3 class="category-title">Most Compute Invested</h3>
+                <p class="category-description">Honoring the dedication of developers who invested significant resources to build revolutionary applications.</p>
+            </div>
+            
+            <div class="category-card">
+                <div class="category-icon">🚀</div>
+                <h3 class="category-title">Startup of the Year</h3>
+                <p class="category-description">Best vibe-coded startup that went from conversation to company, proving the power of AI-assisted development.</p>
+            </div>
+            
+            <div class="category-card">
+                <div class="category-icon">❤️</div>
+                <h3 class="category-title">Social Impact</h3>
+                <p class="category-description">Projects that make a difference. Recognizing vibe-coded solutions addressing real human needs.</p>
+            </div>
+            
+            <div class="category-card">
+                <div class="category-icon">🎨</div>
+                <h3 class="category-title">Design Excellence</h3>
+                <p class="category-description">Outstanding UI/UX created through AI collaboration, proving that machines and humans can create beauty together.</p>
+            </div>
+            
+            <div class="category-card">
+                <div class="category-icon">⚡</div>
+                <h3 class="category-title">Speed Coding</h3>
+                <p class="category-description">Fastest development from idea to deployment. For those who mastered the art of rapid vibe-coding.</p>
+            </div>
+            
+            <div class="category-card">
+                <div class="category-icon">🧠</div>
+                <h3 class="category-title">Technical Innovation</h3>
+                <p class="category-description">Breakthrough technical achievements that showcase the cutting edge of AI-assisted development.</p>
+            </div>
+            
+            <div class="category-card">
+                <div class="category-icon">🌍</div>
+                <h3 class="category-title">Global Reach</h3>
+                <p class="category-description">Projects that scaled internationally, built entirely through vibe-coding conversations.</p>
+            </div>
+            
+            <div class="category-card">
+                <div class="category-icon">🎮</div>
+                <h3 class="category-title">Entertainment</h3>
+                <p class="category-description">Games, experiences, and creative projects that entertain and engage, all built with AI assistance.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Winners Gallery -->
+    <section class="winners" id="winners">
+        <div class="section-header">
+            <h2 class="section-title">Featured Winners</h2>
+            <p class="section-subtitle">Showcasing Excellence in Vibe-Coding</p>
+        </div>
+        
+        <div class="winner-showcase">
+            <div class="winner-card">
+                <div class="winner-image">🏥</div>
+                <div class="winner-info">
+                    <h3 class="winner-title">TinkyBink AAC</h3>
+                    <p class="winner-meta">Social Impact Winner 2024</p>
+                </div>
+            </div>
+            
+            <div class="winner-card">
+                <div class="winner-image">🤖</div>
+                <div class="winner-info">
+                    <h3 class="winner-title">AI Assistant Platform</h3>
+                    <p class="winner-meta">Technical Innovation 2024</p>
+                </div>
+            </div>
+            
+            <div class="winner-card">
+                <div class="winner-image">🎯</div>
+                <div class="winner-info">
+                    <h3 class="winner-title">TaskMaster Pro</h3>
+                    <p class="winner-meta">Productivity Winner 2024</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Judges Section -->
+    <section class="judges" id="judges">
+        <div class="section-header">
+            <h2 class="section-title">Our Judges</h2>
+            <p class="section-subtitle">Industry Leaders & Vibe-Coding Pioneers</p>
+        </div>
+        
+        <div class="judges-grid">
+            <div class="judge-card">
+                <div class="judge-avatar">👨‍💻</div>
+                <h3 class="judge-name">Alex Chen</h3>
+                <p class="judge-title">Chief Innovation Officer</p>
+                <p class="judge-company">OpenAI</p>
+            </div>
+            
+            <div class="judge-card">
+                <div class="judge-avatar">👩‍💼</div>
+                <h3 class="judge-name">Sarah Johnson</h3>
+                <p class="judge-title">VP of Engineering</p>
+                <p class="judge-company">Anthropic</p>
+            </div>
+            
+            <div class="judge-card">
+                <div class="judge-avatar">👨‍🔬</div>
+                <h3 class="judge-name">Dr. Michael Park</h3>
+                <p class="judge-title">AI Research Lead</p>
+                <p class="judge-company">Google DeepMind</p>
+            </div>
+            
+            <div class="judge-card">
+                <div class="judge-avatar">👩‍💻</div>
+                <h3 class="judge-name">Emily Rodriguez</h3>
+                <p class="judge-title">Founder & CEO</p>
+                <p class="judge-company">VibeTech Studios</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sponsors Section -->
+    <section class="sponsors">
+        <div class="section-header">
+            <h2 class="section-title">Our Partners</h2>
+            <p class="section-subtitle">Supporting the Future of AI Development</p>
+        </div>
+        
+        <div class="sponsors-grid">
+            <div class="sponsor-logo">OpenAI</div>
+            <div class="sponsor-logo">Anthropic</div>
+            <div class="sponsor-logo">Google</div>
+            <div class="sponsor-logo">Microsoft</div>
+            <div class="sponsor-logo">Meta</div>
+            <div class="sponsor-logo">Amazon</div>
+            <div class="sponsor-logo">NVIDIA</div>
+            <div class="sponsor-logo">Apple</div>
+            <div class="sponsor-logo">IBM</div>
+            <div class="sponsor-logo">Tesla</div>
+            <div class="sponsor-logo">Mistral</div>
+            <div class="sponsor-logo">Cohere</div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="submit">
+        <h2 class="cta-title">Ready to Make History?</h2>
+        <p class="cta-subtitle">Submit your vibe-coded masterpiece for the 2024 awards</p>
+        <div class="cta-buttons">
+            <a href="#" class="btn btn-primary">Submit Your Project</a>
+            <a href="#" class="btn btn-secondary">Become a Sponsor</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Rules</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 The Vibe Awards. All rights reserved.</p>
+                <p style="margin-top: 10px; opacity: 0.6;">Built entirely through vibe-coding</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animate numbers on scroll
+        function animateValue(id, start, end, duration) {
+            const element = document.getElementById(id);
+            const range = end - start;
+            const minTimer = 50;
+            let stepTime = Math.abs(Math.floor(duration / range));
+            stepTime = Math.max(stepTime, minTimer);
+            const startTime = new Date().getTime();
+            const endTime = startTime + duration;
+            
+            function run() {
+                const now = new Date().getTime();
+                const remaining = Math.max((endTime - now) / duration, 0);
+                const value = Math.round(end - (remaining * range));
+                element.textContent = id === 'computeInvested' ? 
+                    `$${value}M+` : `${value}K+`;
+                if (value < end) {
+                    setTimeout(run, stepTime);
+                }
+            }
+            
+            run();
+        }
+
+        // Trigger animations when hero section is in view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateValue('computeInvested', 0, 47, 2000);
+                    animateValue('projectsBuilt', 0, 10, 2000);
+                    animateValue('vibeCoders', 0, 5, 2000);
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+
+        const heroStats = document.querySelector('.hero-stats');
+        if (heroStats) {
+            observer.observe(heroStats);
+        }
+    </script>
+</body>
+</html>

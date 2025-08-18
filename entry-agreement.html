@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entry Agreement - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-green: #30D158;
+            --apple-red: #FF375F;
+            --apple-orange: #FF9F0A;
+            --apple-purple: #BF5AF2;
+            --apple-teal: #5AC8FA;
+            --apple-indigo: #5856D6;
+            --apple-yellow: #FFD60A;
+            --gold: #FFD700;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.8;
+        }
+
+        /* Clean Background */
+        .agreement-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: linear-gradient(180deg, #000000 0%, #0a0a0a 100%);
+        }
+
+        .grid-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 113, 227, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 113, 227, 0.03) 1px, transparent 1px);
+            background-size: 100px 100px;
+        }
+
+        /* Container */
+        .agreement-container {
+            max-width: 900px;
+            margin: 80px auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .agreement-header {
+            text-align: center;
+            padding: 60px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 48px;
+        }
+
+        .vibe-logo {
+            font-size: 48px;
+            margin-bottom: 24px;
+        }
+
+        .agreement-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .agreement-subtitle {
+            font-size: 20px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        /* Main Terms Box */
+        .terms-box {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 48px;
+            margin-bottom: 48px;
+        }
+
+        .terms-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 32px;
+        }
+
+        .terms-section {
+            margin-bottom: 40px;
+        }
+
+        .section-number {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 600;
+            margin-right: 12px;
+            font-size: 14px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-content {
+            padding-left: 44px;
+            color: rgba(245, 245, 247, 0.9);
+            font-size: 16px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), rgba(191, 90, 242, 0.05));
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .highlight-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--gold);
+        }
+
+        .highlight-text {
+            font-size: 16px;
+            color: rgba(245, 245, 247, 0.9);
+        }
+
+        /* What You Get Section */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .benefit-card {
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-4px);
+        }
+
+        .benefit-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .benefit-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .benefit-description {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.7);
+        }
+
+        /* Simple Terms List */
+        .simple-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .simple-list li {
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            padding-left: 32px;
+        }
+
+        .simple-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--apple-green);
+            font-weight: 600;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin-top: 60px;
+        }
+
+        .faq-title {
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .faq-item {
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .faq-question {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.open .faq-arrow {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(245, 245, 247, 0.8);
+            display: none;
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+
+        /* Agreement Actions */
+        .agreement-actions {
+            position: sticky;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 24px;
+            margin: 60px -24px -24px;
+        }
+
+        .action-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .agreement-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox.checked {
+            background: var(--apple-green);
+            border-color: var(--apple-green);
+        }
+
+        .checkbox.checked:after {
+            content: "✓";
+            color: white;
+            font-weight: 600;
+        }
+
+        .agreement-label {
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border-radius: 100px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-decline {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-decline:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-accept {
+            background: linear-gradient(135deg, var(--apple-green), var(--apple-teal));
+            color: white;
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-accept.enabled {
+            opacity: 1;
+            cursor: pointer;
+        }
+
+        .btn-accept.enabled:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(48, 209, 88, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .agreement-title {
+                font-size: 32px;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-container {
+                flex-direction: column;
+            }
+
+            .agreement-checkbox {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="agreement-background">
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="agreement-container">
+        <!-- Header -->
+        <div class="agreement-header">
+            <div class="vibe-logo">🏆</div>
+            <h1 class="agreement-title">The Vibe Awards Entry Agreement</h1>
+            <p class="agreement-subtitle">Simple. Fair. Transparent.</p>
+        </div>
+
+        <!-- Main Terms -->
+        <div class="terms-box">
+            <span class="terms-badge">Version 1.0 - Plain English</span>
+
+            <!-- The Deal -->
+            <div class="terms-section">
+                <h2 class="section-title">
+                    <span class="section-number">1</span>
+                    The Deal
+                </h2>
+                <div class="section-content">
+                    <p>When you join a Vibe Awards challenge, you're entering a partnership:</p>
+                    
+                    <div class="highlight-box">
+                        <div class="highlight-title">🤝 The 95/5 Split</div>
+                        <div class="highlight-text">
+                            You and your team keep <strong>95%</strong> of everything you build.<br>
+                            The Vibe Awards keeps <strong>5%</strong> as our partnership share.
+                        </div>
+                    </div>
+                    
+                    <p>This applies to any IP, code, designs, or company created during the challenge period.</p>
+                </div>
+            </div>
+
+            <!-- What You Get -->
+            <div class="terms-section">
+                <h2 class="section-title">
+                    <span class="section-number">2</span>
+                    What You Get
+                </h2>
+                <div class="section-content">
+                    <div class="benefits-grid">
+                        <div class="benefit-card">
+                            <div class="benefit-icon">👥</div>
+                            <div class="benefit-title">Instant Team</div>
+                            <div class="benefit-description">Matched with talented co-founders</div>
+                        </div>
+                        
+                        <div class="benefit-card">
+                            <div class="benefit-icon">🏗️</div>
+                            <div class="benefit-title">Platform & Tools</div>
+                            <div class="benefit-description">Project scaffold, workspace, hosting</div>
+                        </div>
+                        
+                        <div class="benefit-card">
+                            <div class="benefit-icon">💰</div>
+                            <div class="benefit-title">Prize Pool</div>
+                            <div class="benefit-description">Compete for cash & recognition</div>
+                        </div>
+                        
+                        <div class="benefit-card">
+                            <div class="benefit-icon">🚀</div>
+                            <div class="benefit-title">VC Pipeline</div>
+                            <div class="benefit-description">Direct access to investors</div>
+                        </div>
+                        
+                        <div class="benefit-card">
+                            <div class="benefit-icon">📺</div>
+                            <div class="benefit-title">Global Spotlight</div>
+                            <div class="benefit-description">Showcase to thousands</div>
+                        </div>
+                        
+                        <div class="benefit-card">
+                            <div class="benefit-icon">🏆</div>
+                            <div class="benefit-title">Awards & Glory</div>
+                            <div class="benefit-description">Emmy-level recognition</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Your Rights -->
+            <div class="terms-section">
+                <h2 class="section-title">
+                    <span class="section-number">3</span>
+                    Your Rights
+                </h2>
+                <div class="section-content">
+                    <ul class="simple-list">
+                        <li>You own 95% of everything you create</li>
+                        <li>You can continue building after the challenge ends</li>
+                        <li>You can raise funding, sell, or pivot freely</li>
+                        <li>You keep all prize money won</li>
+                        <li>You can use anything you build in your portfolio</li>
+                        <li>You decide how to split equity among your team</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Our Rights -->
+            <div class="terms-section">
+                <h2 class="section-title">
+                    <span class="section-number">4</span>
+                    Our Rights
+                </h2>
+                <div class="section-content">
+                    <ul class="simple-list">
+                        <li>We keep 5% equity/IP in projects created during challenges</li>
+                        <li>We can showcase your project publicly</li>
+                        <li>We can connect you with investors and sponsors</li>
+                        <li>We can include you in marketing materials</li>
+                        <li>We can run the awards show and battles</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- The Fine Print -->
+            <div class="terms-section">
+                <h2 class="section-title">
+                    <span class="section-number">5</span>
+                    The Simple Rules
+                </h2>
+                <div class="section-content">
+                    <ul class="simple-list">
+                        <li>One person, one role, one team per challenge</li>
+                        <li>All work must be original (no pre-existing code)</li>
+                        <li>Teams must submit before the timer expires</li>
+                        <li>Be cool to your teammates</li>
+                        <li>No illegal stuff</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <h2 class="faq-title">Common Questions</h2>
+            
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-question">
+                    Why 5%?
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    It's the smallest meaningful stake that aligns our incentives. Y Combinator takes 7%, most accelerators take 10-20%. 
+                    We provide the platform, matching, tools, and spotlight - 5% is our partnership fee for making it all happen.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-question">
+                    What if my team wants to continue after the challenge?
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Awesome! That's the goal. You own 95% and can do whatever you want - raise money, hire people, pivot, sell. 
+                    We'll even help connect you with VCs. Our 5% just comes along for the ride.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-question">
+                    What if we don't want to form a company?
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    No problem! The 5% only matters if your project becomes something real. If it's just a fun weekend project that ends there, 
+                    everyone had a good time and learned something. No strings attached beyond the challenge.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-question">
+                    Can I use my own existing code or libraries?
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Open source libraries and frameworks are fine (React, Next.js, etc). But the core project logic must be original work 
+                    created during the challenge. No copy-pasting your previous startup.
+                </div>
+            </div>
+            
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-question">
+                    Who owns what within the team?
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    That's up to you! The team owns 95% collectively and can split it however you agree. 
+                    We recommend equal splits to keep it simple, but it's your call.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Agreement Actions -->
+    <div class="agreement-actions">
+        <div class="action-container">
+            <div class="agreement-checkbox">
+                <div class="checkbox" id="agreeCheckbox" onclick="toggleAgree()"></div>
+                <label class="agreement-label" onclick="toggleAgree()">
+                    I understand and accept the terms (95% mine, 5% Vibe Awards)
+                </label>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-decline" onclick="decline()">
+                    Not Now
+                </button>
+                <button class="btn btn-accept" id="acceptBtn" onclick="accept()" disabled>
+                    Let's Build →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle FAQ items
+        function toggleFAQ(element) {
+            element.classList.toggle('open');
+        }
+
+        // Toggle agreement checkbox
+        function toggleAgree() {
+            const checkbox = document.getElementById('agreeCheckbox');
+            const acceptBtn = document.getElementById('acceptBtn');
+            
+            checkbox.classList.toggle('checked');
+            
+            if (checkbox.classList.contains('checked')) {
+                acceptBtn.classList.add('enabled');
+                acceptBtn.disabled = false;
+            } else {
+                acceptBtn.classList.remove('enabled');
+                acceptBtn.disabled = true;
+            }
+        }
+
+        // Accept agreement
+        function accept() {
+            if (document.getElementById('agreeCheckbox').classList.contains('checked')) {
+                // Store agreement acceptance
+                localStorage.setItem('vibeAgreementAccepted', 'true');
+                localStorage.setItem('vibeAgreementDate', new Date().toISOString());
+                
+                // Redirect to challenge selection
+                window.location.href = 'random-drop-lobby.html';
+            }
+        }
+
+        // Decline agreement
+        function decline() {
+            window.location.href = 'index-magic.html';
+        }
+
+        // Check if already agreed
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('vibeAgreementAccepted') === 'true') {
+                // Could show a "already agreed" message or redirect
+                console.log('Agreement previously accepted on:', localStorage.getItem('vibeAgreementDate'));
+            }
+        });
+    </script>
+</body>
+</html>

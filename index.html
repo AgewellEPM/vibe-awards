@@ -1,0 +1,1850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Vibe Coders Platform | The Vibe Awards - Where Vibe Coding Happens</title>
+    <meta name="description" content="The ultimate Vibe Coders platform for vibe coding competitions. Join 10,000+ vibe coders building revolutionary AI products. Where vibe coding meets Anthropic-powered innovation.">
+    
+    <!-- SEO Meta Tags for Vibe Coding Keywords -->
+    <meta name="keywords" content="vibe coders, vibe coding, anthropic vibe, vibe hackathon, vibe awards, vibe platform, vibe builders, coding vibe, vibe competition, vibe forge">
+    <meta name="author" content="The Vibe Awards">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    
+    <!-- Open Graph for Social Media -->
+    <meta property="og:title" content="Vibe Coders Platform | The Vibe Awards - Where Vibe Coding Happens">
+    <meta property="og:description" content="The ultimate Vibe Coders platform for vibe coding competitions. Join 10,000+ vibe coders building revolutionary AI products.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vibeawards.com">
+    <meta property="og:site_name" content="The Vibe Awards">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Vibe Coders Platform | The Vibe Awards">
+    <meta name="twitter:description" content="The ultimate Vibe Coders platform for vibe coding competitions. Join 10,000+ vibe coders building revolutionary AI products.">
+    
+    <!-- Additional SEO Tags -->
+    <meta name="theme-color" content="#667eea">
+    <link rel="canonical" href="https://vibeawards.com">
+    
+    <!-- Structured Data for Search Engines -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "The Vibe Awards",
+      "alternateName": ["Vibe Coders Platform", "Vibe Coding Platform"],
+      "description": "The ultimate Vibe Coders platform for vibe coding competitions and Anthropic-powered AI hackathons",
+      "url": "https://vibeawards.com",
+      "logo": "https://vibeawards.com/logo.png",
+      "sameAs": [
+        "https://twitter.com/vibeawards",
+        "https://discord.gg/vibeawards"
+      ],
+      "offers": {
+        "@type": "Event",
+        "name": "Vibe Coding Competition",
+        "description": "Live vibe coding competitions for vibe coders worldwide",
+        "startDate": "2024-01-01",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+        "location": {
+          "@type": "VirtualLocation",
+          "url": "https://vibeawards.com/competition"
+        }
+      }
+    }
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-black: #1d1d1f;
+            --apple-white: #f5f5f7;
+            --apple-gray: #86868b;
+            --apple-blue: #0071e3;
+            --apple-green: #30d158;
+            --apple-purple: #bf5af2;
+            --apple-orange: #ff9f0a;
+            --apple-red: #ff375f;
+            --apple-yellow: #ffd60a;
+            --apple-teal: #5ac8fa;
+            --apple-indigo: #5856d6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', sans-serif;
+            background: #000000;
+            color: var(--apple-white);
+            line-height: 1.47059;
+            font-weight: 400;
+            letter-spacing: -0.022em;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* AI Companies Bar */
+        .companies-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 36px;
+            background: #000000;
+            z-index: 10000;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .companies-track {
+            display: flex;
+            animation: scroll-companies 30s linear infinite;
+        }
+
+        .companies-content {
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            white-space: nowrap;
+        }
+
+        .company {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            font-weight: 500;
+            margin: 0 20px;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .company:hover {
+            opacity: 1;
+            color: #ffffff;
+        }
+
+        .dot {
+            color: rgba(255, 255, 255, 0.3);
+            margin: 0 20px;
+            font-size: 10px;
+        }
+
+        @keyframes scroll-companies {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Epic Navigation */
+        nav {
+            position: fixed;
+            top: 36px;
+            width: 100%;
+            background: linear-gradient(135deg,
+                rgba(0, 0, 0, 0.9) 0%,
+                rgba(30, 0, 60, 0.8) 50%,
+                rgba(0, 0, 0, 0.9) 100%);
+            backdrop-filter: saturate(200%) blur(30px);
+            -webkit-backdrop-filter: saturate(200%) blur(30px);
+            z-index: 9999;
+            border-bottom: 1px solid transparent;
+            background-size: 200% 200%;
+            animation: navGradient 8s ease infinite;
+            box-shadow: 0 10px 40px rgba(138, 43, 226, 0.2);
+        }
+
+        @keyframes navGradient {
+            0% { background-position: 0% 50%; border-bottom-color: rgba(138, 43, 226, 0.3); }
+            50% { background-position: 100% 50%; border-bottom-color: rgba(0, 191, 255, 0.3); }
+            100% { background-position: 0% 50%; border-bottom-color: rgba(138, 43, 226, 0.3); }
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 22px;
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--apple-white);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-logo .logo-icon {
+            font-size: 28px;
+            display: inline-block;
+            animation: logoGlow 2s ease infinite;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
+                transform: rotate(0deg) scale(1);
+            }
+            50% {
+                filter: drop-shadow(0 0 20px rgba(255, 215, 0, 1));
+                transform: rotate(5deg) scale(1.1);
+            }
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 25px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link:hover {
+            color: #ffffff;
+            background: linear-gradient(135deg,
+                rgba(138, 43, 226, 0.4),
+                rgba(0, 191, 255, 0.4));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.3);
+        }
+
+        .nav-link.has-dropdown::after {
+            content: '⚡';
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-dropdown:hover .nav-link.has-dropdown::after {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px) scale(0.9);
+            margin-top: 10px;
+            background: linear-gradient(135deg,
+                rgba(20, 0, 40, 0.98) 0%,
+                rgba(0, 10, 30, 0.98) 100%);
+            backdrop-filter: blur(30px);
+            border-radius: 20px;
+            box-shadow:
+                0 20px 60px rgba(138, 43, 226, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            padding: 12px 8px;
+            min-width: 220px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .nav-dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0) scale(1);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 12px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            margin: 4px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dropdown-item::before {
+            content: '→';
+            position: absolute;
+            left: -20px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: linear-gradient(90deg,
+                rgba(138, 43, 226, 0.3),
+                rgba(0, 191, 255, 0.2));
+            color: #ffffff;
+            padding-left: 35px;
+            transform: translateX(5px);
+        }
+
+        .dropdown-item:hover::before {
+            left: 15px;
+            opacity: 1;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: linear-gradient(90deg,
+                transparent,
+                rgba(138, 43, 226, 0.5),
+                transparent);
+            margin: 8px 0;
+        }
+
+        .nav-cta {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-cta:hover::before {
+            left: 100%;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow:
+                0 7px 20px rgba(102, 126, 234, 0.5),
+                0 3px 10px rgba(118, 75, 162, 0.5);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-size: 20px;
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-icon-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(138, 43, 226, 0.3);
+            transform: translate(-50%, -50%);
+            transition: all 0.4s ease;
+        }
+
+        .nav-icon-btn:hover {
+            color: #ffffff;
+            transform: rotate(10deg) scale(1.1);
+            border-color: rgba(138, 43, 226, 0.5);
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.4);
+        }
+
+        .nav-icon-btn:hover::after {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Notification badge */
+        .nav-icon-btn[title="Notifications"]::before {
+            content: '3';
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: linear-gradient(135deg, #ff0844, #ff5e62);
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 5px;
+            border-radius: 10px;
+            animation: pulse 2s ease infinite;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #000000 0%, #1a0033 25%, #000000 50%, #001a33 75%, #000000 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Hero Section */
+        .hero {
+            padding-top: 160px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-left: 22px;
+            padding-right: 22px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center,
+                rgba(138, 43, 226, 0.1) 0%,
+                transparent 50%);
+            animation: heroGlow 10s ease infinite;
+        }
+
+        @keyframes heroGlow {
+            0%, 100% { transform: rotate(0deg) scale(1); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.2); opacity: 1; }
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 24px;
+            background: linear-gradient(135deg,
+                rgba(138, 43, 226, 0.2),
+                rgba(0, 191, 255, 0.1));
+            backdrop-filter: blur(30px);
+            border: 1px solid transparent;
+            background-clip: padding-box;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 40px;
+            animation: badgeFloat 3s ease infinite, fadeInDown 0.8s ease;
+            box-shadow:
+                0 10px 30px rgba(138, 43, 226, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-badge::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg,
+                #667eea, #764ba2, #f093fb, #f5576c, #667eea);
+            border-radius: 100px;
+            z-index: -1;
+            animation: borderRotate 3s linear infinite;
+            background-size: 400% 400%;
+        }
+
+        @keyframes borderRotate {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        @keyframes badgeFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-badge .badge-icon {
+            width: 8px;
+            height: 8px;
+            background: #00ff88;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #00ff88;
+            animation: pulse 1.5s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 20px #00ff88, 0 0 40px #00ff88;
+            }
+            50% {
+                transform: scale(1.3);
+                box-shadow: 0 0 30px #00ff88, 0 0 60px #00ff88;
+            }
+        }
+
+        .hero-headline {
+            font-size: 96px;
+            line-height: 1.0625;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 32px;
+            background: linear-gradient(135deg,
+                #ffffff 0%,
+                #667eea 25%,
+                #764ba2 50%,
+                #ffffff 75%,
+                #667eea 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation:
+                gradientMove 4s ease infinite,
+                fadeInUp 0.8s ease 0.2s backwards,
+                heroScale 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s backwards;
+            filter: drop-shadow(0 0 30px rgba(138, 43, 226, 0.3));
+        }
+
+        @keyframes gradientMove {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes heroScale {
+            0% { transform: scale(0.8) translateY(30px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .hero-subhead {
+            font-size: 28px;
+            line-height: 1.14286;
+            font-weight: 400;
+            letter-spacing: 0.007em;
+            color: var(--apple-gray);
+            max-width: 820px;
+            margin: 0 auto 40px;
+            animation: fadeInUp 0.8s ease 0.4s backwards;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.6s backwards;
+        }
+
+        .btn {
+            display: inline-block;
+            font-size: 18px;
+            line-height: 1.17648;
+            font-weight: 600;
+            padding: 18px 48px;
+            border-radius: 980px;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.6s ease;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary::before {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow:
+                0 20px 40px rgba(102, 126, 234, 0.4),
+                0 10px 20px rgba(118, 75, 162, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary::before {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            border-color: #667eea;
+            color: #ffffff;
+            transform: translateY(-4px) scale(1.05);
+            box-shadow:
+                0 10px 30px rgba(102, 126, 234, 0.3),
+                inset 0 0 20px rgba(102, 126, 234, 0.2);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 80px 22px;
+            background: rgba(255, 255, 255, 0.02);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 60px;
+            text-align: center;
+        }
+
+        .stat-item {
+            animation: fadeIn 1s ease;
+        }
+
+        .stat-number {
+            font-size: 56px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 17px;
+            color: var(--apple-gray);
+            font-weight: 500;
+        }
+
+        /* What We Do Section */
+        .what-we-do {
+            padding: 140px 22px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-label {
+            font-size: 21px;
+            line-height: 1.381;
+            font-weight: 600;
+            letter-spacing: 0.011em;
+            color: var(--apple-orange);
+            margin-bottom: 16px;
+        }
+
+        .section-headline {
+            font-size: 64px;
+            line-height: 1.0625;
+            font-weight: 700;
+            letter-spacing: -0.009em;
+            margin-bottom: 32px;
+        }
+
+        .section-description {
+            font-size: 21px;
+            line-height: 1.381;
+            font-weight: 400;
+            color: var(--apple-gray);
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--apple-purple), var(--apple-blue));
+            transform: scaleX(0);
+            transition: transform 0.5s ease;
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.16);
+        }
+
+        .service-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-blue));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 24px;
+        }
+
+        .service-title {
+            font-size: 28px;
+            line-height: 1.14286;
+            font-weight: 600;
+            letter-spacing: 0.007em;
+            margin-bottom: 12px;
+        }
+
+        .service-description {
+            font-size: 17px;
+            line-height: 1.47059;
+            color: var(--apple-gray);
+            margin-bottom: 24px;
+        }
+
+        .service-features {
+            list-style: none;
+        }
+
+        .service-features li {
+            font-size: 15px;
+            color: rgba(245, 245, 247, 0.8);
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+        }
+
+        .service-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--apple-green);
+            font-weight: bold;
+        }
+
+        /* Awards Showcase */
+        .awards-section {
+            padding: 140px 22px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .awards-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .award-card {
+            background: linear-gradient(135deg, rgba(191, 90, 242, 0.1), rgba(0, 113, 227, 0.1));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .award-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            background: linear-gradient(135deg, rgba(191, 90, 242, 0.2), rgba(0, 113, 227, 0.2));
+        }
+
+        .award-emoji {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .award-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--apple-white);
+        }
+
+        .award-prize {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--apple-green), var(--apple-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .award-description {
+            font-size: 15px;
+            color: var(--apple-gray);
+            line-height: 1.4;
+        }
+
+        /* Success Stories */
+        .stories-section {
+            padding: 140px 22px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .story-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+        }
+
+        .story-quote {
+            font-size: 20px;
+            line-height: 1.4;
+            color: var(--apple-white);
+            font-style: italic;
+            margin-bottom: 24px;
+        }
+
+        .story-author {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .author-avatar {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .author-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--apple-white);
+            margin-bottom: 4px;
+        }
+
+        .author-info p {
+            font-size: 14px;
+            color: var(--apple-gray);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 160px 22px;
+            background: radial-gradient(ellipse 80% 50% at 50% 50%, rgba(191, 90, 242, 0.2), transparent);
+        }
+
+        .cta-headline {
+            font-size: 64px;
+            line-height: 1.0625;
+            font-weight: 700;
+            letter-spacing: -0.009em;
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cta-subhead {
+            font-size: 21px;
+            line-height: 1.381;
+            color: var(--apple-gray);
+            margin-bottom: 48px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 22px;
+            background: #000;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+        }
+
+        .footer-brand h3 {
+            font-size: 24px;
+            margin-bottom: 16px;
+            color: var(--apple-white);
+        }
+
+        .footer-brand p {
+            font-size: 15px;
+            color: var(--apple-gray);
+            line-height: 1.4;
+        }
+
+        .footer-column h4 {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--apple-white);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 12px;
+        }
+
+        .footer-column a {
+            color: var(--apple-gray);
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column a:hover {
+            color: var(--apple-white);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 60px auto 0;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-copyright {
+            font-size: 14px;
+            color: var(--apple-gray);
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-link {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--apple-white);
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--apple-blue);
+            transform: scale(1.1);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Selection color */
+        ::selection {
+            background: rgba(138, 43, 226, 0.3);
+            color: white;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #764ba2, #667eea);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--apple-white);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 88px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 9998;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu-section {
+            margin-bottom: 32px;
+        }
+
+        .mobile-menu-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--apple-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .mobile-menu-link {
+            display: block;
+            padding: 12px 0;
+            color: var(--apple-white);
+            text-decoration: none;
+            font-size: 17px;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-link:hover {
+            padding-left: 12px;
+            color: var(--apple-blue);
+        }
+
+        /* Responsive */
+        @media (max-width: 1068px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+            .hero-headline {
+                font-size: 72px;
+            }
+
+            .section-headline {
+                font-size: 48px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 734px) {
+            .hero-headline {
+                font-size: 48px;
+            }
+
+            .hero-subhead {
+                font-size: 21px;
+            }
+
+            .section-headline {
+                font-size: 36px;
+            }
+
+            .services-grid,
+            .story-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- AI Companies Bar -->
+    <div class="companies-bar">
+        <div class="companies-track">
+            <div class="companies-content">
+                <span class="company">OpenAI</span>
+                <span class="dot">•</span>
+                <span class="company">Anthropic</span>
+                <span class="dot">•</span>
+                <span class="company">Google DeepMind</span>
+                <span class="dot">•</span>
+                <span class="company">Meta AI</span>
+                <span class="dot">•</span>
+                <span class="company">Stability AI</span>
+                <span class="dot">•</span>
+                <span class="company">Midjourney</span>
+                <span class="dot">•</span>
+                <span class="company">Cohere</span>
+                <span class="dot">•</span>
+                <span class="company">Inflection AI</span>
+                <span class="dot">•</span>
+                <span class="company">Runway</span>
+                <span class="dot">•</span>
+                <span class="company">Hugging Face</span>
+                <span class="dot">•</span>
+                <span class="company">Replicate</span>
+                <span class="dot">•</span>
+                <span class="company">Character AI</span>
+                <span class="dot">•</span>
+                <span class="company">Eleven Labs</span>
+                <span class="dot">•</span>
+                <span class="company">Perplexity</span>
+                <span class="dot">•</span>
+                <span class="company">Mistral AI</span>
+                <span class="dot">•</span>
+            </div>
+            <div class="companies-content" aria-hidden="true">
+                <span class="company">OpenAI</span>
+                <span class="dot">•</span>
+                <span class="company">Anthropic</span>
+                <span class="dot">•</span>
+                <span class="company">Google DeepMind</span>
+                <span class="dot">•</span>
+                <span class="company">Meta AI</span>
+                <span class="dot">•</span>
+                <span class="company">Stability AI</span>
+                <span class="dot">•</span>
+                <span class="company">Midjourney</span>
+                <span class="dot">•</span>
+                <span class="company">Cohere</span>
+                <span class="dot">•</span>
+                <span class="company">Inflection AI</span>
+                <span class="dot">•</span>
+                <span class="company">Runway</span>
+                <span class="dot">•</span>
+                <span class="company">Hugging Face</span>
+                <span class="dot">•</span>
+                <span class="company">Replicate</span>
+                <span class="dot">•</span>
+                <span class="company">Character AI</span>
+                <span class="dot">•</span>
+                <span class="company">Eleven Labs</span>
+                <span class="dot">•</span>
+                <span class="company">Perplexity</span>
+                <span class="dot">•</span>
+                <span class="company">Mistral AI</span>
+                <span class="dot">•</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="logo-icon">🏆</span>
+                The Vibe Awards
+            </a>
+            <div class="nav-menu">
+                <!-- Competition Dropdown -->
+                <div class="nav-dropdown">
+                    <span class="nav-link has-dropdown">Competition</span>
+                    <div class="dropdown-menu">
+                        <a href="competition.html" class="dropdown-item">Main Competition</a>
+                        <a href="battle-arena.html" class="dropdown-item">Battle Arena</a>
+                        <a href="app-battle-arena.html" class="dropdown-item">App Battles</a>
+                        <a href="challenge-mode.html" class="dropdown-item">Challenge Mode</a>
+                        <a href="tournament.html" class="dropdown-item">Tournament</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="leaderboard.html" class="dropdown-item">Leaderboard</a>
+                        <a href="winners.html" class="dropdown-item">Past Winners</a>
+                    </div>
+                </div>
+
+                <!-- Build Dropdown -->
+                <div class="nav-dropdown">
+                    <span class="nav-link has-dropdown">Build</span>
+                    <div class="dropdown-menu">
+                        <a href="vibe-forge.html" class="dropdown-item">Vibe Forge</a>
+                        <a href="vibe-toolkit.html" class="dropdown-item">Vibe Toolkit</a>
+                        <a href="getting-started.html" class="dropdown-item">Getting Started</a>
+                        <a href="brainstorm-workspace.html" class="dropdown-item">Brainstorm</a>
+                        <a href="backlog-synthesizer.html" class="dropdown-item">Backlog</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="deploy-presets.html" class="dropdown-item">Deploy Presets</a>
+                    </div>
+                </div>
+
+                <!-- Community Dropdown -->
+                <div class="nav-dropdown">
+                    <span class="nav-link has-dropdown">Community</span>
+                    <div class="dropdown-menu">
+                        <a href="team-up.html" class="dropdown-item">Team Up</a>
+                        <a href="vibe-hub.html" class="dropdown-item">Vibe Hub</a>
+                        <a href="showcase.html" class="dropdown-item">Showcase</a>
+                        <a href="gallery.html" class="dropdown-item">Gallery</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="directory.html" class="dropdown-item">Builders Directory</a>
+                        <a href="messages.html" class="dropdown-item">Messages</a>
+                    </div>
+                </div>
+
+                <!-- Live Dropdown -->
+                <div class="nav-dropdown">
+                    <span class="nav-link has-dropdown">Live</span>
+                    <div class="dropdown-menu">
+                        <a href="stream-dashboard.html" class="dropdown-item">Stream Dashboard</a>
+                        <a href="awards-ceremony.html" class="dropdown-item">Awards Ceremony</a>
+                        <a href="random-drop-lobby.html" class="dropdown-item">Random Drop</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="voting-history.html" class="dropdown-item">Voting History</a>
+                    </div>
+                </div>
+
+                <!-- About Dropdown -->
+                <div class="nav-dropdown">
+                    <span class="nav-link has-dropdown">About</span>
+                    <div class="dropdown-menu">
+                        <a href="about.html" class="dropdown-item">About Us</a>
+                        <a href="vibe-manifesto.html" class="dropdown-item">Manifesto</a>
+                        <a href="why-vibe-awards.html" class="dropdown-item">Why Vibe</a>
+                        <a href="roadmap.html" class="dropdown-item">Roadmap</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="contact.html" class="dropdown-item">Contact</a>
+                    </div>
+                </div>
+
+                <!-- Direct Links -->
+                <a href="awards.html" class="nav-link">Awards</a>
+
+                <!-- Actions -->
+                <div class="nav-actions">
+                    <a href="notifications.html" class="nav-icon-btn" title="Notifications">🔔</a>
+                    <a href="profile.html" class="nav-icon-btn" title="Profile">👤</a>
+                    <a href="submit-app.html" class="nav-cta">Submit App</a>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button type="button" class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-title">Competition</div>
+            <a href="competition.html" class="mobile-menu-link">Main Competition</a>
+            <a href="battle-arena.html" class="mobile-menu-link">Battle Arena</a>
+            <a href="app-battle-arena.html" class="mobile-menu-link">App Battles</a>
+            <a href="challenge-mode.html" class="mobile-menu-link">Challenge Mode</a>
+            <a href="tournament.html" class="mobile-menu-link">Tournament</a>
+            <a href="leaderboard.html" class="mobile-menu-link">Leaderboard</a>
+            <a href="winners.html" class="mobile-menu-link">Past Winners</a>
+        </div>
+
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-title">Build</div>
+            <a href="vibe-forge.html" class="mobile-menu-link">Vibe Forge</a>
+            <a href="vibe-toolkit.html" class="mobile-menu-link">Vibe Toolkit</a>
+            <a href="getting-started.html" class="mobile-menu-link">Getting Started</a>
+            <a href="brainstorm-workspace.html" class="mobile-menu-link">Brainstorm</a>
+            <a href="backlog-synthesizer.html" class="mobile-menu-link">Backlog</a>
+            <a href="deploy-presets.html" class="mobile-menu-link">Deploy Presets</a>
+        </div>
+
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-title">Community</div>
+            <a href="team-up.html" class="mobile-menu-link">Team Up</a>
+            <a href="vibe-hub.html" class="mobile-menu-link">Vibe Hub</a>
+            <a href="showcase.html" class="mobile-menu-link">Showcase</a>
+            <a href="gallery.html" class="mobile-menu-link">Gallery</a>
+            <a href="directory.html" class="mobile-menu-link">Builders Directory</a>
+            <a href="messages.html" class="mobile-menu-link">Messages</a>
+        </div>
+
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-title">Live</div>
+            <a href="stream-dashboard.html" class="mobile-menu-link">Stream Dashboard</a>
+            <a href="awards-ceremony.html" class="mobile-menu-link">Awards Ceremony</a>
+            <a href="random-drop-lobby.html" class="mobile-menu-link">Random Drop</a>
+            <a href="voting-history.html" class="mobile-menu-link">Voting History</a>
+        </div>
+
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-title">About</div>
+            <a href="about.html" class="mobile-menu-link">About Us</a>
+            <a href="vibe-manifesto.html" class="mobile-menu-link">Manifesto</a>
+            <a href="why-vibe-awards.html" class="mobile-menu-link">Why Vibe</a>
+            <a href="roadmap.html" class="mobile-menu-link">Roadmap</a>
+            <a href="contact.html" class="mobile-menu-link">Contact</a>
+        </div>
+
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-title">More</div>
+            <a href="awards.html" class="mobile-menu-link">Awards</a>
+            <a href="notifications.html" class="mobile-menu-link">Notifications</a>
+            <a href="profile.html" class="mobile-menu-link">Profile</a>
+            <a href="submit-app.html" class="mobile-menu-link">Submit App</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <div class="badge-icon"></div>
+                <span>Live Now: 247 Vibe Coders Building</span>
+            </div>
+            <h1 class="hero-headline">The Vibe Awards</h1>
+            <p class="hero-subhead">Where Vibe Coders Compete in Live Vibe Coding Competitions</p>
+            <div class="hero-cta">
+                <a href="competition.html" class="btn btn-primary">Enter Competition</a>
+                <a href="#what-we-do" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">10K+</div>
+                <div class="stat-label">Active Vibe Coders</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">$2.5M</div>
+                <div class="stat-label">Total Prizes</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Funded Startups</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Live Vibe Coding</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What We Do Section -->
+    <section class="what-we-do" id="what-we-do">
+        <div class="section-header">
+            <div class="section-label">Vibe Coders Platform</div>
+            <h2 class="section-headline">What We Do for Vibe Coding</h2>
+            <p class="section-description">The ultimate vibe coders platform where vibe coding meets Anthropic-powered innovation. Real vibe coders, revolutionary products, massive funding opportunities.</p>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">⚡</div>
+                <h3 class="service-title">Live Vibe Coding Competitions</h3>
+                <p class="service-description">24-hour vibe coding Flash Fires to month-long marathons. Vibe coders build in public with real-time audience engagement and Anthropic-powered tools.</p>
+                <ul class="service-features">
+                    <li>Three competition formats</li>
+                    <li>Live streaming integration</li>
+                    <li>Real-time voting system</li>
+                    <li>Judge &amp; audience scores</li>
+                </ul>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">🤝</div>
+                <h3 class="service-title">Vibe Coders Team Matching</h3>
+                <p class="service-description">AI-powered vibe coder team formation. Find your perfect vibe coding co-founders based on skills, timezone, and shared vibe vision.</p>
+                <ul class="service-features">
+                    <li>Smart skill matching</li>
+                    <li>Cross-timezone coordination</li>
+                    <li>Equity split tools</li>
+                    <li>Legal templates included</li>
+                </ul>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">🚀</div>
+                <h3 class="service-title">Vibe Forge - Anthropic Vibe Coding</h3>
+                <p class="service-description">Anthropic-powered vibe coding project architect. Generate complete vibe-optimized codebases with smart constraints in seconds for vibe coders.</p>
+                <ul class="service-features">
+                    <li>6 project types</li>
+                    <li>Smart constraint system</li>
+                    <li>Full stack generation</li>
+                    <li>Production-ready code</li>
+                </ul>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">💰</div>
+                <h3 class="service-title">Investor Connect</h3>
+                <p class="service-description">Direct access to 200+ active VCs. Demo days, pitch practice, and warm introductions.</p>
+                <ul class="service-features">
+                    <li>Weekly demo days</li>
+                    <li>1-on-1 pitch sessions</li>
+                    <li>Investor scorecards</li>
+                    <li>Term sheet assistance</li>
+                </ul>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">🎓</div>
+                <h3 class="service-title">Skill Development</h3>
+                <p class="service-description">Learn from winners. Masterclasses, code reviews, and mentorship from successful founders.</p>
+                <ul class="service-features">
+                    <li>Weekly masterclasses</li>
+                    <li>Code review sessions</li>
+                    <li>1-on-1 mentorship</li>
+                    <li>Resource library access</li>
+                </ul>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">🌍</div>
+                <h3 class="service-title">Global Vibe Coders Community</h3>
+                <p class="service-description">Join 10,000+ vibe coders worldwide. Collaborate on vibe coding projects, compete in vibe competitions, and create the future together.</p>
+                <ul class="service-features">
+                    <li>24/7 Discord community</li>
+                    <li>Regional meetups</li>
+                    <li>Collaboration tools</li>
+                    <li>Job board access</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Awards Showcase -->
+    <section class="awards-section">
+        <div class="section-header">
+            <div class="section-label">Prizes &amp; Recognition</div>
+            <h2 class="section-headline">What You Can Win</h2>
+            <p class="section-description">More than just prizes. Launch your career, find co-founders, get funded.</p>
+        </div>
+
+        <div class="awards-grid">
+            <div class="award-card">
+                <div class="award-emoji">🥇</div>
+                <h3 class="award-title">Grand Prize</h3>
+                <div class="award-prize">$100K</div>
+                <p class="award-description">Plus YC interview, office space for 6 months, and AWS credits worth $50K</p>
+            </div>
+
+            <div class="award-card">
+                <div class="award-emoji">🚀</div>
+                <h3 class="award-title">Best AI Innovation</h3>
+                <div class="award-prize">$50K</div>
+                <p class="award-description">OpenAI credits, Anthropic partnership, and featured in TechCrunch</p>
+            </div>
+
+            <div class="award-card">
+                <div class="award-emoji">🎨</div>
+                <h3 class="award-title">Best Design</h3>
+                <div class="award-prize">$25K</div>
+                <p class="award-description">Figma enterprise license, design mentorship, and Apple developer account</p>
+            </div>
+
+            <div class="award-card">
+                <div class="award-emoji">⚡</div>
+                <h3 class="award-title">Flash Fire Winner</h3>
+                <div class="award-prize">$10K</div>
+                <p class="award-description">Weekly 24-hour competition prize, fast-track to grand finals</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Stories -->
+    <section class="stories-section">
+        <div class="section-header">
+            <div class="section-label">Success Stories</div>
+            <h2 class="section-headline">From Competition to Company</h2>
+            <p class="section-description">Real builders, real stories, real impact.</p>
+        </div>
+
+        <div class="story-grid">
+            <div class="story-card">
+                <p class="story-quote">"We met as strangers on Monday, had a product by Friday, and raised $2M by the end of the year. The Vibe Awards changed everything."</p>
+                <div class="story-author">
+                    <div class="author-avatar">👩‍💻</div>
+                    <div class="author-info">
+                        <h4>Sarah Chen</h4>
+                        <p>Co-founder, VirtualCoffee (YC W24)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="story-card">
+                <p class="story-quote">"The 24-hour constraint forced us to focus on what really mattered. That MVP is now used by 50,000 developers daily."</p>
+                <div class="story-author">
+                    <div class="author-avatar">🧑‍💻</div>
+                    <div class="author-info">
+                        <h4>Marcus Rodriguez</h4>
+                        <p>Founder, DevFlow ($5M Series A)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="story-card">
+                <p class="story-quote">"I came to learn, stayed for the community, and left with my co-founders. Best decision I ever made."</p>
+                <div class="story-author">
+                    <div class="author-avatar">🎨</div>
+                    <div class="author-info">
+                        <h4>Emma Thompson</h4>
+                        <p>CPO, DesignAI (Acquired by Adobe)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2 class="cta-headline">Ready to Start Vibe Coding?</h2>
+        <p class="cta-subhead">Join the next vibe coding competition and change your life in 24 hours. Where vibe coders become unicorn founders.</p>
+        <div class="hero-cta">
+            <a href="competition.html" class="btn btn-primary">Start Vibe Coding</a>
+            <a href="team-up.html" class="btn btn-secondary">Find Vibe Coders</a>
+        </div>
+    </section>
+
+    <!-- SEO Content Section -->
+    <section class="seo-content" style="padding: 80px 22px; background: rgba(255, 255, 255, 0.02); text-align: center;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h2 style="font-size: 48px; margin-bottom: 32px; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">The Ultimate Vibe Coders Platform</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 60px;">
+                <div style="padding: 30px; background: rgba(255, 255, 255, 0.04); border-radius: 16px;">
+                    <h3 style="font-size: 24px; margin-bottom: 16px; color: #4ade80;">Vibe Coding Competitions</h3>
+                    <p style="color: #a0a7b5; line-height: 1.6;">Experience the ultimate vibe coding competitions where vibe coders showcase their skills using Anthropic-powered tools. Our platform hosts live vibe coding events 24/7.</p>
+                </div>
+                <div style="padding: 30px; background: rgba(255, 255, 255, 0.04); border-radius: 16px;">
+                    <h3 style="font-size: 24px; margin-bottom: 16px; color: #60a5fa;">Anthropic Vibe Integration</h3>
+                    <p style="color: #a0a7b5; line-height: 1.6;">Leverage Anthropic's cutting-edge AI technology in your vibe coding projects. Our Anthropic vibe integration helps vibe coders build revolutionary applications faster.</p>
+                </div>
+                <div style="padding: 30px; background: rgba(255, 255, 255, 0.04); border-radius: 16px;">
+                    <h3 style="font-size: 24px; margin-bottom: 16px; color: #f472b6;">Vibe Coders Community</h3>
+                    <p style="color: #a0a7b5; line-height: 1.6;">Join the largest vibe coders community worldwide. Connect with fellow vibe coders, share vibe coding techniques, and collaborate on groundbreaking projects.</p>
+                </div>
+            </div>
+            <div style="margin-top: 60px; padding: 40px; background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1)); border-radius: 20px;">
+                <h3 style="font-size: 32px; margin-bottom: 20px;">Why Choose Our Vibe Coding Platform?</h3>
+                <p style="font-size: 18px; color: #a0a7b5; line-height: 1.6; max-width: 800px; margin: 0 auto;">Our vibe coders platform is the premier destination for vibe coding enthusiasts. Whether you're new to vibe coding or an experienced vibe coder, our Anthropic-powered platform provides everything you need to excel in vibe coding competitions and build the next unicorn startup through revolutionary vibe coding techniques.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>🏆 The Vibe Awards - Vibe Coders Platform</h3>
+                <p>The ultimate vibe coders platform where vibe coding meets Anthropic innovation. Where vibe coders compete live in vibe coding competitions, audiences vote, and unicorns are born. Join 10,000+ vibe coders changing the world through revolutionary vibe coding.</p>
+            </div>
+
+            <div class="footer-column">
+                <h4>Vibe Coding Platform</h4>
+                <ul>
+                    <li><a href="competition.html">Vibe Coding Competitions</a></li>
+                    <li><a href="vibe-forge.html">Vibe Forge - Anthropic Coding</a></li>
+                    <li><a href="team-up.html">Vibe Coders Team Matching</a></li>
+                    <li><a href="leaderboard.html">Vibe Coders Leaderboard</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="roadmap.html">Roadmap</a></li>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">API Access</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press Kit</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-copyright">
+                © 2024 The Vibe Awards - Vibe Coders Platform. All rights reserved.
+            </div>
+            <div class="footer-socials">
+                <a href="#" class="social-link">𝕏</a>
+                <a href="#" class="social-link">📧</a>
+                <a href="#" class="social-link">💬</a>
+                <a href="#" class="social-link">🎮</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Background Animation -->
+    <div class="bg-animation"></div>
+
+    <!-- Load Modal System -->
+    <script src="js/vibe-modal-system.js"></script>
+    
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+
+            // Update toggle button
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            toggle.textContent = menu.classList.contains('active') ? '✕' : '☰';
+        }
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.mobile-menu-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobileMenu').classList.remove('active');
+                document.querySelector('.mobile-menu-toggle').textContent = '☰';
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.service-card, .award-card, .story-card, .stat-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Parallax effect for hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero && scrolled < window.innerHeight) {
+                hero.style.transform = `translateY(${scrolled * 0.3}px)`;
+            }
+        });
+    </script>
+</body>
+</html>

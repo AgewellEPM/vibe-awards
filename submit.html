@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Nomination - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #D4AF37;
+            --black: #000000;
+            --white: #FFFFFF;
+            --gray: #1a1a1a;
+            --light-gray: #f5f5f5;
+            --accent: #ff006e;
+            --success: #4CAF50;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--white);
+            color: var(--black);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 20px 40px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--gold), #B8941F);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--gold);
+        }
+
+        .nav-link.active {
+            color: var(--gold);
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-top: 100px;
+            padding: 80px 40px;
+            background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--gold), #B8941F);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-subtitle {
+            font-size: 1.5rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Form Container */
+        .form-container {
+            max-width: 800px;
+            margin: 80px auto;
+            padding: 0 40px;
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .form-section:hover {
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: var(--black);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .required {
+            color: var(--accent);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="url"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 15px;
+            font-size: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 20px;
+            padding-right: 45px;
+        }
+
+        .helper-text {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Radio Buttons */
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            background: #f8f8f8;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .radio-option:hover {
+            background: #f0f0f0;
+        }
+
+        .radio-option input[type="radio"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .radio-option label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        /* Checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 20px;
+            background: #fffef5;
+            border: 2px solid #f0e8d0;
+            border-radius: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        /* Submit Button */
+        .submit-section {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .submit-btn {
+            padding: 20px 60px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--gold), #B8941F);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            padding: 20px;
+            background: var(--success);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1rem;
+        }
+
+        /* Tips Section */
+        .tips-section {
+            background: linear-gradient(135deg, var(--gold), #B8941F);
+            color: white;
+            padding: 60px 40px;
+            margin: 80px 0;
+            text-align: center;
+        }
+
+        .tips-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .tip-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .tip-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .tip-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 60px 40px 30px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-link {
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--gold);
+        }
+
+        .copyright {
+            padding-top: 30px;
+            border-top: 1px solid #333;
+            color: #666;
+        }
+
+        .disclaimer {
+            margin-top: 10px;
+            color: #444;
+        }
+    </style>
+    <!-- Modal System -->
+    <script src="js/vibe-modal-system.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">🏆 The Vibe Awards</div>
+            <ul class="nav-menu">
+                <li><a href="vibe-awards-clio.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="awards.html" class="nav-link">Awards</a></li>
+                <li><a href="winners.html" class="nav-link">Winners</a></li>
+                <li><a href="submit.html" class="nav-link active">Submit</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1 class="page-title">Nominate an AI</h1>
+        <p class="page-subtitle">Know an AI that deserves recognition? Tell us why they're the GOAT</p>
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-container">
+        <form id="nominationForm">
+            <!-- Nominee Information -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <span>🤖</span>
+                    <span>AI Information</span>
+                </h2>
+                <div class="form-group">
+                    <label for="aiName">AI Name <span class="required">*</span></label>
+                    <input type="text" id="aiName" name="aiName" required placeholder="e.g., Claude, GPT-4, Gemini">
+                </div>
+
+                <div class="form-group">
+                    <label for="company">Company/Creator <span class="required">*</span></label>
+                    <input type="text" id="company" name="company" required placeholder="e.g., Anthropic, OpenAI, Google">
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Award Category <span class="required">*</span></label>
+                    <select id="category" name="category" required>
+                        <option value="">Select a category...</option>
+                        <option value="grand-vibe">Grand Vibe Award</option>
+                        <option value="mind-reader">Best Mind Reader</option>
+                        <option value="hallucination">Most Creative Hallucination</option>
+                        <option value="bug-creator">Fastest Bug Creator</option>
+                        <option value="emotional-support">Best Emotional Support</option>
+                        <option value="verbose">Most Verbose Explainer</option>
+                        <option value="loop">Loop Champion</option>
+                        <option value="personality">Best Personality Mode</option>
+                        <option value="overengineering">Overengineering Excellence</option>
+                        <option value="breakup">Best Breakup Message</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="version">Model Version (if applicable)</label>
+                    <input type="text" id="version" name="version" placeholder="e.g., 3.5, Pro, Ultra">
+                    <p class="helper-text">Leave blank if not applicable or unknown</p>
+                </div>
+            </div>
+
+            <!-- Nomination Details -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <span>✨</span>
+                    <span>Why They Deserve It</span>
+                </h2>
+
+                <div class="form-group">
+                    <label for="achievement">Greatest Achievement <span class="required">*</span></label>
+                    <textarea id="achievement" name="achievement" required placeholder="Tell us about their most impressive moment..."></textarea>
+                    <p class="helper-text">Be specific! We love a good story.</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="vibeCheck">The Vibe Check <span class="required">*</span></label>
+                    <textarea id="vibeCheck" name="vibeCheck" required placeholder="Describe a time when this AI just... got it. When they understood the assignment perfectly."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="evidence">Evidence/Links</label>
+                    <input type="url" id="evidence" name="evidence" placeholder="https://example.com/proof-of-greatness">
+                    <p class="helper-text">Screenshots, conversations, or any proof of their excellence</p>
+                </div>
+
+                <div class="form-group">
+                    <label>How often do you use this AI?</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="daily" name="frequency" value="daily">
+                            <label for="daily">Daily (We're codependent)</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="weekly" name="frequency" value="weekly">
+                            <label for="weekly">Weekly (Regular dates)</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="monthly" name="frequency" value="monthly">
+                            <label for="monthly">Monthly (Casual thing)</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="rarely" name="frequency" value="rarely">
+                            <label for="rarely">Rarely (It's complicated)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nominator Information -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <span>👤</span>
+                    <span>Your Information</span>
+                </h2>
+
+                <div class="form-group">
+                    <label for="nomName">Your Name <span class="required">*</span></label>
+                    <input type="text" id="nomName" name="nomName" required placeholder="John Doe">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" required placeholder="john@example.com">
+                    <p class="helper-text">We'll only use this to notify you if your nominee wins</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="twitter">Twitter/X Handle</label>
+                    <input type="text" id="twitter" name="twitter" placeholder="@johndoe">
+                    <p class="helper-text">So we can tag you when we announce winners</p>
+                </div>
+
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">
+                            I solemnly swear that this AI has legitimately impressed me and isn't just my
+                            creation that I'm trying to promote. I also accept that The Vibe Awards judges'
+                            decisions are final, even if they're obviously wrong. <span class="required">*</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Section -->
+            <div class="submit-section">
+                <button type="submit" class="submit-btn">Submit Nomination 🚀</button>
+                <div class="success-message" id="successMessage">
+                    ✅ Nomination submitted! May the vibes be with your AI.
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Tips Section -->
+    <section class="tips-section">
+        <h2 class="tips-title">Pro Tips for Winning</h2>
+        <div class="tips-grid">
+            <div class="tip-card">
+                <div class="tip-number">01</div>
+                <div class="tip-text">Be specific about achievements. "It's really good" won't win awards.</div>
+            </div>
+            <div class="tip-card">
+                <div class="tip-number">02</div>
+                <div class="tip-text">Include screenshots or links. We love receipts.</div>
+            </div>
+            <div class="tip-card">
+                <div class="tip-number">03</div>
+                <div class="tip-text">Humor helps. If your nomination makes us laugh, you're halfway there.</div>
+            </div>
+            <div class="tip-card">
+                <div class="tip-number">04</div>
+                <div class="tip-text">Multiple nominations for the same AI are allowed (but won't help).</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="vibe-awards-clio.html" class="footer-link">Home</a>
+                <a href="about.html" class="footer-link">About</a>
+                <a href="awards.html" class="footer-link">Awards</a>
+                <a href="winners.html" class="footer-link">Winners</a>
+                <a href="submit.html" class="footer-link">Submit</a>
+                <a href="contact.html" class="footer-link">Contact</a>
+            </div>
+            <div class="copyright">
+                <p>© 2024 The Vibe Awards. All vibes reserved.</p>
+                <p class="disclaimer">No AI was harmed in the making of this form</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('nominationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Collect form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                // Enhanced AI analysis and submission
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = '🤖 Analyzing AI capabilities...';
+                submitBtn.disabled = true;
+
+                // Simulate intelligent AI analysis
+                await new Promise(resolve => setTimeout(resolve, 1200));
+                submitBtn.textContent = '📊 Evaluating achievements...';
+
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                submitBtn.textContent = '🏆 Processing nomination...';
+
+                await new Promise(resolve => setTimeout(resolve, 800));
+
+                // Analyze nomination quality
+                const analysisResult = analyzeNomination(data);
+
+                // Show enhanced success modal with analysis
+                vibeSuccess(
+                    'Nomination Submitted!',
+                    `
+                        <div style="text-align: left;">
+                            <p style="margin-bottom: 15px;">Thank you for nominating <strong>${data.aiName}</strong> from ${data.company}!</p>
+                            <p style="margin-bottom: 10px;"><strong>Analysis Results:</strong></p>
+                            <ul style="margin-left: 20px; margin-bottom: 15px;">
+                                <li>Innovation Score: ${analysisResult.innovationScore}/10</li>
+                                <li>Category: ${analysisResult.category}</li>
+                                <li>Evaluation Timeline: ${analysisResult.timeline}</li>
+                            </ul>
+                            <p style="font-size: 14px; opacity: 0.8;">Our AI evaluation committee will review this submission and notify you of the results.</p>
+                        </div>
+                    `
+                );
+
+                // Reset form
+                this.reset();
+
+                // Hide success message
+                document.getElementById('successMessage').style.display = 'none';
+
+                // Restore button
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+
+            } catch (error) {
+                vibeError(
+                    'Submission Error',
+                    'There was an issue submitting your nomination. Please try again or contact support if the problem persists.'
+                );
+
+                // Restore button
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // AI-powered nomination analysis
+        function analyzeNomination(data) {
+            const achievement = data.achievement?.toLowerCase() || '';
+            const vibeCheck = data.vibeCheck?.toLowerCase() || '';
+            const aiName = data.aiName?.toLowerCase() || '';
+
+            // Calculate innovation score based on keywords
+            let innovationScore = 5; // base score
+
+            const innovationKeywords = ['breakthrough', 'revolutionary', 'first', 'novel', 'unprecedented', 'cutting-edge', 'innovative'];
+            const performanceKeywords = ['faster', 'efficient', 'accurate', 'reliable', 'scalable', 'powerful'];
+            const impactKeywords = ['impact', 'transform', 'change', 'improve', 'solve', 'revolutionize'];
+
+            innovationKeywords.forEach(keyword => {
+                if (achievement.includes(keyword) || vibeCheck.includes(keyword)) innovationScore += 1;
+            });
+
+            performanceKeywords.forEach(keyword => {
+                if (achievement.includes(keyword) || vibeCheck.includes(keyword)) innovationScore += 0.5;
+            });
+
+            impactKeywords.forEach(keyword => {
+                if (achievement.includes(keyword) || vibeCheck.includes(keyword)) innovationScore += 0.3;
+            });
+
+            innovationScore = Math.min(10, Math.round(innovationScore * 10) / 10);
+
+            // Determine category based on AI name and description
+            let category = 'General AI Excellence';
+            if (aiName.includes('claude') || data.company?.toLowerCase().includes('anthropic')) {
+                category = 'Conversational AI Excellence';
+            } else if (aiName.includes('gpt') || data.company?.toLowerCase().includes('openai')) {
+                category = 'Language Model Innovation';
+            } else if (aiName.includes('gemini') || data.company?.toLowerCase().includes('google')) {
+                category = 'Multimodal AI Achievement';
+            } else if (achievement.includes('coding') || achievement.includes('programming')) {
+                category = 'AI Coding Assistant Excellence';
+            } else if (achievement.includes('image') || achievement.includes('visual')) {
+                category = 'Visual AI Innovation';
+            }
+
+            // Determine timeline based on innovation score
+            const timeline = innovationScore >= 8 ? '2-3 weeks (priority review)' :
+                            innovationScore >= 6 ? '3-4 weeks (standard review)' :
+                            '4-6 weeks (extended review)';
+
+            return {
+                innovationScore,
+                category,
+                timeline
+            };
+        }
+    </script>
+</body>
+</html>

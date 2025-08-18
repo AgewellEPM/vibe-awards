@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform-Specific Guides - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-purple: #BF5AF2;
+            --apple-indigo: #5856D6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+
+        .page-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: radial-gradient(circle at 30% 20%, rgba(191, 90, 242, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(88, 86, 214, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 20% 70%, rgba(0, 113, 227, 0.08) 0%, transparent 50%);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 9999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #F5F5F7;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-link {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #F5F5F7;
+        }
+
+        .nav-cta {
+            padding: 8px 20px;
+            background: var(--apple-blue);
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-cta:hover {
+            background: #005bb5;
+            transform: scale(1.05);
+        }
+
+        .content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 120px 24px 80px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 40px;
+        }
+
+        .breadcrumb a {
+            color: var(--apple-blue);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .breadcrumb span {
+            color: rgba(245, 245, 247, 0.6);
+            margin: 0 8px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 32px;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 24px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 48px;
+        }
+
+        /* Guide Tabs */
+        .guide-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 60px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 8px;
+        }
+
+        .guide-tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            color: rgba(245, 245, 247, 0.6);
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .guide-tab.active {
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            color: white;
+        }
+
+        .guide-tab:hover:not(.active) {
+            color: #F5F5F7;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Guide Content */
+        .guide-content {
+            display: none;
+        }
+
+        .guide-content.active {
+            display: block;
+        }
+
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #F5F5F7;
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+
+        /* Step Cards */
+        .steps-list {
+            display: grid;
+            gap: 24px;
+        }
+
+        .step-card {
+            padding: 32px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .step-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #F5F5F7;
+        }
+
+        .step-description {
+            font-size: 16px;
+            color: rgba(245, 245, 247, 0.8);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        /* Code Examples */
+        .code-example {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+            position: relative;
+        }
+
+        .code-example pre {
+            color: var(--apple-green);
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #F5F5F7;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Tips and Warnings */
+        .tip {
+            padding: 20px;
+            background: rgba(48, 209, 88, 0.1);
+            border: 1px solid rgba(48, 209, 88, 0.3);
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .tip-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--apple-green);
+            margin-bottom: 8px;
+        }
+
+        .warning {
+            padding: 20px;
+            background: rgba(255, 159, 10, 0.1);
+            border: 1px solid rgba(255, 159, 10, 0.3);
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .warning-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--apple-orange);
+            margin-bottom: 8px;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-btn {
+            display: inline-block;
+            padding: 16px 32px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            color: #F5F5F7;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.primary {
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+        }
+
+        .nav-btn.primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 113, 227, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 40px;
+            }
+
+            .guide-tabs {
+                flex-wrap: wrap;
+            }
+
+            .guide-tab {
+                font-size: 12px;
+                padding: 10px 16px;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-background"></div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index-magic.html" class="nav-logo">
+                <span>🏆</span>
+                <span>The Vibe Awards</span>
+            </a>
+            <div class="nav-menu">
+                <a href="index-magic.html" class="nav-link">Home</a>
+                <a href="showcase.html" class="nav-link">Showcase</a>
+                <a href="apple-magic-battle.html" class="nav-link">Battle Arena</a>
+                <a href="team-up.html" class="nav-link">Team Up</a>
+                <a href="getting-started.html" class="nav-link active">Getting Started</a>
+                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+                <a href="submit-app.html" class="nav-link">Submit App</a>
+                <a href="signup.html" class="nav-cta">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="getting-started.html">Getting Started</a>
+            <span>→</span>
+            <span>Platform Guides</span>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-badge">📚 Step-by-Step Guides</div>
+            <h1 class="hero-title">Platform Guides</h1>
+            <p class="hero-subtitle">
+                Master each AI platform with our detailed walkthroughs
+            </p>
+        </div>
+
+        <!-- Guide Tabs -->
+        <div class="guide-tabs">
+            <button class="guide-tab active" onclick="showGuide('claude')">Claude</button>
+            <button class="guide-tab" onclick="showGuide('chatgpt')">ChatGPT</button>
+            <button class="guide-tab" onclick="showGuide('cursor')">Cursor</button>
+            <button class="guide-tab" onclick="showGuide('v0')">v0</button>
+            <button class="guide-tab" onclick="showGuide('bolt')">Bolt</button>
+        </div>
+
+        <!-- Claude Guide -->
+        <div id="claude-guide" class="guide-content active">
+            <section class="section">
+                <h2 class="section-title">Getting Started with Claude</h2>
+                <p class="section-subtitle">Claude excels at understanding context and building thoughtful, well-structured applications. Follow this guide to harness its full potential.</p>
+                
+                <div class="steps-list">
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">1</div>
+                            <h3 class="step-title">Set Up Your Account</h3>
+                        </div>
+                        <p class="step-description">
+                            Create your Claude account and understand the interface. Claude's clean design helps you focus on building.
+                        </p>
+                        <div class="code-example">
+                            <button class="copy-button" onclick="copyToClipboard('claude-setup')">Copy</button>
+                            <pre id="claude-setup">1. Go to claude.ai
+2. Sign up with email or Google
+3. Choose Claude Pro for unlimited usage ($20/month)
+4. Start a new conversation</pre>
+                        </div>
+                        <div class="tip">
+                            <div class="tip-title">💡 Pro Tip</div>
+                            <p>Use Claude Pro for serious development. The unlimited usage and longer context window are worth it.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">2</div>
+                            <h3 class="step-title">Your First Vibe Prompt</h3>
+                        </div>
+                        <p class="step-description">
+                            Claude responds beautifully to emotional and contextual prompts. Be specific about the feeling you want.
+                        </p>
+                        <div class="code-example">
+                            <button class="copy-button" onclick="copyToClipboard('claude-first-prompt')">Copy</button>
+                            <pre id="claude-first-prompt">"Hi Claude! I want to build a mindfulness app that feels calming and zen. The design should be minimalist like Headspace, but with warmer, more natural colors. I want users to feel peaceful the moment they open it.
+
+Features I need:
+• Guided breathing exercises with gentle animations
+• Progress tracking that feels encouraging, not judgmental  
+• Soft background sounds (rain, forest, ocean)
+• Daily quotes that inspire without being preachy
+• A journal section for reflection
+
+Can you create this as a single HTML file that works on mobile? Focus on making it feel like a peaceful digital sanctuary."</pre>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">3</div>
+                            <h3 class="step-title">Iterate with Context</h3>
+                        </div>
+                        <p class="step-description">
+                            Claude's strength is remembering context. Build on your conversation rather than starting fresh.
+                        </p>
+                        <div class="code-example">
+                            <button class="copy-button" onclick="copyToClipboard('claude-iterate')">Copy</button>
+                            <pre id="claude-iterate">Follow-up prompts to try:
+
+"The breathing animation feels too fast - can you slow it down and make it more like actual deep breathing?"
+
+"I love the color palette! Can you add a feature where users can choose different 'moods' - like Ocean (blues), Forest (greens), or Sunset (warm oranges)?"
+
+"The progress tracking is perfect. Now can you add gentle notifications that feel supportive? Like 'Ready for a moment of calm?' instead of 'Time to meditate!'"</pre>
+                        </div>
+                        <div class="tip">
+                            <div class="tip-title">🎯 Claude Strength</div>
+                            <p>Claude excels at maintaining design consistency across iterations. It remembers the "peaceful sanctuary" vibe throughout your conversation.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">4</div>
+                            <h3 class="step-title">Advanced Techniques</h3>
+                        </div>
+                        <p class="step-description">
+                            Use Claude's analytical skills for architecture planning and code organization.
+                        </p>
+                        <div class="code-example">
+                            <button class="copy-button" onclick="copyToClipboard('claude-advanced')">Copy</button>
+                            <pre id="claude-advanced">Advanced Claude prompts:
+
+"Before we build more features, can you analyze the current code structure and suggest how to organize it better? I want to add user accounts and data persistence later."
+
+"Can you explain why you chose this particular CSS approach for the breathing animation? What are the trade-offs?"
+
+"I want to make this into a progressive web app. What changes would you recommend to the current structure?"</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ChatGPT Guide -->
+        <div id="chatgpt-guide" class="guide-content">
+            <section class="section">
+                <h2 class="section-title">Getting Started with ChatGPT</h2>
+                <p class="section-subtitle">ChatGPT is incredibly versatile and great for rapid prototyping. It excels at creative solutions and building feature-rich applications quickly.</p>
+                
+                <div class="steps-list">
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">1</div>
+                            <h3 class="step-title">Set Up Your Account</h3>
+                        </div>
+                        <p class="step-description">
+                            Get started with ChatGPT and choose the right plan for your development needs.
+                        </p>
+                        <div class="code-example">
+                            <button class="copy-button" onclick="copyToClipboard('chatgpt-setup')">Copy</button>
+                            <pre id="chatgpt-setup">1. Go to chat.openai.com
+2. Sign up with email, Google, or Microsoft
+3. Consider ChatGPT Plus for GPT-4 access ($20/month)
+4. Explore plugins if available in your region</pre>
+                        </div>
+                        <div class="tip">
+                            <div class="tip-title">💡 Pro Tip</div>
+                            <p>GPT-4 is significantly better for coding than GPT-3.5. The Plus subscription is worth it for development work.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">2</div>
+                            <h3 class="step-title">Rapid Prototyping</h3>
+                        </div>
+                        <p class="step-description">
+                            ChatGPT excels at quickly building feature-rich prototypes. Start with a comprehensive feature list.
+                        </p>
+                        <div class="code-example">
+                            <button class="copy-button" onclick="copyToClipboard('chatgpt-prototype')">Copy</button>
+                            <pre id="chatgpt-prototype">"I want to build a fitness tracking app that feels motivating and energetic. Build me a complete prototype with:
+
+Core Features:
+• Workout logging with exercise database
+• Progress photos with before/after comparisons  
+• Achievement system with badges and streaks
+• Social features to share wins with friends
+• Meal planning with calorie tracking
+• Motivational quotes and challenges
+• Dark/light mode toggle
+• Responsive design for mobile and desktop
+
+Make it feel like Nike Training Club mixed with MyFitnessPal, but more gamified and social. Use bright, energetic colors and smooth animations."</pre>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">3</div>
+                            <h3 class="step-title">Feature Expansion</h3>
+                        </div>
+                        <p class="step-description">
+                            ChatGPT is great at adding new features and connecting different parts of your app.
+                        </p>
+                        <div class="code-example">
+                            <button class="copy-button" onclick="copyToClipboard('chatgpt-expand')">Copy</button>
+                            <pre id="chatgpt-expand">Feature expansion prompts:
+
+"Add a community section where users can join challenges, share progress pics, and cheer each other on. Make it feel supportive, not competitive."
+
+"Create a nutrition scanning feature where users can take photos of food labels and automatically log nutrition info."
+
+"Add a workout playlist integration - let users connect their Spotify and create energizing playlists for different workout types."
+
+"Build a coach feature that gives personalized advice based on user progress and goals."</pre>
+                        </div>
+                        <div class="tip">
+                            <div class="tip-title">🚀 ChatGPT Strength</div>
+                            <p>ChatGPT is excellent at creative feature ideas and connecting different parts of your app in innovative ways.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">4</div>
+                            <h3 class="step-title">Plugin Power</h3>
+                        </div>
+                        <p class="step-description">
+                            If you have access to plugins, use them to enhance your development workflow.
+                        </p>
+                        <div class="code-example">
+                            <button class="copy-button" onclick="copyToClipboard('chatgpt-plugins')">Copy</button>
+                            <pre id="chatgpt-plugins">Useful plugins for vibe-coding:
+
+• Code Interpreter: Run and test code snippets
+• WebPilot: Browse the web for design inspiration
+• Figma: Generate design mockups and wireframes
+• Zapier: Connect your app to other services
+• Wolfram: Add advanced calculations and data viz</pre>
+                        </div>
+                        <div class="warning">
+                            <div class="warning-title">⚠️ Note</div>
+                            <p>Plugin availability varies by region and account type. Check your ChatGPT settings to see what's available.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Cursor Guide -->
+        <div id="cursor-guide" class="guide-content">
+            <section class="section">
+                <h2 class="section-title">Getting Started with Cursor</h2>
+                <p class="section-subtitle">Cursor is VS Code with AI superpowers. Perfect for developers who want to code alongside AI with intelligent completions and refactoring.</p>
+                
+                <div class="steps-list">
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">1</div>
+                            <h3 class="step-title">Installation and Setup</h3>
+                        </div>
+                        <p class="step-description">
+                            Download Cursor and set up your development environment with AI assistance.
+                        </p>
+                        <div class="code-example">
+                            <button class="copy-button" onclick="copyToClipboard('cursor-setup')">Copy</button>
+                            <pre id="cursor-setup">1. Download from cursor.sh
+2. Install like any other app
+3. Import your VS Code settings and extensions
+4. Sign up for Cursor Pro ($20/month)
+5. Set up your preferred AI model (GPT-4 recommended)</pre>
+                        </div>
+                        <div class="tip">
+                            <div class="tip-title">🔧 Migration Tip</div>
+                            <p>Cursor can import all your VS Code settings, extensions, and keybindings. The transition is seamless.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">2</div>
+                            <h3 class="step-title">AI-Powered Coding</h3>
+                        </div>
+                        <p class="step-description">
+                            Use Cursor's AI features to write code faster and more efficiently.
+                        </p>
+                        <div class="code-example">
+                            <button class="copy-button" onclick="copyToClipboard('cursor-coding')">Copy</button>
+                            <pre id="cursor-coding">Key Cursor features:
+
+• Cmd+K: Generate code from comments
+• Cmd+L: Chat with AI about your code
+• Tab: Accept AI completions
+• Cmd+Shift+L: Ask AI to fix/refactor selected code
+
+Example workflow:
+1. Write a comment: // Create a responsive navigation bar
+2. Press Cmd+K 
+3. AI generates the complete component
+4. Use Tab to accept or edit as needed</pre>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">3</div>
+                            <h3 class="step-title">Vibe-Coding with Cursor</h3>
+                        </div>
+                        <p class="step-description">
+                            Combine Cursor's AI with vibe-coding principles for rapid development.
+                        </p>
+                        <div class="code-example">
+                            <button class="copy-button" onclick="copyToClipboard('cursor-vibe')">Copy</button>
+                            <pre id="cursor-vibe">Vibe-coding workflow in Cursor:
+
+1. Start with a comment describing the vibe:
+   // Create a calming meditation timer that feels zen and peaceful
+   // Use soft colors, gentle animations, breathing circle
+   // Should feel like a digital garden
+
+2. Press Cmd+K to generate the initial structure
+
+3. Use Cmd+L to chat about refinements:
+   "Make the breathing animation slower and more natural"
+   "Add subtle sound effects for the timer"
+   "The colors feel too bright - make them more muted"
+
+4. Select code and use Cmd+Shift+L for instant improvements</pre>
+                        </div>
+                        <div class="tip">
+                            <div class="tip-title">⚡ Cursor Strength</div>
+                            <p>Cursor understands your entire codebase context, so AI suggestions are more relevant and consistent.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">4</div>
+                            <h3 class="step-title">Advanced Workflows</h3>
+                        </div>
+                        <p class="step-description">
+                            Master advanced Cursor features for professional development.
+                        </p>
+                        <div class="code-example">
+                            <button class="copy-button" onclick="copyToClipboard('cursor-advanced')">Copy</button>
+                            <pre id="cursor-advanced">Advanced techniques:
+
+• Code Reviews: Select code and ask "What could be improved?"
+• Refactoring: "Convert this to use React hooks"
+• Testing: "Generate unit tests for this component"
+• Documentation: "Add JSDoc comments to this function"
+• Architecture: "How should I structure this feature?"
+
+Terminal integration:
+• Use AI to write complex git commands
+• Generate deployment scripts
+• Debug error messages with AI assistance</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- v0 Guide -->
+        <div id="v0-guide" class="guide-content">
+            <section class="section">
+                <h2 class="section-title">Getting Started with v0</h2>
+                <p class="section-subtitle">v0 by Vercel specializes in beautiful UI components and modern web applications. Perfect for creating stunning interfaces with Tailwind CSS and React.</p>
+                
+                <div class="steps-list">
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">1</div>
+                            <h3 class="step-title">Access v0</h3>
+                        </div>
+                        <p class="step-description">
+                            Get started with v0 and understand its UI-focused approach.
+                        </p>
+                        <div class="code-example">
+                            <button class="copy-button" onclick="copyToClipboard('v0-setup')">Copy</button>
+                            <pre id="v0-setup">1. Go to v0.dev
+2. Sign in with GitHub or Google
+3. Start with the free tier (generous limits)
+4. Explore the component gallery for inspiration</pre>
+                        </div>
+                        <div class="tip">
+                            <div class="tip-title">🎨 Design Focus</div>
+                            <p>v0 excels at creating beautiful, modern interfaces. It's perfect for the visual aspects of vibe-coding.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">2</div>
+                            <h3 class="step-title">UI-First Development</h3>
+                        </div>
+                        <p class="step-description">
+                            Start with the visual design and build the functionality around it.
+                        </p>
+                        <div class="code-example">
+                            <button class="copy-button" onclick="copyToClipboard('v0-ui-first')">Copy</button>
+                            <pre id="v0-ui-first">"Create a modern dashboard for a personal finance app that feels trustworthy and professional. 
+
+Design elements:
+• Clean card-based layout with subtle shadows
+• Calming blue and green color scheme
+• Beautiful charts showing spending trends
+• Quick action buttons for common tasks
+• Mobile-first responsive design
+• Smooth hover animations
+
+Style inspiration: Stripe dashboard meets Mint, but more premium feeling."</pre>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">3</div>
+                            <h3 class="step-title">Component Refinement</h3>
+                        </div>
+                        <p class="step-description">
+                            Iterate on individual components to perfect the design.
+                        </p>
+                        <div class="code-example">
+                            <button class="copy-button" onclick="copyToClipboard('v0-refine')">Copy</button>
+                            <pre id="v0-refine">Refinement prompts for v0:
+
+"Make the spending chart more interactive - add hover states that show exact amounts"
+
+"The color scheme feels too corporate. Can you warm it up with some gentle oranges and softer blues?"
+
+"Add micro-interactions to the quick action buttons - maybe a subtle bounce on click"
+
+"The mobile layout needs work. Make the cards stack better on small screens"</pre>
+                        </div>
+                        <div class="tip">
+                            <div class="tip-title">✨ v0 Strength</div>
+                            <p>v0 creates pixel-perfect, modern interfaces that feel professional right out of the box.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">4</div>
+                            <h3 class="step-title">Integration Strategy</h3>
+                        </div>
+                        <p class="step-description">
+                            Use v0 for UI design, then integrate with other platforms for functionality.
+                        </p>
+                        <div class="code-example">
+                            <button class="copy-button" onclick="copyToClipboard('v0-integration')">Copy</button>
+                            <pre id="v0-integration">Workflow:
+1. Design components in v0
+2. Export the React/HTML code
+3. Add functionality with Claude or ChatGPT
+4. Deploy with Vercel for seamless integration
+
+Example:
+"I have this beautiful dashboard from v0. Can you add real data fetching, user authentication, and state management? Keep the exact same styling but make it fully functional."</pre>
+                        </div>
+                        <div class="warning">
+                            <div class="warning-title">🔄 Integration Note</div>
+                            <p>v0 focuses on UI. You'll need other AI tools or manual coding for complex backend functionality.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Bolt Guide -->
+        <div id="bolt-guide" class="guide-content">
+            <section class="section">
+                <h2 class="section-title">Getting Started with Bolt</h2>
+                <p class="section-subtitle">Bolt by StackBlitz creates full-stack applications instantly in the browser. Perfect for rapid prototyping and sharing live demos without any setup.</p>
+                
+                <div class="steps-list">
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">1</div>
+                            <h3 class="step-title">Instant Development</h3>
+                        </div>
+                        <p class="step-description">
+                            Get started with Bolt for the fastest way to prototype ideas.
+                        </p>
+                        <div class="code-example">
+                            <button class="copy-button" onclick="copyToClipboard('bolt-setup')">Copy</button>
+                            <pre id="bolt-setup">1. Go to bolt.new
+2. No signup required to start!
+3. Upgrade to Pro for more features
+4. Start typing your idea immediately</pre>
+                        </div>
+                        <div class="tip">
+                            <div class="tip-title">⚡ Speed Advantage</div>
+                            <p>Bolt is the fastest way to go from idea to working prototype. Perfect for validating concepts.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">2</div>
+                            <h3 class="step-title">Full-Stack in Minutes</h3>
+                        </div>
+                        <p class="step-description">
+                            Build complete applications with frontend, backend, and database in one go.
+                        </p>
+                        <div class="code-example">
+                            <button class="copy-button" onclick="copyToClipboard('bolt-fullstack')">Copy</button>
+                            <pre id="bolt-fullstack">"Build a complete recipe sharing app that feels cozy and homey. 
+
+Features needed:
+• User registration and login
+• Recipe creation with photos
+• Rating and review system  
+• Search and filter by ingredients
+• Shopping list generation
+• Social features to follow chefs
+• Mobile-responsive design
+
+Make it feel like a warm kitchen where friends share their favorite family recipes. Use warm colors, handwritten-style fonts, and comfortable spacing."</pre>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">3</div>
+                            <h3 class="step-title">Live Iteration</h3>
+                        </div>
+                        <p class="step-description">
+                            See changes instantly as you iterate on your app.
+                        </p>
+                        <div class="code-example">
+                            <button class="copy-button" onclick="copyToClipboard('bolt-iterate')">Copy</button>
+                            <pre id="bolt-iterate">Live iteration tips:
+
+"The recipe cards feel too formal - make them look more like handwritten recipe cards"
+
+"Add a 'surprise me' button that shows a random recipe"
+
+"The login form is too corporate - make it feel welcoming and cozy"
+
+"Can you add a feature where users can mark recipes as 'family favorites'?"</pre>
+                        </div>
+                        <div class="tip">
+                            <div class="tip-title">🔄 Real-time Magic</div>
+                            <p>Bolt shows changes instantly. You can see your app evolve in real-time as you make requests.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-number">4</div>
+                            <h3 class="step-title">Sharing and Deployment</h3>
+                        </div>
+                        <p class="step-description">
+                            Share your prototypes instantly or deploy them to production.
+                        </p>
+                        <div class="code-example">
+                            <button class="copy-button" onclick="copyToClipboard('bolt-deploy')">Copy</button>
+                            <pre id="bolt-deploy">Sharing options:
+
+• Instant URL sharing - no deployment needed
+• Fork projects to iterate on others' work
+• Export to GitHub for further development
+• Deploy to Netlify/Vercel with one click
+• Embed demos in presentations or portfolios
+
+Perfect for:
+• Client demos and feedback
+• Team collaboration
+• Portfolio showcases
+• Rapid user testing</pre>
+                        </div>
+                        <div class="warning">
+                            <div class="warning-title">🎯 Best Use Case</div>
+                            <p>Bolt is perfect for prototypes and MVPs. For production apps, consider exporting to a full development environment.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <a href="getting-started-platforms.html" class="nav-btn">← Platform Comparison</a>
+            <a href="getting-started-templates.html" class="nav-btn primary">Prompt Templates →</a>
+        </div>
+    </div>
+
+    <script>
+        function showGuide(platform) {
+            // Hide all guide contents
+            document.querySelectorAll('.guide-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Hide all tabs
+            document.querySelectorAll('.guide-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected guide
+            document.getElementById(platform + '-guide').classList.add('active');
+            
+            // Activate selected tab
+            event.target.classList.add('active');
+        }
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const button = element.parentElement.querySelector('.copy-button');
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = 'var(--apple-green)';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = 'rgba(255, 255, 255, 0.1)';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

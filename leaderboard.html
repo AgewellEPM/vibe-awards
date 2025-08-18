@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Leaderboard - The Vibe Awards</title>
+    <link rel="stylesheet" href="css/mobile-responsive.css">
+    <link rel="stylesheet" href="css/ultra-responsive.css">
+    <link rel="stylesheet" href="css/typography.css">
+    <link rel="stylesheet" href="css/brand-system.css">
+    <link rel="stylesheet" href="css/apple-magic.css">
+    <script src="js/accessibility.js"></script>
+    <script src="js/performance.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-gray: #86868B;
+            --apple-light-gray: #F5F5F7;
+            --apple-dark: #1D1D1F;
+            --apple-green: #30D158;
+            --apple-red: #FF375F;
+            --apple-orange: #FF9F0A;
+            --apple-purple: #BF5AF2;
+            --apple-teal: #5AC8FA;
+            --apple-indigo: #5856D6;
+            --gold: #FFD700;
+            --silver: #C0C0C0;
+            --bronze: #CD7F32;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Animated Background */
+        .page-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-particle {
+            position: absolute;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .bg-particle:nth-child(1) {
+            width: clamp(180px, 18.75rem, 300px);
+            height: clamp(210px, 18.75rem, 300px);
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .bg-particle:nth-child(2) {
+            width: 200px;
+            height: clamp(140px, 12.5rem, 200px);
+            top: 60%;
+            right: 10%;
+            animation-delay: 5s;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+        }
+
+        .bg-particle:nth-child(3) {
+            width: clamp(150px, 15.625rem, 250px);
+            height: clamp(175px, 15.625rem, 250px);
+            bottom: 10%;
+            left: 30%;
+            animation-delay: 10s;
+            background: linear-gradient(135deg, var(--apple-orange), var(--apple-red));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.1); }
+            50% { transform: translate(-20px, 20px) scale(0.9); }
+            75% { transform: translate(-30px, -10px) scale(1.05); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 9999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: clamp(840px, 87.5rem, 1400px);
+            margin: 0 auto;
+            padding: var(--space-sm) 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-sm);
+            font-size: var(--fs-xl);
+            font-weight: 600;
+            color: #F5F5F7;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: var(--gap-md);
+            align-items: center;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link,
+        .nav-button {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: var(--fs-sm);
+            transition: color 0.2s ease;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--gap-xs);
+            padding: var(--space-xs) 0;
+        }
+
+        .nav-link:hover,
+        .nav-link.active,
+        .nav-button:hover {
+            color: #F5F5F7;
+        }
+
+        .nav-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 200px;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: var(--space-xs) 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .nav-item:hover .nav-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            padding: var(--space-sm) 20px;
+            font-size: var(--fs-sm);
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            color: #F5F5F7;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .dropdown-arrow {
+            font-size: var(--fs-xs);
+            transition: transform 0.2s ease;
+        }
+
+        .nav-item:hover .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .nav-cta {
+            padding: var(--space-xs) 20px;
+            background: var(--apple-blue);
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: var(--fs-sm);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-cta:hover {
+            background: #005bb5;
+            transform: scale(1.05);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: var(--space-xl) 24px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: var(--space-xs) 20px;
+            background: linear-gradient(135deg, var(--gold), var(--apple-orange));
+            border-radius: 100px;
+            font-size: var(--fs-sm);
+            font-weight: 600;
+            margin-bottom: 24px;
+            animation: badgePulse 2s ease infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .hero-title {
+            font-size: var(--fs-5xl);
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: var(--fs-2xl);
+            color: rgba(245, 245, 247, 0.8);
+            max-width: clamp(360px, 37.5rem, 600px);
+            margin: 0 auto;
+        }
+
+        /* Category Tabs */
+        .category-tabs {
+            max-width: clamp(840px, 87.5rem, 1400px);
+            margin: 0 auto 40px;
+            padding: 0 24px;
+            display: flex;
+            gap: var(--gap-sm);
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+        }
+
+        .category-tab {
+            padding: var(--space-sm) 24px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            color: rgba(245, 245, 247, 0.8);
+            font-size: var(--fs-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .category-tab:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+
+        .category-tab.active {
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Leaderboard Container */
+        .leaderboard-container {
+            max-width: clamp(840px, 87.5rem, 1400px);
+            margin: 0 auto;
+            padding: 0 24px 80px;
+        }
+
+        /* Top 3 Podium */
+        .podium-section {
+            margin-bottom: 60px;
+        }
+
+        .podium-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr 1fr;
+            gap: var(--gap-md);
+            align-items: end;
+            max-width: clamp(540px, 56.25rem, 900px);
+            margin: 0 auto;
+        }
+
+        .podium-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: var(--space-md);
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .podium-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .podium-card.first {
+            grid-column: 2;
+            transform: scale(1.1);
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 255, 255, 0.05));
+            border-color: var(--gold);
+        }
+
+        .podium-card.second {
+            grid-column: 1;
+            grid-row: 1;
+            background: linear-gradient(135deg, rgba(192, 192, 192, 0.1), rgba(255, 255, 255, 0.05));
+            border-color: var(--silver);
+        }
+
+        .podium-card.third {
+            grid-column: 3;
+            grid-row: 1;
+            background: linear-gradient(135deg, rgba(205, 127, 50, 0.1), rgba(255, 255, 255, 0.05));
+            border-color: var(--bronze);
+        }
+
+        .podium-rank {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--gold), var(--apple-orange));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-2xl);
+            font-weight: 700;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .podium-card.second .podium-rank {
+            background: linear-gradient(135deg, var(--silver), #E5E5EA);
+        }
+
+        .podium-card.third .podium-rank {
+            background: linear-gradient(135deg, var(--bronze), #D4A574);
+        }
+
+        .crown-icon {
+            position: absolute;
+            top: -15px;
+            font-size: var(--fs-xl);
+        }
+
+        .app-icon-large {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-4xl);
+            margin: 0 auto 20px;
+        }
+
+        .podium-app-name {
+            font-size: var(--fs-2xl);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .podium-developer {
+            font-size: var(--fs-sm);
+            color: rgba(245, 245, 247, 0.6);
+            margin-bottom: 20px;
+        }
+
+        .podium-stats {
+            display: flex;
+            justify-content: space-around;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .podium-stat {
+            text-align: center;
+        }
+
+        .podium-stat-value {
+            font-size: var(--fs-xl);
+            font-weight: 600;
+            display: block;
+        }
+
+        .podium-stat-label {
+            font-size: var(--fs-xs);
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        /* Rankings Table */
+        .rankings-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .rankings-header {
+            padding: var(--space-md) 32px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .rankings-title {
+            font-size: var(--fs-2xl);
+            font-weight: 600;
+        }
+
+        .view-options {
+            display: flex;
+            gap: var(--gap-sm);
+        }
+
+        .view-btn {
+            padding: var(--space-xs) 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: rgba(245, 245, 247, 0.8);
+            font-size: var(--fs-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .view-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: white;
+        }
+
+        .view-btn.active {
+            background: var(--apple-blue);
+            color: white;
+            border-color: transparent;
+        }
+
+        .rankings-table {
+            width: 100%;
+        }
+
+        .ranking-row {
+            display: grid;
+            grid-template-columns: 60px 80px 2fr 1fr 120px 120px 120px 100px;
+            align-items: center;
+            padding: var(--space-md) 32px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background 0.2s ease;
+        }
+
+        .ranking-row:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .ranking-header {
+            font-size: var(--fs-xs);
+            font-weight: 600;
+            color: rgba(245, 245, 247, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .rank-number {
+            font-size: var(--fs-lg);
+            font-weight: 600;
+        }
+
+        .rank-change {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-xs);
+            font-size: var(--fs-sm);
+        }
+
+        .rank-up {
+            color: var(--apple-green);
+        }
+
+        .rank-down {
+            color: var(--apple-red);
+        }
+
+        .rank-same {
+            color: rgba(245, 245, 247, 0.4);
+        }
+
+        .app-info {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-sm);
+        }
+
+        .app-icon-small {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-2xl);
+        }
+
+        .app-details {
+            flex: 1;
+        }
+
+        .app-name-small {
+            font-size: var(--fs-base);
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .app-category {
+            font-size: var(--fs-xs);
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .developer-name {
+            font-size: var(--fs-sm);
+            color: rgba(245, 245, 247, 0.8);
+        }
+
+        .stat-value {
+            font-size: var(--fs-base);
+            font-weight: 500;
+        }
+
+        .win-rate {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-xs);
+        }
+
+        .win-rate-bar {
+            width: 60px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .win-rate-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--apple-green), var(--apple-teal));
+            border-radius: 3px;
+        }
+
+        .action-btn {
+            padding: var(--space-xs) 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            font-size: var(--fs-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--apple-blue);
+            border-color: transparent;
+        }
+
+        /* Load More */
+        .load-more {
+            text-align: center;
+            padding: var(--space-md);
+        }
+
+        .load-more-btn {
+            padding: var(--space-sm) 32px;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-size: var(--fs-base);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .load-more-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 113, 227, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: clamp(614px, 64rem, 1024px)) {
+            .ranking-row {
+                grid-template-columns: 50px 60px 2fr 100px 100px 80px;
+            }
+
+            .developer-name,
+            .rank-change {
+                display: none;
+            }
+        }
+
+        @media (max-width: clamp(460px, 48rem, 768px)) {
+            .hero-title {
+                font-size: var(--fs-4xl);
+            }
+
+            .podium-grid {
+                grid-template-columns: 1fr;
+                gap: var(--gap-md);
+            }
+
+            .podium-card.first {
+                grid-column: 1;
+                transform: scale(1);
+            }
+
+            .podium-card.second,
+            .podium-card.third {
+                grid-column: 1;
+            }
+
+            .ranking-row {
+                grid-template-columns: 40px 1fr 80px 60px;
+                gap: var(--gap-sm);
+            }
+
+            .stat-value:not(.win-rate) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- API Script -->
+    <script src="js/api.js"></script>
+    <!-- Background -->
+    <div class="page-background">
+        <div class="bg-particle"></div>
+        <div class="bg-particle"></div>
+        <div class="bg-particle"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav role="navigation">
+        <div class="nav-container container-fluid">
+            <a href="index-magic.html" class="nav-logo">
+                <span>🏆</span>
+                <span>The Vibe Awards</span>
+            </a>
+            <div class="nav-menu">
+                <div class="nav-item">
+                    <button class="nav-button">
+                        Getting Started
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="nav-dropdown">
+                        <a href="getting-started.html" class="dropdown-item">🚀 Getting Started Hub</a>
+                        <a href="index.html" class="dropdown-item">🏆 The Vibe Awards</a>
+                        <div style="height: 1px; background: rgba(255, 255, 255, 0.1); margin: var(--space-xs) 0;"></div>
+                        <a href="index.html#features" class="dropdown-item">✨ Features</a>
+                    </div>
+                </div>
+                
+                <div class="nav-item">
+                    <button class="nav-button">
+                        Toolkit Hub
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="nav-dropdown">
+                        <a href="vibe-toolkit.html" class="dropdown-item">🛠️ Vibe Toolkit</a>
+                        <a href="vibe-hub.html" class="dropdown-item">🎯 Vibe Hub Central</a>
+                    </div>
+                </div>
+                
+                <div class="nav-item">
+                    <button class="nav-button">
+                        Profile
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="nav-dropdown">
+                        <a href="profile.html" class="dropdown-item">👤 My Profile</a>
+                        <a href="messages.html" class="dropdown-item">💬 Messages</a>
+                        <a href="directory.html" class="dropdown-item">🌐 Directory</a>
+                    </div>
+                </div>
+                
+                <div class="nav-item">
+                    <button class="nav-button">
+                        Competition
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="nav-dropdown">
+                        <a href="apple-magic-battle.html" class="dropdown-item">⚔️ Battle Arena</a>
+                        <a href="leaderboard.html" class="dropdown-item">📊 Leaderboard</a>
+                        <a href="team-up.html" class="dropdown-item">🤝 Team Up</a>
+                    </div>
+                </div>
+                
+                <a href="submit-app.html" class="nav-link">Submit App</a>
+                <a href="signup.html" class="nav-cta">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section role="region" class="hero-section">
+        <div class="hero-badge">🔥 Live Rankings</div>
+        <h1 class="hero-title" style="font-size: var(--fs-4xl);" style="font-size: var(--fs-4xl);">Leaderboard</h1>
+        <p class="hero-subtitle">The best apps ranked by battle performance and community votes</p>
+    </section>
+
+    <!-- Category Tabs -->
+    <div class="category-tabs">
+        <div class="category-tab active">All Categories</div>
+        <div class="category-tab">Healthcare</div>
+        <div class="category-tab">Education</div>
+        <div class="category-tab">Productivity</div>
+        <div class="category-tab">Entertainment</div>
+        <div class="category-tab">Finance</div>
+        <div class="category-tab">Social</div>
+        <div class="category-tab">Games</div>
+        <div class="category-tab">Lifestyle</div>
+    </div>
+
+    <!-- Leaderboard Container -->
+    <div class="leaderboard-container container-fluid">
+        <!-- Top 3 Podium -->
+        <div class="podium-section">
+            <div class="podium-grid ultra-grid-responsive">
+                <!-- 2nd Place -->
+                <div class="podium-card second card-fluid">
+                    <div class="podium-rank">
+                        2
+                        <span class="crown-icon">🥈</span>
+                    </div>
+                    <div class="app-icon-large">📚</div>
+                    <h3 class="podium-app-name" style="font-size: var(--fs-2xl);">StudyBuddy AI</h3>
+                    <p class="podium-developer">EduTech Labs</p>
+                    <div class="podium-stats">
+                        <div class="podium-stat">
+                            <span class="podium-stat-value">245</span>
+                            <span class="podium-stat-label">Wins</span>
+                        </div>
+                        <div class="podium-stat">
+                            <span class="podium-stat-value">88%</span>
+                            <span class="podium-stat-label">Win Rate</span>
+                        </div>
+                        <div class="podium-stat">
+                            <span class="podium-stat-value">89K</span>
+                            <span class="podium-stat-label">Votes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1st Place -->
+                <div class="podium-card first card-fluid">
+                    <div class="podium-rank">
+                        1
+                        <span class="crown-icon">👑</span>
+                    </div>
+                    <div class="app-icon-large">🗣️</div>
+                    <h3 class="podium-app-name" style="font-size: var(--fs-2xl);">TinkyBink AAC</h3>
+                    <p class="podium-developer">Luke Kist</p>
+                    <div class="podium-stats">
+                        <div class="podium-stat">
+                            <span class="podium-stat-value">312</span>
+                            <span class="podium-stat-label">Wins</span>
+                        </div>
+                        <div class="podium-stat">
+                            <span class="podium-stat-value">92%</span>
+                            <span class="podium-stat-label">Win Rate</span>
+                        </div>
+                        <div class="podium-stat">
+                            <span class="podium-stat-value">124K</span>
+                            <span class="podium-stat-label">Votes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3rd Place -->
+                <div class="podium-card third card-fluid">
+                    <div class="podium-rank">
+                        3
+                        <span class="crown-icon">🥉</span>
+                    </div>
+                    <div class="app-icon-large">🎵</div>
+                    <h3 class="podium-app-name" style="font-size: var(--fs-2xl);">BeatMaker Studio</h3>
+                    <p class="podium-developer">Sonic Innovations</p>
+                    <div class="podium-stats">
+                        <div class="podium-stat">
+                            <span class="podium-stat-value">198</span>
+                            <span class="podium-stat-label">Wins</span>
+                        </div>
+                        <div class="podium-stat">
+                            <span class="podium-stat-value">85%</span>
+                            <span class="podium-stat-label">Win Rate</span>
+                        </div>
+                        <div class="podium-stat">
+                            <span class="podium-stat-value">76K</span>
+                            <span class="podium-stat-label">Votes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rankings Table -->
+        <div class="rankings-section">
+            <div class="rankings-header">
+                <h2 class="rankings-title" style="font-size: var(--fs-3xl);">Full Rankings</h2>
+                <div class="view-options">
+                    <button class="view-btn active btn-fluid">Today</button>
+                    <button class="view-btn btn-fluid">This Week</button>
+                    <button class="view-btn btn-fluid">This Month</button>
+                    <button class="view-btn btn-fluid">All Time</button>
+                </div>
+            </div>
+
+            <div class="rankings-table">
+                <!-- Header Row -->
+                <div class="ranking-row ranking-header">
+                    <div>Rank</div>
+                    <div>Change</div>
+                    <div>App</div>
+                    <div>Developer</div>
+                    <div>Likes</div>
+                    <div>Views</div>
+                    <div>Category</div>
+                    <div>Action</div>
+                </div>
+                
+                <!-- Loading State -->
+                <div class="rankings-loading" id="rankings-loading">
+                    <div style="text-align: center; padding: var(--space-lg); color: rgba(245, 245, 247, 0.6);">
+                        Loading rankings...
+                    </div>
+                </div>
+                
+                <!-- Rankings will be populated here -->
+                <div id="rankings-content"></div>
+
+                <!-- Ranking Rows -->
+                <div class="ranking-row">
+                    <div class="rank-number">4</div>
+                    <div class="rank-change rank-up">
+                        <span>↑</span>
+                        <span>2</span>
+                    </div>
+                    <div class="app-info">
+                        <div class="app-icon-small">🧠</div>
+                        <div class="app-details">
+                            <div class="app-name-small">MindSync Pro</div>
+                            <div class="app-category">Healthcare</div>
+                        </div>
+                    </div>
+                    <div class="developer-name">Neural Labs Inc.</div>
+                    <div class="stat-value">178</div>
+                    <div class="stat-value">68.4K</div>
+                    <div class="win-rate">
+                        <span class="stat-value">82%</span>
+                        <div class="win-rate-bar">
+                            <div class="win-rate-fill" style="width: 82%"></div>
+                        </div>
+                    </div>
+                    <button class="action-btn btn-fluid">View</button>
+                </div>
+
+                <div class="ranking-row">
+                    <div class="rank-number">5</div>
+                    <div class="rank-change rank-down">
+                        <span>↓</span>
+                        <span>1</span>
+                    </div>
+                    <div class="app-info">
+                        <div class="app-icon-small">💊</div>
+                        <div class="app-details">
+                            <div class="app-name-small">MediTrack AI</div>
+                            <div class="app-category">Medical</div>
+                        </div>
+                    </div>
+                    <div class="developer-name">HealthTech Solutions</div>
+                    <div class="stat-value">156</div>
+                    <div class="stat-value">61.2K</div>
+                    <div class="win-rate">
+                        <span class="stat-value">79%</span>
+                        <div class="win-rate-bar">
+                            <div class="win-rate-fill" style="width: 79%"></div>
+                        </div>
+                    </div>
+                    <button class="action-btn btn-fluid">View</button>
+                </div>
+
+                <div class="ranking-row">
+                    <div class="rank-number">6</div>
+                    <div class="rank-change rank-same">
+                        <span>—</span>
+                        <span>0</span>
+                    </div>
+                    <div class="app-info">
+                        <div class="app-icon-small">🎨</div>
+                        <div class="app-details">
+                            <div class="app-name-small">CreativeFlow</div>
+                            <div class="app-category">Graphics & Design</div>
+                        </div>
+                    </div>
+                    <div class="developer-name">Artisan Studios</div>
+                    <div class="stat-value">143</div>
+                    <div class="stat-value">54.8K</div>
+                    <div class="win-rate">
+                        <span class="stat-value">77%</span>
+                        <div class="win-rate-bar">
+                            <div class="win-rate-fill" style="width: 77%"></div>
+                        </div>
+                    </div>
+                    <button class="action-btn btn-fluid">View</button>
+                </div>
+
+                <div class="ranking-row">
+                    <div class="rank-number">7</div>
+                    <div class="rank-change rank-up">
+                        <span>↑</span>
+                        <span>3</span>
+                    </div>
+                    <div class="app-info">
+                        <div class="app-icon-small">🏃</div>
+                        <div class="app-details">
+                            <div class="app-name-small">FitGenius Pro</div>
+                            <div class="app-category">Health & Fitness</div>
+                        </div>
+                    </div>
+                    <div class="developer-name">FitTech Inc.</div>
+                    <div class="stat-value">132</div>
+                    <div class="stat-value">49.3K</div>
+                    <div class="win-rate">
+                        <span class="stat-value">75%</span>
+                        <div class="win-rate-bar">
+                            <div class="win-rate-fill" style="width: 75%"></div>
+                        </div>
+                    </div>
+                    <button class="action-btn btn-fluid">View</button>
+                </div>
+
+                <div class="ranking-row">
+                    <div class="rank-number">8</div>
+                    <div class="rank-change rank-down">
+                        <span>↓</span>
+                        <span>2</span>
+                    </div>
+                    <div class="app-info">
+                        <div class="app-icon-small">💰</div>
+                        <div class="app-details">
+                            <div class="app-name-small">WealthWise AI</div>
+                            <div class="app-category">Finance</div>
+                        </div>
+                    </div>
+                    <div class="developer-name">FinTech Pioneers</div>
+                    <div class="stat-value">121</div>
+                    <div class="stat-value">45.7K</div>
+                    <div class="win-rate">
+                        <span class="stat-value">73%</span>
+                        <div class="win-rate-bar">
+                            <div class="win-rate-fill" style="width: 73%"></div>
+                        </div>
+                    </div>
+                    <button class="action-btn btn-fluid">View</button>
+                </div>
+
+                <div class="ranking-row">
+                    <div class="rank-number">9</div>
+                    <div class="rank-change rank-up">
+                        <span>↑</span>
+                        <span>5</span>
+                    </div>
+                    <div class="app-info">
+                        <div class="app-icon-small">🎮</div>
+                        <div class="app-details">
+                            <div class="app-name-small">PixelQuest Pro</div>
+                            <div class="app-category">Games</div>
+                        </div>
+                    </div>
+                    <div class="developer-name">GameForge Studios</div>
+                    <div class="stat-value">118</div>
+                    <div class="stat-value">42.1K</div>
+                    <div class="win-rate">
+                        <span class="stat-value">71%</span>
+                        <div class="win-rate-bar">
+                            <div class="win-rate-fill" style="width: 71%"></div>
+                        </div>
+                    </div>
+                    <button class="action-btn btn-fluid">View</button>
+                </div>
+
+                <div class="ranking-row">
+                    <div class="rank-number">10</div>
+                    <div class="rank-change rank-same">
+                        <span>—</span>
+                        <span>0</span>
+                    </div>
+                    <div class="app-info">
+                        <div class="app-icon-small">📸</div>
+                        <div class="app-details">
+                            <div class="app-name-small">PhotoMaster AI</div>
+                            <div class="app-category">Photo & Video</div>
+                        </div>
+                    </div>
+                    <div class="developer-name">Visual Arts Co.</div>
+                    <div class="stat-value">108</div>
+                    <div class="stat-value">38.9K</div>
+                    <div class="win-rate">
+                        <span class="stat-value">69%</span>
+                        <div class="win-rate-bar">
+                            <div class="win-rate-fill" style="width: 69%"></div>
+                        </div>
+                    </div>
+                    <button class="action-btn btn-fluid">View</button>
+                </div>
+            </div>
+
+            <div class="load-more">
+                <button class="load-more-btn btn-fluid">Load More Rankings</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allApps = [];
+        let currentCategory = 'all';
+        
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadLeaderboardData();
+            updateUserDisplay();
+        });
+        
+        // Animate podium cards on load
+        window.addEventListener('load', () => {
+            const podiumCards = document.querySelectorAll('.podium-card');
+            podiumCards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.animation = 'slideUp 0.6s ease forwards';
+                }, index * 200);
+            });
+        });
+        
+        async function loadLeaderboardData() {
+            try {
+                const data = await vibeAPI.getApps({ limit: 50 });
+                allApps = data.apps;
+                
+                // Sort by likes + views for ranking
+                allApps.sort((a, b) => {
+                    const scoreA = (a.like_count || 0) + (a.view_count || 0) + (a.nomination_count || 0) * 5;
+                    const scoreB = (b.like_count || 0) + (b.view_count || 0) + (b.nomination_count || 0) * 5;
+                    return scoreB - scoreA;
+                });
+                
+                updatePodium();
+                updateRankingsTable();
+                
+            } catch (error) {
+                console.error('Error loading leaderboard:', error);
+                showNotification('Failed to load leaderboard data', 'error');
+                hideLoading();
+            }
+        }
+        
+        function updatePodium() {
+            if (allApps.length < 3) return;
+            
+            const topThree = allApps.slice(0, 3);
+            const podiumCards = document.querySelectorAll('.podium-card');
+            
+            // Update podium in order: 2nd, 1st, 3rd
+            const podiumOrder = [1, 0, 2]; // 2nd place, 1st place, 3rd place
+            
+            podiumCards.forEach((card, index) => {
+                const app = topThree[podiumOrder[index]];
+                if (!app) return;
+                
+                const appName = card.querySelector('.podium-app-name');
+                const developer = card.querySelector('.podium-developer');
+                const stats = card.querySelectorAll('.podium-stat-value');
+                
+                if (appName) appName.textContent = app.name;
+                if (developer) developer.textContent = app.developer_name || 'Unknown Developer';
+                
+                // Update stats: Likes, Views, Nominations
+                if (stats[0]) stats[0].textContent = formatNumber(app.like_count || 0);
+                if (stats[1]) stats[1].textContent = formatNumber(app.view_count || 0);
+                if (stats[2]) stats[2].textContent = formatNumber(app.nomination_count || 0);
+                
+                // Update stat labels
+                const labels = card.querySelectorAll('.podium-stat-label');
+                if (labels[0]) labels[0].textContent = 'Likes';
+                if (labels[1]) labels[1].textContent = 'Views'; 
+                if (labels[2]) labels[2].textContent = 'Nominations';
+            });
+        }
+        
+        function updateRankingsTable() {
+            const rankingsContent = document.getElementById('rankings-content');
+            const loadingElement = document.getElementById('rankings-loading');
+            
+            if (!rankingsContent) return;
+            
+            // Hide loading
+            if (loadingElement) loadingElement.style.display = 'none';
+            
+            // Clear previous content
+            rankingsContent.innerHTML = '';
+            
+            // Filter apps by category
+            const filteredApps = currentCategory === 'all' 
+                ? allApps 
+                : allApps.filter(app => app.category.toLowerCase() === currentCategory.toLowerCase());
+            
+            // Show apps starting from rank 4 (after podium)
+            const remainingApps = filteredApps.slice(3);
+            
+            remainingApps.forEach((app, index) => {
+                const rank = index + 4;
+                const row = createRankingRow(app, rank);
+                rankingsContent.appendChild(row);
+            });
+        }
+        
+        function createRankingRow(app, rank) {
+            const row = document.createElement('div');
+            row.className = 'ranking-row';
+            row.onclick = () => window.location.href = `app-details.html?id=${app.uuid}`;
+            
+            row.innerHTML = `
+                <div class="rank-number">${rank}</div>
+                <div class="rank-change">
+                    <span style="color: #30D158;">↑</span>
+                    <span>${Math.floor(Math.random() * 5) + 1}</span>
+                </div>
+                <div class="app-info">
+                    <div class="app-icon-small">${getAppIcon(app.category)}</div>
+                    <div>
+                        <div class="app-name-small">${app.name}</div>
+                        <div class="app-category">${app.category}</div>
+                    </div>
+                </div>
+                <div class="developer-name">${app.developer_name || 'Unknown'}</div>
+                <div class="battles-won">${formatNumber(app.like_count || 0)}</div>
+                <div class="total-votes">${formatNumber(app.view_count || 0)}</div>
+                <div class="win-rate">${app.category}</div>
+                <div class="action-cell">
+                    <button class="action-btn btn-fluid" onclick="event.stopPropagation(); nominateApp('${app.uuid}')">Nominate</button>
+                </div>
+            `;
+            
+            return row;
+        }
+        
+        function getAppIcon(category) {
+            const icons = {
+                'Healthcare': '🏥',
+                'Education': '📚',
+                'Productivity': '⚡',
+                'Entertainment': '🎵',
+                'Finance': '💰',
+                'Social': '💬',
+                'Games': '🎮',
+                'Lifestyle': '🌟'
+            };
+            return icons[category] || '📱';
+        }
+        
+        async function nominateApp(appId) {
+            try {
+                await vibeAPI.nominateApp(appId);
+                showNotification('App nominated for battle!', 'success');
+            } catch (error) {
+                console.error('Error nominating app:', error);
+                showNotification(error.message || 'Failed to nominate app', 'error');
+            }
+        }
+        
+        function hideLoading() {
+            const loadingElement = document.getElementById('rankings-loading');
+            if (loadingElement) loadingElement.style.display = 'none';
+        }
+
+        // Add animation keyframe
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(50px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .podium-card.first {
+                animation-delay: 0.4s;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Category filter
+        document.querySelectorAll('.category-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                const categoryText = this.textContent.trim();
+                currentCategory = categoryText === 'All Categories' ? 'all' : categoryText;
+                
+                updateRankingsTable();
+            });
+        });
+
+        // View options
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Here you would update the time period
+                console.log('View period:', this.textContent);
+            });
+        });
+
+        // Action buttons
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Navigate to app details
+                window.location.href = 'apple-magic-battle.html';
+            });
+        });
+
+        // Load more functionality
+        document.querySelector('.load-more-btn').addEventListener('click', function() {
+            this.textContent = 'Loading...';
+            
+            // Simulate loading more data
+            setTimeout(() => {
+                this.textContent = 'Load More Rankings';
+                // Here you would append more ranking rows
+            }, 1000);
+        });
+
+        // Animate numbers counting up
+        function animateValue(element, start, end, duration) {
+            const range = end - start;
+            const increment = range / (duration / 16);
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= end) {
+                    current = end;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.round(current);
+            }, 16);
+        }
+
+        // Animate stats on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statValues = entry.target.querySelectorAll('.podium-stat-value');
+                    statValues.forEach(stat => {
+                        const value = parseInt(stat.textContent);
+                        if (!isNaN(value)) {
+                            animateValue(stat, 0, value, 1000);
+                        }
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+
+        document.querySelectorAll('.podium-stats').forEach(stats => {
+            observer.observe(stats);
+        });
+    </script>
+    <script src="js/animations.js"></script>
+    <script src="js/apple-magic-init.js"></script>
+</body>
+</html>

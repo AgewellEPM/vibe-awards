@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Architecture Patterns - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-purple: #BF5AF2;
+            --apple-indigo: #5856D6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+
+        .page-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: radial-gradient(circle at 30% 20%, rgba(191, 90, 242, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(88, 86, 214, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 20% 70%, rgba(0, 113, 227, 0.08) 0%, transparent 50%);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 9999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #F5F5F7;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-link {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #F5F5F7;
+        }
+
+        .nav-cta {
+            padding: 8px 20px;
+            background: var(--apple-blue);
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-cta:hover {
+            background: #005bb5;
+            transform: scale(1.05);
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 24px 80px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 40px;
+        }
+
+        .breadcrumb a {
+            color: var(--apple-blue);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .breadcrumb span {
+            color: rgba(245, 245, 247, 0.6);
+            margin: 0 8px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 32px;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 24px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 48px;
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #F5F5F7;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 20px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 60px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* Pattern Cards */
+        .patterns-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 32px;
+            margin-bottom: 60px;
+        }
+
+        .pattern-card {
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(0, 113, 227, 0.2);
+        }
+
+        .pattern-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .pattern-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .pattern-info h3 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #F5F5F7;
+            margin-bottom: 4px;
+        }
+
+        .pattern-type {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .pattern-description {
+            font-size: 16px;
+            color: rgba(245, 245, 247, 0.8);
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+
+        .pattern-features {
+            list-style: none;
+            margin-bottom: 24px;
+        }
+
+        .pattern-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.8);
+        }
+
+        .pattern-features .check {
+            color: var(--apple-green);
+            font-weight: bold;
+        }
+
+        /* Code Examples */
+        .code-example {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .code-example pre {
+            color: var(--apple-green);
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #F5F5F7;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Best Practices */
+        .best-practices {
+            background: rgba(48, 209, 88, 0.1);
+            border: 1px solid rgba(48, 209, 88, 0.3);
+            border-radius: 20px;
+            padding: 32px;
+            margin: 40px 0;
+        }
+
+        .best-practices h4 {
+            color: var(--apple-green);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .best-practices ul {
+            list-style: none;
+        }
+
+        .best-practices li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 15px;
+            color: rgba(245, 245, 247, 0.9);
+        }
+
+        .best-practices .tip-icon {
+            color: var(--apple-green);
+            margin-top: 2px;
+        }
+
+        /* Anti-Patterns */
+        .anti-patterns {
+            background: rgba(255, 159, 10, 0.1);
+            border: 1px solid rgba(255, 159, 10, 0.3);
+            border-radius: 20px;
+            padding: 32px;
+            margin: 40px 0;
+        }
+
+        .anti-patterns h4 {
+            color: var(--apple-orange);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .anti-patterns ul {
+            list-style: none;
+        }
+
+        .anti-patterns li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 15px;
+            color: rgba(245, 245, 247, 0.9);
+        }
+
+        .anti-patterns .warning-icon {
+            color: var(--apple-orange);
+            margin-top: 2px;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-btn {
+            display: inline-block;
+            padding: 16px 32px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            color: #F5F5F7;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.primary {
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+        }
+
+        .nav-btn.primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 113, 227, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 40px;
+            }
+
+            .patterns-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-background"></div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index-magic.html" class="nav-logo">
+                <span>🏆</span>
+                <span>The Vibe Awards</span>
+            </a>
+            <div class="nav-menu">
+                <a href="index-magic.html" class="nav-link">Home</a>
+                <a href="showcase.html" class="nav-link">Showcase</a>
+                <a href="apple-magic-battle.html" class="nav-link">Battle Arena</a>
+                <a href="team-up.html" class="nav-link">Team Up</a>
+                <a href="getting-started.html" class="nav-link active">Getting Started</a>
+                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+                <a href="submit-app.html" class="nav-link">Submit App</a>
+                <a href="signup.html" class="nav-cta">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="getting-started.html">Getting Started</a>
+            <span>→</span>
+            <span>App Architecture</span>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-badge">🏗️ Architecture Patterns</div>
+            <h1 class="hero-title">App Architecture</h1>
+            <p class="hero-subtitle">
+                Learn proven patterns for structuring vibe-coded applications that scale beautifully
+            </p>
+        </div>
+
+        <!-- Single Page Applications -->
+        <section class="section">
+            <h2 class="section-title">Single Page Applications (SPA)</h2>
+            <p class="section-subtitle">Perfect for interactive apps that need smooth, app-like experiences</p>
+            
+            <div class="patterns-grid">
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <div class="pattern-icon" style="background: linear-gradient(135deg, #FF6B4A, #FF8E4A);">
+                            📱
+                        </div>
+                        <div class="pattern-info">
+                            <h3>Component-Based SPA</h3>
+                            <div class="pattern-type">Single File • Modular</div>
+                        </div>
+                    </div>
+                    <p class="pattern-description">
+                        Organize your app into reusable components within a single HTML file. Perfect for medium-complexity apps.
+                    </p>
+                    <ul class="pattern-features">
+                        <li><span class="check">✓</span> Clean separation of concerns</li>
+                        <li><span class="check">✓</span> Reusable components</li>
+                        <li><span class="check">✓</span> Easy to understand and modify</li>
+                        <li><span class="check">✓</span> Great for vibe-coding iteration</li>
+                    </ul>
+                    <div class="code-example">
+                        <button class="copy-button" onclick="copyToClipboard('spa-prompt')">Copy</button>
+                        <pre id="spa-prompt">"Build me a task management app using a component-based architecture within a single HTML file.
+
+Structure it like this:
+• App Component (main container)
+• Header Component (navigation, user info)
+• TaskList Component (displays tasks)
+• TaskItem Component (individual task)
+• AddTask Component (form for new tasks)
+• Sidebar Component (filters, categories)
+
+Each component should:
+• Be a JavaScript class or function
+• Have its own render method
+• Handle its own state and events
+• Be easily testable and reusable
+
+Use modern JavaScript (ES6+) with clean, readable code organization. Make it feel like a professional React app but without the build complexity."</pre>
+                    </div>
+                </div>
+
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <div class="pattern-icon" style="background: linear-gradient(135deg, #30D158, #34C759);">
+                            🎯
+                        </div>
+                        <div class="pattern-info">
+                            <h3>State Management Pattern</h3>
+                            <div class="pattern-type">Reactive • Predictable</div>
+                        </div>
+                    </div>
+                    <p class="pattern-description">
+                        Centralized state management for complex apps that need predictable data flow.
+                    </p>
+                    <ul class="pattern-features">
+                        <li><span class="check">✓</span> Single source of truth</li>
+                        <li><span class="check">✓</span> Predictable state updates</li>
+                        <li><span class="check">✓</span> Easy debugging and testing</li>
+                        <li><span class="check">✓</span> Great for collaboration features</li>
+                    </ul>
+                    <div class="code-example">
+                        <button class="copy-button" onclick="copyToClipboard('state-prompt')">Copy</button>
+                        <pre id="state-prompt">"Create a meditation app with centralized state management that feels calm and responsive.
+
+Implement a simple store pattern with:
+• AppStore (central state container)
+• Actions (user interactions like startMeditation, completeSession)
+• State updates that trigger UI re-renders
+• Local storage persistence for user progress
+
+State should include:
+• Current meditation session data
+• User preferences (duration, sounds, themes)
+• Progress tracking and statistics
+• App theme and settings
+
+Make state changes feel smooth and predictable. When users start a meditation, the entire app should reflect this state change with gentle animations and appropriate UI updates."</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progressive Web Apps -->
+        <section class="section">
+            <h2 class="section-title">Progressive Web Apps (PWA)</h2>
+            <p class="section-subtitle">Native app experience in the browser with offline capabilities</p>
+            
+            <div class="patterns-grid">
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <div class="pattern-icon" style="background: linear-gradient(135deg, #5856D6, #AF52DE);">
+                            📲
+                        </div>
+                        <div class="pattern-info">
+                            <h3>Offline-First PWA</h3>
+                            <div class="pattern-type">Installable • Resilient</div>
+                        </div>
+                    </div>
+                    <p class="pattern-description">
+                        Apps that work perfectly offline and feel native when installed on devices.
+                    </p>
+                    <ul class="pattern-features">
+                        <li><span class="check">✓</span> Works without internet</li>
+                        <li><span class="check">✓</span> Installable on any device</li>
+                        <li><span class="check">✓</span> Push notifications support</li>
+                        <li><span class="check">✓</span> Native app feel</li>
+                    </ul>
+                    <div class="code-example">
+                        <button class="copy-button" onclick="copyToClipboard('pwa-prompt')">Copy</button>
+                        <pre id="pwa-prompt">"Build me a journaling app as a PWA that works offline and feels like a native app.
+
+PWA Requirements:
+• Service worker for offline functionality
+• Web app manifest for installation
+• Local storage for entries when offline
+• Background sync when connection returns
+• Push notifications for gentle reminders
+
+App should feel like:
+• Opening a personal journal
+• Smooth, native-like animations
+• Instant response even without internet
+• Secure and private (data stays local)
+
+Include:
+• Daily journal entries with rich text
+• Mood tracking integration
+• Photo attachments that work offline
+• Export functionality for backup
+• Beautiful, calming design that works in any lighting"</pre>
+                    </div>
+                </div>
+
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <div class="pattern-icon" style="background: linear-gradient(135deg, #FF9F0A, #FFCC02);">
+                            🔄
+                        </div>
+                        <div class="pattern-info">
+                            <h3>Sync-Enabled PWA</h3>
+                            <div class="pattern-type">Multi-device • Cloud</div>
+                        </div>
+                    </div>
+                    <p class="pattern-description">
+                        PWAs that sync data across devices while maintaining offline capabilities.
+                    </p>
+                    <ul class="pattern-features">
+                        <li><span class="check">✓</span> Cross-device synchronization</li>
+                        <li><span class="check">✓</span> Conflict resolution</li>
+                        <li><span class="check">✓</span> Optimistic updates</li>
+                        <li><span class="check">✓</span> Real-time collaboration</li>
+                    </ul>
+                    <div class="code-example">
+                        <button class="copy-button" onclick="copyToClipboard('sync-prompt')">Copy</button>
+                        <pre id="sync-prompt">"Create a note-taking PWA that syncs across devices and handles offline editing gracefully.
+
+Sync Architecture:
+• Local-first data storage (IndexedDB)
+• Background sync when online
+• Conflict resolution for simultaneous edits
+• Real-time updates when multiple devices are active
+• Optimistic UI updates for responsive feel
+
+User Experience:
+• Notes appear instantly when created (optimistic)
+• Clear indicators for sync status
+• Graceful handling of conflicts with user choice
+• Works seamlessly whether online or offline
+• Cross-device notifications for shared notes
+
+Make it feel magical - users should never worry about losing data or sync conflicts. Handle the complexity behind a beautifully simple interface."</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Micro-Frontend Architecture -->
+        <section class="section">
+            <h2 class="section-title">Micro-Frontend Patterns</h2>
+            <p class="section-subtitle">Modular architectures for large applications built by teams</p>
+            
+            <div class="patterns-grid">
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <div class="pattern-icon" style="background: linear-gradient(135deg, #5AC8FA, #007AFF);">
+                            🧩
+                        </div>
+                        <div class="pattern-info">
+                            <h3>Module Federation</h3>
+                            <div class="pattern-type">Scalable • Team-friendly</div>
+                        </div>
+                    </div>
+                    <p class="pattern-description">
+                        Independent modules that can be developed and deployed separately but work together seamlessly.
+                    </p>
+                    <ul class="pattern-features">
+                        <li><span class="check">✓</span> Independent deployments</li>
+                        <li><span class="check">✓</span> Team autonomy</li>
+                        <li><span class="check">✓</span> Shared design system</li>
+                        <li><span class="check">✓</span> Runtime composition</li>
+                    </ul>
+                    <div class="code-example">
+                        <button class="copy-button" onclick="copyToClipboard('microfrontend-prompt')">Copy</button>
+                        <pre id="microfrontend-prompt">"Design a large productivity suite as micro-frontends that can be developed by different teams.
+
+Modules:
+• Shell App (navigation, layout, shared services)
+• Task Management Module (todo lists, projects)
+• Calendar Module (scheduling, events)
+• Notes Module (documentation, ideas)
+• Analytics Module (insights, reports)
+
+Each module should:
+• Be independently deployable
+• Share a consistent design system
+• Communicate through well-defined APIs
+• Handle its own routing and state
+• Degrade gracefully if other modules fail
+
+Design Philosophy:
+Make it feel like one cohesive app despite being built by separate teams. Consistent navigation, shared components, and seamless data flow between modules."</pre>
+                    </div>
+                </div>
+
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <div class="pattern-icon" style="background: linear-gradient(135deg, #FF6B6B, #FF8E53);">
+                            🎨
+                        </div>
+                        <div class="pattern-info">
+                            <h3>Design System Integration</h3>
+                            <div class="pattern-type">Consistent • Scalable</div>
+                        </div>
+                    </div>
+                    <p class="pattern-description">
+                        Shared design system that ensures consistency across independently built modules.
+                    </p>
+                    <ul class="pattern-features">
+                        <li><span class="check">✓</span> Visual consistency</li>
+                        <li><span class="check">✓</span> Shared components</li>
+                        <li><span class="check">✓</span> Theme propagation</li>
+                        <li><span class="check">✓</span> Accessibility standards</li>
+                    </ul>
+                    <div class="code-example">
+                        <button class="copy-button" onclick="copyToClipboard('design-system-prompt')">Copy</button>
+                        <pre id="design-system-prompt">"Create a comprehensive design system for a multi-team application that ensures visual and functional consistency.
+
+Design System Components:
+• Core Design Tokens (colors, typography, spacing)
+• Base Components (buttons, inputs, modals)
+• Complex Patterns (forms, data tables, navigation)
+• Theme System (light/dark, brand variations)
+• Animation Library (consistent micro-interactions)
+
+Integration Strategy:
+• Each team imports the design system as a dependency
+• Automatic updates when design system evolves
+• Custom theming for different product areas
+• Accessibility built into every component
+
+Make it feel premium and polished - like Apple's ecosystem where every app feels part of the same family despite being built by different teams."</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Best Practices -->
+        <div class="best-practices">
+            <h4>✨ Architecture Best Practices</h4>
+            <ul>
+                <li><span class="tip-icon">💡</span> Start simple and evolve - begin with a single file and refactor as complexity grows</li>
+                <li><span class="tip-icon">💡</span> Keep components focused - each should have a single, clear responsibility</li>
+                <li><span class="tip-icon">💡</span> Plan for mobile first - responsive design should be built into your architecture</li>
+                <li><span class="tip-icon">💡</span> Use semantic naming - component and function names should explain their purpose</li>
+                <li><span class="tip-icon">💡</span> Optimize for iteration - structure code so AI can easily understand and modify it</li>
+                <li><span class="tip-icon">💡</span> Include error boundaries - graceful failure makes apps feel more professional</li>
+            </ul>
+        </div>
+
+        <!-- Anti-Patterns -->
+        <div class="anti-patterns">
+            <h4>⚠️ Common Anti-Patterns to Avoid</h4>
+            <ul>
+                <li><span class="warning-icon">⚠️</span> Over-engineering early - don't build for scale you don't have yet</li>
+                <li><span class="warning-icon">⚠️</span> Tight coupling - components should work independently when possible</li>
+                <li><span class="warning-icon">⚠️</span> Global state everywhere - not everything needs to be in global state</li>
+                <li><span class="warning-icon">⚠️</span> Ignoring loading states - users should always know what's happening</li>
+                <li><span class="warning-icon">⚠️</span> Magic numbers and strings - use constants and meaningful names</li>
+                <li><span class="warning-icon">⚠️</span> Inconsistent error handling - errors should be handled predictably</li>
+            </ul>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <a href="getting-started-templates.html" class="nav-btn">← Prompt Templates</a>
+            <a href="getting-started-professional.html" class="nav-btn primary">Pro Techniques →</a>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const button = element.parentElement.querySelector('.copy-button');
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = 'var(--apple-green)';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = 'rgba(255, 255, 255, 0.1)';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

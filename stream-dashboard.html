@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Awards - Stream Producer Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-pink: #FF10F0;
+            --neon-blue: #00FFF0;
+            --neon-purple: #9D00FF;
+            --neon-green: #39FF14;
+            --neon-orange: #FF6600;
+            --neon-yellow: #FFFF00;
+            --dark-bg: #0A0A0A;
+            --panel-bg: #1A1A1A;
+            --border-color: #333;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark-bg);
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Dashboard Layout */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 300px 1fr 350px;
+            grid-template-rows: 80px 1fr;
+            height: 100vh;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            grid-column: 1 / -1;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 32px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stream-status {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: rgba(57, 255, 20, 0.1);
+            border: 1px solid var(--neon-green);
+            border-radius: 10px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .viewer-stats {
+            display: flex;
+            gap: 30px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--neon-blue);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.6;
+        }
+
+        /* Left Panel - Stream Controls */
+        .stream-controls {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .panel-header {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .control-section {
+            margin-bottom: 30px;
+        }
+
+        .control-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--neon-purple);
+        }
+
+        .control-btn {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .control-btn.primary {
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+            border: none;
+        }
+
+        .control-btn.danger {
+            background: linear-gradient(135deg, #FF375F, #FF0040);
+            border: none;
+        }
+
+        .control-btn.success {
+            background: linear-gradient(135deg, var(--neon-green), #00FF00);
+            border: none;
+            color: black;
+        }
+
+        /* Center Panel - Main View */
+        .main-view {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Team Grid */
+        .team-grid {
+            flex: 1;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .teams-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .team-tile {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .team-tile:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .team-tile.active {
+            border-color: var(--neon-green);
+            background: linear-gradient(135deg, rgba(57, 255, 20, 0.1), rgba(0, 255, 240, 0.1));
+        }
+
+        .team-tile.eliminated {
+            opacity: 0.4;
+            border-color: #FF375F;
+        }
+
+        .team-tile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .team-name {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .team-score {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--neon-yellow);
+        }
+
+        .team-members-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .member-tag {
+            padding: 3px 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            font-size: 11px;
+        }
+
+        .team-progress {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .team-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));
+            transition: width 0.5s ease;
+        }
+
+        .team-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .team-action-btn {
+            flex: 1;
+            padding: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: white;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .team-action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Challenge Timer */
+        .challenge-timer {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .timer-display {
+            font-size: 72px;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            background: linear-gradient(90deg, var(--neon-yellow), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .timer-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .timer-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Right Panel - Activity & Chat */
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Event Log */
+        .event-log {
+            flex: 1;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .event-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .event-item {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid var(--neon-blue);
+            border-radius: 5px;
+            font-size: 13px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .event-time {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 4px;
+        }
+
+        .event-item.critical {
+            border-left-color: var(--neon-orange);
+            background: rgba(255, 102, 0, 0.1);
+        }
+
+        .event-item.success {
+            border-left-color: var(--neon-green);
+            background: rgba(57, 255, 20, 0.1);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        .action-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .action-label {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Modal for announcements */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--panel-bg);
+            border: 2px solid var(--neon-purple);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .modal-btn.cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .modal-btn.confirm {
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-title">
+                <div class="logo">🎬</div>
+                <div class="title">Stream Producer Dashboard</div>
+            </div>
+            
+            <div class="stream-status">
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span>LIVE</span>
+                </div>
+                
+                <div class="viewer-stats">
+                    <div class="stat">
+                        <div class="stat-value">12.4K</div>
+                        <div class="stat-label">Viewers</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">847</div>
+                        <div class="stat-label">Chat/min</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">98%</div>
+                        <div class="stat-label">Uptime</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Left Panel - Stream Controls -->
+        <div class="stream-controls">
+            <div class="panel-header">🎮 Stream Controls</div>
+            
+            <div class="control-section">
+                <div class="control-title">Phase Control</div>
+                <button class="control-btn" onclick="changePhase('brainstorm')">🧠 Brainstorm Phase</button>
+                <button class="control-btn" onclick="changePhase('build')">🔨 Build Phase</button>
+                <button class="control-btn" onclick="changePhase('demo')">🎥 Demo Phase</button>
+                <button class="control-btn primary" onclick="changePhase('battle')">⚔️ Battle Phase</button>
+            </div>
+            
+            <div class="control-section">
+                <div class="control-title">Special Events</div>
+                <button class="control-btn" onclick="triggerPowerUp()">⚡ Trigger Power-Up</button>
+                <button class="control-btn" onclick="dropHint()">💡 Drop Hint</button>
+                <button class="control-btn" onclick="activateChaos()">🌪️ Chaos Mode</button>
+                <button class="control-btn danger" onclick="eliminateTeam()">💀 Eliminate Team</button>
+            </div>
+            
+            <div class="control-section">
+                <div class="control-title">Announcements</div>
+                <button class="control-btn" onclick="showAnnouncement()">📢 Stream Alert</button>
+                <button class="control-btn" onclick="showSponsor()">💰 Sponsor Message</button>
+                <button class="control-btn success" onclick="showWinner()">🏆 Announce Winner</button>
+            </div>
+        </div>
+
+        <!-- Center Panel -->
+        <div class="main-view">
+            <!-- Challenge Timer -->
+            <div class="challenge-timer">
+                <div class="timer-display" id="mainTimer">23:47:18</div>
+                <div class="timer-controls">
+                    <button class="timer-btn" onclick="pauseTimer()">⏸️ Pause</button>
+                    <button class="timer-btn" onclick="addTime()">➕ Add 1 Hour</button>
+                    <button class="timer-btn" onclick="subtractTime()">➖ Remove 1 Hour</button>
+                    <button class="timer-btn" onclick="resetTimer()">🔄 Reset</button>
+                </div>
+            </div>
+            
+            <!-- Team Grid -->
+            <div class="team-grid">
+                <div class="panel-header">👥 Team Management</div>
+                <div class="teams-container">
+                    <!-- Team 1 -->
+                    <div class="team-tile active" data-team="alpha">
+                        <div class="team-tile-header">
+                            <span class="team-name">Team Alpha</span>
+                            <span class="team-score">1,247</span>
+                        </div>
+                        <div class="team-members-list">
+                            <span class="member-tag">👨‍💻 Alex</span>
+                            <span class="member-tag">🎨 Sarah</span>
+                            <span class="member-tag">📈 Mike</span>
+                        </div>
+                        <div class="team-progress">
+                            <div class="team-progress-fill" style="width: 68%"></div>
+                        </div>
+                        <div class="team-actions">
+                            <button class="team-action-btn">📹 Focus</button>
+                            <button class="team-action-btn">🎯 Highlight</button>
+                            <button class="team-action-btn">⚡ Boost</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Team 2 -->
+                    <div class="team-tile" data-team="neural">
+                        <div class="team-tile-header">
+                            <span class="team-name">Neural Squad</span>
+                            <span class="team-score">982</span>
+                        </div>
+                        <div class="team-members-list">
+                            <span class="member-tag">👨‍💻 John</span>
+                            <span class="member-tag">🎥 Lisa</span>
+                            <span class="member-tag">📊 David</span>
+                        </div>
+                        <div class="team-progress">
+                            <div class="team-progress-fill" style="width: 52%"></div>
+                        </div>
+                        <div class="team-actions">
+                            <button class="team-action-btn">📹 Focus</button>
+                            <button class="team-action-btn">🎯 Highlight</button>
+                            <button class="team-action-btn">⚡ Boost</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Team 3 -->
+                    <div class="team-tile" data-team="pixel">
+                        <div class="team-tile-header">
+                            <span class="team-name">Pixel Pirates</span>
+                            <span class="team-score">1,189</span>
+                        </div>
+                        <div class="team-members-list">
+                            <span class="member-tag">🎨 Emma</span>
+                            <span class="member-tag">👨‍💻 Ryan</span>
+                            <span class="member-tag">🎥 Kate</span>
+                        </div>
+                        <div class="team-progress">
+                            <div class="team-progress-fill" style="width: 74%"></div>
+                        </div>
+                        <div class="team-actions">
+                            <button class="team-action-btn">📹 Focus</button>
+                            <button class="team-action-btn">🎯 Highlight</button>
+                            <button class="team-action-btn">⚡ Boost</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Team 4 -->
+                    <div class="team-tile" data-team="code">
+                        <div class="team-tile-header">
+                            <span class="team-name">Code Crusaders</span>
+                            <span class="team-score">756</span>
+                        </div>
+                        <div class="team-members-list">
+                            <span class="member-tag">👨‍💻 Tom</span>
+                            <span class="member-tag">👨‍💻 Amy</span>
+                            <span class="member-tag">📈 Chris</span>
+                        </div>
+                        <div class="team-progress">
+                            <div class="team-progress-fill" style="width: 45%"></div>
+                        </div>
+                        <div class="team-actions">
+                            <button class="team-action-btn">📹 Focus</button>
+                            <button class="team-action-btn">🎯 Highlight</button>
+                            <button class="team-action-btn">⚡ Boost</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Team 5 (Eliminated) -->
+                    <div class="team-tile eliminated" data-team="quantum">
+                        <div class="team-tile-header">
+                            <span class="team-name">Quantum Leap</span>
+                            <span class="team-score">432</span>
+                        </div>
+                        <div class="team-members-list">
+                            <span class="member-tag">💀 ELIMINATED</span>
+                        </div>
+                        <div class="team-progress">
+                            <div class="team-progress-fill" style="width: 23%"></div>
+                        </div>
+                        <div class="team-actions">
+                            <button class="team-action-btn" disabled>Eliminated</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="right-panel">
+            <!-- Event Log -->
+            <div class="event-log">
+                <div class="panel-header">📊 Live Event Log</div>
+                <div class="event-list" id="eventList">
+                    <div class="event-item success">
+                        <div class="event-time">23:47:15</div>
+                        <div>Team Alpha deployed to staging</div>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-time">23:46:42</div>
+                        <div>Neural Squad pushed 15 commits</div>
+                    </div>
+                    <div class="event-item critical">
+                        <div class="event-time">23:45:30</div>
+                        <div>Chaos Mode activated by chat vote!</div>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-time">23:44:18</div>
+                        <div>Pixel Pirates started demo recording</div>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-time">23:43:05</div>
+                        <div>$500 donation from @techVC</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <div class="panel-header">⚡ Quick Actions</div>
+                <div class="action-grid">
+                    <div class="action-btn" onclick="switchCamera()">
+                        <div class="action-icon">📹</div>
+                        <div class="action-label">Switch Cam</div>
+                    </div>
+                    <div class="action-btn" onclick="muteTeam()">
+                        <div class="action-icon">🔇</div>
+                        <div class="action-label">Mute Team</div>
+                    </div>
+                    <div class="action-btn" onclick="showStats()">
+                        <div class="action-icon">📊</div>
+                        <div class="action-label">Show Stats</div>
+                    </div>
+                    <div class="action-btn" onclick="triggerVote()">
+                        <div class="action-icon">🗳️</div>
+                        <div class="action-label">Start Vote</div>
+                    </div>
+                    <div class="action-btn" onclick="playSound()">
+                        <div class="action-icon">🔊</div>
+                        <div class="action-label">Sound FX</div>
+                    </div>
+                    <div class="action-btn" onclick="showReplay()">
+                        <div class="action-icon">🔄</div>
+                        <div class="action-label">Replay</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Announcements -->
+    <div class="modal" id="announcementModal">
+        <div class="modal-content">
+            <div class="modal-title">📢 Stream Announcement</div>
+            <textarea class="modal-input" rows="4" placeholder="Enter your announcement..." id="announcementText"></textarea>
+            <div class="modal-actions">
+                <button class="modal-btn cancel" onclick="closeModal()">Cancel</button>
+                <button class="modal-btn confirm" onclick="sendAnnouncement()">Send to Stream</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Timer functionality
+        let timerRunning = true;
+        let hours = 23, minutes = 47, seconds = 18;
+
+        function updateTimer() {
+            if (!timerRunning) return;
+            
+            seconds--;
+            if (seconds < 0) {
+                seconds = 59;
+                minutes--;
+                if (minutes < 0) {
+                    minutes = 59;
+                    hours--;
+                }
+            }
+            
+            document.getElementById('mainTimer').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        setInterval(updateTimer, 1000);
+
+        function pauseTimer() {
+            timerRunning = !timerRunning;
+        }
+
+        function addTime() {
+            hours += 1;
+            addEvent('⏰ Added 1 hour to timer', 'success');
+        }
+
+        function subtractTime() {
+            if (hours > 0) hours -= 1;
+            addEvent('⏰ Removed 1 hour from timer', 'critical');
+        }
+
+        function resetTimer() {
+            hours = 48;
+            minutes = 0;
+            seconds = 0;
+            addEvent('🔄 Timer reset to 48:00:00', 'success');
+        }
+
+        // Event log
+        function addEvent(message, type = '') {
+            const eventList = document.getElementById('eventList');
+            const now = new Date();
+            const timeStr = now.toTimeString().substr(0, 8);
+            
+            const eventItem = document.createElement('div');
+            eventItem.className = `event-item ${type}`;
+            eventItem.innerHTML = `
+                <div class="event-time">${timeStr}</div>
+                <div>${message}</div>
+            `;
+            
+            eventList.insertBefore(eventItem, eventList.firstChild);
+            
+            // Keep only last 10 events
+            while (eventList.children.length > 10) {
+                eventList.removeChild(eventList.lastChild);
+            }
+        }
+
+        // Phase control
+        function changePhase(phase) {
+            const phases = {
+                brainstorm: '🧠 Brainstorm Phase started',
+                build: '🔨 Build Phase started',
+                demo: '🎥 Demo Phase started',
+                battle: '⚔️ Battle Phase started!'
+            };
+            addEvent(phases[phase], 'success');
+        }
+
+        // Special events
+        function triggerPowerUp() {
+            addEvent('⚡ POWER-UP ACTIVATED!', 'success');
+        }
+
+        function dropHint() {
+            addEvent('💡 Hint dropped to all teams', 'success');
+        }
+
+        function activateChaos() {
+            addEvent('🌪️ CHAOS MODE ACTIVATED!', 'critical');
+        }
+
+        function eliminateTeam() {
+            const teams = document.querySelectorAll('.team-tile:not(.eliminated)');
+            if (teams.length > 0) {
+                const randomTeam = teams[Math.floor(Math.random() * teams.length)];
+                randomTeam.classList.add('eliminated');
+                const teamName = randomTeam.querySelector('.team-name').textContent;
+                addEvent(`💀 ${teamName} has been eliminated!`, 'critical');
+            }
+        }
+
+        // Announcements
+        function showAnnouncement() {
+            document.getElementById('announcementModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('announcementModal').classList.remove('active');
+        }
+
+        function sendAnnouncement() {
+            const text = document.getElementById('announcementText').value;
+            if (text) {
+                addEvent(`📢 Announcement sent: "${text}"`, 'success');
+                closeModal();
+                document.getElementById('announcementText').value = '';
+            }
+        }
+
+        function showSponsor() {
+            addEvent('💰 Sponsor message displayed', 'success');
+        }
+
+        function showWinner() {
+            addEvent('🏆 Winner announcement triggered!', 'success');
+        }
+
+        // Quick actions
+        function switchCamera() {
+            addEvent('📹 Camera switched');
+        }
+
+        function muteTeam() {
+            addEvent('🔇 Team audio muted');
+        }
+
+        function showStats() {
+            addEvent('📊 Stats overlay displayed');
+        }
+
+        function triggerVote() {
+            addEvent('🗳️ Chat voting started', 'success');
+        }
+
+        function playSound() {
+            addEvent('🔊 Sound effect played');
+        }
+
+        function showReplay() {
+            addEvent('🔄 Replay shown on stream');
+        }
+
+        // Team focus
+        document.querySelectorAll('.team-tile').forEach(tile => {
+            tile.addEventListener('click', function() {
+                document.querySelectorAll('.team-tile').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                const teamName = this.querySelector('.team-name').textContent;
+                addEvent(`📹 Focused on ${teamName}`);
+            });
+        });
+
+        // Simulate live updates
+        setInterval(() => {
+            // Random progress updates
+            document.querySelectorAll('.team-tile:not(.eliminated) .team-progress-fill').forEach(bar => {
+                const current = parseInt(bar.style.width);
+                const newWidth = Math.min(100, current + Math.floor(Math.random() * 3));
+                bar.style.width = newWidth + '%';
+            });
+            
+            // Random score updates
+            document.querySelectorAll('.team-tile:not(.eliminated) .team-score').forEach(score => {
+                const current = parseInt(score.textContent);
+                score.textContent = current + Math.floor(Math.random() * 20);
+            });
+        }, 5000);
+    </script>
+</body>
+</html>

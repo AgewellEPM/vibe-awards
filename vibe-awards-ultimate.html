@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Vibe Awards - Excellence in AI Development</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F4E4BC;
+            --black: #000000;
+            --white: #FFFFFF;
+            --gray: #1a1a1a;
+            --purple: #8B00FF;
+            --blue: #00D4FF;
+            --pink: #FF006E;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--black);
+            color: var(--white);
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            transition: all 0.1s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-follower {
+            width: 40px;
+            height: 40px;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor.hover {
+            transform: translate(-50%, -50%) scale(2);
+            background: var(--gold);
+            mix-blend-mode: difference;
+        }
+
+        /* Loading Screen */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            z-index: 100000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-title {
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--gold), var(--pink), var(--blue), var(--gold));
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-shift 3s ease infinite;
+        }
+
+        .loader-bar {
+            width: 300px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 30px auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loader-progress {
+            position: absolute;
+            height: 100%;
+            background: var(--gold);
+            animation: load 2s ease;
+        }
+
+        @keyframes load {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 20px 40px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            transform: translateY(-100%);
+            animation: slideDown 1s ease 2s forwards;
+        }
+
+        @keyframes slideDown {
+            to { transform: translateY(0); }
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 300;
+            letter-spacing: 3px;
+            color: var(--white);
+            position: relative;
+        }
+
+        .logo span {
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--white);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section with Particle System */
+        .hero {
+            margin-top: 80px;
+            min-height: 100vh;
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.1), transparent),
+                        linear-gradient(180deg, #000 0%, #0a0a0a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #particles-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            padding: 40px;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease 2.5s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-title {
+            font-size: clamp(4rem, 10vw, 8rem);
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -3px;
+            line-height: 0.9;
+            position: relative;
+        }
+
+        .hero-title-main {
+            background: linear-gradient(180deg, var(--white) 0%, rgba(255, 255, 255, 0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-title .gold {
+            color: var(--gold);
+            display: block;
+            font-size: 0.6em;
+            letter-spacing: 15px;
+            font-weight: 300;
+            margin-top: 20px;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            animation: pulse 2s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 300;
+            letter-spacing: 3px;
+            margin-bottom: 60px;
+        }
+
+        /* AI Terminal */
+        .ai-terminal {
+            max-width: 800px;
+            margin: 60px auto;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--gold);
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Monaco', monospace;
+            backdrop-filter: blur(10px);
+        }
+
+        .terminal-header {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red { background: #FF5F56; }
+        .terminal-dot.yellow { background: #FFBD2E; }
+        .terminal-dot.green { background: #27C93F; }
+
+        .terminal-text {
+            color: var(--gold);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .typing-text {
+            border-right: 2px solid var(--gold);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        /* Floating 3D Cards */
+        .floating-cards {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .float-card {
+            position: absolute;
+            width: 200px;
+            height: 250px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(139, 0, 255, 0.1));
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            transform-style: preserve-3d;
+            animation: float3d 20s infinite ease-in-out;
+        }
+
+        .float-card:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .float-card:nth-child(2) {
+            top: 60%;
+            right: 15%;
+            animation-delay: 5s;
+        }
+
+        .float-card:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 10s;
+        }
+
+        @keyframes float3d {
+            0%, 100% {
+                transform: translateY(0) rotateX(0) rotateY(0);
+            }
+            25% {
+                transform: translateY(-30px) rotateX(10deg) rotateY(10deg);
+            }
+            50% {
+                transform: translateY(0) rotateX(-10deg) rotateY(-10deg);
+            }
+            75% {
+                transform: translateY(30px) rotateX(5deg) rotateY(-5deg);
+            }
+        }
+
+        /* Stats with Live Counter */
+        .hero-stats {
+            display: flex;
+            gap: 60px;
+            justify-content: center;
+            margin-top: 60px;
+        }
+
+        .stat {
+            text-align: center;
+            position: relative;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--gold), var(--pink), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-shift 4s ease infinite;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
+        .stat-live {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            background: var(--pink);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            text-transform: uppercase;
+            animation: pulse 2s infinite;
+        }
+
+        /* Categories with Hover Effects */
+        .categories {
+            padding: 120px 40px;
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+            background: linear-gradient(90deg, var(--white), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 300;
+        }
+
+        .categories-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 40px 30px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            backdrop-filter: blur(10px);
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+            transition: left 0.7s;
+        }
+
+        .category-card:hover::before {
+            left: 100%;
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 30px 60px rgba(212, 175, 55, 0.3);
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+
+        .category-card:nth-child(even) .category-icon {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--gold);
+        }
+
+        .category-description {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+        }
+
+        /* AI Chat Interface */
+        .ai-chat {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .ai-bubble {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--gold), var(--pink));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+            animation: float 3s ease infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .ai-chat-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 450px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid var(--gold);
+            border-radius: 15px;
+            padding: 20px;
+            display: none;
+            backdrop-filter: blur(10px);
+        }
+
+        .ai-chat-window.active {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .ai-messages {
+            height: 350px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .ai-message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .ai-message.bot {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .ai-message.user {
+            background: rgba(139, 0, 255, 0.1);
+            border: 1px solid rgba(139, 0, 255, 0.3);
+            text-align: right;
+        }
+
+        .ai-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .ai-input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        /* Winners with 3D Gallery */
+        .winners {
+            padding: 120px 40px;
+            background: radial-gradient(circle at center, rgba(139, 0, 255, 0.1), transparent);
+            position: relative;
+        }
+
+        .winner-showcase {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            perspective: 1000px;
+        }
+
+        .winner-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .winner-card:hover {
+            transform: rotateY(5deg) rotateX(5deg) scale(1.05);
+            box-shadow: 0 25px 50px rgba(212, 175, 55, 0.4);
+        }
+
+        .winner-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--gold), var(--purple), var(--pink));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .winner-image::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .winner-info {
+            padding: 20px;
+        }
+
+        .winner-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--gold);
+        }
+
+        .winner-meta {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .winner-stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .winner-stat {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .winner-stat span {
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        /* Interactive Globe */
+        .globe-section {
+            padding: 120px 40px;
+            background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
+            position: relative;
+            text-align: center;
+        }
+
+        #globe-container {
+            width: 600px;
+            height: 600px;
+            margin: 60px auto;
+            position: relative;
+        }
+
+        /* Sponsors with Logo Animation */
+        .sponsors {
+            padding: 100px 40px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .sponsors-grid {
+            max-width: 1200px;
+            margin: 60px auto 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            align-items: center;
+        }
+
+        .sponsor-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80px;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.3);
+            transition: all 0.5s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .sponsor-logo::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, var(--gold), transparent);
+            opacity: 0;
+            transition: opacity 0.5s;
+            transform: scale(0);
+        }
+
+        .sponsor-logo:hover {
+            color: var(--gold);
+            transform: scale(1.2) rotate(5deg);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+        }
+
+        .sponsor-logo:hover::before {
+            opacity: 0.3;
+            transform: scale(2);
+        }
+
+        /* CTA with Video Background */
+        .cta {
+            position: relative;
+            padding: 150px 40px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .cta-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.8), rgba(139, 0, 255, 0.8)),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23000" width="100" height="100"/></svg>');
+            z-index: 1;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-title {
+            font-size: 4rem;
+            color: var(--white);
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-subtitle {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 50px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 20px 50px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--white);
+            color: var(--black);
+            border-color: var(--white);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border-color: var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: var(--white);
+            color: var(--black);
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 80px 40px 40px;
+            text-align: center;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .footer-live-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 30px 0;
+        }
+
+        .footer-stat {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .footer-stat span {
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .ai-chat-window {
+                width: 90vw;
+                right: 5vw;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <h1 class="loader-title">VIBE AWARDS</h1>
+            <div class="loader-bar">
+                <div class="loader-progress"></div>
+            </div>
+            <p style="color: rgba(255,255,255,0.5); margin-top: 20px;">Initializing AI Systems...</p>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursor-follower"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">THE <span>VIBE</span> AWARDS</div>
+            <ul class="nav-links">
+                <li><a href="#categories">Categories</a></li>
+                <li><a href="#winners">Winners</a></li>
+                <li><a href="#global">Global Impact</a></li>
+                <li><a href="#submit">Submit</a></li>
+                <li><a href="#ai">AI Judge</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Particles -->
+    <section class="hero">
+        <canvas id="particles-canvas"></canvas>
+        
+        <div class="floating-cards">
+            <div class="float-card">
+                <div style="color: var(--gold); font-size: 2rem; margin-bottom: 10px;">🏆</div>
+                <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">10K+ Projects</div>
+            </div>
+            <div class="float-card">
+                <div style="color: var(--pink); font-size: 2rem; margin-bottom: 10px;">💻</div>
+                <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">5K+ Developers</div>
+            </div>
+            <div class="float-card">
+                <div style="color: var(--blue); font-size: 2rem; margin-bottom: 10px;">🚀</div>
+                <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">$47M+ Invested</div>
+            </div>
+        </div>
+
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="hero-title-main">THE VIBE AWARDS</span>
+                <span class="gold">2024</span>
+            </h1>
+            <p class="hero-subtitle">Where AI Meets Human Creativity</p>
+            
+            <div class="ai-terminal">
+                <div class="terminal-header">
+                    <div class="terminal-dot red"></div>
+                    <div class="terminal-dot yellow"></div>
+                    <div class="terminal-dot green"></div>
+                </div>
+                <div class="terminal-text">
+                    <span id="typing-text" class="typing-text"></span>
+                </div>
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-live">LIVE</span>
+                    <div class="stat-number" id="computeInvested">$0M</div>
+                    <div class="stat-label">Compute Invested</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="projectsBuilt">0</div>
+                    <div class="stat-label">Projects Built</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="vibeCoders">0</div>
+                    <div class="stat-label">Active Coders</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories fade-in" id="categories">
+        <div class="section-header">
+            <h2 class="section-title">Award Categories</h2>
+            <p class="section-subtitle">Recognizing Excellence in AI-Powered Development</p>
+        </div>
+        
+        <div class="categories-grid">
+            <div class="category-card">
+                <div class="category-icon">🏆</div>
+                <h3 class="category-title">Grand Prix</h3>
+                <p class="category-description">The pinnacle of vibe-coding achievement. For projects that redefine what's possible.</p>
+            </div>
+            
+            <div class="category-card">
+                <div class="category-icon">💎</div>
+                <h3 class="category-title">Innovation Award</h3>
+                <p class="category-description">Breaking boundaries with AI. Recognizing groundbreaking technical achievements.</p>
+            </div>
+            
+            <div class="category-card">
+                <div class="category-icon">🚀</div>
+                <h3 class="category-title">Startup Excellence</h3>
+                <p class="category-description">From conversation to company. Best AI-built startups changing the world.</p>
+            </div>
+            
+            <div class="category-card">
+                <div class="category-icon">❤️</div>
+                <h3 class="category-title">Humanitarian Impact</h3>
+                <p class="category-description">Technology for humanity. Projects making real difference in people's lives.</p>
+            </div>
+            
+            <div class="category-card">
+                <div class="category-icon">🎨</div>
+                <h3 class="category-title">Design Mastery</h3>
+                <p class="category-description">Where AI meets aesthetics. Outstanding UI/UX through human-AI collaboration.</p>
+            </div>
+            
+            <div class="category-card">
+                <div class="category-icon">⚡</div>
+                <h3 class="category-title">Speed Development</h3>
+                <p class="category-description">Lightning-fast creation. Recognizing rapid development without compromising quality.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Winners Gallery -->
+    <section class="winners fade-in" id="winners">
+        <div class="section-header">
+            <h2 class="section-title">Hall of Fame</h2>
+            <p class="section-subtitle">Projects That Changed Everything</p>
+        </div>
+        
+        <div class="winner-showcase">
+            <div class="winner-card">
+                <div class="winner-image">
+                    🏥
+                </div>
+                <div class="winner-info">
+                    <h3 class="winner-title">TinkyBink AAC</h3>
+                    <p class="winner-meta">Humanitarian Impact Winner 2024</p>
+                    <div class="winner-stats">
+                        <div class="winner-stat">Lines: <span>1.4M</span></div>
+                        <div class="winner-stat">Impact: <span>10K+ Users</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="winner-card">
+                <div class="winner-image">
+                    🤖
+                </div>
+                <div class="winner-info">
+                    <h3 class="winner-title">NeuralAssist Pro</h3>
+                    <p class="winner-meta">Innovation Award 2024</p>
+                    <div class="winner-stats">
+                        <div class="winner-stat">AI Models: <span>12</span></div>
+                        <div class="winner-stat">Accuracy: <span>99.2%</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="winner-card">
+                <div class="winner-image">
+                    🎯
+                </div>
+                <div class="winner-info">
+                    <h3 class="winner-title">VisionBoard AI</h3>
+                    <p class="winner-meta">Design Excellence 2024</p>
+                    <div class="winner-stats">
+                        <div class="winner-stat">Components: <span>500+</span></div>
+                        <div class="winner-stat">Awards: <span>5</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Global Impact Section -->
+    <section class="globe-section fade-in" id="global">
+        <div class="section-header">
+            <h2 class="section-title">Global Vibe Network</h2>
+            <p class="section-subtitle">Connected Creators Worldwide</p>
+        </div>
+        <div id="globe-container">
+            <!-- Globe visualization would go here -->
+            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--gold); border-radius: 50%; background: radial-gradient(circle, rgba(212,175,55,0.1), transparent);">
+                <div style="text-align: center;">
+                    <div style="font-size: 5rem;">🌍</div>
+                    <div style="color: var(--gold); margin-top: 20px;">127 Countries</div>
+                    <div style="color: rgba(255,255,255,0.6);">5,482 Active Projects</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sponsors Section -->
+    <section class="sponsors fade-in">
+        <div class="section-header">
+            <h2 class="section-title">Powered By</h2>
+            <p class="section-subtitle">The Builders of Tomorrow</p>
+        </div>
+        
+        <div class="sponsors-grid">
+            <div class="sponsor-logo">OpenAI</div>
+            <div class="sponsor-logo">Anthropic</div>
+            <div class="sponsor-logo">Google</div>
+            <div class="sponsor-logo">Microsoft</div>
+            <div class="sponsor-logo">Meta</div>
+            <div class="sponsor-logo">Amazon</div>
+            <div class="sponsor-logo">NVIDIA</div>
+            <div class="sponsor-logo">Apple</div>
+            <div class="sponsor-logo">Tesla</div>
+            <div class="sponsor-logo">IBM</div>
+            <div class="sponsor-logo">Mistral</div>
+            <div class="sponsor-logo">Perplexity</div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="submit">
+        <div class="cta-bg"></div>
+        <div class="cta-content">
+            <h2 class="cta-title">Join the Revolution</h2>
+            <p class="cta-subtitle">Submit your vibe-coded masterpiece for 2024</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">Submit Project</a>
+                <a href="#" class="btn btn-secondary">Become a Judge</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Chat Assistant -->
+    <div class="ai-chat">
+        <div class="ai-bubble" onclick="toggleChat()">
+            <span style="font-size: 1.5rem;">🤖</span>
+        </div>
+        <div class="ai-chat-window" id="aiChat">
+            <div class="ai-messages" id="aiMessages">
+                <div class="ai-message bot">
+                    👋 Hello! I'm the Vibe Awards AI Assistant. Ask me about categories, submissions, or past winners!
+                </div>
+            </div>
+            <input type="text" class="ai-input" placeholder="Ask me anything..." onkeypress="handleAIChat(event)">
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-live-stats">
+                <div class="footer-stat">Active Sessions: <span id="activeSessions">2,847</span></div>
+                <div class="footer-stat">Projects Submitted Today: <span id="todaySubmissions">47</span></div>
+                <div class="footer-stat">Compute This Session: <span id="sessionCompute">$0.00</span></div>
+            </div>
+            
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Rules</a>
+                <a href="#">FAQ</a>
+                <a href="#">Blog</a>
+                <a href="#">API</a>
+                <a href="#">Terms</a>
+                <a href="#">Privacy</a>
+                <a href="#">Contact</a>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 The Vibe Awards. Redefining Excellence.</p>
+                <p style="margin-top: 10px; opacity: 0.6;">This entire website was vibe-coded in one conversation</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Hide loader after page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 2000);
+        });
+
+        // Custom cursor
+        const cursor = document.getElementById('cursor');
+        const cursorFollower = document.getElementById('cursor-follower');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            setTimeout(() => {
+                cursorFollower.style.left = e.clientX + 'px';
+                cursorFollower.style.top = e.clientY + 'px';
+            }, 100);
+        });
+
+        document.querySelectorAll('a, button, .category-card, .winner-card, .sponsor-logo').forEach(elem => {
+            elem.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            elem.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // Particle system
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 100;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+                if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(212, 175, 55, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            // Draw connections
+            particles.forEach((p1, i) => {
+                particles.slice(i + 1).forEach(p2 => {
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.strokeStyle = `rgba(212, 175, 55, ${0.1 * (1 - distance / 100)})`;
+                        ctx.stroke();
+                    }
+                });
+            });
+
+            requestAnimationFrame(animateParticles);
+        }
+
+        animateParticles();
+
+        // Typing animation
+        const typingText = document.getElementById('typing-text');
+        const messages = [
+            '> Analyzing 10,483 vibe-coded projects...',
+            '> Computing total impact: $47,382,910',
+            '> Active developers: 5,482 worldwide',
+            '> Excellence detected in 127 countries',
+            '> Next winner could be you_'
+        ];
+        let messageIndex = 0;
+        let charIndex = 0;
+
+        function typeMessage() {
+            if (charIndex < messages[messageIndex].length) {
+                typingText.textContent += messages[messageIndex][charIndex];
+                charIndex++;
+                setTimeout(typeMessage, 50);
+            } else {
+                setTimeout(() => {
+                    typingText.textContent = '';
+                    charIndex = 0;
+                    messageIndex = (messageIndex + 1) % messages.length;
+                    typeMessage();
+                }, 2000);
+            }
+        }
+
+        setTimeout(typeMessage, 3000);
+
+        // Counter animations
+        function animateCounter(id, start, end, suffix = '', duration = 2000) {
+            const element = document.getElementById(id);
+            const increment = (end - start) / (duration / 16);
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= end) {
+                    current = end;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current).toLocaleString() + suffix;
+            }, 16);
+        }
+
+        // Start counters after loader
+        setTimeout(() => {
+            animateCounter('computeInvested', 0, 47, 'M');
+            animateCounter('projectsBuilt', 0, 10483);
+            animateCounter('vibeCoders', 0, 5482);
+            animateCounter('activeSessions', 2000, 2847);
+            animateCounter('todaySubmissions', 0, 47);
+        }, 2500);
+
+        // Live session compute counter
+        let sessionCompute = 0;
+        setInterval(() => {
+            sessionCompute += Math.random() * 0.5;
+            document.getElementById('sessionCompute').textContent = '$' + sessionCompute.toFixed(2);
+        }, 100);
+
+        // AI Chat
+        function toggleChat() {
+            document.getElementById('aiChat').classList.toggle('active');
+        }
+
+        function handleAIChat(event) {
+            if (event.key === 'Enter') {
+                const input = event.target;
+                const messages = document.getElementById('aiMessages');
+                
+                // Add user message
+                const userMsg = document.createElement('div');
+                userMsg.className = 'ai-message user';
+                userMsg.textContent = input.value;
+                messages.appendChild(userMsg);
+                
+                // Simulate AI response
+                setTimeout(() => {
+                    const botMsg = document.createElement('div');
+                    botMsg.className = 'ai-message bot';
+                    botMsg.textContent = '🤔 Processing your request... The Vibe Awards celebrates excellence in AI-powered development!';
+                    messages.appendChild(botMsg);
+                    messages.scrollTop = messages.scrollHeight;
+                }, 500);
+                
+                input.value = '';
+            }
+        }
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Window resize handler
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>

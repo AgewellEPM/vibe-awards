@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenge Mode - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-gray: #86868B;
+            --apple-light-gray: #F5F5F7;
+            --apple-dark: #1D1D1F;
+            --apple-green: #30D158;
+            --apple-red: #FF375F;
+            --apple-orange: #FF9F0A;
+            --apple-purple: #BF5AF2;
+            --apple-teal: #5AC8FA;
+            --apple-indigo: #5856D6;
+            --apple-yellow: #FFD60A;
+            --gold: #FFD700;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .page-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .pulse-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 113, 227, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 113, 227, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.1; }
+        }
+
+        .energy-orb {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(191, 90, 242, 0.3) 0%, transparent 70%);
+            filter: blur(60px);
+            animation: orbFloat 20s ease-in-out infinite;
+        }
+
+        .energy-orb:nth-child(2) {
+            top: 60%;
+            right: -200px;
+            background: radial-gradient(circle, rgba(88, 86, 214, 0.3) 0%, transparent 70%);
+            animation-duration: 25s;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -50px) scale(1.1); }
+            66% { transform: translate(-30px, 30px) scale(0.9); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 9999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #F5F5F7;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #F5F5F7;
+        }
+
+        .nav-cta {
+            padding: 8px 20px;
+            background: var(--apple-blue);
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        /* Main Container */
+        .challenge-container {
+            max-width: 1400px;
+            margin: 100px auto 80px;
+            padding: 0 24px;
+        }
+
+        /* Timer Header */
+        .timer-header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .phase-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, var(--apple-red), var(--apple-orange));
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            animation: pulseBadge 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseBadge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .project-title {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .project-tagline {
+            font-size: 20px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 40px;
+        }
+
+        /* Countdown Timer */
+        .countdown-display {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+
+        .countdown-unit {
+            text-align: center;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            min-width: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .countdown-unit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--apple-red), var(--apple-orange));
+            animation: timerPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes timerPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .countdown-number {
+            font-size: 48px;
+            font-weight: 700;
+            color: white;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .countdown-label {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Team Assembly Grid */
+        .team-section {
+            margin-bottom: 60px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 600;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .role-slot {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .role-slot.filled {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .role-slot:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 113, 227, 0.2);
+        }
+
+        .role-slot.empty:hover {
+            border-color: var(--apple-blue);
+            background: rgba(0, 113, 227, 0.1);
+        }
+
+        .role-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .role-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .role-status {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .join-btn {
+            margin-top: 16px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .join-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 113, 227, 0.3);
+        }
+
+        .member-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .member-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .member-details {
+            text-align: left;
+        }
+
+        .member-name {
+            font-weight: 500;
+        }
+
+        .member-joined {
+            font-size: 12px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        /* Timeline Section */
+        .timeline-section {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            padding: 48px;
+            margin-bottom: 60px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--apple-purple), var(--apple-indigo));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 32px;
+            animation: slideInLeft 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -35px;
+            top: 4px;
+            width: 20px;
+            height: 20px;
+            background: var(--apple-purple);
+            border: 3px solid #000;
+            border-radius: 50%;
+        }
+
+        .timeline-content {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timeline-time {
+            font-size: 12px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .timeline-description {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.8);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.6);
+            margin-top: 8px;
+        }
+
+        /* Action Buttons */
+        .action-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .action-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .action-info {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 113, 227, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .project-title {
+                font-size: 36px;
+            }
+
+            .countdown-display {
+                flex-wrap: wrap;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-content {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="page-background">
+        <div class="pulse-grid"></div>
+        <div class="energy-orb"></div>
+        <div class="energy-orb"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index-magic.html" class="nav-logo">
+                <span>🏆</span>
+                <span>The Vibe Awards</span>
+            </a>
+            <div class="nav-menu">
+                <a href="index-magic.html" class="nav-link">Home</a>
+                <a href="showcase.html" class="nav-link">Showcase</a>
+                <a href="apple-magic-battle.html" class="nav-link">Battle Arena</a>
+                <a href="challenge-mode.html" class="nav-link active">Challenge Mode</a>
+                <a href="team-up.html" class="nav-link">Team Up</a>
+                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+                <a href="submit-app.html" class="nav-link">Submit</a>
+                <a href="signup.html" class="nav-cta">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="challenge-container">
+        <!-- Timer Header -->
+        <div class="timer-header">
+            <div class="phase-badge">⚡ TEAM ASSEMBLY PHASE</div>
+            <h1 class="project-title">AI Music Visualizer</h1>
+            <p class="project-tagline">Form your team. Beat the clock. Ship your vibe.</p>
+        </div>
+
+        <!-- Countdown Timer -->
+        <div class="countdown-display">
+            <div class="countdown-unit">
+                <div class="countdown-number" id="hours">23</div>
+                <div class="countdown-label">Hours</div>
+            </div>
+            <div class="countdown-unit">
+                <div class="countdown-number" id="minutes">47</div>
+                <div class="countdown-label">Minutes</div>
+            </div>
+            <div class="countdown-unit">
+                <div class="countdown-number" id="seconds">32</div>
+                <div class="countdown-label">Seconds</div>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">3/5</div>
+                <div class="stat-label">Team Members</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">12</div>
+                <div class="stat-label">Commits</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">247</div>
+                <div class="stat-label">Watching</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">$5K</div>
+                <div class="stat-label">Prize Pool</div>
+            </div>
+        </div>
+
+        <!-- Team Assembly -->
+        <div class="team-section">
+            <div class="section-header">
+                <h2 class="section-title">🚀 Team Assembly</h2>
+                <span style="color: var(--apple-orange);">2 slots remaining</span>
+            </div>
+            
+            <div class="team-grid">
+                <!-- Code Role (Filled) -->
+                <div class="role-slot filled">
+                    <div class="role-icon">👨‍💻</div>
+                    <div class="role-name">Code Lead</div>
+                    <div class="role-status">Position Filled</div>
+                    <div class="member-info">
+                        <div class="member-avatar">AK</div>
+                        <div class="member-details">
+                            <div class="member-name">Alex Kim</div>
+                            <div class="member-joined">Founder</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Design Role (Filled) -->
+                <div class="role-slot filled">
+                    <div class="role-icon">🎨</div>
+                    <div class="role-name">Design/Artist</div>
+                    <div class="role-status">Position Filled</div>
+                    <div class="member-info">
+                        <div class="member-avatar">SR</div>
+                        <div class="member-details">
+                            <div class="member-name">Sarah Rodriguez</div>
+                            <div class="member-joined">Joined 2h ago</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Marketing Role (Empty) -->
+                <div class="role-slot empty">
+                    <div class="role-icon">📈</div>
+                    <div class="role-name">Marketing</div>
+                    <div class="role-status">Open Position</div>
+                    <button class="join-btn">Request to Join</button>
+                </div>
+
+                <!-- Video Role (Empty) -->
+                <div class="role-slot empty">
+                    <div class="role-icon">🎥</div>
+                    <div class="role-name">Video/Content</div>
+                    <div class="role-status">Open Position</div>
+                    <button class="join-btn">Request to Join</button>
+                </div>
+
+                <!-- Biz Ops Role (Filled) -->
+                <div class="role-slot filled">
+                    <div class="role-icon">📊</div>
+                    <div class="role-name">Biz Ops</div>
+                    <div class="role-status">Position Filled</div>
+                    <div class="member-info">
+                        <div class="member-avatar">MJ</div>
+                        <div class="member-details">
+                            <div class="member-name">Marcus Johnson</div>
+                            <div class="member-joined">Joined 5h ago</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline-section">
+            <div class="section-header">
+                <h2 class="section-title">⚡ Live Timeline</h2>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <div class="timeline-title">
+                                <span>💻</span>
+                                <span>Alex pushed initial codebase</span>
+                            </div>
+                            <div class="timeline-time">5 hours ago</div>
+                        </div>
+                        <div class="timeline-description">
+                            Set up React + Three.js for audio visualization engine
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <div class="timeline-title">
+                                <span>🎨</span>
+                                <span>Sarah uploaded design mockups</span>
+                            </div>
+                            <div class="timeline-time">2 hours ago</div>
+                        </div>
+                        <div class="timeline-description">
+                            Added UI/UX designs for control panel and visualizer modes
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <div class="timeline-title">
+                                <span>📊</span>
+                                <span>Marcus drafted monetization strategy</span>
+                            </div>
+                            <div class="timeline-time">30 minutes ago</div>
+                        </div>
+                        <div class="timeline-description">
+                            Proposed freemium model with Pro tier for advanced features
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fixed Action Bar -->
+    <div class="action-bar">
+        <div class="action-content">
+            <div class="action-info">
+                <span>Challenge ends in: <strong style="color: var(--apple-orange);">23:47:32</strong></span>
+                <span>Status: <strong style="color: var(--apple-green);">Active</strong></span>
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-secondary">Share Project</button>
+                <button class="btn btn-primary">View Live Demo</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Countdown Timer
+        let assemblyDeadline = new Date().getTime() + (24 * 60 * 60 * 1000); // 24 hours from now
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = assemblyDeadline - now;
+
+            if (distance < 0) {
+                // Phase transition
+                document.querySelector('.phase-badge').textContent = '🔨 BUILD PHASE';
+                assemblyDeadline = now + (72 * 60 * 60 * 1000); // 72 hour build phase
+                return;
+            }
+
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+
+            // Add urgency styling when time is low
+            if (hours < 1) {
+                document.querySelectorAll('.countdown-unit').forEach(unit => {
+                    unit.style.borderColor = 'var(--apple-red)';
+                });
+            }
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Join Team Functionality
+        document.querySelectorAll('.join-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const roleSlot = this.closest('.role-slot');
+                const roleName = roleSlot.querySelector('.role-name').textContent;
+                
+                // Simulate join request
+                this.textContent = 'Request Sent';
+                this.style.background = 'var(--apple-green)';
+                this.disabled = true;
+                
+                // Add to timeline
+                addTimelineEntry(`You requested to join as ${roleName}`, '👋');
+            });
+        });
+
+        // Add timeline entry
+        function addTimelineEntry(text, icon) {
+            const timeline = document.querySelector('.timeline');
+            const newItem = document.createElement('div');
+            newItem.className = 'timeline-item';
+            newItem.innerHTML = `
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <div class="timeline-title">
+                            <span>${icon}</span>
+                            <span>${text}</span>
+                        </div>
+                        <div class="timeline-time">Just now</div>
+                    </div>
+                </div>
+            `;
+            timeline.insertBefore(newItem, timeline.firstChild);
+        }
+
+        // Simulate live updates
+        const liveUpdates = [
+            { text: "New commit: Added audio FFT analysis", icon: "💻", delay: 15000 },
+            { text: "Team discussing in project chat", icon: "💬", delay: 30000 },
+            { text: "Design assets updated", icon: "🎨", delay: 45000 }
+        ];
+
+        liveUpdates.forEach(update => {
+            setTimeout(() => {
+                addTimelineEntry(update.text, update.icon);
+            }, update.delay);
+        });
+
+        // Share functionality
+        document.querySelector('.btn-secondary').addEventListener('click', function() {
+            navigator.clipboard.writeText(window.location.href);
+            this.textContent = 'Link Copied!';
+            setTimeout(() => {
+                this.textContent = 'Share Project';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

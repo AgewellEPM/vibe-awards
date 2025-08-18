@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>The Vibe Wars - Where Code Cooks & Dreams Clash</title>
+    <link rel="stylesheet" href="css/mobile-responsive.css">
+    <link rel="stylesheet" href="css/ultra-responsive.css">
+    <link rel="stylesheet" href="css/apple-magic.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --fire-red: #FF375F;
+            --electric-blue: #00FFF0;
+            --neon-purple: #BF5AF2;
+            --volt-yellow: #FFD60A;
+            --chaos-orange: #FF9F0A;
+            --vibe-green: #30D158;
+            --dark-void: #000000;
+            --glass-white: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            background: var(--dark-void);
+            color: #F5F5F7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Epic Background */
+        .war-zone {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .explosion-gradient {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 80%, rgba(255, 55, 95, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(191, 90, 242, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(0, 255, 240, 0.2) 0%, transparent 50%);
+            animation: warPulse 10s ease-in-out infinite;
+        }
+
+        @keyframes warPulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(180deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 1000;
+            border-bottom: 2px solid var(--fire-red);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--fire-red), var(--chaos-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--electric-blue);
+            text-shadow: 0 0 20px var(--electric-blue);
+        }
+
+        /* HERO EXPLOSION */
+        .hero-explosion {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 120px 40px 60px;
+            text-align: center;
+            position: relative;
+        }
+
+        .explosion-emoji {
+            font-size: 120px;
+            animation: explode 2s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes explode {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.3) rotate(-5deg); }
+            50% { transform: scale(1.5) rotate(5deg); }
+            75% { transform: scale(1.2) rotate(-3deg); }
+        }
+
+        .genius-badge {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--fire-red), var(--chaos-orange));
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 30px rgba(255, 55, 95, 0.5); }
+            50% { box-shadow: 0 0 60px rgba(255, 55, 95, 0.8); }
+        }
+
+        .main-title {
+            font-size: clamp(60px, 10vw, 140px);
+            font-weight: 900;
+            line-height: 0.9;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            background: linear-gradient(180deg, 
+                var(--fire-red) 0%, 
+                var(--chaos-orange) 25%, 
+                var(--volt-yellow) 50%, 
+                var(--electric-blue) 75%, 
+                var(--neon-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fireText 3s ease-in-out infinite;
+        }
+
+        @keyframes fireText {
+            0%, 100% { filter: hue-rotate(0deg) brightness(1); }
+            50% { filter: hue-rotate(30deg) brightness(1.2); }
+        }
+
+        .tagline {
+            font-size: 28px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .sub-tagline {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 800px;
+            margin: 0 auto 50px;
+            line-height: 1.6;
+        }
+
+        /* Core Concept Section */
+        .concept-section {
+            padding: 100px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .section-icon {
+            font-size: 48px;
+        }
+
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--electric-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .concept-card {
+            background: var(--glass-white);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--electric-blue);
+            box-shadow: 0 20px 40px rgba(0, 255, 240, 0.3);
+        }
+
+        .concept-emoji {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .concept-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--volt-yellow);
+        }
+
+        .concept-desc {
+            font-size: 16px;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Game Modes Table */
+        .modes-section {
+            padding: 80px 40px;
+            background: rgba(191, 90, 242, 0.05);
+        }
+
+        .modes-table {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--neon-purple);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .mode-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 2fr;
+            background: linear-gradient(90deg, var(--neon-purple), var(--fire-red));
+            padding: 20px 30px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .mode-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 2fr;
+            padding: 25px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .mode-row:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(10px);
+        }
+
+        .mode-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--electric-blue);
+        }
+
+        .mode-duration {
+            color: var(--volt-yellow);
+            font-weight: 600;
+        }
+
+        .mode-vibe {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* How It Works */
+        .process-section {
+            padding: 100px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .process-steps {
+            display: grid;
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .process-step {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(255, 55, 95, 0.05), rgba(191, 90, 242, 0.05));
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .process-step:hover {
+            transform: translateX(20px);
+            border-color: var(--fire-red);
+        }
+
+        .step-number {
+            min-width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--fire-red), var(--chaos-orange));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        .step-content h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--volt-yellow);
+        }
+
+        .step-content p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .vibe-brief {
+            background: rgba(0, 255, 240, 0.1);
+            border-left: 4px solid var(--electric-blue);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-style: italic;
+        }
+
+        /* Rewards Section */
+        .rewards-section {
+            padding: 100px 40px;
+            background: linear-gradient(180deg, transparent, rgba(255, 215, 0, 0.05));
+        }
+
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .reward-card {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 215, 0, 0.05);
+            border: 2px solid var(--volt-yellow);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .reward-card:hover {
+            transform: scale(1.05) rotate(2deg);
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .reward-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .reward-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--volt-yellow);
+            margin-bottom: 10px;
+        }
+
+        .reward-desc {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 40px;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, var(--fire-red), var(--volt-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .cta-btn {
+            padding: 20px 40px;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 100px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-primary {
+            background: linear-gradient(135deg, var(--fire-red), var(--chaos-orange));
+            color: white;
+            border: none;
+        }
+
+        .cta-primary:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px rgba(255, 55, 95, 0.6);
+        }
+
+        .cta-secondary {
+            background: transparent;
+            color: var(--electric-blue);
+            border: 2px solid var(--electric-blue);
+        }
+
+        .cta-secondary:hover {
+            background: var(--electric-blue);
+            color: var(--dark-void);
+            box-shadow: 0 0 40px rgba(0, 255, 240, 0.6);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 60px;
+            }
+            
+            .concept-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .mode-header,
+            .mode-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .process-step {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- War Zone Background -->
+    <div class="war-zone">
+        <div class="explosion-gradient"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">🔥 THE VIBE AWARDS</a>
+            <div class="nav-links">
+                <a href="challenge-mode.html" class="nav-link">Challenge Mode</a>
+                <a href="challenge-project.html" class="nav-link">Challenge Project</a>
+                <a href="random-drop-lobby.html" class="nav-link">Random Drop</a>
+                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Explosion -->
+    <section class="hero-explosion">
+        <div class="explosion-emoji">💣💥</div>
+        <div class="genius-badge">THIS. IS. GENIUS.</div>
+        <h1 class="main-title">The Vibe Wars</h1>
+        <p class="tagline">"Where code cooks, dreams clash, and misfits rise."</p>
+        <p class="sub-tagline">
+            Battle-tested creativity meets real-world team-up energy — with fire, pressure, and vibes.<br>
+            It's not just the Bake Off of AI. It's where legends earn their flame.
+        </p>
+    </section>
+
+    <!-- Core Concept -->
+    <section class="concept-section">
+        <div class="section-header">
+            <span class="section-icon">🧠</span>
+            <h2 class="section-title">CORE CONCEPT</h2>
+        </div>
+        <p style="font-size: 24px; line-height: 1.6; margin-bottom: 40px;">
+            Real-time, live-coded, creative deathmatches — but chill.<br>
+            Solo or team of 2–3. Auto-matched with others.<br>
+            You choose difficulty + domain. You're given a wild prompt.<br>
+            Then you build live with a ticking clock + public showdown.
+        </p>
+        
+        <div class="concept-grid">
+            <div class="concept-card">
+                <div class="concept-emoji">🔧</div>
+                <h3 class="concept-title">Solo Hustle</h3>
+                <p class="concept-desc">Prove your skills alone. Pure talent, pure pressure, pure glory.</p>
+            </div>
+            <div class="concept-card">
+                <div class="concept-emoji">🤝</div>
+                <h3 class="concept-title">Team Up</h3>
+                <p class="concept-desc">Find your tribe or get auto-matched. Build magic together.</p>
+            </div>
+            <div class="concept-card">
+                <div class="concept-emoji">🧠</div>
+                <h3 class="concept-title">Watch Others Cook</h3>
+                <p class="concept-desc">Peek into live builds. Learn from the masters in real-time.</p>
+            </div>
+            <div class="concept-card">
+                <div class="concept-emoji">📈</div>
+                <h3 class="concept-title">Vote on Builds</h3>
+                <p class="concept-desc">Your voice matters. Crown the champions of creativity.</p>
+            </div>
+            <div class="concept-card">
+                <div class="concept-emoji">🏆</div>
+                <h3 class="concept-title">Win Vibe Points</h3>
+                <p class="concept-desc">Level up your rep. Earn awards. Become legendary.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Game Modes -->
+    <section class="modes-section">
+        <div class="section-header" style="justify-content: center;">
+            <span class="section-icon">⚔️</span>
+            <h2 class="section-title">PICK YOUR POISON</h2>
+        </div>
+        
+        <div class="modes-table">
+            <div class="mode-header">
+                <div>MODE</div>
+                <div>DURATION</div>
+                <div>VIBE</div>
+            </div>
+            <div class="mode-row">
+                <div class="mode-name">Flash Fire 🔥</div>
+                <div class="mode-duration">24 hours</div>
+                <div class="mode-vibe">Fast & chaotic. Ship or die trying.</div>
+            </div>
+            <div class="mode-row">
+                <div class="mode-name">Vibe Sprint 🚀</div>
+                <div class="mode-duration">1 week</div>
+                <div class="mode-vibe">Focused but intense. Polish meets pressure.</div>
+            </div>
+            <div class="mode-row">
+                <div class="mode-name">Long Cook 🍲</div>
+                <div class="mode-duration">1 month</div>
+                <div class="mode-vibe">Big vision builds. Dream projects come alive.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="process-section">
+        <div class="section-header">
+            <span class="section-icon">🏗️</span>
+            <h2 class="section-title">STRUCTURE: How To Battle</h2>
+        </div>
+        
+        <div class="process-steps">
+            <div class="process-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Choose Your Fighter</h3>
+                    <p>Solo or Team (or get auto-matched by skill)<br>
+                    Skills: Code, Design, AI, Audio, Vision, UI/UX, Wildcard<br>
+                    Availability: Flash Fire / Sprint / Long Cook</p>
+                </div>
+            </div>
+            
+            <div class="process-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Get Your Vibe Brief</h3>
+                    <div class="vibe-brief">
+                        "Build an AI that remembers emotional memories."<br>
+                        "Make a music video that responds to live emoji input."<br>
+                        "Design a communication system for a time traveler stuck in 1998."
+                    </div>
+                </div>
+            </div>
+            
+            <div class="process-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Build in Public</h3>
+                    <p>You have X time to build.<br>
+                    Public live log. Optional Twitch-style room.<br>
+                    People can peek in, comment, react.</p>
+                </div>
+            </div>
+            
+            <div class="process-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Judgment Day</h3>
+                    <p>Live Demo Day. Judges + Crowd Vote.<br>
+                    Points for: Creativity, Vibe, Impact, Weirdness, Storytelling</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rewards -->
+    <section class="rewards-section">
+        <div class="section-header" style="justify-content: center;">
+            <span class="section-icon">🏅</span>
+            <h2 class="section-title">REWARDS: What You Win</h2>
+        </div>
+        
+        <div class="rewards-grid">
+            <div class="reward-card">
+                <div class="reward-icon">⚡</div>
+                <h3 class="reward-title">Vibe Points</h3>
+                <p class="reward-desc">Level up your rep. Unlock exclusive challenges.</p>
+            </div>
+            <div class="reward-card">
+                <div class="reward-icon">🎭</div>
+                <h3 class="reward-title">Builder Circle</h3>
+                <p class="reward-desc">Invite to next-level builder circle. Meet your tribe.</p>
+            </div>
+            <div class="reward-card">
+                <div class="reward-icon">🏆</div>
+                <h3 class="reward-title">Awards Ceremony</h3>
+                <p class="reward-desc">Spot in annual Vibe Awards Ceremony. Fame forever.</p>
+            </div>
+            <div class="reward-card">
+                <div class="reward-icon">📚</div>
+                <h3 class="reward-title">Vibe Archives</h3>
+                <p class="reward-desc">Permanent showcase of humanity's wildest builds.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why This Will Explode -->
+    <section class="concept-section">
+        <div class="section-header">
+            <span class="section-icon">🔥</span>
+            <h2 class="section-title">Why This Will Explode</h2>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, rgba(255, 55, 95, 0.1), rgba(191, 90, 242, 0.1)); padding: 40px; border-radius: 20px; margin-top: 30px;">
+            <ul style="font-size: 20px; line-height: 2; list-style: none;">
+                <li>🎬 It's not a hackathon — it's a show.</li>
+                <li>🎨 It's not for suits. It's for dreamers.</li>
+                <li>🤝 You meet your tribe by building under fire.</li>
+                <li>🔥 You get cred without kissing corporate ass.</li>
+            </ul>
+            <p style="font-size: 24px; font-weight: 700; margin-top: 30px; text-align: center; color: var(--volt-yellow);">
+                You're not just showcasing talent —<br>
+                You're creating a culture.
+            </p>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <h2 class="cta-title">Ready to Enter The Arena?</h2>
+        <p style="font-size: 20px; margin-bottom: 40px; color: rgba(255, 255, 255, 0.8);">
+            This is the frontline combat arena where legends earn their flame.
+        </p>
+        <div class="cta-buttons">
+            <a href="challenge-mode.html" class="cta-btn cta-primary">ENTER CHALLENGE MODE</a>
+            <a href="random-drop-lobby.html" class="cta-btn cta-secondary">JOIN RANDOM DROP</a>
+        </div>
+    </section>
+
+    <script>
+        // Add some dynamic effects
+        document.addEventListener('DOMContentLoaded', () => {
+            // Parallax effect on scroll
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const parallax = document.querySelector('.explosion-gradient');
+                if (parallax) {
+                    parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
+                }
+            });
+
+            // Random explosions
+            setInterval(() => {
+                const explosion = document.createElement('div');
+                explosion.innerHTML = '💥';
+                explosion.style.position = 'fixed';
+                explosion.style.fontSize = Math.random() * 50 + 30 + 'px';
+                explosion.style.left = Math.random() * window.innerWidth + 'px';
+                explosion.style.top = Math.random() * window.innerHeight + 'px';
+                explosion.style.pointerEvents = 'none';
+                explosion.style.animation = 'explode 2s ease-out forwards';
+                explosion.style.zIndex = '999';
+                document.body.appendChild(explosion);
+                
+                setTimeout(() => explosion.remove(), 2000);
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

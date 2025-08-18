@@ -1,0 +1,25 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://vibeawards.com/sitemap.xml
+
+# Priority crawling for vibe coding content
+Allow: /competition.html
+Allow: /vibe-forge.html
+Allow: /battle-arena.html
+Allow: /app-battle-arena.html
+Allow: /team-up.html
+Allow: /leaderboard.html
+
+# Allow crawling of main pages
+Allow: /index.html
+Allow: /
+
+# Disallow admin or temporary files
+Disallow: /admin/
+Disallow: /temp/
+Disallow: /*.log
+
+# Crawl delay for better server performance
+Crawl-delay: 1

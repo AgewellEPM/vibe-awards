@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What is Vibe Coding? - The Vibe Awards</title>
+    <link rel="stylesheet" href="css/mobile-responsive.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-gray: #86868B;
+            --apple-light-gray: #F5F5F7;
+            --apple-dark: #1D1D1F;
+            --apple-green: #30D158;
+            --apple-red: #FF375F;
+            --apple-orange: #FF9F0A;
+            --apple-purple: #BF5AF2;
+            --apple-teal: #5AC8FA;
+            --apple-indigo: #5856D6;
+            --apple-yellow: #FFD60A;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+
+        .page-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: radial-gradient(circle at 30% 20%, rgba(191, 90, 242, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(88, 86, 214, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 20% 70%, rgba(0, 113, 227, 0.08) 0%, transparent 50%);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            z-index: 9999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #F5F5F7;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #F5F5F7;
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 24px 80px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 40px;
+        }
+
+        .breadcrumb a {
+            color: var(--apple-blue);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .breadcrumb span {
+            color: rgba(245, 245, 247, 0.6);
+            margin: 0 8px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 32px;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 24px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 48px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .intro-section {
+            margin-bottom: 80px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-header h2 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .section-header p {
+            font-size: 20px;
+            color: rgba(245, 245, 247, 0.8);
+        }
+
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 80px;
+        }
+
+        .comparison-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .comparison-card.old-way {
+            border-color: rgba(255, 55, 95, 0.3);
+        }
+
+        .comparison-card.vibe-way {
+            border-color: rgba(48, 209, 88, 0.3);
+            background: rgba(48, 209, 88, 0.05);
+        }
+
+        .comparison-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .comparison-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .old-way .comparison-icon {
+            background: linear-gradient(135deg, var(--apple-red), var(--apple-orange));
+        }
+
+        .vibe-way .comparison-icon {
+            background: linear-gradient(135deg, var(--apple-green), var(--apple-teal));
+        }
+
+        .comparison-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .comparison-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .comparison-list li {
+            padding: 12px 0;
+            color: rgba(245, 245, 247, 0.8);
+            font-size: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .comparison-list li::before {
+            content: '×';
+            color: var(--apple-red);
+            font-weight: bold;
+            font-size: 20px;
+            margin-top: -4px;
+        }
+
+        .vibe-way .comparison-list li::before {
+            content: '✓';
+            color: var(--apple-green);
+        }
+
+        .code-example {
+            background: #1a1a1c;
+            border-radius: 24px;
+            padding: 48px;
+            margin-bottom: 60px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .code-dot.red { background: #FF5F57; }
+        .code-dot.yellow { background: #FFBD2E; }
+        .code-dot.green { background: #28CA42; }
+
+        .code-title {
+            margin-left: auto;
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .code-content {
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+        }
+
+        .code-block {
+            margin-bottom: 32px;
+        }
+
+        .code-block h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: var(--apple-teal);
+        }
+
+        .code-line {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+        }
+
+        .comment {
+            color: var(--apple-green);
+            font-style: italic;
+        }
+
+        .keyword {
+            color: var(--apple-purple);
+            font-weight: bold;
+        }
+
+        .string {
+            color: var(--apple-orange);
+        }
+
+        .function {
+            color: var(--apple-blue);
+        }
+
+        .prompt-example {
+            background: linear-gradient(135deg, rgba(88, 86, 214, 0.1), rgba(191, 90, 242, 0.1));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .prompt-label {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--apple-purple);
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .prompt-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #F5F5F7;
+            margin-bottom: 16px;
+        }
+
+        .ai-response {
+            background: rgba(0, 113, 227, 0.1);
+            border: 1px solid rgba(0, 113, 227, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 16px;
+        }
+
+        .ai-label {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--apple-blue);
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .timeline-section {
+            margin-bottom: 80px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--apple-purple), var(--apple-blue));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+            padding-left: 40px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -30px;
+            top: 8px;
+            width: 20px;
+            height: 20px;
+            background: var(--apple-purple);
+            border: 3px solid #000;
+            border-radius: 50%;
+        }
+
+        .timeline-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .timeline-description {
+            color: rgba(245, 245, 247, 0.8);
+            font-size: 16px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--apple-teal), var(--apple-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            color: rgba(245, 245, 247, 0.8);
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, rgba(88, 86, 214, 0.1), rgba(191, 90, 242, 0.1));
+            border-radius: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 60px;
+        }
+
+        .cta-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .cta-subtitle {
+            font-size: 18px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 32px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            color: white;
+            text-decoration: none;
+            border-radius: 24px;
+            font-size: 17px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 113, 227, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="page-background"></div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span>🏆</span>
+                <span>The Vibe Awards</span>
+            </a>
+            <div class="nav-menu">
+                <a href="getting-started.html" class="nav-link">Getting Started</a>
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="apple-magic-battle.html" class="nav-link">Battle Arena</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+                <a href="submit-app.html" class="nav-link">Submit App</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="breadcrumb">
+            <a href="getting-started.html">Getting Started</a>
+            <span>→</span>
+            <span>What is Vibe Coding?</span>
+        </div>
+
+        <div class="hero">
+            <div class="hero-badge">🎯 The Revolution</div>
+            <h1 class="hero-title">What is Vibe Coding?</h1>
+            <p class="hero-subtitle">
+                Building apps through conversation with AI. No memorizing syntax. No debugging for hours. Just pure creation through natural language.
+            </p>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">10x</div>
+                <div class="stat-label">Faster Development</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Years of Experience Needed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Focus on Ideas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">∞</div>
+                <div class="stat-label">Possibilities</div>
+            </div>
+        </div>
+
+        <!-- Old Way vs Vibe Way -->
+        <div class="intro-section">
+            <div class="section-header">
+                <h2>The Old Way vs The Vibe Way</h2>
+                <p>See how vibe-coding changes everything</p>
+            </div>
+
+            <div class="comparison-container">
+                <div class="comparison-card old-way">
+                    <div class="comparison-header">
+                        <div class="comparison-icon">💀</div>
+                        <h3 class="comparison-title">Traditional Coding</h3>
+                    </div>
+                    <ul class="comparison-list">
+                        <li>Spend years learning syntax</li>
+                        <li>Debug cryptic error messages</li>
+                        <li>Stack Overflow copy-paste hell</li>
+                        <li>Forget a semicolon, break everything</li>
+                        <li>10 hours to build a simple form</li>
+                        <li>Need 5 different tools to start</li>
+                        <li>Impostor syndrome forever</li>
+                    </ul>
+                </div>
+
+                <div class="comparison-card vibe-way">
+                    <div class="comparison-header">
+                        <div class="comparison-icon">✨</div>
+                        <h3 class="comparison-title">Vibe Coding</h3>
+                    </div>
+                    <ul class="comparison-list">
+                        <li>Start building in minutes</li>
+                        <li>AI explains and fixes errors</li>
+                        <li>Describe what you want in English</li>
+                        <li>AI handles all the syntax</li>
+                        <li>10 minutes to build anything</li>
+                        <li>Just you and the AI</li>
+                        <li>Feel like a wizard immediately</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Live Example Section -->
+        <div class="intro-section">
+            <div class="section-header">
+                <h2>See The Magic In Action</h2>
+                <p>Watch how a simple conversation becomes a real app</p>
+            </div>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <div class="code-dot red"></div>
+                    <div class="code-dot yellow"></div>
+                    <div class="code-dot green"></div>
+                    <div class="code-title">Vibe Coding Session - Building a Todo App</div>
+                </div>
+                
+                <div class="code-content">
+                    <div class="prompt-example">
+                        <div class="prompt-label">YOU</div>
+                        <div class="prompt-text">
+                            "Create a todo app that looks like Apple's Reminders app. I want it to have categories, due dates, and a really smooth animation when I complete tasks. Make it feel magical."
+                        </div>
+                    </div>
+
+                    <div class="ai-response">
+                        <div class="ai-label">CLAUDE</div>
+                        <div style="color: rgba(245, 245, 247, 0.9);">
+                            I'll create a beautiful todo app inspired by Apple's design language. Let me build this with smooth animations and a magical feel...
+                        </div>
+                    </div>
+
+                    <div class="code-block" style="margin-top: 24px;">
+                        <h3>✨ AI Creates This Instantly:</h3>
+                        <div class="code-line">
+                            <span class="comment">// Beautiful React component with animations</span><br>
+                            <span class="keyword">const</span> <span class="function">TodoApp</span> = () => {<br>
+                            &nbsp;&nbsp;<span class="keyword">const</span> [todos, setTodos] = <span class="function">useState</span>([]);<br>
+                            &nbsp;&nbsp;<span class="keyword">const</span> [categories] = <span class="function">useState</span>([<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="string">'🏠 Personal'</span>,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="string">'💼 Work'</span>,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="string">'🎯 Goals'</span><br>
+                            &nbsp;&nbsp;]);<br><br>
+                            &nbsp;&nbsp;<span class="comment">// Magical completion animation</span><br>
+                            &nbsp;&nbsp;<span class="keyword">const</span> <span class="function">completeTodo</span> = (id) => {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// AI adds beautiful animations automatically</span><br>
+                            &nbsp;&nbsp;};<br>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="prompt-example" style="margin-top: 24px;">
+                        <div class="prompt-label">YOU</div>
+                        <div class="prompt-text">
+                            "Add a confetti animation when someone completes all their tasks for the day"
+                        </div>
+                    </div>
+
+                    <div class="ai-response">
+                        <div class="ai-label">CLAUDE</div>
+                        <div style="color: rgba(245, 245, 247, 0.9);">
+                            Great idea! I'll add a celebratory confetti animation. This will make users feel accomplished...
+                            <br><br>
+                            *Adds confetti library and celebration logic in seconds*
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="intro-section">
+            <div class="section-header">
+                <h2>How Vibe Coding Works</h2>
+                <p>Your journey from idea to live app</p>
+            </div>
+
+            <div class="timeline-section">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <h3 class="timeline-title">1. Describe Your Vision</h3>
+                        <p class="timeline-description">
+                            Tell the AI what you want to build in plain English. Be creative, be specific, be ambitious.
+                        </p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <h3 class="timeline-title">2. AI Understands & Creates</h3>
+                        <p class="timeline-description">
+                            Claude, ChatGPT, or Cursor instantly generates professional code that matches your vision.
+                        </p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <h3 class="timeline-title">3. Iterate Through Conversation</h3>
+                        <p class="timeline-description">
+                            Don't like something? Just tell the AI. "Make it more colorful" or "Add a dark mode" - done!
+                        </p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <h3 class="timeline-title">4. Deploy & Share</h3>
+                        <p class="timeline-description">
+                            Your app is live in minutes. Share with the world, enter battles, win prizes.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real Examples -->
+        <div class="intro-section">
+            <div class="section-header">
+                <h2>Apps Built With Pure Vibes</h2>
+                <p>Real apps created by people who never coded before</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div style="font-size: 48px; margin-bottom: 16px;">🏥</div>
+                    <h3 style="font-size: 20px; margin-bottom: 8px;">TinkyBink AAC</h3>
+                    <p style="font-size: 14px; color: rgba(245, 245, 247, 0.7);">
+                        Medical app for non-verbal patients. Built by a parent, not a programmer.
+                    </p>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 48px; margin-bottom: 16px;">🎮</div>
+                    <h3 style="font-size: 20px; margin-bottom: 8px;">RetroVibe Games</h3>
+                    <p style="font-size: 14px; color: rgba(245, 245, 247, 0.7);">
+                        Full gaming platform. Created by a 16-year-old in one weekend.
+                    </p>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 48px; margin-bottom: 16px;">🎵</div>
+                    <h3 style="font-size: 20px; margin-bottom: 8px;">BeatFlow AI</h3>
+                    <p style="font-size: 14px; color: rgba(245, 245, 247, 0.7);">
+                        Music production app. Built by a DJ who just described the perfect workflow.
+                    </p>
+                </div>
+                <div class="stat-card">
+                    <div style="font-size: 48px; margin-bottom: 16px;">📚</div>
+                    <h3 style="font-size: 20px; margin-bottom: 8px;">StudyVibe</h3>
+                    <p style="font-size: 14px; color: rgba(245, 245, 247, 0.7);">
+                        AI study buddy. Created by a teacher through natural conversation.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- The Vibe Philosophy -->
+        <div class="intro-section">
+            <div class="section-header">
+                <h2>The Vibe Philosophy</h2>
+                <p>Why we believe this is the future</p>
+            </div>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <div class="code-dot red"></div>
+                    <div class="code-dot yellow"></div>
+                    <div class="code-dot green"></div>
+                    <div class="code-title">Our Manifesto</div>
+                </div>
+                
+                <div class="code-content">
+                    <div style="font-size: 20px; line-height: 1.8; color: #F5F5F7;">
+                        <p style="margin-bottom: 24px;">
+                            <strong style="color: var(--apple-purple);">Ideas > Syntax</strong><br>
+                            Your creativity matters more than knowing JavaScript
+                        </p>
+                        <p style="margin-bottom: 24px;">
+                            <strong style="color: var(--apple-blue);">Speed > Perfection</strong><br>
+                            Ship fast, iterate through conversation
+                        </p>
+                        <p style="margin-bottom: 24px;">
+                            <strong style="color: var(--apple-green);">Magic > Logic</strong><br>
+                            If it feels amazing, you're doing it right
+                        </p>
+                        <p style="margin-bottom: 24px;">
+                            <strong style="color: var(--apple-orange);">Everyone > Gatekeepers</strong><br>
+                            Building apps is for everyone, not just "developers"
+                        </p>
+                        <p>
+                            <strong style="color: var(--apple-teal);">Fun > Frustration</strong><br>
+                            Coding should feel like playing, not suffering
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Who Can Vibe Code -->
+        <div class="intro-section">
+            <div class="section-header">
+                <h2>Who Can Vibe Code?</h2>
+                <p>Spoiler: Everyone</p>
+            </div>
+
+            <div class="comparison-container">
+                <div class="comparison-card vibe-way">
+                    <div class="comparison-header">
+                        <div class="comparison-icon">👨‍🎨</div>
+                        <h3 class="comparison-title">Designers</h3>
+                    </div>
+                    <p style="color: rgba(245, 245, 247, 0.8); font-size: 16px;">
+                        "Make it look like Figma but with glassmorphism and micro-interactions"
+                    </p>
+                </div>
+
+                <div class="comparison-card vibe-way">
+                    <div class="comparison-header">
+                        <div class="comparison-icon">👩‍💼</div>
+                        <h3 class="comparison-title">Entrepreneurs</h3>
+                    </div>
+                    <p style="color: rgba(245, 245, 247, 0.8); font-size: 16px;">
+                        "Build me a SaaS that tracks customer happiness with AI sentiment analysis"
+                    </p>
+                </div>
+
+                <div class="comparison-card vibe-way">
+                    <div class="comparison-header">
+                        <div class="comparison-icon">👨‍🏫</div>
+                        <h3 class="comparison-title">Teachers</h3>
+                    </div>
+                    <p style="color: rgba(245, 245, 247, 0.8); font-size: 16px;">
+                        "Create an app that makes learning multiplication tables feel like a game"
+                    </p>
+                </div>
+
+                <div class="comparison-card vibe-way">
+                    <div class="comparison-header">
+                        <div class="comparison-icon">👩‍🎤</div>
+                        <h3 class="comparison-title">Artists</h3>
+                    </div>
+                    <p style="color: rgba(245, 245, 247, 0.8); font-size: 16px;">
+                        "I want an interactive portfolio that responds to music"
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2 class="cta-title">Ready to Start Vibing?</h2>
+            <p class="cta-subtitle">
+                Your first app is just a conversation away. No experience needed. Just ideas and enthusiasm.
+            </p>
+            <a href="getting-started-quickstart.html" class="cta-button">Start Your First App Now →</a>
+        </div>
+    </div>
+</body>
+</html>

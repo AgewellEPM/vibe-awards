@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Brainstorm - AI-Powered Team Workspace</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-pink: #FF10F0;
+            --neon-blue: #00FFF0;
+            --neon-purple: #9D00FF;
+            --neon-green: #39FF14;
+            --neon-orange: #FF6600;
+            --neon-yellow: #FFFF00;
+            --dark-bg: #0A0A0A;
+            --panel-bg: #1A1A1A;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark-bg);
+            color: #F5F5F7;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Infinite Canvas */
+        .canvas-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: 
+                radial-gradient(circle, rgba(157, 0, 255, 0.05) 1px, transparent 1px),
+                radial-gradient(circle, rgba(0, 255, 240, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px, 50px 50px;
+            background-position: 0 0, 25px 25px;
+        }
+
+        .infinite-canvas {
+            position: absolute;
+            width: 10000px;
+            height: 10000px;
+            top: -4950px;
+            left: -4950px;
+            cursor: grab;
+            transition: none;
+        }
+
+        .infinite-canvas.grabbing {
+            cursor: grabbing;
+        }
+
+        /* Top Toolbar */
+        .top-toolbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 1000;
+        }
+
+        .team-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .team-name {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .challenge-timer {
+            padding: 10px 20px;
+            background: rgba(255, 16, 240, 0.1);
+            border: 1px solid var(--neon-pink);
+            border-radius: 10px;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .team-avatars {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .team-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
+            border: 3px solid var(--dark-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .team-avatar:hover {
+            transform: scale(1.1);
+            border-color: var(--neon-blue);
+            box-shadow: 0 6px 20px rgba(0, 255, 240, 0.4);
+        }
+
+        .team-avatar.online::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 16px;
+            height: 16px;
+            background: var(--neon-green);
+            border: 3px solid var(--dark-bg);
+            border-radius: 50%;
+            animation: onlinePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes onlinePulse {
+            0%, 100% { box-shadow: 0 0 8px rgba(57, 255, 20, 0.5); }
+            50% { box-shadow: 0 0 16px rgba(57, 255, 20, 0.8); }
+        }
+
+        .team-avatar.coder { background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple)); }
+        .team-avatar.designer { background: linear-gradient(135deg, var(--neon-pink), var(--neon-orange)); }
+        .team-avatar.marketer { background: linear-gradient(135deg, var(--neon-orange), var(--neon-yellow)); }
+        .team-avatar.video { background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink)); }
+        .team-avatar.bizops { background: linear-gradient(135deg, var(--neon-green), var(--neon-blue)); }
+
+        /* Left Sidebar - Tools */
+        .tools-sidebar {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            width: 80px;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            gap: 15px;
+            z-index: 999;
+        }
+
+        .tool-btn {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tool-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.1);
+        }
+
+        .tool-btn.active {
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+            border-color: var(--neon-pink);
+        }
+
+        .tool-tooltip {
+            position: absolute;
+            left: 65px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .tool-btn:hover .tool-tooltip {
+            opacity: 1;
+        }
+
+        /* Right Sidebar - AI Assistant */
+        .ai-sidebar {
+            position: fixed;
+            top: 80px;
+            right: 0;
+            width: 400px;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            z-index: 999;
+            transform: translateX(400px);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .ai-sidebar.open {
+            transform: translateX(0);
+        }
+
+        .ai-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .ai-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .ai-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ai-suggestions {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .ai-suggestions::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .ai-suggestions::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        .ai-suggestions::-webkit-scrollbar-thumb {
+            background: var(--neon-blue);
+            border-radius: 3px;
+        }
+
+        .suggestion-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.06));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .suggestion-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 240, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .suggestion-card:hover::before {
+            left: 100%;
+        }
+
+        .suggestion-card:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.12));
+            transform: translateX(-8px) translateY(-2px);
+            border-color: var(--neon-blue);
+            box-shadow: 0 8px 32px rgba(0, 255, 240, 0.2);
+        }
+
+        .suggestion-title {
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--neon-blue);
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .suggestion-text {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        .suggestion-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: rgba(0, 255, 240, 0.2);
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 12px;
+        }
+
+        .ai-input-area {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .ai-input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            resize: none;
+        }
+
+        .ai-input:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Canvas Elements */
+        .canvas-element {
+            position: absolute;
+            min-width: 200px;
+            min-height: 100px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            cursor: move;
+            transition: all 0.3s ease;
+        }
+
+        .canvas-element:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 255, 240, 0.3);
+        }
+
+        .canvas-element.selected {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 30px rgba(255, 16, 240, 0.4);
+        }
+
+        /* Sticky Note */
+        .sticky-note {
+            background: linear-gradient(135deg, rgba(255, 255, 0, 0.15), rgba(255, 159, 10, 0.15));
+            border-color: var(--neon-yellow);
+            transform: rotate(-2deg);
+            box-shadow: 0 8px 24px rgba(255, 255, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sticky-note:hover {
+            transform: rotate(0deg) scale(1.02);
+            box-shadow: 0 12px 32px rgba(255, 255, 0, 0.3);
+        }
+
+        .sticky-note.editing {
+            transform: rotate(0deg) scale(1.05);
+            border-color: var(--neon-orange);
+            box-shadow: 0 16px 40px rgba(255, 159, 10, 0.4);
+        }
+
+        .sticky-content {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neon-yellow);
+            min-height: 80px;
+            outline: none;
+            line-height: 1.4;
+            background: transparent;
+            border: none;
+            resize: none;
+            width: 100%;
+        }
+
+        .sticky-content:focus {
+            color: white;
+        }
+
+        /* Idea Card */
+        .idea-card {
+            background: linear-gradient(135deg, rgba(157, 0, 255, 0.08), rgba(0, 255, 240, 0.08));
+            border-color: var(--neon-purple);
+            min-width: 320px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .idea-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-purple), var(--neon-blue), var(--neon-purple));
+            background-size: 200% 100%;
+            animation: ideaShimmer 3s linear infinite;
+        }
+
+        @keyframes ideaShimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .idea-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--neon-purple);
+            outline: none;
+        }
+
+        .idea-description {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+            outline: none;
+        }
+
+        .idea-votes {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .vote-btn {
+            padding: 5px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .vote-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .vote-btn.voted {
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));
+            color: black;
+            font-weight: 600;
+        }
+
+        /* User Flow Diagram */
+        .flow-container {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2));
+            border: 2px dashed var(--neon-green);
+            border-radius: 24px;
+            padding: 24px;
+            min-width: 450px;
+            min-height: 320px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .flow-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 48%, rgba(57, 255, 20, 0.1) 50%, transparent 52%);
+            background-size: 20px 20px;
+            animation: flowPattern 10s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes flowPattern {
+            0% { background-position: 0 0; }
+            100% { background-position: 20px 20px; }
+        }
+
+        .flow-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--neon-green);
+        }
+
+        .flow-node {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--neon-blue);
+            border-radius: 10px;
+            padding: 12px 20px;
+            margin: 10px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .flow-node::after {
+            content: '→';
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: var(--neon-blue);
+        }
+
+        .flow-node:last-child::after {
+            display: none;
+        }
+
+        /* Image/Media Container */
+        .media-container {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            min-width: 300px;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .media-placeholder {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .media-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        .media-text {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Drawing Area */
+        .drawing-canvas {
+            background: white;
+            border-radius: 12px;
+            cursor: crosshair;
+        }
+
+        /* Cursor Indicators */
+        .cursor-indicator {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--neon-blue);
+            pointer-events: none;
+            z-index: 1000;
+            transition: all 0.1s ease;
+        }
+
+        .cursor-name {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        /* Floating Action Button */
+        .ai-fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            cursor: pointer;
+            box-shadow: 0 12px 36px rgba(0, 255, 240, 0.4);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 998;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            animation: fabPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes fabPulse {
+            0%, 100% { 
+                box-shadow: 0 12px 36px rgba(0, 255, 240, 0.4);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 16px 48px rgba(0, 255, 240, 0.6);
+                transform: scale(1.02);
+            }
+        }
+
+        .ai-fab:hover {
+            transform: scale(1.15);
+            box-shadow: 0 20px 60px rgba(0, 255, 240, 0.7);
+            animation: none;
+        }
+
+        .ai-fab.active {
+            transform: rotate(45deg) scale(1.1);
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+            box-shadow: 0 20px 60px rgba(255, 16, 240, 0.6);
+        }
+
+        /* Quick Actions Radial Menu */
+        .quick-actions {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            display: none;
+            z-index: 997;
+        }
+
+        .quick-actions.open {
+            display: block;
+        }
+
+        .quick-action {
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        .quick-actions.open .quick-action {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .quick-action:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.1);
+        }
+
+        .quick-action:nth-child(1) {
+            bottom: 0;
+            right: 70px;
+            transition-delay: 0.05s;
+        }
+
+        .quick-action:nth-child(2) {
+            bottom: 50px;
+            right: 50px;
+            transition-delay: 0.1s;
+        }
+
+        .quick-action:nth-child(3) {
+            bottom: 70px;
+            right: 0;
+            transition-delay: 0.15s;
+        }
+
+        /* Collaboration Line */
+        .collab-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));
+            transform-origin: left center;
+            pointer-events: none;
+            animation: lineFlow 2s linear infinite;
+        }
+
+        @keyframes lineFlow {
+            0% { background-position: 0 0; }
+            100% { background-position: 100px 0; }
+        }
+
+        /* Emoji Reactions */
+        .emoji-reaction {
+            position: absolute;
+            font-size: 24px;
+            animation: emojiFloat 2s ease-out forwards;
+            pointer-events: none;
+            z-index: 1001;
+        }
+
+        @keyframes emojiFloat {
+            0% {
+                transform: translateY(0) scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-30px) scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-60px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Voice Chat Indicator */
+        .voice-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 100px;
+            display: flex;
+            gap: 10px;
+            z-index: 999;
+        }
+
+        .voice-user {
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .voice-user.speaking {
+            border-color: var(--neon-green);
+            animation: speakingPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes speakingPulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(57, 255, 20, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(57, 255, 20, 0.6); }
+        }
+
+        .voice-icon {
+            width: 16px;
+            height: 16px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            animation: voicePulse 1s ease-in-out infinite;
+        }
+
+        @keyframes voicePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Canvas Container -->
+    <div class="canvas-container" id="canvasContainer">
+        <div class="infinite-canvas" id="infiniteCanvas">
+            <!-- Sticky Note -->
+            <div class="canvas-element sticky-note" style="top: 5100px; left: 5100px;">
+                <div class="sticky-content" contenteditable="true">
+                    💡 What if we build a marketplace for AI agents?
+                </div>
+            </div>
+
+            <!-- Idea Card -->
+            <div class="canvas-element idea-card" style="top: 5200px; left: 5400px;">
+                <div class="idea-title" contenteditable="true">User Onboarding Flow</div>
+                <div class="idea-description" contenteditable="true">
+                    1. Magic link signup<br>
+                    2. Select interests<br>
+                    3. AI personalizes dashboard<br>
+                    4. First achievement unlock
+                </div>
+                <div class="idea-votes">
+                    <button class="vote-btn voted">👍 3</button>
+                    <button class="vote-btn">🔥 1</button>
+                    <button class="vote-btn">❤️ 2</button>
+                </div>
+            </div>
+
+            <!-- Flow Diagram -->
+            <div class="canvas-element flow-container" style="top: 5400px; left: 5100px;">
+                <div class="flow-title">MVP Features</div>
+                <div class="flow-node">Sign Up</div>
+                <div class="flow-node">Profile</div>
+                <div class="flow-node">Dashboard</div>
+                <div class="flow-node">Launch!</div>
+            </div>
+
+            <!-- Media Placeholder -->
+            <div class="canvas-element media-container" style="top: 5100px; left: 5600px;">
+                <div class="media-placeholder">
+                    <div class="media-icon">🖼️</div>
+                    <div class="media-text">Drop mockups here</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Other users' cursors -->
+        <div class="cursor-indicator" style="top: 300px; left: 500px;">
+            <span class="cursor-name">Sarah</span>
+        </div>
+    </div>
+
+    <!-- Top Toolbar -->
+    <div class="top-toolbar">
+        <div class="team-info">
+            <div class="team-name">Team Alpha</div>
+            <div class="challenge-timer">⏱️ 23:47:18</div>
+        </div>
+        
+        <div class="team-avatars">
+            <div class="team-avatar coder online" title="Alex Kim - Coder">AK</div>
+            <div class="team-avatar designer online" title="Sarah Rodriguez - Designer">SR</div>
+            <div class="team-avatar marketer online" title="Marcus Johnson - Marketer">MJ</div>
+            <div class="team-avatar video" title="Lisa Park - Video (away)">LP</div>
+            <div class="team-avatar bizops online" title="You - Biz Ops">YOU</div>
+        </div>
+    </div>
+
+    <!-- Left Tools Sidebar -->
+    <div class="tools-sidebar">
+        <div class="tool-btn active" onclick="selectTool('cursor')">
+            <span>👆</span>
+            <span class="tool-tooltip">Select</span>
+        </div>
+        <div class="tool-btn" onclick="selectTool('sticky')">
+            <span>📝</span>
+            <span class="tool-tooltip">Sticky Note</span>
+        </div>
+        <div class="tool-btn" onclick="selectTool('idea')">
+            <span>💡</span>
+            <span class="tool-tooltip">Idea Card</span>
+        </div>
+        <div class="tool-btn" onclick="selectTool('flow')">
+            <span>🔀</span>
+            <span class="tool-tooltip">Flow Diagram</span>
+        </div>
+        <div class="tool-btn" onclick="selectTool('draw')">
+            <span>✏️</span>
+            <span class="tool-tooltip">Draw</span>
+        </div>
+        <div class="tool-btn" onclick="selectTool('text')">
+            <span>📄</span>
+            <span class="tool-tooltip">Text</span>
+        </div>
+        <div class="tool-btn" onclick="selectTool('image')">
+            <span>🖼️</span>
+            <span class="tool-tooltip">Image</span>
+        </div>
+        <div class="tool-btn" onclick="selectTool('emoji')">
+            <span>😀</span>
+            <span class="tool-tooltip">Emoji</span>
+        </div>
+        <div class="tool-btn" onclick="selectTool('connect')">
+            <span>🔗</span>
+            <span class="tool-tooltip">Connect</span>
+        </div>
+    </div>
+
+    <!-- Right AI Sidebar -->
+    <div class="ai-sidebar" id="aiSidebar">
+        <div class="ai-header">
+            <div class="ai-title">
+                <div class="ai-icon">🤖</div>
+                <span>AI Brainstorm Assistant</span>
+            </div>
+            <button onclick="toggleAI()" style="background: none; border: none; color: white; cursor: pointer;">✕</button>
+        </div>
+        
+        <div class="ai-suggestions">
+            <div class="suggestion-card" onclick="applySuggestion(this)">
+                <div class="suggestion-title">💡 Feature Idea</div>
+                <div class="suggestion-text">
+                    Add a "Quick Share" feature that generates a shareable link with one click. Users love frictionless sharing - this could increase viral coefficient by 300%.
+                </div>
+                <div class="suggestion-badge">High Impact</div>
+            </div>
+            
+            <div class="suggestion-card" onclick="applySuggestion(this)">
+                <div class="suggestion-title">🎯 Market Insight</div>
+                <div class="suggestion-text">
+                    Your target demographic (18-24) spends 95% of time on mobile. Mobile-first design isn't optional - it's survival.
+                </div>
+                <div class="suggestion-badge">Critical</div>
+            </div>
+            
+            <div class="suggestion-card" onclick="applySuggestion(this)">
+                <div class="suggestion-title">🚀 Growth Hack</div>
+                <div class="suggestion-text">
+                    Referral system where users unlock premium features for invites. Dropbox gained 4M users this way. Could 10x your acquisition.
+                </div>
+                <div class="suggestion-badge">Proven</div>
+            </div>
+            
+            <div class="suggestion-card" onclick="applySuggestion(this)">
+                <div class="suggestion-title">⚡ Technical Stack</div>
+                <div class="suggestion-text">
+                    Next.js + Socket.io + Supabase = rapid development. Real-time features out of the box, scales to millions.
+                </div>
+                <div class="suggestion-badge">Quick Win</div>
+            </div>
+            
+            <div class="suggestion-card" onclick="applySuggestion(this)">
+                <div class="suggestion-title">🎨 UX Pattern</div>
+                <div class="suggestion-text">
+                    Dark mode toggle + system preference detection. 82% of Gen Z expect this. One line of CSS, massive user satisfaction.
+                </div>
+                <div class="suggestion-badge">Easy</div>
+            </div>
+            
+            <div class="suggestion-card" onclick="applySuggestion(this)">
+                <div class="suggestion-title">💰 Monetization</div>
+                <div class="suggestion-text">
+                    Freemium with usage limits. First 100 actions free, then $9/month. SaaS standard that users expect and accept.
+                </div>
+                <div class="suggestion-badge">Revenue</div>
+            </div>
+        </div>
+        
+        <div class="ai-input-area">
+            <textarea class="ai-input" placeholder="Ask AI anything... 'How do we monetize this?' or 'Generate 10 app names'" rows="3"></textarea>
+        </div>
+    </div>
+
+    <!-- AI Floating Action Button -->
+    <div class="ai-fab" id="aiFab" onclick="toggleAI()">
+        🤖
+    </div>
+
+    <!-- Quick Actions Radial Menu -->
+    <div class="quick-actions" id="quickActions">
+        <div class="quick-action" onclick="addSticky()">📝</div>
+        <div class="quick-action" onclick="addIdea()">💡</div>
+        <div class="quick-action" onclick="addFlow()">🔀</div>
+    </div>
+
+    <!-- Voice Chat Indicator -->
+    <div class="voice-indicator">
+        <div class="voice-user speaking">
+            <div class="voice-icon"></div>
+            <span>Alex speaking...</span>
+        </div>
+        <div class="voice-user">
+            <div class="voice-icon" style="background: rgba(255,255,255,0.3);"></div>
+            <span>Sarah</span>
+        </div>
+    </div>
+
+    <script>
+        // Canvas dragging
+        let isDragging = false;
+        let startX, startY;
+        let scrollLeft, scrollTop;
+        const canvas = document.getElementById('infiniteCanvas');
+        const container = document.getElementById('canvasContainer');
+
+        // Initialize canvas position to center
+        container.scrollLeft = 4950 - window.innerWidth / 2;
+        container.scrollTop = 4950 - window.innerHeight / 2;
+
+        container.addEventListener('mousedown', (e) => {
+            if (e.target === canvas || e.target === container) {
+                isDragging = true;
+                canvas.classList.add('grabbing');
+                startX = e.pageX - container.offsetLeft;
+                startY = e.pageY - container.offsetTop;
+                scrollLeft = container.scrollLeft;
+                scrollTop = container.scrollTop;
+            }
+        });
+
+        container.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.pageX - container.offsetLeft;
+            const y = e.pageY - container.offsetTop;
+            const walkX = (x - startX) * 1.5;
+            const walkY = (y - startY) * 1.5;
+            container.scrollLeft = scrollLeft - walkX;
+            container.scrollTop = scrollTop - walkY;
+        });
+
+        container.addEventListener('mouseup', () => {
+            isDragging = false;
+            canvas.classList.remove('grabbing');
+        });
+
+        container.addEventListener('mouseleave', () => {
+            isDragging = false;
+            canvas.classList.remove('grabbing');
+        });
+
+        // Make elements draggable
+        document.querySelectorAll('.canvas-element').forEach(element => {
+            makeElementDraggable(element);
+        });
+
+        function makeElementDraggable(element) {
+            let isDraggingElement = false;
+            let elementStartX, elementStartY;
+            let elementLeft, elementTop;
+
+            element.addEventListener('mousedown', (e) => {
+                if (e.target.getAttribute('contenteditable') === 'true') return;
+                
+                isDraggingElement = true;
+                element.classList.add('selected');
+                elementStartX = e.clientX;
+                elementStartY = e.clientY;
+                elementLeft = element.offsetLeft;
+                elementTop = element.offsetTop;
+                e.stopPropagation();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDraggingElement) return;
+                const deltaX = e.clientX - elementStartX;
+                const deltaY = e.clientY - elementStartY;
+                element.style.left = (elementLeft + deltaX) + 'px';
+                element.style.top = (elementTop + deltaY) + 'px';
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDraggingElement = false;
+                element.classList.remove('selected');
+            });
+        }
+
+        // Toggle AI Sidebar
+        function toggleAI() {
+            const sidebar = document.getElementById('aiSidebar');
+            const fab = document.getElementById('aiFab');
+            sidebar.classList.toggle('open');
+            fab.classList.toggle('active');
+        }
+
+        // Tool selection
+        let currentTool = 'cursor';
+        
+        function selectTool(tool) {
+            currentTool = tool;
+            document.querySelectorAll('.tool-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Change cursor based on tool
+            if (tool === 'draw') {
+                canvas.style.cursor = 'crosshair';
+            } else if (tool === 'text') {
+                canvas.style.cursor = 'text';
+            } else {
+                canvas.style.cursor = 'grab';
+            }
+        }
+
+        // Add new elements
+        function addSticky() {
+            const sticky = document.createElement('div');
+            sticky.className = 'canvas-element sticky-note';
+            sticky.style.top = (container.scrollTop + window.innerHeight / 2) + 'px';
+            sticky.style.left = (container.scrollLeft + window.innerWidth / 2) + 'px';
+            sticky.innerHTML = '<div class="sticky-content" contenteditable="true">New idea...</div>';
+            canvas.appendChild(sticky);
+            makeElementDraggable(sticky);
+        }
+
+        function addIdea() {
+            const idea = document.createElement('div');
+            idea.className = 'canvas-element idea-card';
+            idea.style.top = (container.scrollTop + window.innerHeight / 2) + 'px';
+            idea.style.left = (container.scrollLeft + window.innerWidth / 2) + 'px';
+            idea.innerHTML = `
+                <div class="idea-title" contenteditable="true">New Idea</div>
+                <div class="idea-description" contenteditable="true">Describe your idea here...</div>
+                <div class="idea-votes">
+                    <button class="vote-btn">👍 0</button>
+                    <button class="vote-btn">🔥 0</button>
+                    <button class="vote-btn">❤️ 0</button>
+                </div>
+            `;
+            canvas.appendChild(idea);
+            makeElementDraggable(idea);
+        }
+
+        function addFlow() {
+            const flow = document.createElement('div');
+            flow.className = 'canvas-element flow-container';
+            flow.style.top = (container.scrollTop + window.innerHeight / 2) + 'px';
+            flow.style.left = (container.scrollLeft + window.innerWidth / 2) + 'px';
+            flow.innerHTML = `
+                <div class="flow-title">New Flow</div>
+                <div class="flow-node">Step 1</div>
+                <div class="flow-node">Step 2</div>
+                <div class="flow-node">Step 3</div>
+            `;
+            canvas.appendChild(flow);
+            makeElementDraggable(flow);
+        }
+
+        // Canvas click to add elements
+        canvas.addEventListener('dblclick', (e) => {
+            if (e.target !== canvas) return;
+            
+            if (currentTool === 'sticky') {
+                addSticky();
+            } else if (currentTool === 'idea') {
+                addIdea();
+            } else if (currentTool === 'flow') {
+                addFlow();
+            }
+        });
+
+        // Simulate other users' cursors moving
+        setInterval(() => {
+            const cursor = document.querySelector('.cursor-indicator');
+            const randomX = Math.random() * window.innerWidth;
+            const randomY = Math.random() * window.innerHeight;
+            cursor.style.left = randomX + 'px';
+            cursor.style.top = randomY + 'px';
+        }, 3000);
+
+        // Add emoji reactions on click
+        canvas.addEventListener('click', (e) => {
+            if (currentTool === 'emoji' && e.target === canvas) {
+                const emojis = ['🔥', '👍', '❤️', '🚀', '💡', '✨'];
+                const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+                
+                const reaction = document.createElement('div');
+                reaction.className = 'emoji-reaction';
+                reaction.textContent = emoji;
+                reaction.style.left = e.pageX + 'px';
+                reaction.style.top = e.pageY + 'px';
+                document.body.appendChild(reaction);
+                
+                setTimeout(() => reaction.remove(), 2000);
+            }
+        });
+
+        // Timer countdown
+        function updateTimer() {
+            const timer = document.querySelector('.challenge-timer');
+            const parts = timer.textContent.split(' ')[1].split(':');
+            let hours = parseInt(parts[0]);
+            let minutes = parseInt(parts[1]);
+            let seconds = parseInt(parts[2]);
+            
+            seconds--;
+            if (seconds < 0) {
+                seconds = 59;
+                minutes--;
+                if (minutes < 0) {
+                    minutes = 59;
+                    hours--;
+                }
+            }
+            
+            timer.textContent = `⏱️ ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        setInterval(updateTimer, 1000);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 's' && !e.target.getAttribute('contenteditable')) {
+                selectTool('sticky');
+            } else if (e.key === 'i' && !e.target.getAttribute('contenteditable')) {
+                selectTool('idea');
+            } else if (e.key === 'v' && !e.target.getAttribute('contenteditable')) {
+                selectTool('cursor');
+            }
+        });
+    </script>
+</body>
+</html>

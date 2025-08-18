@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Dashboard - The Vibe Awards</title>
+    <link rel="stylesheet" href="css/typography.css">
+    <link rel="stylesheet" href="css/brand-system.css">
+    <link rel="stylesheet" href="css/apple-magic.css">
+    <link rel="stylesheet" href="css/mobile-responsive.css">
+    <link rel="stylesheet" href="css/ultra-responsive.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-gray: #86868B;
+            --apple-light-gray: #F5F5F7;
+            --apple-dark: #1D1D1F;
+            --apple-green: #30D158;
+            --apple-red: #FF375F;
+            --apple-orange: #FF9F0A;
+            --apple-purple: #BF5AF2;
+            --apple-teal: #5AC8FA;
+            --apple-indigo: #5856D6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Background */
+        .dashboard-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 50%, rgba(88, 86, 214, 0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(191, 90, 242, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 20%, rgba(0, 113, 227, 0.1) 0%, transparent 50%);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 9999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: clamp(840px, 87.5rem, 1400px);
+            margin: 0 auto;
+            padding: var(--space-sm) 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-sm);
+            font-size: var(--fs-xl);
+            font-weight: 600;
+            color: #F5F5F7;
+            text-decoration: none;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-md);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: var(--gap-md);
+        }
+
+        .nav-link {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: var(--fs-sm);
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #F5F5F7;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-sm);
+            padding: var(--space-xs) 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .user-menu:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .user-avatar {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-sm);
+        }
+
+        .user-name {
+            font-size: var(--fs-sm);
+            font-weight: 500;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            max-width: clamp(840px, 87.5rem, 1400px);
+            margin: var(--space-xl) auto 40px;
+            padding: var(--space-md);
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: var(--gap-md);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .sidebar-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: var(--space-md);
+            margin-bottom: 20px;
+        }
+
+        .profile-section {
+            text-align: center;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-4xl);
+            margin: 0 auto 16px;
+        }
+
+        .profile-name {
+            font-size: var(--fs-xl);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .profile-role {
+            font-size: var(--fs-sm);
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .sidebar-menu {
+            padding-top: 24px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-sm);
+            padding: var(--space-sm) 16px;
+            border-radius: 12px;
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            margin-bottom: 8px;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+
+        .menu-item.active {
+            background: var(--apple-blue);
+            color: white;
+        }
+
+        .menu-icon {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            min-height: calc(100vh - 120px);
+        }
+
+        /* Welcome Header */
+        .welcome-header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: var(--space-md);
+            margin-bottom: 32px;
+        }
+
+        .welcome-title {
+            font-size: var(--fs-3xl);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .welcome-subtitle {
+            font-size: var(--fs-lg);
+            color: rgba(245, 245, 247, 0.8);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--gap-md);
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: var(--space-md);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.07);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-2xl);
+            margin-bottom: 16px;
+        }
+
+        .stat-value {
+            font-size: var(--fs-4xl);
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: var(--fs-sm);
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .stat-change {
+            display: inline-block;
+            padding: var(--space-xs) 8px;
+            background: rgba(48, 209, 88, 0.2);
+            color: var(--apple-green);
+            border-radius: 6px;
+            font-size: var(--fs-xs);
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .stat-change.negative {
+            background: rgba(255, 55, 95, 0.2);
+            color: var(--apple-red);
+        }
+
+        /* Apps Section */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: var(--fs-2xl);
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            padding: var(--space-sm) 20px;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: var(--fs-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 113, 227, 0.3);
+        }
+
+        .apps-list {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .app-item {
+            display: flex;
+            align-items: center;
+            padding: var(--space-md);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background 0.2s ease;
+        }
+
+        .app-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .app-item:last-child {
+            border-bottom: none;
+        }
+
+        .app-icon-wrapper {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-3xl);
+            margin-right: 20px;
+        }
+
+        .app-info {
+            flex: 1;
+        }
+
+        .app-name {
+            font-size: var(--fs-lg);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .app-status {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-sm);
+            font-size: var(--fs-sm);
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .status-badge {
+            padding: var(--space-xs) 8px;
+            border-radius: 6px;
+            font-size: var(--fs-xs);
+            font-weight: 600;
+        }
+
+        .status-badge.live {
+            background: rgba(48, 209, 88, 0.2);
+            color: var(--apple-green);
+        }
+
+        .status-badge.review {
+            background: rgba(255, 159, 10, 0.2);
+            color: var(--apple-orange);
+        }
+
+        .status-badge.draft {
+            background: rgba(134, 134, 139, 0.2);
+            color: var(--apple-gray);
+        }
+
+        .app-stats {
+            display: flex;
+            gap: var(--gap-md);
+            align-items: center;
+        }
+
+        .app-stat {
+            text-align: center;
+        }
+
+        .app-stat-value {
+            font-size: var(--fs-xl);
+            font-weight: 600;
+            display: block;
+        }
+
+        .app-stat-label {
+            font-size: var(--fs-xs);
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .app-actions {
+            display: flex;
+            gap: var(--gap-xs);
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-icon:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: var(--space-lg) 20px;
+        }
+
+        .empty-icon {
+            font-size: var(--fs-5xl);
+            margin-bottom: 24px;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: var(--fs-2xl);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .empty-text {
+            font-size: var(--fs-base);
+            color: rgba(245, 245, 247, 0.6);
+            margin-bottom: 24px;
+        }
+
+        /* Activity Feed */
+        .activity-feed {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: var(--space-md);
+            margin-top: 32px;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: var(--gap-sm);
+            padding: var(--space-sm) 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-size: var(--fs-sm);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .activity-time {
+            font-size: var(--fs-xs);
+            color: rgba(245, 245, 247, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: clamp(614px, 64rem, 1024px)) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+                order: 2;
+            }
+
+            .main-content {
+                order: 1;
+            }
+        }
+
+        @media (max-width: clamp(460px, 48rem, 768px)) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .app-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .app-stats {
+                margin: var(--space-sm) 0;
+            }
+        }
+    </style>
+    <!-- Modal System -->
+    <script src="js/vibe-modal-system.js"></script>
+</head>
+<body>
+    <!-- Background -->
+    <div class="dashboard-background"></div>
+
+    <!-- Navigation -->
+    <nav role="navigation">
+        <div class="nav-container container-fluid">
+            <a href="index-magic.html" class="nav-logo">
+                <span>🏆</span>
+                <span>The Vibe Awards</span>
+            </a>
+            <div class="nav-right">
+                <div class="nav-menu">
+                    <a href="apple-magic-battle.html" class="nav-link">Battle Arena</a>
+                    <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+                    <a href="submit-app.html" class="nav-link">Submit App</a>
+                </div>
+                <div class="user-menu">
+                    <div class="user-avatar">👤</div>
+                    <span class="user-name">John Doe</span>
+                    <span>▼</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container container-fluid">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-card card-fluid">
+                <div class="profile-section">
+                    <div class="profile-avatar">🚀</div>
+                    <div class="profile-name">John Doe</div>
+                    <div class="profile-role">App Developer</div>
+                </div>
+                <nav role="navigation" class="sidebar-menu">
+                    <a href="#" class="menu-item active">
+                        <span class="menu-icon">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="menu-item">
+                        <span class="menu-icon">📱</span>
+                        <span>My Apps</span>
+                    </a>
+                    <a href="#" class="menu-item">
+                        <span class="menu-icon">⚔️</span>
+                        <span>Battle History</span>
+                    </a>
+                    <a href="#" class="menu-item">
+                        <span class="menu-icon">📈</span>
+                        <span>Analytics</span>
+                    </a>
+                    <a href="#" class="menu-item">
+                        <span class="menu-icon">🏆</span>
+                        <span>Achievements</span>
+                    </a>
+                    <a href="#" class="menu-item">
+                        <span class="menu-icon">⚙️</span>
+                        <span>Settings</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="sidebar-card card-fluid">
+                <h3 style="font-size: var(--fs-base); margin-bottom: 12px;">Quick Actions</h3>
+                <a href="submit-app.html" class="btn-primary btn-fluid" style="width: 100%; text-align: center;">
+                    Submit New App
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main role="main" class="main-content">
+            <!-- Welcome Header -->
+            <div class="welcome-header">
+                <h1 class="welcome-title" style="font-size: var(--fs-4xl);">Welcome back, John! 👋</h1>
+                <p class="welcome-subtitle">Your apps are performing well. Keep up the great work!</p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid ultra-grid-responsive">
+                <div class="stat-card card-fluid">
+                    <div class="stat-icon">📱</div>
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Active Apps</div>
+                    <span class="stat-change">+1 this month</span>
+                </div>
+
+                <div class="stat-card card-fluid">
+                    <div class="stat-icon">⚔️</div>
+                    <div class="stat-value">247</div>
+                    <div class="stat-label">Total Battles</div>
+                    <span class="stat-change">+12 this week</span>
+                </div>
+
+                <div class="stat-card card-fluid">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-value">189</div>
+                    <div class="stat-label">Battles Won</div>
+                    <span class="stat-change">76.5% win rate</span>
+                </div>
+
+                <div class="stat-card card-fluid">
+                    <div class="stat-icon">🗳️</div>
+                    <div class="stat-value">45.2K</div>
+                    <div class="stat-label">Total Votes</div>
+                    <span class="stat-change">+2.3K today</span>
+                </div>
+            </div>
+
+            <!-- My Apps Section -->
+            <div class="section-header container-fluid">
+                <h2 class="section-title" style="font-size: var(--fs-3xl);" style="font-size: var(--fs-3xl);">My Apps</h2>
+                <a href="submit-app.html" class="btn-primary btn-fluid">+ Add New App</a>
+            </div>
+
+            <div class="apps-list">
+                <div class="app-item">
+                    <div class="app-icon-wrapper">🗣️</div>
+                    <div class="app-info">
+                        <div class="app-name">TinkyBink AAC</div>
+                        <div class="app-status">
+                            <span class="status-badge live">Live</span>
+                            <span>Healthcare • Submitted Dec 10, 2024</span>
+                        </div>
+                    </div>
+                    <div class="app-stats">
+                        <div class="app-stat">
+                            <span class="app-stat-value">147</span>
+                            <span class="app-stat-label">Wins</span>
+                        </div>
+                        <div class="app-stat">
+                            <span class="app-stat-value">89%</span>
+                            <span class="app-stat-label">Win Rate</span>
+                        </div>
+                        <div class="app-stat">
+                            <span class="app-stat-value">#1</span>
+                            <span class="app-stat-label">Rank</span>
+                        </div>
+                    </div>
+                    <div class="app-actions">
+                        <div class="btn-icon btn-fluid">📊</div>
+                        <div class="btn-icon btn-fluid">✏️</div>
+                        <div class="btn-icon btn-fluid">👁️</div>
+                    </div>
+                </div>
+
+                <div class="app-item">
+                    <div class="app-icon-wrapper">📚</div>
+                    <div class="app-info">
+                        <div class="app-name">StudyBuddy AI</div>
+                        <div class="app-status">
+                            <span class="status-badge live">Live</span>
+                            <span>Education • Submitted Nov 28, 2024</span>
+                        </div>
+                    </div>
+                    <div class="app-stats">
+                        <div class="app-stat">
+                            <span class="app-stat-value">42</span>
+                            <span class="app-stat-label">Wins</span>
+                        </div>
+                        <div class="app-stat">
+                            <span class="app-stat-value">71%</span>
+                            <span class="app-stat-label">Win Rate</span>
+                        </div>
+                        <div class="app-stat">
+                            <span class="app-stat-value">#8</span>
+                            <span class="app-stat-label">Rank</span>
+                        </div>
+                    </div>
+                    <div class="app-actions">
+                        <div class="btn-icon btn-fluid">📊</div>
+                        <div class="btn-icon btn-fluid">✏️</div>
+                        <div class="btn-icon btn-fluid">👁️</div>
+                    </div>
+                </div>
+
+                <div class="app-item">
+                    <div class="app-icon-wrapper">🎮</div>
+                    <div class="app-info">
+                        <div class="app-name">PixelQuest Pro</div>
+                        <div class="app-status">
+                            <span class="status-badge review">In Review</span>
+                            <span>Gaming • Submitted Dec 14, 2024</span>
+                        </div>
+                    </div>
+                    <div class="app-stats">
+                        <div class="app-stat">
+                            <span class="app-stat-value">—</span>
+                            <span class="app-stat-label">Wins</span>
+                        </div>
+                        <div class="app-stat">
+                            <span class="app-stat-value">—</span>
+                            <span class="app-stat-label">Win Rate</span>
+                        </div>
+                        <div class="app-stat">
+                            <span class="app-stat-value">—</span>
+                            <span class="app-stat-label">Rank</span>
+                        </div>
+                    </div>
+                    <div class="app-actions">
+                        <div class="btn-icon btn-fluid">✏️</div>
+                        <div class="btn-icon btn-fluid">👁️</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Feed -->
+            <div class="activity-feed">
+                <h3 style="font-size: var(--fs-xl); margin-bottom: 20px;">Recent Activity</h3>
+                
+                <div class="activity-item">
+                    <div class="activity-icon">🏆</div>
+                    <div class="activity-content">
+                        <div class="activity-title">TinkyBink AAC won against MindSync Pro</div>
+                        <div class="activity-time">2 hours ago • 58% vs 42%</div>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon">🗳️</div>
+                    <div class="activity-content">
+                        <div class="activity-title">StudyBuddy AI received 1,234 new votes</div>
+                        <div class="activity-time">5 hours ago</div>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon">⚔️</div>
+                    <div class="activity-content">
+                        <div class="activity-title">TinkyBink AAC scheduled for battle tomorrow</div>
+                        <div class="activity-time">8 hours ago • vs. HealthTracker Pro</div>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon">✅</div>
+                    <div class="activity-content">
+                        <div class="activity-title">PixelQuest Pro submitted for review</div>
+                        <div class="activity-time">1 day ago • Approval pending</div>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon">🎯</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Achievement unlocked: 100 Battle Veteran</div>
+                        <div class="activity-time">2 days ago</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Check authentication
+        const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+        const userName = localStorage.getItem('userName') || 'User';
+
+        if (!isAuthenticated) {
+            window.location.href = 'signup.html';
+        }
+
+        // Update user name
+        document.querySelectorAll('.user-name, .profile-name').forEach(el => {
+            if (el.textContent === 'John Doe' || el.textContent.includes('John')) {
+                el.textContent = el.textContent.replace('John Doe', userName).replace('John', userName);
+            }
+        });
+
+        // Animate stats on load
+        window.addEventListener('load', () => {
+            const statValues = document.querySelectorAll('.stat-value');
+            statValues.forEach((stat, index) => {
+                setTimeout(() => {
+                    stat.style.animation = 'statPulse 0.5s ease';
+                }, index * 100);
+            });
+        });
+
+        // Add animation keyframe
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes statPulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // User menu dropdown
+        document.querySelector('.user-menu').addEventListener('click', function() {
+            // Show logout confirmation modal
+            vibeConfirm(
+                'Sign Out',
+                'Are you sure you want to sign out? You\'ll need to log back in to access your dashboard.',
+                () => {
+                    localStorage.removeItem('isAuthenticated');
+                    localStorage.removeItem('userName');
+                    localStorage.removeItem('userRole');
+                    localStorage.removeItem('userSkillLevel');
+                    vibeInfo('Signed Out', 'You have been successfully signed out. See you next time!');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                }
+            );
+        });
+
+        // Sidebar menu navigation
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                if (!this.href || this.href === '#') {
+                    e.preventDefault();
+                    document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+    </script>
+    <script src="js/animations.js"></script>
+    <script src="js/apple-magic-init.js"></script>
+    <script src="js/performance.js"></script>
+    <script src="js/accessibility.js"></script>
+</body>
+</html>

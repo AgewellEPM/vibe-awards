@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Vibe-Coder Directory - The Vibe Awards</title>
+    <link rel="stylesheet" href="css/mobile-responsive.css">
+    <link rel="stylesheet" href="css/ultra-responsive.css">
+    <link rel="stylesheet" href="css/typography.css">
+    <link rel="stylesheet" href="css/brand-system.css">
+    <link rel="stylesheet" href="css/apple-magic.css">
+    <script src="js/accessibility.js"></script>
+    <script src="js/performance.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-gray: #86868B;
+            --apple-light-gray: #F5F5F7;
+            --apple-dark: #1D1D1F;
+            --apple-green: #30D158;
+            --apple-red: #FF375F;
+            --apple-orange: #FF9F0A;
+            --apple-purple: #BF5AF2;
+            --apple-teal: #5AC8FA;
+            --apple-indigo: #5856D6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: var(--space-sm) 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: clamp(720px, 75rem, 1200px);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            color: #F5F5F7;
+            text-decoration: none;
+            font-size: var(--fs-xl);
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--gap-md);
+            align-items: center;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link,
+        .nav-button {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: var(--fs-sm);
+            transition: color 0.2s ease;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--gap-xs);
+            padding: var(--space-xs) 0;
+        }
+
+        .nav-link:hover,
+        .nav-button:hover {
+            color: #F5F5F7;
+        }
+
+        .nav-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 200px;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: var(--space-xs) 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .nav-item:hover .nav-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            padding: var(--space-sm) 20px;
+            font-size: var(--fs-sm);
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            color: #F5F5F7;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .dropdown-arrow {
+            font-size: var(--fs-xs);
+            transition: transform 0.2s ease;
+        }
+
+        .nav-item:hover .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .nav-cta {
+            padding: var(--space-xs) 20px;
+            background: var(--apple-blue);
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: var(--fs-sm);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-cta:hover {
+            background: #005bb5;
+            transform: scale(1.05);
+        }
+
+        /* Main Content */
+        .directory-container {
+            padding: var(--space-xl) 24px 60px;
+            max-width: clamp(840px, 87.5rem, 1400px);
+            margin: 0 auto;
+        }
+
+        .directory-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .directory-title {
+            font-size: var(--fs-4xl);
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .directory-subtitle {
+            font-size: var(--fs-xl);
+            color: rgba(245, 245, 247, 0.8);
+            max-width: clamp(360px, 37.5rem, 600px);
+            margin: 0 auto;
+        }
+
+        /* Search and Filters */
+        .search-controls {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: var(--space-md);
+            margin-bottom: 48px;
+        }
+
+        .search-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: var(--gap-md);
+            align-items: end;
+        }
+
+        .search-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap-xs);
+        }
+
+        .search-label {
+            font-size: var(--fs-sm);
+            font-weight: 500;
+            color: rgba(245, 245, 247, 0.9);
+        }
+
+        .search-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: var(--space-sm) 16px;
+            color: white;
+            font-size: var(--fs-base);
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--apple-blue);
+            box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
+        }
+
+        .search-input::placeholder {
+            color: rgba(245, 245, 247, 0.5);
+        }
+
+        .filter-select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: var(--space-sm) 16px;
+            color: white;
+            font-size: var(--fs-base);
+        }
+
+        .filter-select option {
+            background: #1D1D1F;
+            color: white;
+        }
+
+        /* Skills Filter */
+        .skills-filter {
+            margin-top: 24px;
+        }
+
+        .skills-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--gap-sm);
+            margin-top: 12px;
+        }
+
+        .skill-tag {
+            padding: var(--space-xs) 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: var(--fs-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .skill-tag:hover,
+        .skill-tag.active {
+            background: rgba(0, 113, 227, 0.2);
+            border-color: var(--apple-blue);
+            color: var(--apple-blue);
+        }
+
+        /* Results Header */
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .results-count {
+            font-size: var(--fs-lg);
+            color: rgba(245, 245, 247, 0.8);
+        }
+
+        .view-toggle {
+            display: flex;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: var(--space-xs);
+        }
+
+        .view-btn {
+            padding: var(--space-xs) 16px;
+            background: none;
+            border: none;
+            border-radius: 8px;
+            color: rgba(245, 245, 247, 0.6);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .view-btn.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        /* Profile Grid */
+        .profiles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: var(--gap-md);
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: var(--space-md);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(0, 113, 227, 0.2);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-sm);
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-3xl);
+            position: relative;
+        }
+
+        .status-dot {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            width: 16px;
+            height: 16px;
+            background: var(--apple-green);
+            border-radius: 50%;
+            border: 2px solid #000;
+        }
+
+        .profile-info h3 {
+            font-size: var(--fs-xl);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .profile-role {
+            font-size: var(--fs-sm);
+            color: var(--apple-teal);
+            margin-bottom: 4px;
+        }
+
+        .profile-level {
+            font-size: var(--fs-xs);
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .profile-bio {
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 20px;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .profile-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--gap-xs);
+            margin-bottom: 20px;
+        }
+
+        .profile-skill {
+            padding: var(--space-xs) 12px;
+            background: rgba(191, 90, 242, 0.2);
+            color: var(--apple-purple);
+            border-radius: 16px;
+            font-size: var(--fs-xs);
+            border: 1px solid rgba(191, 90, 242, 0.3);
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--gap-sm);
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: var(--fs-lg);
+            font-weight: 600;
+            color: var(--apple-green);
+        }
+
+        .stat-label {
+            font-size: var(--fs-xs);
+            color: rgba(245, 245, 247, 0.5);
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: var(--gap-sm);
+        }
+
+        .btn {
+            flex: 1;
+            padding: var(--space-sm) 16px;
+            border-radius: 20px;
+            font-size: var(--fs-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            text-align: center;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--apple-blue);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* List View */
+        .profiles-list {
+            display: none;
+            flex-direction: column;
+            gap: var(--gap-sm);
+        }
+
+        .profiles-list.active {
+            display: flex;
+        }
+
+        .profiles-grid.active {
+            display: grid;
+        }
+
+        .profile-list-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: var(--space-md);
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: var(--gap-md);
+            align-items: center;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .profile-list-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .list-info {
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap-xs);
+        }
+
+        .list-meta {
+            display: flex;
+            gap: var(--gap-sm);
+            font-size: var(--fs-sm);
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        /* Responsive */
+        @media (max-width: clamp(460px, 48rem, 768px)) {
+            .search-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .profiles-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-list-item {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        /* Animated Background */
+        .directory-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.2;
+            animation: orbFloat 25s ease-in-out infinite;
+        }
+
+        .orb1 {
+            width: clamp(360px, 37.5rem, 600px);
+            height: clamp(420px, 37.5rem, 600px);
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+            top: -200px;
+            left: -200px;
+        }
+
+        .orb2 {
+            width: clamp(300px, 31.25rem, 500px);
+            height: clamp(350px, 31.25rem, 500px);
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            bottom: -150px;
+            right: -150px;
+            animation-delay: 8s;
+        }
+
+        .orb3 {
+            width: clamp(240px, 25rem, 400px);
+            height: clamp(280px, 25rem, 400px);
+            background: linear-gradient(135deg, var(--apple-green), var(--apple-teal));
+            top: 30%;
+            left: 70%;
+            animation-delay: 15s;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(40px, -40px) scale(1.1); }
+            66% { transform: translate(-40px, 40px) scale(0.9); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="directory-background">
+        <div class="gradient-orb orb1"></div>
+        <div class="gradient-orb orb2"></div>
+        <div class="gradient-orb orb3"></div>
+    </div>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container container-fluid">
+            <a href="index.html" class="nav-logo">🏆 The Vibe Awards</a>
+            <div class="nav-links">
+                <div class="nav-item">
+                    <button class="nav-button">
+                        Getting Started
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="nav-dropdown">
+                        <a href="getting-started.html" class="dropdown-item">🚀 Getting Started Hub</a>
+                        <a href="index.html" class="dropdown-item">🏆 The Vibe Awards</a>
+                        <div style="height: 1px; background: rgba(255, 255, 255, 0.1); margin: var(--space-xs) 0;"></div>
+                        <a href="index.html#features" class="dropdown-item">✨ Features</a>
+                    </div>
+                </div>
+                
+                <div class="nav-item">
+                    <button class="nav-button">
+                        Toolkit Hub
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="nav-dropdown">
+                        <a href="vibe-toolkit.html" class="dropdown-item">🛠️ Vibe Toolkit</a>
+                        <a href="vibe-hub.html" class="dropdown-item">🎯 Vibe Hub Central</a>
+                    </div>
+                </div>
+                
+                <div class="nav-item">
+                    <button class="nav-button">
+                        Profile
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="nav-dropdown">
+                        <a href="profile.html" class="dropdown-item">👤 My Profile</a>
+                        <a href="messages.html" class="dropdown-item">💬 Messages</a>
+                        <a href="directory.html" class="dropdown-item">🌐 Directory</a>
+                    </div>
+                </div>
+                
+                <div class="nav-item">
+                    <button class="nav-button">
+                        Competition
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="nav-dropdown">
+                        <a href="apple-magic-battle.html" class="dropdown-item">⚔️ Battle Arena</a>
+                        <a href="leaderboard.html" class="dropdown-item">📊 Leaderboard</a>
+                        <a href="team-up.html" class="dropdown-item">🤝 Team Up</a>
+                    </div>
+                </div>
+                
+                <a href="submit-app.html" class="nav-link">Submit App</a>
+                <a href="signup.html" class="nav-cta">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="directory-container container-fluid">
+        <!-- Header -->
+        <div class="directory-header">
+            <div class="hero-badge" style="display: inline-block; padding: var(--space-xs) 20px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 100px; font-size: var(--fs-sm); font-weight: 500; margin-bottom: 32px;">✨ AI Collaboration Pioneers</div>
+            <h1 class="directory-title">Vibe-Coder Directory</h1>
+            <p class="directory-subtitle">Discover developers building magical apps through conversation with AI assistants</p>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="search-controls">
+            <div class="search-grid ultra-grid-responsive">
+                <div class="search-group">
+                    <label class="search-label">Search vibe-coders</label>
+                    <input type="text" class="search-input" placeholder="Search by name, skills, or projects..." id="searchInput">
+                </div>
+                
+                <div class="search-group">
+                    <label class="search-label">Role</label>
+                    <select class="filter-select" id="roleFilter">
+                        <option value="">All Roles</option>
+                        <option value="coder">Coder</option>
+                        <option value="designer">Designer</option>
+                        <option value="marketer">Marketer</option>
+                        <option value="video">Video Creator</option>
+                        <option value="bizops">Business Ops</option>
+                    </select>
+                </div>
+                
+                <div class="search-group">
+                    <label class="search-label">Skill Level</label>
+                    <select class="filter-select" id="levelFilter">
+                        <option value="">All Levels</option>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="expert">Expert</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="skills-filter">
+                <label class="search-label">Filter by Vibe-Coding Skills</label>
+                <div class="skills-tags" id="skillsFilter">
+                    <div class="skill-tag" data-skill="ai-prompting">AI Prompt Engineering</div>
+                    <div class="skill-tag" data-skill="conversation-design">Conversation Design</div>
+                    <div class="skill-tag" data-skill="healthcare">Healthcare AI</div>
+                    <div class="skill-tag" data-skill="mobile">Mobile Development</div>
+                    <div class="skill-tag" data-skill="data-viz">Data Visualization</div>
+                    <div class="skill-tag" data-skill="accessibility">Accessibility Design</div>
+                    <div class="skill-tag" data-skill="music-tech">Music Technology</div>
+                    <div class="skill-tag" data-skill="ux-design">UX/UI Design</div>
+                    <div class="skill-tag" data-skill="collaboration">AI Collaboration</div>
+                    <div class="skill-tag" data-skill="innovation">Innovation Strategy</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Header -->
+        <div class="results-header">
+            <div class="results-count" id="resultsCount">Showing 12 vibe-coders</div>
+            <div class="view-toggle">
+                <button class="view-btn active btn-fluid" onclick="switchView('grid')">🔳 Grid</button>
+                <button class="view-btn btn-fluid" onclick="switchView('list')">📋 List</button>
+            </div>
+        </div>
+
+        <!-- Profiles Grid -->
+        <div class="profiles-grid active ultra-grid-responsive" id="profilesGrid">
+            <!-- Profile Card 1 -->
+            <div class="profile-card card-fluid" data-role="coder" data-level="expert" data-skills="ai-prompting,healthcare,mobile">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        👨‍💻
+                        <div class="status-dot"></div>
+                    </div>
+                    <div class="profile-info">
+                        <h3>Alex Chen</h3>
+                        <div class="profile-role">AI Collaboration Pioneer</div>
+                        <div class="profile-level">Expert Vibe-Coder</div>
+                    </div>
+                </div>
+                <p class="profile-bio">Masters vibe-coding through AI conversation. Built TinkyBink AAC entirely through dialogue with Claude, creating breakthrough communication tools for non-verbal individuals.</p>
+                <div class="profile-skills">
+                    <span class="profile-skill">AI Prompt Engineering</span>
+                    <span class="profile-skill">Healthcare AI</span>
+                    <span class="profile-skill">Mobile Development</span>
+                    <span class="profile-skill">Conversation Design</span>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">47</div>
+                        <div class="stat-label">Apps</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">156</div>
+                        <div class="stat-label">Battles</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">2.3K</div>
+                        <div class="stat-label">Votes</div>
+                    </div>
+                </div>
+                <div class="profile-showcase" style="margin-bottom: 20px;">
+                    <div style="font-size: var(--fs-xs); color: rgba(245, 245, 247, 0.6); margin-bottom: 8px;">Latest App</div>
+                    <div style="display: flex; align-items: center; gap: var(--gap-xs); padding: var(--space-xs) 12px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                        <span style="font-size: var(--fs-base);">🏥</span>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-size: var(--fs-sm); font-weight: 500; color: white; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">TinkyBink AAC</div>
+                            <div style="font-size: var(--fs-xs); color: rgba(245, 245, 247, 0.5);">Healthcare AI • 1.2K votes</div>
+                        </div>
+                        <span style="font-size: var(--fs-xs); color: var(--apple-green);">✨ Live</span>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <a href="profile.html" class="btn btn-primary btn-fluid">View Profile</a>
+                    <button class="btn btn-secondary btn-fluid" onclick="sendMessage('Alex Chen')">Message</button>
+                </div>
+            </div>
+
+            <!-- Profile Card 2 -->
+            <div class="profile-card card-fluid" data-role="designer" data-level="advanced" data-skills="ux-design,data-viz,ai-prompting">
+                <div class="profile-header">
+                    <div class="profile-avatar" style="background: linear-gradient(135deg, var(--apple-teal), var(--apple-green));">
+                        👩‍🎨
+                        <div class="status-dot"></div>
+                    </div>
+                    <div class="profile-info">
+                        <h3>Sarah Johnson</h3>
+                        <div class="profile-role">Vibe-UX Designer</div>
+                        <div class="profile-level">Advanced Vibe-Coder</div>
+                    </div>
+                </div>
+                <p class="profile-bio">Designs magical user experiences through AI conversation. Specializes in vibe-coding intuitive interfaces and turning complex data into beautiful, accessible visualizations.</p>
+                <div class="profile-skills">
+                    <span class="profile-skill">UX/UI Design</span>
+                    <span class="profile-skill">Data Visualization</span>
+                    <span class="profile-skill">AI Prompt Engineering</span>
+                    <span class="profile-skill">Accessibility Design</span>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">23</div>
+                        <div class="stat-label">Apps</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">89</div>
+                        <div class="stat-label">Battles</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">1.8K</div>
+                        <div class="stat-label">Votes</div>
+                    </div>
+                </div>
+                <div class="profile-showcase" style="margin-bottom: 20px;">
+                    <div style="font-size: var(--fs-xs); color: rgba(245, 245, 247, 0.6); margin-bottom: 8px;">Latest App</div>
+                    <div style="display: flex; align-items: center; gap: var(--gap-xs); padding: var(--space-xs) 12px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                        <span style="font-size: var(--fs-base);">📊</span>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-size: var(--fs-sm); font-weight: 500; color: white; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">DataViz Pro</div>
+                            <div style="font-size: var(--fs-xs); color: rgba(245, 245, 247, 0.5);">Data Visualization • 892 votes</div>
+                        </div>
+                        <span style="font-size: var(--fs-xs); color: var(--apple-red);">⚔️ Battle</span>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button class="btn btn-primary btn-fluid" onclick="viewProfile('sarah-johnson')">View Profile</button>
+                    <button class="btn btn-secondary btn-fluid" onclick="sendMessage('Sarah Johnson')">Message</button>
+                </div>
+            </div>
+
+            <!-- Profile Card 3 -->
+            <div class="profile-card card-fluid" data-role="coder" data-level="intermediate" data-skills="mobile,collaboration,innovation">
+                <div class="profile-header">
+                    <div class="profile-avatar" style="background: linear-gradient(135deg, var(--apple-orange), var(--apple-red));">
+                        👨‍💼
+                        <div class="status-dot" style="background: var(--apple-orange);"></div>
+                    </div>
+                    <div class="profile-info">
+                        <h3>Mike Rodriguez</h3>
+                        <div class="profile-role">Vibe-Stack Developer</div>
+                        <div class="profile-level">Intermediate Vibe-Coder</div>
+                    </div>
+                </div>
+                <p class="profile-bio">Learning to build revolutionary apps through AI conversation. Specializes in mobile platforms and exploring new frontiers of human-AI collaboration in music applications.</p>
+                <div class="profile-skills">
+                    <span class="profile-skill">Mobile Development</span>
+                    <span class="profile-skill">AI Collaboration</span>
+                    <span class="profile-skill">Music Technology</span>
+                    <span class="profile-skill">Innovation Strategy</span>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">15</div>
+                        <div class="stat-label">Apps</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">34</div>
+                        <div class="stat-label">Battles</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">892</div>
+                        <div class="stat-label">Votes</div>
+                    </div>
+                </div>
+                <div class="profile-showcase" style="margin-bottom: 20px;">
+                    <div style="font-size: var(--fs-xs); color: rgba(245, 245, 247, 0.6); margin-bottom: 8px;">Latest App</div>
+                    <div style="display: flex; align-items: center; gap: var(--gap-xs); padding: var(--space-xs) 12px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                        <span style="font-size: var(--fs-base);">🎵</span>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-size: var(--fs-sm); font-weight: 500; color: white; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">VibeBeats</div>
+                            <div style="font-size: var(--fs-xs); color: rgba(245, 245, 247, 0.5);">Music Tech • 654 votes</div>
+                        </div>
+                        <span style="font-size: var(--fs-xs); color: var(--apple-green);">✨ Live</span>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button class="btn btn-primary btn-fluid" onclick="viewProfile('mike-rodriguez')">View Profile</button>
+                    <button class="btn btn-secondary btn-fluid" onclick="sendMessage('Mike Rodriguez')">Message</button>
+                </div>
+            </div>
+
+            <!-- Profile Card 4 -->
+            <div class="profile-card card-fluid" data-role="marketer" data-level="expert" data-skills="data-viz,ai-prompting,music-tech">
+                <div class="profile-header">
+                    <div class="profile-avatar" style="background: linear-gradient(135deg, var(--apple-indigo), var(--apple-purple));">
+                        👩‍💻
+                        <div class="status-dot"></div>
+                    </div>
+                    <div class="profile-info">
+                        <h3>Emily Watson</h3>
+                        <div class="profile-role">Vibe-Growth Strategist</div>
+                        <div class="profile-level">Expert Vibe-Coder</div>
+                    </div>
+                </div>
+                <p class="profile-bio">Pioneers vibe-marketing through AI conversation. Creates viral growth strategies for music and entertainment apps by understanding user emotions through data-driven AI insights.</p>
+                <div class="profile-skills">
+                    <span class="profile-skill">Data Visualization</span>
+                    <span class="profile-skill">AI Prompt Engineering</span>
+                    <span class="profile-skill">Music Technology</span>
+                    <span class="profile-skill">Innovation Strategy</span>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">8</div>
+                        <div class="stat-label">Apps</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">67</div>
+                        <div class="stat-label">Battles</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">1.2K</div>
+                        <div class="stat-label">Votes</div>
+                    </div>
+                </div>
+                <div class="profile-showcase" style="margin-bottom: 20px;">
+                    <div style="font-size: var(--fs-xs); color: rgba(245, 245, 247, 0.6); margin-bottom: 8px;">Latest App</div>
+                    <div style="display: flex; align-items: center; gap: var(--gap-xs); padding: var(--space-xs) 12px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                        <span style="font-size: var(--fs-base);">🚀</span>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-size: var(--fs-sm); font-weight: 500; color: white; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">GrowthAI</div>
+                            <div style="font-size: var(--fs-xs); color: rgba(245, 245, 247, 0.5);">Marketing AI • 1.1K votes</div>
+                        </div>
+                        <span style="font-size: var(--fs-xs); color: var(--apple-green);">✨ Live</span>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button class="btn btn-primary btn-fluid" onclick="viewProfile('emily-watson')">View Profile</button>
+                    <button class="btn btn-secondary btn-fluid" onclick="sendMessage('Emily Watson')">Message</button>
+                </div>
+            </div>
+
+            <!-- Profile Card 5 -->
+            <div class="profile-card card-fluid" data-role="video" data-level="intermediate" data-skills="ai-prompting,music-tech,mobile">
+                <div class="profile-header">
+                    <div class="profile-avatar" style="background: linear-gradient(135deg, var(--apple-green), var(--apple-teal));">
+                        🎬
+                        <div class="status-dot"></div>
+                    </div>
+                    <div class="profile-info">
+                        <h3>David Kim</h3>
+                        <div class="profile-role">Vibe-Visual Storyteller</div>
+                        <div class="profile-level">Intermediate Vibe-Coder</div>
+                    </div>
+                </div>
+                <p class="profile-bio">Captures the magic of vibe-coding through cinematic storytelling. Creates videos that showcase the emotional journey of AI collaboration and app creation breakthroughs.</p>
+                <div class="profile-skills">
+                    <span class="profile-skill">AI Prompt Engineering</span>
+                    <span class="profile-skill">Music Technology</span>
+                    <span class="profile-skill">Mobile Development</span>
+                    <span class="profile-skill">Conversation Design</span>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">12</div>
+                        <div class="stat-label">Apps</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">28</div>
+                        <div class="stat-label">Battles</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">743</div>
+                        <div class="stat-label">Votes</div>
+                    </div>
+                </div>
+                <div class="profile-showcase" style="margin-bottom: 20px;">
+                    <div style="font-size: var(--fs-xs); color: rgba(245, 245, 247, 0.6); margin-bottom: 8px;">Latest App</div>
+                    <div style="display: flex; align-items: center; gap: var(--gap-xs); padding: var(--space-xs) 12px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                        <span style="font-size: var(--fs-base);">🎥</span>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-size: var(--fs-sm); font-weight: 500; color: white; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">StoryAI</div>
+                            <div style="font-size: var(--fs-xs); color: rgba(245, 245, 247, 0.5);">Video AI • 743 votes</div>
+                        </div>
+                        <span style="font-size: var(--fs-xs); color: var(--apple-green);">✨ Live</span>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button class="btn btn-primary btn-fluid" onclick="viewProfile('david-kim')">View Profile</button>
+                    <button class="btn btn-secondary btn-fluid" onclick="sendMessage('David Kim')">Message</button>
+                </div>
+            </div>
+
+            <!-- Profile Card 6 -->
+            <div class="profile-card card-fluid" data-role="coder" data-level="beginner" data-skills="healthcare,accessibility,collaboration">
+                <div class="profile-header">
+                    <div class="profile-avatar" style="background: linear-gradient(135deg, var(--apple-red), var(--apple-orange));">
+                        👩‍💻
+                        <div class="status-dot" style="background: var(--apple-gray);"></div>
+                    </div>
+                    <div class="profile-info">
+                        <h3>Lisa Park</h3>
+                        <div class="profile-role">Aspiring Vibe-Coder</div>
+                        <div class="profile-level">Beginner Vibe-Coder</div>
+                    </div>
+                </div>
+                <p class="profile-bio">New to vibe-coding but deeply passionate about healthcare accessibility. Learning to build empathetic apps through AI conversation while making technology more inclusive.</p>
+                <div class="profile-skills">
+                    <span class="profile-skill">Healthcare AI</span>
+                    <span class="profile-skill">Accessibility Design</span>
+                    <span class="profile-skill">AI Collaboration</span>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Apps</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">7</div>
+                        <div class="stat-label">Battles</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">156</div>
+                        <div class="stat-label">Votes</div>
+                    </div>
+                </div>
+                <div class="profile-showcase" style="margin-bottom: 20px;">
+                    <div style="font-size: var(--fs-xs); color: rgba(245, 245, 247, 0.6); margin-bottom: 8px;">Latest App</div>
+                    <div style="display: flex; align-items: center; gap: var(--gap-xs); padding: var(--space-xs) 12px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                        <span style="font-size: var(--fs-base);">👩‍⚕️</span>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-size: var(--fs-sm); font-weight: 500; color: white; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">CareHelper</div>
+                            <div style="font-size: var(--fs-xs); color: rgba(245, 245, 247, 0.5);">Healthcare AI • 156 votes</div>
+                        </div>
+                        <span style="font-size: var(--fs-xs); color: var(--apple-orange);">🛠️ Beta</span>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button class="btn btn-primary btn-fluid" onclick="viewProfile('lisa-park')">View Profile</button>
+                    <button class="btn btn-secondary btn-fluid" onclick="sendMessage('Lisa Park')">Message</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profiles List (Alternative View) -->
+        <div class="profiles-list" id="profilesList">
+            <!-- List items would be generated here -->
+        </div>
+    </div>
+
+    <script>
+        // Search and filter functionality
+        const searchInput = document.getElementById('searchInput');
+        const roleFilter = document.getElementById('roleFilter');
+        const levelFilter = document.getElementById('levelFilter');
+        const skillsFilter = document.getElementById('skillsFilter');
+        const resultsCount = document.getElementById('resultsCount');
+        
+        let activeSkills = [];
+        
+        // Add event listeners
+        searchInput.addEventListener('input', filterProfiles);
+        roleFilter.addEventListener('change', filterProfiles);
+        levelFilter.addEventListener('change', filterProfiles);
+        
+        // Skill tag filtering
+        skillsFilter.addEventListener('click', function(e) {
+            if (e.target.classList.contains('skill-tag')) {
+                const skill = e.target.dataset.skill;
+                
+                if (e.target.classList.contains('active')) {
+                    e.target.classList.remove('active');
+                    activeSkills = activeSkills.filter(s => s !== skill);
+                } else {
+                    e.target.classList.add('active');
+                    activeSkills.push(skill);
+                }
+                
+                filterProfiles();
+            }
+        });
+        
+        // Filter profiles based on search criteria
+        function filterProfiles() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedRole = roleFilter.value;
+            const selectedLevel = levelFilter.value;
+            const profileCards = document.querySelectorAll('.profile-card');
+            
+            let visibleCount = 0;
+            
+            profileCards.forEach(card => {
+                const role = card.dataset.role;
+                const level = card.dataset.level;
+                const skills = card.dataset.skills.split(',');
+                const text = card.textContent.toLowerCase();
+                
+                // Check if profile matches all filters
+                const matchesSearch = searchTerm === '' || text.includes(searchTerm);
+                const matchesRole = selectedRole === '' || role === selectedRole;
+                const matchesLevel = selectedLevel === '' || level === selectedLevel;
+                const matchesSkills = activeSkills.length === 0 || 
+                                    activeSkills.some(skill => skills.includes(skill));
+                
+                if (matchesSearch && matchesRole && matchesLevel && matchesSkills) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Update results count
+            resultsCount.textContent = `Showing ${visibleCount} vibe-coder${visibleCount !== 1 ? 's' : ''}`;
+        }
+        
+        // Switch between grid and list view
+        function switchView(view) {
+            const gridView = document.getElementById('profilesGrid');
+            const listView = document.getElementById('profilesList');
+            const buttons = document.querySelectorAll('.view-btn');
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            if (view === 'grid') {
+                gridView.classList.add('active');
+                listView.classList.remove('active');
+                buttons[0].classList.add('active');
+            } else {
+                gridView.classList.remove('active');
+                listView.classList.add('active');
+                buttons[1].classList.add('active');
+                generateListView();
+            }
+        }
+        
+        // Generate list view from grid data
+        function generateListView() {
+            const listContainer = document.getElementById('profilesList');
+            const profileCards = document.querySelectorAll('.profile-card[style*="block"], .profile-card:not([style*="none"])');
+            
+            listContainer.innerHTML = '';
+            
+            profileCards.forEach(card => {
+                if (card.style.display === 'none') return;
+                
+                const name = card.querySelector('h3').textContent;
+                const role = card.querySelector('.profile-role').textContent;
+                const bio = card.querySelector('.profile-bio').textContent;
+                const skills = Array.from(card.querySelectorAll('.profile-skill')).map(s => s.textContent);
+                const stats = Array.from(card.querySelectorAll('.stat-number')).map(s => s.textContent);
+                
+                const listItem = document.createElement('div');
+                listItem.className = 'profile-list-item';
+                listItem.innerHTML = `
+                    <div class="profile-avatar" style="${card.querySelector('.profile-avatar').style.cssText}">
+                        ${card.querySelector('.profile-avatar').textContent.trim()}
+                    </div>
+                    <div class="list-info">
+                        <h3>${name}</h3>
+                        <div class="profile-role">${role}</div>
+                        <p class="profile-bio">${bio}</p>
+                        <div class="list-meta">
+                            <span>${stats[0]} apps</span>
+                            <span>${stats[1]} battles</span>
+                            <span>${stats[2]} votes</span>
+                            <span>${skills.slice(0, 3).join(', ')}</span>
+                        </div>
+                    </div>
+                    <div class="profile-actions">
+                        <button class="btn btn-primary btn-fluid" onclick="viewProfile('${name.toLowerCase().replace(' ', '-')}')">View Profile</button>
+                        <button class="btn btn-secondary btn-fluid" onclick="sendMessage('${name}')">Message</button>
+                    </div>
+                `;
+                
+                listContainer.appendChild(listItem);
+            });
+        }
+        
+        // Profile actions
+        function viewProfile(userId) {
+            window.location.href = 'profile.html';
+        }
+        
+        function sendMessage(userName) {
+            localStorage.setItem('messageTarget', userName);
+            window.location.href = 'messages.html';
+        }
+        
+        // Initialize with current filter state
+        filterProfiles();
+    </script>
+    <script src="js/animations.js"></script>
+    <script src="js/apple-magic-init.js"></script>
+</body>
+</html>

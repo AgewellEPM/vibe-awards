@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>App Battle Arena - The Vibe Awards</title>
+    <link rel="stylesheet" href="css/mobile-responsive.css">
+    <link rel="stylesheet" href="css/ultra-responsive.css">
+    <link rel="stylesheet" href="css/typography.css">
+    <link rel="stylesheet" href="css/brand-system.css">
+    <link rel="stylesheet" href="css/apple-magic.css">
+    <script src="js/accessibility.js"></script>
+    <script src="js/performance.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-blue-hover: #0077ED;
+            --apple-gray: #86868B;
+            --apple-light-gray: #F5F5F7;
+            --apple-dark: #1D1D1F;
+            --apple-green: #30D158;
+            --apple-red: #FF375F;
+            --apple-orange: #FF9F0A;
+            --apple-purple: #BF5AF2;
+            --apple-pink: #FF375F;
+            --apple-teal: #5AC8FA;
+            --apple-indigo: #5856D6;
+            --apple-yellow: #FFD60A;
+        }
+
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            line-height: 1.47059;
+            font-weight: 400;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .background-gradient {
+            position: fixed;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle at 20% 80%, #5856D6 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, #FF375F 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, #0071E3 0%, transparent 50%),
+                        radial-gradient(circle at 90% 90%, #30D158 0%, transparent 50%);
+            animation: gradientShift 20s ease infinite;
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            33% { transform: rotate(120deg) scale(1.1); }
+            66% { transform: rotate(240deg) scale(0.9); }
+        }
+
+        /* Navigation with Glass Effect */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(29, 29, 31, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 9999;
+            border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-container {
+            max-width: clamp(720px, 75rem, 1200px);
+            margin: 0 auto;
+            padding: var(--space-sm) 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: var(--fs-2xl);
+            font-weight: 600;
+            letter-spacing: -0.015em;
+            display: flex;
+            align-items: center;
+            gap: var(--gap-sm);
+            color: #F5F5F7;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-pink));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-lg);
+            animation: logoGlow 3s ease infinite;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(191, 90, 242, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(191, 90, 242, 0.8); }
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: var(--gap-md);
+            align-items: center;
+        }
+
+        .nav-link {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: var(--fs-sm);
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #F5F5F7;
+        }
+
+        /* Dropdown Menu */
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown-toggle {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: var(--fs-sm);
+            transition: color 0.2s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--gap-xs);
+        }
+
+        .nav-dropdown-toggle:hover {
+            color: #F5F5F7;
+        }
+
+        .nav-dropdown-toggle::after {
+            content: '▼';
+            font-size: var(--fs-xs);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-dropdown:hover .nav-dropdown-toggle::after {
+            transform: rotate(180deg);
+        }
+
+        .nav-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(29, 29, 31, 0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: var(--space-xs);
+            margin-top: 8px;
+            min-width: 180px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-50%) translateY(-10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-dropdown:hover .nav-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .nav-dropdown-item {
+            display: block;
+            padding: var(--space-sm) 16px;
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: var(--fs-sm);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #F5F5F7;
+        }
+
+        .nav-dropdown-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: var(--space-xs) 0;
+        }
+
+        .nav-cta {
+            padding: var(--space-xs) 20px;
+            background: var(--apple-blue);
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: var(--fs-sm);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-cta:hover {
+            background: var(--apple-blue-hover);
+            transform: scale(1.05) translateY(-1px);
+            box-shadow: 0 8px 25px rgba(0, 113, 227, 0.3);
+        }
+
+        .nav-cta:active {
+            transform: scale(0.98) translateY(0px);
+            transition: all 0.1s ease;
+        }
+
+        /* Hero Section with Dynamic Background */
+        .hero {
+            margin-top: 64px;
+            padding: var(--space-xl) 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: clamp(720px, 75rem, 1200px);
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: var(--space-xs) 16px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            font-size: var(--fs-sm);
+            font-weight: 500;
+            color: var(--apple-teal);
+            margin-bottom: 24px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-title {
+            font-size: var(--fs-5xl);
+            font-weight: 700;
+            letter-spacing: -0.015em;
+            line-height: 1.05;
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleGlow 4s ease infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        .hero-subtitle {
+            font-size: var(--fs-3xl);
+            font-weight: 400;
+            color: rgba(245, 245, 247, 0.8);
+            max-width: clamp(480px, 50rem, 800px);
+            margin: 0 auto 48px;
+            line-height: 1.3;
+        }
+
+        .countdown-pills {
+            display: flex;
+            justify-content: center;
+            gap: var(--gap-sm);
+            margin-top: 48px;
+        }
+
+        .countdown-pill {
+            padding: var(--space-md) 24px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            min-width: 120px;
+            transition: all 0.3s ease;
+        }
+
+        .countdown-pill:hover {
+            transform: scale(1.05) translateY(-2px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 15px 45px rgba(0, 113, 227, 0.4);
+        }
+
+        .countdown-pill:active {
+            transform: scale(1.02) translateY(0px);
+            transition: all 0.1s ease;
+        }
+
+        /* Enhanced countdown animation */
+        .countdown-number {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .countdown-number.updating {
+            transform: scale(1.2);
+            color: var(--apple-teal);
+        }
+
+        .countdown-number {
+            font-size: var(--fs-4xl);
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--apple-teal), var(--apple-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .countdown-label {
+            font-size: var(--fs-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(245, 245, 247, 0.6);
+            margin-top: 4px;
+        }
+
+        /* Battle Section */
+        .battle-section {
+            max-width: clamp(840px, 87.5rem, 1400px);
+            margin: 0 auto;
+            padding: var(--space-xl) 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-eyebrow {
+            font-size: var(--fs-lg);
+            color: var(--apple-orange);
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: var(--fs-5xl);
+            font-weight: 700;
+            letter-spacing: -0.015em;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .section-description {
+            font-size: var(--fs-2xl);
+            color: rgba(245, 245, 247, 0.8);
+            max-width: clamp(360px, 37.5rem, 600px);
+            margin: 0 auto;
+        }
+
+        /* App Cards with Glass Morphism */
+        .battle-grid {
+            display: grid;
+            grid-template-columns: 1fr 120px 1fr;
+            gap: var(--gap-lg);
+            align-items: stretch;
+            margin-bottom: 60px;
+        }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                transparent 40%, 
+                transparent 60%, 
+                rgba(255, 255, 255, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .app-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0, 113, 227, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .app-card {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .app-card:active {
+            transform: translateY(-5px) scale(1.01);
+            transition: all 0.1s ease;
+        }
+
+        .app-card:hover::before {
+            opacity: 1;
+        }
+
+        .app-card.team-red {
+            background: linear-gradient(135deg, 
+                rgba(255, 55, 95, 0.1) 0%, 
+                rgba(255, 255, 255, 0.05) 100%);
+        }
+
+        .app-card.team-blue {
+            background: linear-gradient(135deg, 
+                rgba(0, 113, 227, 0.1) 0%, 
+                rgba(255, 255, 255, 0.05) 100%);
+        }
+
+        .app-hero-image {
+            height: clamp(196px, 17.5rem, 280px);
+            background: linear-gradient(135deg, #1D1D1F 0%, #2D2D2F 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-hero-image::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: heroShimmer 3s ease infinite;
+        }
+
+        @keyframes heroShimmer {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+
+        .app-icon-large {
+            width: 120px;
+            height: clamp(84px, 7.5rem, 120px);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 27px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-5xl);
+            z-index: 1;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: iconFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-5px) rotate(2deg); }
+            75% { transform: translateY(5px) rotate(-2deg); }
+        }
+
+        .app-content {
+            padding: var(--space-md);
+        }
+
+        .app-header {
+            margin-bottom: 24px;
+        }
+
+        .app-name {
+            font-size: var(--fs-3xl);
+            font-weight: 700;
+            letter-spacing: -0.015em;
+            margin-bottom: 8px;
+        }
+
+        .app-developer {
+            font-size: var(--fs-lg);
+            color: rgba(245, 245, 247, 0.6);
+            margin-bottom: 16px;
+        }
+
+        .app-rating {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-sm);
+            margin-bottom: 20px;
+        }
+
+        .stars {
+            display: flex;
+            gap: var(--gap-xs);
+        }
+
+        .star {
+            color: var(--apple-orange);
+            font-size: var(--fs-base);
+            transition: all 0.2s ease;
+        }
+
+        .star:hover {
+            transform: scale(1.2);
+        }
+
+        .rating-info {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-xs);
+            color: rgba(245, 245, 247, 0.6);
+            font-size: var(--fs-base);
+        }
+
+        .app-badges {
+            display: flex;
+            gap: var(--gap-xs);
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: var(--space-xs) 12px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            font-size: var(--fs-xs);
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .badge:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .badge.featured {
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            border: none;
+            color: white;
+        }
+
+        .badge.editors {
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-pink));
+            border: none;
+            color: white;
+        }
+
+        .app-description {
+            font-size: var(--fs-lg);
+            line-height: 1.5;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 32px;
+        }
+
+        .app-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--gap-sm);
+            margin-bottom: 32px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-xs);
+            font-size: var(--fs-base);
+            color: rgba(245, 245, 247, 0.7);
+        }
+
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--apple-green), var(--apple-teal));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-xs);
+        }
+
+        .app-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--gap-md);
+            padding: var(--space-md) 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 24px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: var(--fs-3xl);
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--apple-teal), var(--apple-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: var(--fs-xs);
+            color: rgba(245, 245, 247, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 4px;
+        }
+
+        .vote-button {
+            width: 100%;
+            padding: var(--space-md);
+            border: none;
+            border-radius: 16px;
+            font-size: var(--fs-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vote-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .vote-button:active::before {
+            width: clamp(180px, 18.75rem, 300px);
+            height: clamp(210px, 18.75rem, 300px);
+        }
+
+        .vote-red {
+            background: linear-gradient(135deg, var(--apple-red), var(--apple-pink));
+            color: white;
+        }
+
+        .vote-blue {
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            color: white;
+        }
+
+        .vote-button:hover {
+            transform: scale(1.02) translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .vote-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .vote-button.voted {
+            background: linear-gradient(135deg, var(--apple-green), var(--apple-teal)) !important;
+            transform: scale(0.98);
+        }
+
+        .vote-button:active {
+            transform: scale(0.98);
+        }
+
+        /* VS Divider */
+        .vs-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .vs-divider::before,
+        .vs-divider::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 60px;
+            background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: energyFlow 2s ease-in-out infinite;
+        }
+
+        .vs-divider::before {
+            left: -20px;
+            animation-delay: 0s;
+        }
+
+        .vs-divider::after {
+            right: -20px;
+            animation-delay: 1s;
+        }
+
+        @keyframes energyFlow {
+            0%, 100% {
+                opacity: 0;
+                transform: scaleY(0);
+            }
+            50% {
+                opacity: 1;
+                transform: scaleY(1);
+            }
+        }
+
+        .vs-badge {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(40px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-3xl);
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: vsPulse 2s ease infinite;
+        }
+
+        @keyframes vsPulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            }
+            50% { 
+                transform: scale(1.1);
+                box-shadow: 0 25px 50px rgba(0, 113, 227, 0.5);
+            }
+        }
+
+        /* Live Results Bar */
+        .results-section {
+            max-width: clamp(600px, 62.5rem, 1000px);
+            margin: var(--space-xl) auto;
+            padding: var(--space-lg);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .results-title {
+            font-size: var(--fs-3xl);
+            font-weight: 600;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-xs);
+            padding: var(--space-xs) 16px;
+            background: rgba(255, 55, 95, 0.2);
+            border: 1px solid var(--apple-red);
+            border-radius: 100px;
+            animation: livePulse 2s ease infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--apple-red);
+            border-radius: 50%;
+            animation: liveDot 1s ease infinite;
+        }
+
+        @keyframes liveDot {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+        }
+
+        .live-text {
+            font-size: var(--fs-sm);
+            font-weight: 600;
+            color: var(--apple-red);
+        }
+
+        .progress-container {
+            position: relative;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            display: flex;
+            position: relative;
+        }
+
+        .progress-segment {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-xl);
+            font-weight: 600;
+            color: white;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-segment::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-red {
+            background: linear-gradient(135deg, var(--apple-red), var(--apple-pink));
+        }
+
+        .progress-blue {
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+        }
+
+        .vote-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: var(--fs-base);
+            color: rgba(245, 245, 247, 0.8);
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            max-width: clamp(840px, 87.5rem, 1400px);
+            margin: var(--space-xl) auto;
+            padding: 0 20px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--gap-md);
+            margin-top: 48px;
+        }
+
+        .gallery-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: var(--space-md);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 113, 227, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .gallery-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gallery-card:active {
+            transform: translateY(-2px) scale(1.01);
+            transition: all 0.1s ease;
+        }
+
+        /* Footer */
+        footer {
+            padding: var(--space-xl) 20px 40px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-logo {
+            font-size: var(--fs-4xl);
+            margin-bottom: 24px;
+            opacity: 0.3;
+        }
+
+        .footer-text {
+            font-size: var(--fs-sm);
+            color: rgba(245, 245, 247, 0.6);
+            line-height: 1.6;
+        }
+
+        /* Additional animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-30px) scale(1.2);
+            }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: calc(200px + 100%) 0; }
+        }
+        
+        /* Battle entrance animations */
+        .app-card {
+            animation: battleEntrance 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            opacity: 0;
+            transform: translateY(50px) scale(0.9);
+        }
+        
+        .app-card.team-red {
+            animation-delay: 0.2s;
+        }
+        
+        .app-card.team-blue {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes battleEntrance {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        /* VS badge enhanced animation */
+        .vs-badge {
+            animation: vsPulse 2s ease infinite, vsGlow 4s ease infinite;
+        }
+        
+        @keyframes vsGlow {
+            0%, 100% {
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3),
+                           0 0 0 0 rgba(0, 113, 227, 0.4);
+            }
+            50% {
+                box-shadow: 0 25px 50px rgba(0, 113, 227, 0.5),
+                           0 0 30px 10px rgba(0, 113, 227, 0.2);
+            }
+        }
+
+        @media (max-width: clamp(460px, 48rem, 768px)) {
+            .hero-title {
+                font-size: var(--fs-4xl);
+            }
+
+            .battle-grid {
+                grid-template-columns: 1fr;
+                gap: var(--gap-lg);
+            }
+
+            .vs-divider {
+                margin: var(--space-lg) 0;
+            }
+
+            .app-features {
+                grid-template-columns: 1fr;
+            }
+            
+            /* Disable complex animations on mobile for performance */
+            .vs-divider::before,
+            .vs-divider::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- API Script -->
+    <script src="js/api.js"></script>
+    <script src="js/animations.js"></script>
+    <!-- Animated Background -->
+    <div class="background-gradient"></div>
+
+    <!-- Navigation -->
+    <nav role="navigation">
+        <div class="nav-container container-fluid">
+            <div class="logo">
+                <div class="logo-icon">🏆</div>
+                <span>The Vibe Awards</span>
+            </div>
+            <div class="nav-menu">
+                <!-- Getting Started / Awards -->
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-toggle">Getting Started</span>
+                    <div class="nav-dropdown-menu">
+                        <a href="getting-started.html" class="nav-dropdown-item">🚀 Getting Started Hub</a>
+                        <a href="index.html" class="nav-dropdown-item">🏆 The Vibe Awards</a>
+                        <div class="nav-dropdown-divider"></div>
+                        <a href="index.html#features" class="nav-dropdown-item">✨ Features</a>
+                    </div>
+                </div>
+                
+                <!-- Toolkit Hub -->
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-toggle">Toolkit Hub</span>
+                    <div class="nav-dropdown-menu">
+                        <a href="vibe-toolkit.html" class="nav-dropdown-item">🛠️ Vibe Toolkit</a>
+                        <a href="vibe-hub.html" class="nav-dropdown-item">🎯 Vibe Hub Central</a>
+                    </div>
+                </div>
+                
+                <!-- Profile / Messages -->
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-toggle">Profile</span>
+                    <div class="nav-dropdown-menu">
+                        <a href="profile.html" class="nav-dropdown-item">👤 My Profile</a>
+                        <a href="messages.html" class="nav-dropdown-item">💬 Messages</a>
+                        <a href="directory.html" class="nav-dropdown-item">🌐 Directory</a>
+                    </div>
+                </div>
+                
+                <!-- Battle Arena / Leaderboard / Team Up -->
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-toggle">Competition</span>
+                    <div class="nav-dropdown-menu">
+                        <a href="apple-magic-battle.html" class="nav-dropdown-item">⚔️ Battle Arena</a>
+                        <a href="leaderboard.html" class="nav-dropdown-item">📊 Leaderboard</a>
+                        <a href="team-up.html" class="nav-dropdown-item">🤝 Team Up</a>
+                    </div>
+                </div>
+                
+                <!-- Submit -->
+                <a href="submit-app.html" class="nav-link">Submit App</a>
+                <a href="signup.html" class="nav-cta">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">⚡ Live Battle in Progress</div>
+            <h1 class="hero-title" style="font-size: var(--fs-4xl);" style="font-size: var(--fs-4xl);">App Battle Arena</h1>
+            <p class="hero-subtitle">Where revolutionary apps compete for glory in daily showdowns</p>
+            
+            <div class="countdown-pills">
+                <div class="countdown-pill">
+                    <div class="countdown-number" id="hours">23</div>
+                    <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-pill">
+                    <div class="countdown-number" id="minutes">47</div>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-pill">
+                    <div class="countdown-number" id="seconds">32</div>
+                    <div class="countdown-label">Seconds</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Battle Section -->
+    <div class="battle-section">
+        <div class="section-header container-fluid">
+            <div class="section-eyebrow">Today's Showdown</div>
+            <h2 class="section-title" style="font-size: var(--fs-3xl);" style="font-size: var(--fs-3xl);">Healthcare Innovation Battle</h2>
+            <p class="section-description">Two groundbreaking apps compete for the crown in medical technology</p>
+        </div>
+
+        <div class="battle-grid ultra-grid-responsive">
+            <!-- App 1 -->
+            <div class="app-card team-red card-fluid">
+                <div class="app-hero-image">
+                    <div class="app-icon-large">🗣️</div>
+                </div>
+                <div class="app-content">
+                    <div class="app-header">
+                        <h3 class="app-name" style="font-size: var(--fs-2xl);">TinkyBink AAC</h3>
+                        <p class="app-developer">Luke Kist</p>
+                    </div>
+                    
+                    <div class="app-rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <div class="rating-info">
+                            <span>4.9</span>
+                            <span>•</span>
+                            <span>2.4K Ratings</span>
+                        </div>
+                    </div>
+
+                    <div class="app-badges">
+                        <span class="badge editors">Editor's Choice</span>
+                        <span class="badge featured">Featured</span>
+                        <span class="badge">#1 Medical</span>
+                    </div>
+
+                    <p class="app-description">
+                        Revolutionary AI-powered AAC platform transforming speech therapy through predictive analytics, 
+                        automated documentation, and real-time family engagement.
+                    </p>
+
+                    <div class="app-features">
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span>AI Predictions</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span>Auto IEP Goals</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span>Family Portal</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span>HIPAA Secure</span>
+                        </div>
+                    </div>
+
+                    <div class="app-stats">
+                        <div class="stat">
+                            <div class="stat-value">147</div>
+                            <div class="stat-label">Victories</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">89%</div>
+                            <div class="stat-label">Win Rate</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">2.4K</div>
+                            <div class="stat-label">Users</div>
+                        </div>
+                    </div>
+
+                    <button class="vote-button vote-red" onclick="vote('red')">
+                        Vote for TinkyBink
+                    </button>
+                </div>
+            </div>
+
+            <!-- VS Divider -->
+            <div class="vs-divider">
+                <div class="vs-badge">VS</div>
+            </div>
+
+            <!-- App 2 -->
+            <div class="app-card team-blue card-fluid">
+                <div class="app-hero-image">
+                    <div class="app-icon-large">🧠</div>
+                </div>
+                <div class="app-content">
+                    <div class="app-header">
+                        <h3 class="app-name" style="font-size: var(--fs-2xl);">MindSync Pro</h3>
+                        <p class="app-developer">Neural Labs</p>
+                    </div>
+                    
+                    <div class="app-rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">☆</span>
+                        </div>
+                        <div class="rating-info">
+                            <span>4.7</span>
+                            <span>•</span>
+                            <span>1.8K Ratings</span>
+                        </div>
+                    </div>
+
+                    <div class="app-badges">
+                        <span class="badge featured">Featured</span>
+                        <span class="badge">Trending</span>
+                        <span class="badge">#3 Medical</span>
+                    </div>
+
+                    <p class="app-description">
+                        Advanced mental health companion using AI-driven CBT techniques, mood tracking, 
+                        and crisis intervention with seamless healthcare provider integration.
+                    </p>
+
+                    <div class="app-features">
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span>CBT Therapy</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span>Mood Tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span>Crisis Support</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <span>24/7 AI Help</span>
+                        </div>
+                    </div>
+
+                    <div class="app-stats">
+                        <div class="stat">
+                            <div class="stat-value">98</div>
+                            <div class="stat-label">Victories</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">72%</div>
+                            <div class="stat-label">Win Rate</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">1.8K</div>
+                            <div class="stat-label">Users</div>
+                        </div>
+                    </div>
+
+                    <button class="vote-button vote-blue" onclick="vote('blue')">
+                        Vote for MindSync
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Results -->
+    <div class="results-section">
+        <div class="results-header">
+            <h3 class="results-title">Live Voting Results</h3>
+            <div class="live-indicator">
+                <div class="live-dot"></div>
+                <span class="live-text">LIVE</span>
+            </div>
+        </div>
+
+        <div class="progress-container container-fluid">
+            <div class="progress-bar">
+                <div class="progress-segment progress-red" id="redBar" style="width: 58%;">
+                    <span id="redPercent">58%</span>
+                </div>
+                <div class="progress-segment progress-blue" id="blueBar" style="width: 42%;">
+                    <span id="bluePercent">42%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="vote-stats">
+            <span>TinkyBink AAC: <strong id="redVotes">10,687</strong> votes</span>
+            <span>Total Votes: <strong id="totalVotes">18,432</strong></span>
+            <span>MindSync Pro: <strong id="blueVotes">7,745</strong> votes</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">🏆</div>
+        <p class="footer-text">
+            © 2024 The Vibe Awards. All rights reserved.<br>
+            Where innovation meets competition.
+        </p>
+    </footer>
+
+    <script>
+        // Global battle data
+        let currentBattle = null;
+        let redVoteCount = 0;
+        let blueVoteCount = 0;
+        let hasVoted = false;
+        
+        // Load battle data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCurrentBattle();
+            updateUserDisplay();
+        });
+        
+        async function loadCurrentBattle() {
+            try {
+                const battle = await vibeAPI.getCurrentBattle();
+                
+                if (!battle) {
+                    // No active battle, show message
+                    showNotification('No active battle right now. Check back soon!', 'info');
+                    return;
+                }
+                
+                currentBattle = battle;
+                redVoteCount = battle.app1_votes || 0;
+                blueVoteCount = battle.app2_votes || 0;
+                
+                // Check if user has already voted
+                hasVoted = localStorage.getItem(`hasVoted_${battle.id}`) === 'true';
+                
+                updateBattleDisplay();
+                updateVoteDisplay();
+                
+            } catch (error) {
+                console.error('Error loading battle:', error);
+                showNotification('Failed to load current battle', 'error');
+            }
+        }
+        
+        function updateBattleDisplay() {
+            if (!currentBattle) return;
+            
+            // Update app names
+            const app1Name = document.querySelector('.app-card.team-red .app-name');
+            const app2Name = document.querySelector('.app-card.team-blue .app-name');
+            
+            if (app1Name) app1Name.textContent = currentBattle.app1_name;
+            if (app2Name) app2Name.textContent = currentBattle.app2_name;
+            
+            // Update developer names
+            const app1Dev = document.querySelector('.app-card.team-red .app-developer');
+            const app2Dev = document.querySelector('.app-card.team-blue .app-developer');
+            
+            if (app1Dev) app1Dev.textContent = currentBattle.app1_developer;
+            if (app2Dev) app2Dev.textContent = currentBattle.app2_developer;
+            
+            // Update vote button text
+            const redButton = document.querySelector('.vote-button.vote-red');
+            const blueButton = document.querySelector('.vote-button.vote-blue');
+            
+            if (redButton) redButton.textContent = `Vote for ${currentBattle.app1_name}`;
+            if (blueButton) blueButton.textContent = `Vote for ${currentBattle.app2_name}`;
+        }
+
+        // Enhanced Countdown Timer with animations
+        function updateCountdown() {
+            const now = new Date();
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            
+            const diff = tomorrow - now;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            // Animate number changes
+            updateCountdownNumber('hours', hours.toString().padStart(2, '0'));
+            updateCountdownNumber('minutes', minutes.toString().padStart(2, '0'));
+            updateCountdownNumber('seconds', seconds.toString().padStart(2, '0'));
+        }
+        
+        function updateCountdownNumber(elementId, newValue) {
+            const element = document.getElementById(elementId);
+            const currentValue = element.textContent;
+            
+            if (currentValue !== newValue) {
+                element.classList.add('updating');
+                
+                setTimeout(() => {
+                    element.textContent = newValue;
+                    element.classList.remove('updating');
+                }, 150);
+            }
+        }
+        
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        function updateVoteDisplay() {
+            const total = redVoteCount + blueVoteCount;
+            const redPercent = total > 0 ? Math.round((redVoteCount / total) * 100) : 0;
+            const bluePercent = total > 0 ? Math.round((blueVoteCount / total) * 100) : 0;
+            
+            // Animate percentage text changes
+            animateTextChange('redPercent', redPercent + '%');
+            animateTextChange('bluePercent', bluePercent + '%');
+            
+            // Animate progress bar changes
+            const redBar = document.getElementById('redBar');
+            const blueBar = document.getElementById('blueBar');
+            
+            redBar.style.transition = 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+            blueBar.style.transition = 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+            
+            redBar.style.width = redPercent + '%';
+            blueBar.style.width = bluePercent + '%';
+            
+            // Animate vote count text
+            animateTextChange('redVotes', redVoteCount.toLocaleString());
+            animateTextChange('blueVotes', blueVoteCount.toLocaleString());
+            animateTextChange('totalVotes', total.toLocaleString());
+        }
+        
+        function animateTextChange(elementId, newText) {
+            const element = document.getElementById(elementId);
+            const currentText = element.textContent;
+            
+            if (currentText !== newText) {
+                element.style.transform = 'scale(1.1)';
+                element.style.transition = 'transform 0.2s ease';
+                
+                setTimeout(() => {
+                    element.textContent = newText;
+                    element.style.transform = 'scale(1)';
+                }, 100);
+            }
+        }
+
+        async function vote(team) {
+            if (hasVoted) {
+                showNotification('You\'ve already cast your vote! Return tomorrow for the next battle.', 'info');
+                return;
+            }
+            
+            if (!currentBattle) {
+                showNotification('No active battle to vote on', 'error');
+                return;
+            }
+            
+            const button = event.target;
+            
+            try {
+                // Show loading animation
+                button.style.transform = 'scale(0.95)';
+                button.textContent = 'Casting Vote...';
+                button.disabled = true;
+                
+                // Add pulse animation
+                button.style.animation = 'pulse 1s ease infinite';
+                
+                // Determine which app to vote for
+                const appId = team === 'red' ? currentBattle.app1_id : currentBattle.app2_id;
+                
+                // Cast vote via API
+                await vibeAPI.voteInBattle(currentBattle.id, appId);
+                
+                // Update local counts with animation
+                if (team === 'red') {
+                    redVoteCount++;
+                    animateVoteIncrease('red');
+                } else {
+                    blueVoteCount++;
+                    animateVoteIncrease('blue');
+                }
+                
+                hasVoted = true;
+                localStorage.setItem(`hasVoted_${currentBattle.id}`, 'true');
+                
+                // Success animation
+                button.style.animation = '';
+                button.style.transform = 'scale(1)';
+                button.classList.add('voted');
+                button.textContent = '✓ Vote Cast';
+                
+                // Disable both vote buttons
+                document.querySelectorAll('.vote-button').forEach(btn => {
+                    if (btn !== button) {
+                        btn.disabled = true;
+                        btn.style.opacity = '0.4';
+                    }
+                });
+                
+                // Animate progress bar update
+                setTimeout(() => {
+                    updateVoteDisplay();
+                }, 300);
+                
+                showNotification('Vote cast successfully! 🎉', 'success');
+                
+            } catch (error) {
+                console.error('Error voting:', error);
+                
+                // Reset button on error
+                button.style.animation = '';
+                button.style.transform = 'scale(1)';
+                button.disabled = false;
+                button.textContent = team === 'red' ? `Vote for ${currentBattle.app1_name}` : `Vote for ${currentBattle.app2_name}`;
+                
+                showNotification(error.message || 'Failed to cast vote', 'error');
+            }
+        }
+        
+        // Animate vote count increase
+        function animateVoteIncrease(team) {
+            const voteElement = document.getElementById(team === 'red' ? 'redVotes' : 'blueVotes');
+            const totalElement = document.getElementById('totalVotes');
+            
+            // Create floating +1 animation
+            const floatingNumber = document.createElement('div');
+            floatingNumber.textContent = '+1';
+            floatingNumber.style.cssText = `
+                position: absolute;
+                color: ${team === 'red' ? 'var(--apple-red)' : 'var(--apple-blue)'};
+                font-weight: bold;
+                font-size: var(--fs-lg);
+                pointer-events: none;
+                z-index: 1000;
+                animation: floatUp 1.5s ease-out forwards;
+            `;
+            
+            voteElement.parentElement.style.position = 'relative';
+            voteElement.parentElement.appendChild(floatingNumber);
+            
+            // Remove floating number after animation
+            setTimeout(() => {
+                if (floatingNumber.parentNode) {
+                    floatingNumber.parentNode.removeChild(floatingNumber);
+                }
+            }, 1500);
+            
+            // Pulse animation for vote count
+            voteElement.style.animation = 'pulse 0.6s ease';
+            totalElement.style.animation = 'pulse 0.6s ease 0.3s';
+        }
+
+        // Refresh battle data periodically
+        setInterval(() => {
+            if (currentBattle) {
+                loadCurrentBattle();
+            }
+        }, 30000); // Refresh every 30 seconds
+    </script>
+    <script src="js/apple-magic-init.js"></script>
+</body>
+</html>

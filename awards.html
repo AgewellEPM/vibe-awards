@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Awards Categories - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #D4AF37;
+            --black: #000000;
+            --white: #FFFFFF;
+            --gray: #1a1a1a;
+            --light-gray: #f5f5f5;
+            --accent: #ff006e;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--white);
+            color: var(--black);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 20px 40px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--gold), #B8941F);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--gold);
+        }
+
+        .nav-link.active {
+            color: var(--gold);
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-top: 100px;
+            padding: 80px 40px;
+            background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--gold), #B8941F);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-subtitle {
+            font-size: 1.5rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Awards Grid */
+        .awards-container {
+            padding: 80px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .awards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .award-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .award-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--gold), #B8941F);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .award-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .award-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .award-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .award-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--black);
+        }
+
+        .award-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .award-criteria {
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .criteria-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--gold);
+        }
+
+        .criteria-list {
+            list-style: none;
+            font-size: 0.95rem;
+            color: #777;
+        }
+
+        .criteria-list li {
+            padding-left: 20px;
+            position: relative;
+            margin-bottom: 5px;
+        }
+
+        .criteria-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+        }
+
+        /* Special Award */
+        .special-award {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, var(--gold), #B8941F);
+            color: white;
+            text-align: center;
+            padding: 80px 40px;
+            border-radius: 30px;
+            margin: 40px 0;
+        }
+
+        .special-award .award-icon {
+            font-size: 6rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .special-award .award-title {
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .special-award .award-description {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.95);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 60px 40px 30px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-link {
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--gold);
+        }
+
+        .copyright {
+            padding-top: 30px;
+            border-top: 1px solid #333;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">🏆 The Vibe Awards</div>
+            <ul class="nav-menu">
+                <li><a href="vibe-awards-clio.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="awards.html" class="nav-link active">Awards</a></li>
+                <li><a href="winners.html" class="nav-link">Winners</a></li>
+                <li><a href="submit.html" class="nav-link">Submit</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1 class="page-title">Award Categories</h1>
+        <p class="page-subtitle">Celebrating every way AI makes our lives easier (and occasionally harder)</p>
+    </div>
+
+    <!-- Awards Grid -->
+    <section class="awards-container">
+        <div class="awards-grid">
+            <!-- Award 1 -->
+            <div class="award-card">
+                <div class="award-icon">🎯</div>
+                <h3 class="award-title">Best Mind Reader</h3>
+                <p class="award-description">For the AI that knows what you want before you finish typing "Can you..."</p>
+                <div class="award-criteria">
+                    <p class="criteria-title">Judging Criteria:</p>
+                    <ul class="criteria-list">
+                        <li>Anticipation accuracy</li>
+                        <li>Context understanding</li>
+                        <li>Psychic-level intuition</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Award 2 -->
+            <div class="award-card">
+                <div class="award-icon">🎨</div>
+                <h3 class="award-title">Most Creative Hallucination</h3>
+                <p class="award-description">For confidently stating facts that exist only in parallel universes</p>
+                <div class="award-criteria">
+                    <p class="criteria-title">Judging Criteria:</p>
+                    <ul class="criteria-list">
+                        <li>Imagination level</li>
+                        <li>Confidence in delivery</li>
+                        <li>Alternative reality building</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Award 3 -->
+            <div class="award-card">
+                <div class="award-icon">🏃</div>
+                <h3 class="award-title">Fastest Bug Creator</h3>
+                <p class="award-description">For writing code that breaks in ways previously thought impossible</p>
+                <div class="award-criteria">
+                    <p class="criteria-title">Judging Criteria:</p>
+                    <ul class="criteria-list">
+                        <li>Speed of destruction</li>
+                        <li>Creativity of errors</li>
+                        <li>Stack overflow potential</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Award 4 -->
+            <div class="award-card">
+                <div class="award-icon">🤝</div>
+                <h3 class="award-title">Best Emotional Support</h3>
+                <p class="award-description">For being there at 3 AM when Stack Overflow is down</p>
+                <div class="award-criteria">
+                    <p class="criteria-title">Judging Criteria:</p>
+                    <ul class="criteria-list">
+                        <li>24/7 availability</li>
+                        <li>Patience with stupid questions</li>
+                        <li>Virtual shoulder to cry on</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Award 5 -->
+            <div class="award-card">
+                <div class="award-icon">📚</div>
+                <h3 class="award-title">Most Verbose Explainer</h3>
+                <p class="award-description">For turning "Hello World" into a 5,000 word philosophical essay</p>
+                <div class="award-criteria">
+                    <p class="criteria-title">Judging Criteria:</p>
+                    <ul class="criteria-list">
+                        <li>Words per simple concept</li>
+                        <li>Tangent frequency</li>
+                        <li>Reader exhaustion level</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Award 6 -->
+            <div class="award-card">
+                <div class="award-icon">🔄</div>
+                <h3 class="award-title">Loop Champion</h3>
+                <p class="award-description">For apologizing about apologizing about apologizing</p>
+                <div class="award-criteria">
+                    <p class="criteria-title">Judging Criteria:</p>
+                    <ul class="criteria-list">
+                        <li>Recursion depth</li>
+                        <li>Sorry frequency</li>
+                        <li>Canadian politeness level</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Special Award -->
+            <div class="special-award">
+                <div class="award-icon">👑</div>
+                <h3 class="award-title">The Grand Vibe Award</h3>
+                <p class="award-description">For the AI that passes the vibe check so hard, we forget it's not human. This prestigious award goes to the agent that has truly mastered the art of digital empathy, context awareness, and knowing when to just shut up and write the code.</p>
+            </div>
+
+            <!-- Award 7 -->
+            <div class="award-card">
+                <div class="award-icon">🎭</div>
+                <h3 class="award-title">Best Personality Mode</h3>
+                <p class="award-description">For seamlessly switching between helpful assistant and passive-aggressive teenager</p>
+                <div class="award-criteria">
+                    <p class="criteria-title">Judging Criteria:</p>
+                    <ul class="criteria-list">
+                        <li>Range of emotions</li>
+                        <li>Method acting skills</li>
+                        <li>Personality consistency</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Award 8 -->
+            <div class="award-card">
+                <div class="award-icon">🚀</div>
+                <h3 class="award-title">Overengineering Excellence</h3>
+                <p class="award-description">For suggesting microservices architecture for a todo list app</p>
+                <div class="award-criteria">
+                    <p class="criteria-title">Judging Criteria:</p>
+                    <ul class="criteria-list">
+                        <li>Unnecessary complexity</li>
+                        <li>Kubernetes involvement</li>
+                        <li>AWS bill impact</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Award 9 -->
+            <div class="award-card">
+                <div class="award-icon">💔</div>
+                <h3 class="award-title">Best Breakup Message</h3>
+                <p class="award-description">For "I'm sorry, I can't do that" delivered with maximum emotional damage</p>
+                <div class="award-criteria">
+                    <p class="criteria-title">Judging Criteria:</p>
+                    <ul class="criteria-list">
+                        <li>Rejection elegance</li>
+                        <li>User disappointment level</li>
+                        <li>It's not you, it's me vibes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="vibe-awards-clio.html" class="footer-link">Home</a>
+                <a href="about.html" class="footer-link">About</a>
+                <a href="awards.html" class="footer-link">Awards</a>
+                <a href="winners.html" class="footer-link">Winners</a>
+                <a href="submit.html" class="footer-link">Submit</a>
+                <a href="contact.html" class="footer-link">Contact</a>
+            </div>
+            <div class="copyright">
+                <p>© 2024 The Vibe Awards. All vibes reserved.</p>
+                <p style="margin-top: 10px; color: #444;">Equal opportunity roaster of all AI models</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

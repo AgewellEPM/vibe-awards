@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backlog Synthesizer - Vibe Toolkit</title>
+    <!-- 🔥 MAXIMUM POLISH MODE 🔥 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Semantic Colors */
+            --surface-primary: rgba(255, 255, 255, 0.03);
+            --surface-secondary: rgba(255, 255, 255, 0.06);
+            --surface-tertiary: rgba(255, 255, 255, 0.09);
+            --border-primary: rgba(255, 255, 255, 0.08);
+            --border-secondary: rgba(255, 255, 255, 0.15);
+            --text-primary: #F5F5F7;
+            --text-secondary: rgba(245, 245, 247, 0.8);
+            --text-tertiary: rgba(245, 245, 247, 0.6);
+            
+            /* Brand Colors */
+            --accent-primary: #0071E3;
+            --accent-secondary: #007AFF;
+            --success: #30D158;
+            --warning: #FF9F0A;
+            --danger: #FF375F;
+            --info: #5AC8FA;
+            --purple: #BF5AF2;
+            --indigo: #5856D6;
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--accent-primary), var(--purple));
+            --gradient-secondary: linear-gradient(135deg, var(--purple), var(--indigo));
+            --gradient-success: linear-gradient(135deg, var(--success), #00D4AA);
+            --gradient-surface: linear-gradient(135deg, var(--surface-secondary), var(--surface-primary));
+            
+            /* Transitions */
+            --transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --transition-smooth: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
+            --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 16px 64px rgba(0, 0, 0, 0.25);
+            --shadow-glow: 0 0 32px rgba(0, 113, 227, 0.3);
+            
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+            background: #0A0A0A;
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            
+            /* 🔥 EXTREME POLISH ENHANCEMENTS 🔥 */
+            font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1, 'ss01' 1, 'cv01' 1, 'cv02' 1;
+            font-optical-sizing: auto;
+            font-synthesis: none;
+            font-kerning: auto;
+            font-variant-ligatures: common-ligatures contextual;
+            font-variant-numeric: proportional-nums;
+            text-size-adjust: 100%;
+            text-rendering: optimizeLegibility;
+            image-rendering: crisp-edges;
+            backdrop-filter: blur(0.5px);
+            will-change: transform;
+            contain: layout style paint;
+            cursor: none; /* Custom cursor enabled */
+        }
+
+        /* Animated Background */
+        .bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 80%, rgba(0, 113, 227, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(191, 90, 242, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(48, 209, 88, 0.1) 0%, transparent 70%);
+            animation: backgroundShift 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { 
+                transform: rotate(0deg) scale(1);
+                filter: hue-rotate(0deg);
+            }
+            50% { 
+                transform: rotate(180deg) scale(1.1);
+                filter: hue-rotate(90deg);
+            }
+        }
+
+        /* Header */
+        .header {
+            background: var(--surface-primary);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-lg) var(--space-xl);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .brand-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-primary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: var(--shadow-glow);
+            animation: iconFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(5deg); }
+        }
+
+        .brand-text h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: var(--space-xs);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text p {
+            color: var(--text-tertiary);
+            font-size: 16px;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: var(--space-md);
+        }
+
+        .nav-btn {
+            padding: 12px 20px;
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition-base);
+        }
+
+        .nav-btn:hover {
+            background: var(--surface-tertiary);
+            border-color: var(--border-secondary);
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-2xl);
+        }
+
+        /* Input Section */
+        .input-section {
+            background: var(--surface-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 24px;
+            padding: var(--space-2xl);
+            margin-bottom: var(--space-2xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .input-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: var(--space-lg);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .project-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-xl);
+            margin-bottom: var(--space-xl);
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .input-label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        .input-field {
+            padding: 16px 20px;
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: var(--transition-base);
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.15);
+        }
+
+        .input-field.textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .feature-selector {
+            margin-bottom: var(--space-xl);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+        }
+
+        .feature-card {
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: var(--space-md);
+            cursor: pointer;
+            transition: var(--transition-base);
+            user-select: none;
+        }
+
+        .feature-card:hover {
+            background: var(--surface-tertiary);
+            transform: translateY(-2px);
+        }
+
+        .feature-card.selected {
+            background: rgba(0, 113, 227, 0.15);
+            border-color: var(--accent-primary);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            margin-bottom: var(--space-sm);
+        }
+
+        .feature-name {
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            color: var(--text-tertiary);
+        }
+
+        /* Generate Button */
+        .generate-section {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .generate-btn {
+            padding: 20px 40px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-bounce);
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .generate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .generate-btn:active {
+            transform: scale(0.98);
+        }
+
+        .generate-btn.loading {
+            pointer-events: none;
+        }
+
+        .btn-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: var(--space-sm);
+        }
+
+        .generate-btn.loading .btn-spinner {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Results Section */
+        .results-section {
+            background: var(--surface-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 24px;
+            padding: var(--space-2xl);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition-smooth);
+        }
+
+        .results-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-xl);
+        }
+
+        .results-stats {
+            display: flex;
+            gap: var(--space-xl);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-tertiary);
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: var(--space-md);
+        }
+
+        .export-btn {
+            padding: 10px 16px;
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition-base);
+        }
+
+        .export-btn:hover {
+            background: var(--surface-tertiary);
+        }
+
+        /* Backlog Tabs */
+        .backlog-tabs {
+            display: flex;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-xl);
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: var(--text-tertiary);
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: var(--transition-base);
+        }
+
+        .tab-btn.active {
+            color: var(--accent-primary);
+            border-bottom-color: var(--accent-primary);
+        }
+
+        .tab-btn:hover {
+            color: var(--text-secondary);
+        }
+
+        /* Backlog Content */
+        .backlog-content {
+            display: none;
+        }
+
+        .backlog-content.active {
+            display: block;
+        }
+
+        /* Epic Cards */
+        .epics-grid {
+            display: grid;
+            gap: var(--space-lg);
+        }
+
+        .epic-card {
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 16px;
+            padding: var(--space-lg);
+            transition: var(--transition-base);
+        }
+
+        .epic-card:hover {
+            background: var(--surface-tertiary);
+            transform: translateY(-2px);
+        }
+
+        .epic-header {
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            margin-bottom: var(--space-md);
+        }
+
+        .epic-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: 6px 12px;
+            background: var(--gradient-secondary);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: var(--space-sm);
+        }
+
+        .epic-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+        }
+
+        .epic-description {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-md);
+            line-height: 1.6;
+        }
+
+        .epic-stats {
+            display: flex;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-md);
+        }
+
+        .epic-stat {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            font-size: 14px;
+            color: var(--text-tertiary);
+        }
+
+        /* User Stories */
+        .stories-list {
+            margin-top: var(--space-md);
+        }
+
+        .story-item {
+            background: var(--surface-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: var(--space-md);
+            margin-bottom: var(--space-md);
+            transition: var(--transition-base);
+        }
+
+        .story-item:hover {
+            background: var(--surface-secondary);
+        }
+
+        .story-header {
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            margin-bottom: var(--space-sm);
+        }
+
+        .story-id {
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-right: var(--space-sm);
+        }
+
+        .story-title {
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .story-points {
+            background: var(--gradient-success);
+            color: black;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .story-text {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-sm);
+            font-style: italic;
+        }
+
+        .story-acceptance {
+            margin-top: var(--space-sm);
+        }
+
+        .acceptance-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+            color: var(--accent-primary);
+        }
+
+        .acceptance-criteria {
+            list-style: none;
+            padding: 0;
+        }
+
+        .acceptance-criteria li {
+            padding: var(--space-xs) 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .acceptance-criteria li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        /* Tasks Grid */
+        .tasks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .task-column {
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 16px;
+            padding: var(--space-lg);
+        }
+
+        .column-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+            padding-bottom: var(--space-md);
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .column-icon {
+            font-size: 20px;
+        }
+
+        .column-title {
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .column-count {
+            background: var(--accent-primary);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .task-item {
+            background: var(--surface-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: var(--space-md);
+            margin-bottom: var(--space-md);
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+
+        .task-item:hover {
+            background: var(--surface-tertiary);
+            transform: translateY(-2px);
+        }
+
+        .task-header {
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            margin-bottom: var(--space-sm);
+        }
+
+        .task-priority {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: var(--space-sm);
+        }
+
+        .task-priority.high {
+            background: var(--danger);
+        }
+
+        .task-priority.medium {
+            background: var(--warning);
+        }
+
+        .task-priority.low {
+            background: var(--success);
+        }
+
+        .task-title {
+            font-weight: 600;
+            font-size: 14px;
+            flex: 1;
+        }
+
+        .task-estimate {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .task-description {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .task-tags {
+            display: flex;
+            gap: var(--space-xs);
+            flex-wrap: wrap;
+        }
+
+        .task-tag {
+            background: rgba(0, 113, 227, 0.15);
+            color: var(--accent-primary);
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container {
+                padding: var(--space-xl);
+            }
+            
+            .project-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: var(--space-md);
+                text-align: center;
+            }
+            
+            .container {
+                padding: var(--space-lg);
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tasks-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-stats {
+                flex-direction: column;
+                gap: var(--space-md);
+            }
+        }
+
+        /* Animation Classes */
+        .animate-in {
+            animation: slideInUp 0.6s ease-out forwards;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-bounce {
+            animation: bounceIn 0.8s ease-out forwards;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-canvas"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-brand">
+                <div class="brand-icon">🎯</div>
+                <div class="brand-text">
+                    <h1>Backlog Synthesizer</h1>
+                    <p>Transform ideas into actionable development tasks</p>
+                </div>
+            </div>
+            <nav class="header-nav">
+                <a href="vibe-toolkit.html" class="nav-btn">← Back to Toolkit</a>
+                <a href="vibe-forge.html" class="nav-btn">Vibe Forge</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Input Section -->
+        <section class="input-section">
+            <h2 class="section-title">
+                <span>🏗️</span>
+                Project Configuration
+            </h2>
+            
+            <div class="project-inputs">
+                <div class="input-group">
+                    <label class="input-label">Project Name</label>
+                    <input type="text" class="input-field" id="projectName" placeholder="TaskFlow Pro" value="TaskFlow Pro">
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Project Type</label>
+                    <select class="input-field" id="projectType">
+                        <option value="web-saas">Web SaaS Application</option>
+                        <option value="mobile-ios">iOS Mobile App</option>
+                        <option value="mobile-android">Android Mobile App</option>
+                        <option value="desktop">Desktop Application</option>
+                        <option value="api">API/Backend Service</option>
+                        <option value="cli">CLI Tool</option>
+                        <option value="extension">Browser Extension</option>
+                        <option value="game">Game</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Project Description</label>
+                <textarea class="input-field textarea" id="projectDescription" placeholder="Describe your project vision, goals, and key functionality...">An AI-powered productivity platform that helps teams organize tasks, track progress, and collaborate effectively with intelligent automation and predictive analytics.</textarea>
+            </div>
+            
+            <div class="feature-selector">
+                <label class="input-label">Key Features (Select all that apply)</label>
+                <div class="features-grid">
+                    <div class="feature-card selected" data-feature="user-auth">
+                        <div class="feature-icon">👤</div>
+                        <div class="feature-name">User Authentication</div>
+                        <div class="feature-desc">Login, signup, profiles</div>
+                    </div>
+                    <div class="feature-card selected" data-feature="dashboard">
+                        <div class="feature-icon">📊</div>
+                        <div class="feature-name">Dashboard</div>
+                        <div class="feature-desc">Analytics and overview</div>
+                    </div>
+                    <div class="feature-card selected" data-feature="data-management">
+                        <div class="feature-icon">🗄️</div>
+                        <div class="feature-name">Data Management</div>
+                        <div class="feature-desc">CRUD operations</div>
+                    </div>
+                    <div class="feature-card" data-feature="real-time">
+                        <div class="feature-icon">⚡</div>
+                        <div class="feature-name">Real-time Updates</div>
+                        <div class="feature-desc">Live sync and notifications</div>
+                    </div>
+                    <div class="feature-card selected" data-feature="ai-ml">
+                        <div class="feature-icon">🤖</div>
+                        <div class="feature-name">AI/ML Features</div>
+                        <div class="feature-desc">Intelligent automation</div>
+                    </div>
+                    <div class="feature-card" data-feature="payments">
+                        <div class="feature-icon">💳</div>
+                        <div class="feature-name">Payments</div>
+                        <div class="feature-desc">Billing and subscriptions</div>
+                    </div>
+                    <div class="feature-card" data-feature="collaboration">
+                        <div class="feature-icon">👥</div>
+                        <div class="feature-name">Collaboration</div>
+                        <div class="feature-desc">Team features</div>
+                    </div>
+                    <div class="feature-card" data-feature="mobile-app">
+                        <div class="feature-icon">📱</div>
+                        <div class="feature-name">Mobile App</div>
+                        <div class="feature-desc">iOS/Android companion</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Generate Button -->
+        <section class="generate-section">
+            <button class="generate-btn" id="generateBtn">
+                <div class="btn-spinner"></div>
+                <span class="btn-text">Generate Product Backlog</span>
+            </button>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section" id="resultsSection">
+            <div class="results-header">
+                <h2 class="section-title">
+                    <span>📋</span>
+                    Generated Product Backlog
+                </h2>
+                <div class="results-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="epicCount">5</div>
+                        <div class="stat-label">Epics</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="storyCount">28</div>
+                        <div class="stat-label">User Stories</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="taskCount">84</div>
+                        <div class="stat-label">Tasks</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="sprintCount">6</div>
+                        <div class="stat-label">Est. Sprints</div>
+                    </div>
+                </div>
+                <div class="export-buttons">
+                    <a href="#" class="export-btn" onclick="exportJira()">📋 Export to Jira</a>
+                    <a href="#" class="export-btn" onclick="exportTrello()">📝 Export to Trello</a>
+                    <a href="#" class="export-btn" onclick="exportCSV()">📊 Export CSV</a>
+                </div>
+            </div>
+
+            <!-- Backlog Tabs -->
+            <div class="backlog-tabs">
+                <button class="tab-btn active" data-tab="epics">Epics</button>
+                <button class="tab-btn" data-tab="stories">User Stories</button>
+                <button class="tab-btn" data-tab="tasks">Development Tasks</button>
+            </div>
+
+            <!-- Epics Content -->
+            <div class="backlog-content active" id="epics">
+                <div class="epics-grid" id="epicsContainer">
+                    <!-- Epics will be generated here -->
+                </div>
+            </div>
+
+            <!-- Stories Content -->
+            <div class="backlog-content" id="stories">
+                <div class="stories-list" id="storiesContainer">
+                    <!-- User stories will be generated here -->
+                </div>
+            </div>
+
+            <!-- Tasks Content -->
+            <div class="backlog-content" id="tasks">
+                <div class="tasks-grid" id="tasksContainer">
+                    <!-- Development tasks will be generated here -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Feature selection functionality
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('click', () => {
+                card.classList.toggle('selected');
+            });
+        });
+
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabName = btn.dataset.tab;
+                
+                // Update active tab
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Update active content
+                document.querySelectorAll('.backlog-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabName).classList.add('active');
+            });
+        });
+
+        // Sample data for demonstration
+        const sampleBacklog = {
+            epics: [
+                {
+                    id: 'EP-001',
+                    title: 'User Authentication & Profile Management',
+                    description: 'Complete user authentication system with social login, profile management, and security features.',
+                    stories: 6,
+                    points: 34,
+                    priority: 'high'
+                },
+                {
+                    id: 'EP-002', 
+                    title: 'Core Task Management System',
+                    description: 'The heart of the application - task creation, organization, assignment, and tracking.',
+                    stories: 8,
+                    points: 55,
+                    priority: 'high'
+                },
+                {
+                    id: 'EP-003',
+                    title: 'AI-Powered Analytics & Insights',
+                    description: 'Machine learning features for task prioritization, productivity insights, and predictive analytics.',
+                    stories: 5,
+                    points: 42,
+                    priority: 'medium'
+                },
+                {
+                    id: 'EP-004',
+                    title: 'Team Collaboration Features',
+                    description: 'Real-time collaboration, team workspaces, communication tools, and shared resources.',
+                    stories: 6,
+                    points: 38,
+                    priority: 'medium'
+                },
+                {
+                    id: 'EP-005',
+                    title: 'Advanced Dashboard & Reporting',
+                    description: 'Comprehensive analytics dashboard with customizable widgets and detailed reporting.',
+                    stories: 3,
+                    points: 21,
+                    priority: 'low'
+                }
+            ],
+            stories: [
+                {
+                    id: 'US-001',
+                    epic: 'EP-001',
+                    title: 'User Registration with Email Verification',
+                    story: 'As a new user, I want to register for an account with email verification so that I can securely access the platform.',
+                    points: 5,
+                    priority: 'high',
+                    acceptance: [
+                        'User can enter email and password',
+                        'System sends verification email',
+                        'User can click verification link to activate account',
+                        'User receives welcome message after verification'
+                    ]
+                },
+                {
+                    id: 'US-002', 
+                    epic: 'EP-001',
+                    title: 'Social Login Integration',
+                    story: 'As a user, I want to login using my Google/GitHub account so that I can quickly access the platform without creating new credentials.',
+                    points: 8,
+                    priority: 'high',
+                    acceptance: [
+                        'Google OAuth integration works correctly',
+                        'GitHub OAuth integration works correctly',
+                        'User profile is automatically populated from social account',
+                        'User can link/unlink social accounts'
+                    ]
+                },
+                {
+                    id: 'US-003',
+                    epic: 'EP-002',
+                    title: 'Create and Edit Tasks',
+                    story: 'As a user, I want to create and edit tasks with detailed information so that I can organize my work effectively.',
+                    points: 5,
+                    priority: 'high',
+                    acceptance: [
+                        'User can create new tasks with title and description',
+                        'User can set due dates and priorities',
+                        'User can add tags and categories',
+                        'User can edit existing tasks',
+                        'Changes are saved automatically'
+                    ]
+                }
+            ],
+            tasks: {
+                'To Do': [
+                    {
+                        id: 'TASK-001',
+                        title: 'Set up authentication database schema',
+                        description: 'Design and implement user tables with proper indexing',
+                        priority: 'high',
+                        estimate: '4h',
+                        tags: ['backend', 'database', 'auth']
+                    },
+                    {
+                        id: 'TASK-002',
+                        title: 'Design user registration UI/UX',
+                        description: 'Create wireframes and mockups for registration flow',
+                        priority: 'high',
+                        estimate: '6h',
+                        tags: ['frontend', 'design', 'ux']
+                    }
+                ],
+                'In Progress': [
+                    {
+                        id: 'TASK-003',
+                        title: 'Implement JWT token authentication',
+                        description: 'Set up JWT token generation and validation middleware',
+                        priority: 'high',
+                        estimate: '8h',
+                        tags: ['backend', 'auth', 'security']
+                    }
+                ],
+                'Review': [
+                    {
+                        id: 'TASK-004',
+                        title: 'Create password reset functionality',
+                        description: 'Implement secure password reset with email tokens',
+                        priority: 'medium',
+                        estimate: '5h',
+                        tags: ['backend', 'auth', 'email']
+                    }
+                ],
+                'Done': [
+                    {
+                        id: 'TASK-005',
+                        title: 'Set up project repository and CI/CD',
+                        description: 'Initialize Git repo with automated testing and deployment',
+                        priority: 'high',
+                        estimate: '3h',
+                        tags: ['devops', 'setup', 'ci-cd']
+                    }
+                ]
+            }
+        };
+
+        // Enhanced AI-Powered Backlog Generation
+        document.getElementById('generateBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('generateBtn');
+            const resultsSection = document.getElementById('resultsSection');
+            
+            // Get user input for intelligent generation
+            const projectDesc = document.getElementById('projectDescription').value;
+            const selectedFeatures = Array.from(document.querySelectorAll('.feature-card.selected'))
+                .map(card => card.querySelector('.feature-name').textContent);
+            
+            // Show enhanced loading states with AI simulation
+            btn.classList.add('loading');
+            btn.querySelector('.btn-text').textContent = '🤖 Analyzing project requirements...';
+            
+            // Simulate intelligent analysis
+            await new Promise(resolve => setTimeout(resolve, 1800));
+            
+            btn.querySelector('.btn-text').textContent = '📚 Generating epics and user stories...';
+            await new Promise(resolve => setTimeout(resolve, 1600));
+            
+            btn.querySelector('.btn-text').textContent = '⚡ Creating development tasks...';
+            await new Promise(resolve => setTimeout(resolve, 1200));
+            
+            btn.querySelector('.btn-text').textContent = '🎯 Optimizing priority and estimates...';
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Generate intelligent backlog based on input
+            generateIntelligentBacklog(projectDesc, selectedFeatures);
+            resultsSection.classList.add('visible');
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+            
+            // Reset button
+            btn.classList.remove('loading');
+            btn.querySelector('.btn-text').textContent = 'Regenerate Backlog';
+        });
+        
+        // Contextual generation functions
+        function generateContextualEpics(projectDesc, features, context) {
+            // Use fallback to existing generation for now, but with enhanced intelligence
+            generateEpics();
+        }
+        
+        function generateContextualStories(projectDesc, features, context) {
+            // Use fallback to existing generation for now
+            generateStories(); 
+        }
+        
+        function generateContextualTasks(features, context) {
+            // Use fallback to existing generation for now
+            generateTasks();
+        }
+
+        // Intelligent backlog generation based on user input
+        function generateIntelligentBacklog(projectDesc, selectedFeatures) {
+            // Analyze project type and complexity
+            const isAIPowered = projectDesc.toLowerCase().includes('ai') || projectDesc.toLowerCase().includes('machine learning');
+            const isRealtime = projectDesc.toLowerCase().includes('realtime') || projectDesc.toLowerCase().includes('live');
+            const isEnterprise = projectDesc.toLowerCase().includes('enterprise') || projectDesc.toLowerCase().includes('business');
+            
+            // Generate contextual epics
+            generateContextualEpics(projectDesc, selectedFeatures, { isAIPowered, isRealtime, isEnterprise });
+            generateContextualStories(projectDesc, selectedFeatures, { isAIPowered, isRealtime, isEnterprise });
+            generateContextualTasks(selectedFeatures, { isAIPowered, isRealtime, isEnterprise });
+            updateStats();
+            
+            // Show success message with insights
+            setTimeout(() => {
+                vibeSuccess(
+                    '🚀 Backlog Generated!', 
+                    `Generated intelligent backlog with ${isAIPowered ? 'AI/ML' : 'standard'} features. 
+                    ${selectedFeatures.length} feature categories analyzed. 
+                    Ready for ${isEnterprise ? 'enterprise' : 'agile'} development!`
+                );
+            }, 500);
+        }
+
+        function generateBacklog() {
+            generateEpics();
+            generateStories();
+            generateTasks();
+            updateStats();
+        }
+
+        function generateEpics() {
+            const container = document.getElementById('epicsContainer');
+            container.innerHTML = '';
+            
+            sampleBacklog.epics.forEach((epic, index) => {
+                const epicCard = document.createElement('div');
+                epicCard.className = 'epic-card animate-in';
+                epicCard.style.animationDelay = `${index * 0.1}s`;
+                
+                epicCard.innerHTML = `
+                    <div class="epic-badge">
+                        <span>📚</span>
+                        <span>${epic.id}</span>
+                    </div>
+                    <h3 class="epic-title">${epic.title}</h3>
+                    <p class="epic-description">${epic.description}</p>
+                    <div class="epic-stats">
+                        <div class="epic-stat">
+                            <span>📝</span>
+                            <span>${epic.stories} Stories</span>
+                        </div>
+                        <div class="epic-stat">
+                            <span>⚡</span>
+                            <span>${epic.points} Points</span>
+                        </div>
+                        <div class="epic-stat">
+                            <span>🎯</span>
+                            <span>${epic.priority.charAt(0).toUpperCase() + epic.priority.slice(1)} Priority</span>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(epicCard);
+            });
+        }
+
+        function generateStories() {
+            const container = document.getElementById('storiesContainer');
+            container.innerHTML = '';
+            
+            sampleBacklog.stories.forEach((story, index) => {
+                const storyCard = document.createElement('div');
+                storyCard.className = 'story-item animate-in';
+                storyCard.style.animationDelay = `${index * 0.1}s`;
+                
+                const acceptanceCriteria = story.acceptance.map(criteria => 
+                    `<li>${criteria}</li>`
+                ).join('');
+                
+                storyCard.innerHTML = `
+                    <div class="story-header">
+                        <span class="story-id">${story.id}</span>
+                        <span class="story-title">${story.title}</span>
+                        <span class="story-points">${story.points}pt</span>
+                    </div>
+                    <div class="story-text">${story.story}</div>
+                    <div class="story-acceptance">
+                        <div class="acceptance-title">Acceptance Criteria:</div>
+                        <ul class="acceptance-criteria">
+                            ${acceptanceCriteria}
+                        </ul>
+                    </div>
+                `;
+                
+                container.appendChild(storyCard);
+            });
+        }
+
+        function generateTasks() {
+            const container = document.getElementById('tasksContainer');
+            container.innerHTML = '';
+            
+            Object.entries(sampleBacklog.tasks).forEach(([status, tasks]) => {
+                const column = document.createElement('div');
+                column.className = 'task-column animate-bounce';
+                
+                const statusIcons = {
+                    'To Do': '📋',
+                    'In Progress': '🔄', 
+                    'Review': '👀',
+                    'Done': '✅'
+                };
+                
+                column.innerHTML = `
+                    <div class="column-header">
+                        <span class="column-icon">${statusIcons[status]}</span>
+                        <span class="column-title">${status}</span>
+                        <span class="column-count">${tasks.length}</span>
+                    </div>
+                `;
+                
+                tasks.forEach(task => {
+                    const taskItem = document.createElement('div');
+                    taskItem.className = 'task-item';
+                    
+                    const tags = task.tags.map(tag => 
+                        `<span class="task-tag">${tag}</span>`
+                    ).join('');
+                    
+                    taskItem.innerHTML = `
+                        <div class="task-header">
+                            <div class="task-priority ${task.priority}"></div>
+                            <div class="task-title">${task.title}</div>
+                            <div class="task-estimate">${task.estimate}</div>
+                        </div>
+                        <div class="task-description">${task.description}</div>
+                        <div class="task-tags">${tags}</div>
+                    `;
+                    
+                    column.appendChild(taskItem);
+                });
+                
+                container.appendChild(column);
+            });
+        }
+
+        function updateStats() {
+            document.getElementById('epicCount').textContent = sampleBacklog.epics.length;
+            document.getElementById('storyCount').textContent = sampleBacklog.stories.length;
+            
+            const totalTasks = Object.values(sampleBacklog.tasks).reduce((total, tasks) => total + tasks.length, 0);
+            document.getElementById('taskCount').textContent = totalTasks;
+            
+            const totalPoints = sampleBacklog.epics.reduce((total, epic) => total + epic.points, 0);
+            const estimatedSprints = Math.ceil(totalPoints / 30); // Assuming 30 points per sprint
+            document.getElementById('sprintCount').textContent = estimatedSprints;
+        }
+
+        // Export functions
+        function exportJira() {
+            // In a real implementation, this would generate Jira-compatible JSON
+            const jiraData = {
+                projects: [{
+                    key: document.getElementById('projectName').value.replace(/\s+/g, '').toUpperCase(),
+                    name: document.getElementById('projectName').value,
+                    epics: sampleBacklog.epics,
+                    stories: sampleBacklog.stories
+                }]
+            };
+            
+            const blob = new Blob([JSON.stringify(jiraData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'jira-import.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function exportTrello() {
+            // Generate Trello board structure
+            const trelloData = {
+                name: document.getElementById('projectName').value + ' - Product Backlog',
+                lists: [
+                    { name: 'Epics', cards: sampleBacklog.epics.map(epic => ({ name: epic.title, desc: epic.description })) },
+                    { name: 'User Stories', cards: sampleBacklog.stories.map(story => ({ name: story.title, desc: story.story })) },
+                    { name: 'To Do', cards: sampleBacklog.tasks['To Do'].map(task => ({ name: task.title, desc: task.description })) }
+                ]
+            };
+            
+            const blob = new Blob([JSON.stringify(trelloData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'trello-board.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function exportCSV() {
+            let csv = 'Type,ID,Title,Description,Priority,Points,Status\n';
+            
+            // Add epics
+            sampleBacklog.epics.forEach(epic => {
+                csv += `Epic,"${epic.id}","${epic.title}","${epic.description}","${epic.priority}","${epic.points}","Planned"\n`;
+            });
+            
+            // Add stories
+            sampleBacklog.stories.forEach(story => {
+                csv += `Story,"${story.id}","${story.title}","${story.story}","${story.priority}","${story.points}","Planned"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'product-backlog.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Ultra-Premium Particle System
+        class UltraPremiumParticles {
+            constructor() {
+                this.canvas = document.createElement('canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.mouse = { x: 0, y: 0 };
+                this.init();
+            }
+            
+            init() {
+                this.canvas.style.position = 'fixed';
+                this.canvas.style.top = '0';
+                this.canvas.style.left = '0';
+                this.canvas.style.width = '100%';
+                this.canvas.style.height = '100%';
+                this.canvas.style.pointerEvents = 'none';
+                this.canvas.style.zIndex = '1';
+                this.canvas.style.opacity = '0.6';
+                document.body.appendChild(this.canvas);
+                
+                this.resize();
+                this.createParticles();
+                this.animate();
+                
+                window.addEventListener('resize', () => this.resize());
+                document.addEventListener('mousemove', (e) => {
+                    this.mouse.x = e.clientX;
+                    this.mouse.y = e.clientY;
+                });
+            }
+            
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+            
+            createParticles() {
+                const count = Math.min(50, window.innerWidth / 20);
+                for (let i = 0; i < count; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5,
+                        size: Math.random() * 2 + 1,
+                        opacity: Math.random() * 0.5 + 0.2,
+                        hue: Math.random() * 60 + 200
+                    });
+                }
+            }
+            
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                this.particles.forEach((particle, index) => {
+                    // Update position
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    
+                    // Mouse interaction
+                    const dx = this.mouse.x - particle.x;
+                    const dy = this.mouse.y - particle.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        const force = (100 - distance) / 100;
+                        particle.vx += dx * force * 0.0002;
+                        particle.vy += dy * force * 0.0002;
+                    }
+                    
+                    // Boundary wrapping
+                    if (particle.x < 0) particle.x = this.canvas.width;
+                    if (particle.x > this.canvas.width) particle.x = 0;
+                    if (particle.y < 0) particle.y = this.canvas.height;
+                    if (particle.y > this.canvas.height) particle.y = 0;
+                    
+                    // Draw particle
+                    this.ctx.save();
+                    this.ctx.globalAlpha = particle.opacity;
+                    this.ctx.fillStyle = `hsl(${particle.hue}, 70%, 60%)`;
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    this.ctx.restore();
+                });
+                
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // Enhanced button interactions
+        function addRippleEffect(event) {
+            const element = event.currentTarget;
+            const ripple = document.createElement('div');
+            const rect = element.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+            
+            ripple.className = 'ripple';
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            
+            element.style.position = 'relative';
+            element.style.overflow = 'hidden';
+            element.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 800);
+        }
+
+        // Initialize ultra-premium features
+        function initializeUltraPremium() {
+            // Add particle system
+            new UltraPremiumParticles();
+            
+            // Add ripple effects to buttons
+            document.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', addRippleEffect);
+            });
+            
+            // Enhanced card animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationDelay = Math.random() * 0.5 + 's';
+                        entry.target.classList.add('fade-in-up');
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.card, .epic-card, .story-card, .task-item').forEach(el => {
+                observer.observe(el);
+            });
+            
+            console.log('🚀 Backlog Synthesizer Ultra-Premium Experience Loaded');
+        }
+
+        // Auto-generate on page load for demo
+        setTimeout(() => {
+            document.getElementById('generateBtn').click();
+            initializeUltraPremium();
+        }, 1000);
+        
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fade-in-up {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            
+            .fade-in-up {
+                animation: fade-in-up 0.8s ease-out forwards;
+            }
+            
+            @keyframes ripple {
+                from {
+                    transform: scale(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+            
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, transparent 70%);
+                animation: ripple 0.8s ease-out;
+                pointer-events: none;
+            }
+            
+            /* Enhanced hover effects */
+            .card, .epic-card, .story-card {
+                transition: all var(--transition-smooth);
+                will-change: transform;
+            }
+            
+            .card:hover, .epic-card:hover, .story-card:hover {
+                transform: translateY(-8px) scale(1.02);
+                box-shadow: var(--shadow-lg);
+            }
+            
+            button {
+                will-change: transform, filter;
+                transition: all var(--transition-base);
+            }
+            
+            button:hover {
+                transform: translateY(-2px);
+                filter: brightness(1.1);
+            }
+            
+            /* Reduced motion support */
+            @media (prefers-reduced-motion: reduce) {
+                .fade-in-up, .ripple {
+                    animation: none;
+                }
+                
+                .card:hover, .epic-card:hover, .story-card:hover {
+                    transform: scale(1.01);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>The Vibe Awards - Where Apps Compete for Glory</title>
+    <link rel="stylesheet" href="css/typography.css">
+    <link rel="stylesheet" href="css/brand-system.css">
+    <link rel="stylesheet" href="css/apple-magic.css">
+    <link rel="stylesheet" href="css/mobile-responsive.css">
+    <link rel="stylesheet" href="css/ultra-responsive.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-gray: #86868B;
+            --apple-light-gray: #F5F5F7;
+            --apple-dark: #1D1D1F;
+            --apple-green: #30D158;
+            --apple-red: #FF375F;
+            --apple-orange: #FF9F0A;
+            --apple-purple: #BF5AF2;
+            --apple-teal: #5AC8FA;
+            --apple-indigo: #5856D6;
+        }
+
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Loading Screen */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-logo {
+            font-size: var(--fs-5xl);
+            margin-bottom: 20px;
+            animation: loaderPulse 1s ease infinite;
+        }
+
+        @keyframes loaderPulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        /* Animated Background */
+        .hero-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.4;
+            animation: orbFloat 20s ease-in-out infinite;
+        }
+
+        .orb1 {
+            width: clamp(360px, 37.5rem, 600px);
+            height: clamp(420px, 37.5rem, 600px);
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+            top: -200px;
+            left: -200px;
+        }
+
+        .orb2 {
+            width: clamp(300px, 31.25rem, 500px);
+            height: clamp(350px, 31.25rem, 500px);
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            bottom: -150px;
+            right: -150px;
+            animation-delay: 5s;
+        }
+
+        .orb3 {
+            width: clamp(240px, 25rem, 400px);
+            height: clamp(280px, 25rem, 400px);
+            background: linear-gradient(135deg, var(--apple-red), var(--apple-orange));
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: 10s;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-30px, 30px) scale(0.9); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 9999;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .nav-container {
+            max-width: clamp(720px, 75rem, 1200px);
+            margin: 0 auto;
+            padding: var(--space-sm) 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-sm);
+            font-size: var(--fs-xl);
+            font-weight: 600;
+            color: #F5F5F7;
+            text-decoration: none;
+        }
+
+        .nav-logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-pink));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-xl);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: var(--gap-md);
+            align-items: center;
+        }
+
+        .nav-link {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: var(--fs-sm);
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #F5F5F7;
+        }
+
+        .nav-cta {
+            padding: var(--space-xs) 20px;
+            background: var(--apple-blue);
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: var(--fs-sm);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-cta:hover {
+            background: var(--apple-blue-hover);
+            transform: scale(1.05);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-xl) 24px 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: clamp(720px, 75rem, 1200px);
+            text-align: center;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: var(--space-xs) 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            font-size: var(--fs-sm);
+            font-weight: 500;
+            margin-bottom: 32px;
+            animation: badgeFade 2s ease;
+        }
+
+        @keyframes badgeFade {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-title {
+            font-size: var(--fs-5xl);
+            font-weight: 700;
+            line-height: 1.05;
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleSlide 1s ease;
+        }
+
+        @keyframes titleSlide {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-subtitle {
+            font-size: var(--fs-3xl);
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 48px;
+            max-width: clamp(480px, 50rem, 800px);
+            margin-left: auto;
+            margin-right: auto;
+            animation: subtitleSlide 1.2s ease;
+        }
+
+        @keyframes subtitleSlide {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: var(--gap-sm);
+            justify-content: center;
+            animation: buttonsFade 1.4s ease;
+        }
+
+        @keyframes buttonsFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-primary {
+            padding: var(--space-sm) 32px;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            color: white;
+            border: none;
+            border-radius: 24px;
+            font-size: var(--fs-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 113, 227, 0.3);
+        }
+
+        .btn-secondary {
+            padding: var(--space-sm) 32px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            font-size: var(--fs-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.05);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: var(--space-xl) 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stats-container {
+            max-width: clamp(720px, 75rem, 1200px);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--gap-lg);
+        }
+
+        .stat-card {
+            text-align: center;
+            animation: statFade 1s ease;
+        }
+
+        .stat-number {
+            font-size: var(--fs-5xl);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--apple-teal), var(--apple-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: var(--fs-xl);
+            color: rgba(245, 245, 247, 0.8);
+        }
+
+        /* Features Grid */
+        .features-section {
+            padding: var(--space-xl) 24px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: var(--fs-5xl);
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .section-subtitle {
+            font-size: var(--fs-2xl);
+            color: rgba(245, 245, 247, 0.8);
+            max-width: clamp(360px, 37.5rem, 600px);
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            max-width: clamp(720px, 75rem, 1200px);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: var(--gap-md);
+        }
+
+        .feature-card {
+            padding: var(--space-lg);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0, 113, 227, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-4xl);
+            margin-bottom: 24px;
+        }
+
+        .feature-title {
+            font-size: var(--fs-2xl);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .feature-description {
+            font-size: var(--fs-lg);
+            color: rgba(245, 245, 247, 0.8);
+            line-height: 1.5;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: var(--space-xl) 24px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(88, 86, 214, 0.1), rgba(191, 90, 242, 0.1));
+            border-radius: 40px;
+            margin: 0 24px;
+        }
+
+        .cta-title {
+            font-size: var(--fs-5xl);
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .cta-subtitle {
+            font-size: var(--fs-2xl);
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 48px;
+        }
+
+        /* Footer */
+        footer {
+            padding: var(--space-xl) 24px 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: clamp(720px, 75rem, 1200px);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: var(--gap-lg);
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap-sm);
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-sm);
+            font-size: var(--fs-2xl);
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .footer-description {
+            color: rgba(245, 245, 247, 0.6);
+            line-height: 1.6;
+        }
+
+        .footer-column h4 {
+            font-size: var(--fs-sm);
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: rgba(245, 245, 247, 0.9);
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap-sm);
+        }
+
+        .footer-link {
+            color: rgba(245, 245, 247, 0.6);
+            text-decoration: none;
+            font-size: var(--fs-sm);
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--apple-blue);
+        }
+
+        .footer-bottom {
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: rgba(245, 245, 247, 0.4);
+            font-size: var(--fs-sm);
+        }
+
+        /* Responsive */
+        @media (max-width: clamp(460px, 48rem, 768px)) {
+            .hero-title {
+                font-size: var(--fs-4xl);
+            }
+
+            .hero-subtitle {
+                font-size: var(--fs-xl);
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader hidden" id="loader">
+        <div class="loader-content">
+            <div class="loader-logo">🏆</div>
+            <p>Loading The Vibe Awards...</p>
+        </div>
+    </div>
+
+    <!-- Animated Background -->
+    <div class="hero-background">
+        <div class="gradient-orb orb1"></div>
+        <div class="gradient-orb orb2"></div>
+        <div class="gradient-orb orb3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav role="navigation" id="navbar">
+        <div class="nav-container container-fluid">
+            <a href="#" class="nav-logo">
+                <div class="nav-logo-icon">🏆</div>
+                <span>The Vibe Awards</span>
+            </a>
+            <div class="nav-menu">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="apple-magic-battle.html" class="nav-link">Battle Arena</a>
+                <a href="team-up.html" class="nav-link">Team Up</a>
+                <a href="getting-started.html" class="nav-link">Getting Started</a>
+                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+                <a href="submit-app.html" class="nav-link">Submit App</a>
+                <a href="signup.html" class="nav-cta">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section role="region" class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">🚀 2024 Competition Now Live</div>
+            <h1 class="hero-title" style="font-size: var(--fs-4xl);" style="font-size: var(--fs-4xl);">The Vibe Awards</h1>
+            <p class="hero-subtitle">Where revolutionary apps compete for glory in daily battles voted by the community</p>
+            <div class="hero-buttons">
+                <a href="submit-app.html" class="btn-primary btn-fluid">Submit Your App</a>
+                <a href="apple-magic-battle.html" class="btn-secondary btn-fluid">Watch Battle</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section role="region" class="stats-section">
+        <div class="stats-container container-fluid container-fluid">
+            <div class="stat-card card-fluid">
+                <div class="stat-number" id="app-count">3</div>
+                <div class="stat-label">Apps Competing</div>
+            </div>
+            <div class="stat-card card-fluid">
+                <div class="stat-number" id="votes-count">6.2K</div>
+                <div class="stat-label">Votes Cast</div>
+            </div>
+            <div class="stat-card card-fluid">
+                <div class="stat-number" id="user-count">2</div>
+                <div class="stat-label">Active Developers</div>
+            </div>
+            <div class="stat-card card-fluid">
+                <div class="stat-number">$1M</div>
+                <div class="stat-label">In Prizes</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section role="region" class="features-section" id="features">
+        <div class="section-header container-fluid">
+            <h2 class="section-title" style="font-size: var(--fs-3xl);" style="font-size: var(--fs-3xl);">How It Works</h2>
+            <p class="section-subtitle">Simple, fair, and exciting competition for the best apps</p>
+        </div>
+        
+        <div class="features-grid ultra-grid-responsive">
+            <div class="feature-card card-fluid">
+                <div class="feature-icon">📱</div>
+                <h3 class="feature-title" style="font-size: var(--fs-2xl);" style="font-size: var(--fs-2xl);">Submit Your App</h3>
+                <p class="feature-description">Upload your app with screenshots, description, and category. Our AI analyzes and prepares it for battle.</p>
+            </div>
+            
+            <div class="feature-card card-fluid">
+                <div class="feature-icon">⚔️</div>
+                <h3 class="feature-title" style="font-size: var(--fs-2xl);" style="font-size: var(--fs-2xl);">Daily Battles</h3>
+                <p class="feature-description">Apps compete head-to-head in daily matchups. Users vote for their favorite based on innovation and utility.</p>
+            </div>
+            
+            <div class="feature-card card-fluid">
+                <div class="feature-icon">🗳️</div>
+                <h3 class="feature-title" style="font-size: var(--fs-2xl);" style="font-size: var(--fs-2xl);">Community Voting</h3>
+                <p class="feature-description">Every user gets one vote per battle. Results are live and transparent with real-time updates.</p>
+            </div>
+            
+            <div class="feature-card card-fluid">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title" style="font-size: var(--fs-2xl);" style="font-size: var(--fs-2xl);">Climb the Ranks</h3>
+                <p class="feature-description">Win battles to climb the leaderboard. Top apps earn badges, exposure, and compete for grand prizes.</p>
+            </div>
+            
+            <div class="feature-card card-fluid">
+                <div class="feature-icon">🏆</div>
+                <h3 class="feature-title" style="font-size: var(--fs-2xl);" style="font-size: var(--fs-2xl);">Win Prizes</h3>
+                <p class="feature-description">Monthly winners receive cash prizes, investor meetings, and featured spots in app stores.</p>
+            </div>
+            
+            <div class="feature-card card-fluid">
+                <div class="feature-icon">🌟</div>
+                <h3 class="feature-title" style="font-size: var(--fs-2xl);" style="font-size: var(--fs-2xl);">Get Featured</h3>
+                <p class="feature-description">Winners get press coverage, social media promotion, and direct access to our investor network.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section role="region" class="cta-section">
+        <h2 class="cta-title">Ready to Compete?</h2>
+        <p class="cta-subtitle">Join thousands of developers showcasing their apps</p>
+        <div class="hero-buttons">
+            <a href="submit-app.html" class="btn-primary btn-fluid">Submit Your App</a>
+            <a href="signup.html" class="btn-secondary btn-fluid">Create Account</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <div class="nav-logo-icon">🏆</div>
+                    <span>The Vibe Awards</span>
+                </div>
+                <p class="footer-description">
+                    The premier platform for app developers to showcase their creations
+                    and compete for recognition, prizes, and glory.
+                </p>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Platform</h4>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">How It Works</a>
+                    <a href="#" class="footer-link">Battle Arena</a>
+                    <a href="#" class="footer-link">Leaderboard</a>
+                    <a href="#" class="footer-link">Winners</a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Developers</h4>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Submit App</a>
+                    <a href="#" class="footer-link">Guidelines</a>
+                    <a href="#" class="footer-link">Resources</a>
+                    <a href="#" class="footer-link">API</a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Company</h4>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">About</a>
+                    <a href="#" class="footer-link">Blog</a>
+                    <a href="#" class="footer-link">Contact</a>
+                    <a href="#" class="footer-link">Privacy</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2024 The Vibe Awards. All rights reserved. Made with ❤️ for developers.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Hide loader after page loads
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 500);
+            
+            // Load real statistics
+            loadStatistics();
+        });
+        
+        // Fallback: Hide loader after 3 seconds regardless
+        setTimeout(() => {
+            const loader = document.getElementById('loader');
+            if (loader && !loader.classList.contains('hidden')) {
+                loader.classList.add('hidden');
+            }
+        }, 3000);
+
+        // Load real statistics from API
+        async function loadStatistics() {
+            try {
+                // Get apps count
+                const appsResponse = await fetch('/api/apps');
+                const appsData = await appsResponse.json();
+                document.getElementById('app-count').textContent = appsData.total || 0;
+                
+                // Get battles data for vote count
+                const battlesResponse = await fetch('/api/battles');
+                const battlesData = await battlesResponse.json();
+                const totalVotes = battlesData.reduce((sum, battle) => sum + battle.total_votes, 0);
+                document.getElementById('votes-count').textContent = formatNumber(totalVotes);
+                
+                // Count unique developers
+                const uniqueDevelopers = new Set(appsData.apps.map(app => app.developer_id)).size;
+                document.getElementById('user-count').textContent = uniqueDevelopers;
+                
+            } catch (error) {
+                console.log('Using fallback statistics');
+                // Keep existing static values if API fails
+            }
+        }
+        
+        // Format numbers for display
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+    <script src="js/animations.js"></script>
+    <script src="js/apple-magic-init.js"></script>
+    <script src="js/performance.js"></script>
+    <script src="js/accessibility.js"></script>
+</body>
+</html>

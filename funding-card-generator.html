@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funding Card Generator - Vibe Toolkit</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Semantic Colors */
+            --surface-primary: rgba(255, 255, 255, 0.03);
+            --surface-secondary: rgba(255, 255, 255, 0.06);
+            --surface-tertiary: rgba(255, 255, 255, 0.09);
+            --border-primary: rgba(255, 255, 255, 0.08);
+            --border-secondary: rgba(255, 255, 255, 0.15);
+            --text-primary: #F5F5F7;
+            --text-secondary: rgba(245, 245, 247, 0.8);
+            --text-tertiary: rgba(245, 245, 247, 0.6);
+            
+            /* Brand Colors */
+            --accent-primary: #0071E3;
+            --accent-secondary: #007AFF;
+            --success: #30D158;
+            --warning: #FF9F0A;
+            --danger: #FF375F;
+            --info: #5AC8FA;
+            --purple: #BF5AF2;
+            --indigo: #5856D6;
+            --green: #00C896;
+            --gold: #FFD700;
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--accent-primary), var(--purple));
+            --gradient-secondary: linear-gradient(135deg, var(--purple), var(--indigo));
+            --gradient-success: linear-gradient(135deg, var(--success), var(--green));
+            --gradient-gold: linear-gradient(135deg, var(--gold), #FFA500);
+            --gradient-surface: linear-gradient(135deg, var(--surface-secondary), var(--surface-primary));
+            
+            /* Transitions */
+            --transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --transition-smooth: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
+            --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 16px 64px rgba(0, 0, 0, 0.25);
+            --shadow-glow: 0 0 32px rgba(0, 113, 227, 0.3);
+            
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+            background: #0A0A0A;
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(191, 90, 242, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(0, 200, 150, 0.1) 0%, transparent 70%);
+            animation: backgroundShift 25s ease-in-out infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { 
+                transform: rotate(0deg) scale(1);
+                filter: hue-rotate(0deg);
+            }
+            50% { 
+                transform: rotate(180deg) scale(1.1);
+                filter: hue-rotate(120deg);
+            }
+        }
+
+        /* Header */
+        .header {
+            background: var(--surface-primary);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-lg) var(--space-xl);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .brand-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-gold);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 0 32px rgba(255, 215, 0, 0.4);
+            animation: iconFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(-5deg); }
+        }
+
+        .brand-text h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: var(--space-xs);
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text p {
+            color: var(--text-tertiary);
+            font-size: 16px;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: var(--space-md);
+        }
+
+        .nav-btn {
+            padding: 12px 20px;
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition-base);
+        }
+
+        .nav-btn:hover {
+            background: var(--surface-tertiary);
+            border-color: var(--border-secondary);
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-2xl);
+        }
+
+        /* Input Section */
+        .input-section {
+            background: var(--surface-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 24px;
+            padding: var(--space-2xl);
+            margin-bottom: var(--space-2xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .input-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-gold);
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: var(--space-lg);
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-xl);
+            margin-bottom: var(--space-xl);
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .input-group.full-width {
+            grid-column: span 2;
+        }
+
+        .input-label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        .input-field {
+            padding: 16px 20px;
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: var(--transition-base);
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.15);
+        }
+
+        .input-field.textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        /* Market Selection */
+        .market-selector {
+            margin-bottom: var(--space-xl);
+        }
+
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+        }
+
+        .market-card {
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: var(--space-md);
+            cursor: pointer;
+            transition: var(--transition-base);
+            user-select: none;
+        }
+
+        .market-card:hover {
+            background: var(--surface-tertiary);
+            transform: translateY(-2px);
+        }
+
+        .market-card.selected {
+            background: rgba(255, 215, 0, 0.15);
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .market-icon {
+            font-size: 24px;
+            margin-bottom: var(--space-sm);
+        }
+
+        .market-name {
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+        }
+
+        .market-size {
+            font-size: 14px;
+            color: var(--text-tertiary);
+        }
+
+        /* Generate Button */
+        .generate-section {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .generate-btn {
+            padding: 20px 40px;
+            background: var(--gradient-gold);
+            border: none;
+            border-radius: 16px;
+            color: black;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-bounce);
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .generate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .generate-btn:active {
+            transform: scale(0.98);
+        }
+
+        .generate-btn.loading {
+            pointer-events: none;
+        }
+
+        .btn-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(0, 0, 0, 0.3);
+            border-top-color: black;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: var(--space-sm);
+        }
+
+        .generate-btn.loading .btn-spinner {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Results Section */
+        .results-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition-smooth);
+        }
+
+        .results-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Funding Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: var(--space-xl);
+            margin-bottom: var(--space-2xl);
+        }
+
+        /* Executive Summary Card */
+        .exec-card {
+            background: var(--surface-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 20px;
+            padding: var(--space-2xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exec-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-gold);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-xl);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-gold);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: black;
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 700;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .summary-content {
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
+        }
+
+        .key-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+
+        .metric-item {
+            background: var(--surface-secondary);
+            border-radius: 12px;
+            padding: var(--space-md);
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: var(--space-xs);
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Market Opportunity Card */
+        .market-card-full {
+            background: var(--surface-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 20px;
+            padding: var(--space-2xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .market-card-full::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-success);
+        }
+
+        .market-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-lg);
+        }
+
+        .market-segment {
+            background: var(--surface-secondary);
+            border-radius: 12px;
+            padding: var(--space-md);
+        }
+
+        .segment-title {
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+            color: var(--success);
+        }
+
+        .segment-value {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: var(--space-xs);
+        }
+
+        .segment-growth {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        /* Business Model Card */
+        .business-card {
+            background: var(--surface-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 20px;
+            padding: var(--space-2xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .business-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .revenue-streams {
+            display: grid;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .revenue-item {
+            background: var(--surface-secondary);
+            border-radius: 12px;
+            padding: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .revenue-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: white;
+        }
+
+        .revenue-info {
+            flex: 1;
+        }
+
+        .revenue-name {
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+        }
+
+        .revenue-desc {
+            font-size: 14px;
+            color: var(--text-tertiary);
+        }
+
+        .revenue-value {
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        /* Financial Projections Card */
+        .financial-card {
+            background: var(--surface-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 20px;
+            padding: var(--space-2xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .financial-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-secondary);
+        }
+
+        .projection-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: var(--space-lg);
+        }
+
+        .projection-table th,
+        .projection-table td {
+            padding: var(--space-sm) var(--space-md);
+            text-align: left;
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .projection-table th {
+            background: var(--surface-secondary);
+            font-weight: 600;
+            color: var(--purple);
+        }
+
+        .projection-table td {
+            color: var(--text-secondary);
+        }
+
+        /* Export Section */
+        .export-section {
+            background: var(--surface-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 20px;
+            padding: var(--space-xl);
+            text-align: center;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: var(--space-md);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .export-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: 12px 24px;
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition-base);
+        }
+
+        .export-btn:hover {
+            background: var(--surface-tertiary);
+            transform: translateY(-2px);
+        }
+
+        .export-btn.primary {
+            background: var(--gradient-primary);
+            border: none;
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container {
+                padding: var(--space-xl);
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-group.full-width {
+                grid-column: span 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: var(--space-md);
+                text-align: center;
+            }
+            
+            .container {
+                padding: var(--space-lg);
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .market-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .export-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Animation Classes */
+        .animate-in {
+            animation: slideInUp 0.6s ease-out forwards;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-bounce {
+            animation: bounceIn 0.8s ease-out forwards;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-canvas"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-brand">
+                <div class="brand-icon">💰</div>
+                <div class="brand-text">
+                    <h1>Funding Card Generator</h1>
+                    <p>Create VC-ready pitch materials in minutes</p>
+                </div>
+            </div>
+            <nav class="header-nav">
+                <a href="vibe-toolkit.html" class="nav-btn">← Back to Toolkit</a>
+                <a href="backlog-synthesizer.html" class="nav-btn">Backlog Tool</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Input Section -->
+        <section class="input-section">
+            <h2 class="section-title">
+                <span>🚀</span>
+                Startup Information
+            </h2>
+            
+            <div class="form-grid">
+                <div class="input-group">
+                    <label class="input-label">Company Name</label>
+                    <input type="text" class="input-field" id="companyName" placeholder="TaskFlow AI" value="TaskFlow AI">
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Industry</label>
+                    <select class="input-field" id="industry">
+                        <option value="productivity">Productivity & SaaS</option>
+                        <option value="fintech">FinTech</option>
+                        <option value="healthtech">HealthTech</option>
+                        <option value="edtech">EdTech</option>
+                        <option value="ecommerce">E-commerce</option>
+                        <option value="gaming">Gaming</option>
+                        <option value="ai-ml">AI/ML</option>
+                        <option value="blockchain">Blockchain</option>
+                        <option value="iot">IoT</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Funding Stage</label>
+                    <select class="input-field" id="fundingStage">
+                        <option value="pre-seed">Pre-Seed ($50K - $250K)</option>
+                        <option value="seed">Seed ($250K - $2M)</option>
+                        <option value="series-a">Series A ($2M - $15M)</option>
+                        <option value="series-b">Series B ($10M - $50M)</option>
+                        <option value="series-c">Series C ($30M+)</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Target Funding Amount</label>
+                    <input type="text" class="input-field" id="fundingAmount" placeholder="$1.5M" value="$1.5M">
+                </div>
+                
+                <div class="input-group full-width">
+                    <label class="input-label">Company Description</label>
+                    <textarea class="input-field textarea" id="companyDescription" placeholder="Describe your company's mission, vision, and what problem you're solving...">TaskFlow AI revolutionizes team productivity through intelligent task management, predictive analytics, and automated workflow optimization. Our platform uses machine learning to help teams work smarter, not harder.</textarea>
+                </div>
+                
+                <div class="input-group full-width">
+                    <label class="input-label">The Problem You're Solving</label>
+                    <textarea class="input-field textarea" id="problemStatement" placeholder="What major problem does your company solve?">Traditional project management tools are reactive and require constant manual input. Teams waste 40% of their time on administrative tasks, context switching, and unclear priorities. Existing solutions lack intelligence and fail to adapt to team dynamics.</textarea>
+                </div>
+                
+                <div class="input-group full-width">
+                    <label class="input-label">Your Solution</label>
+                    <textarea class="input-field textarea" id="solution" placeholder="How does your product solve this problem?">TaskFlow AI automatically prioritizes tasks, predicts bottlenecks, and optimizes workflows using advanced machine learning. Our intelligent assistant learns from team patterns to suggest optimal work distribution and timing.</textarea>
+                </div>
+            </div>
+            
+            <div class="market-selector">
+                <label class="input-label">Target Market Size</label>
+                <div class="market-grid">
+                    <div class="market-card selected" data-market="productivity">
+                        <div class="market-icon">📊</div>
+                        <div class="market-name">Productivity Tools</div>
+                        <div class="market-size">$47B global market</div>
+                    </div>
+                    <div class="market-card" data-market="project-mgmt">
+                        <div class="market-icon">🎯</div>
+                        <div class="market-name">Project Management</div>
+                        <div class="market-size">$6.8B global market</div>
+                    </div>
+                    <div class="market-card" data-market="ai-tools">
+                        <div class="market-icon">🤖</div>
+                        <div class="market-name">AI Business Tools</div>
+                        <div class="market-size">$37B global market</div>
+                    </div>
+                    <div class="market-card" data-market="collaboration">
+                        <div class="market-icon">👥</div>
+                        <div class="market-name">Team Collaboration</div>
+                        <div class="market-size">$31B global market</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Generate Button -->
+        <section class="generate-section">
+            <button class="generate-btn" id="generateBtn">
+                <div class="btn-spinner"></div>
+                <span class="btn-text">Generate Funding Materials</span>
+            </button>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section" id="resultsSection">
+            <div class="cards-grid">
+                <!-- Executive Summary Card -->
+                <div class="exec-card animate-in">
+                    <div class="card-header">
+                        <div class="card-icon">📋</div>
+                        <div class="card-title">Executive Summary</div>
+                    </div>
+                    <div class="summary-content" id="execSummary">
+                        <!-- Generated content will appear here -->
+                    </div>
+                    <div class="key-metrics">
+                        <div class="metric-item">
+                            <div class="metric-value" id="tamValue">$47B</div>
+                            <div class="metric-label">TAM</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value" id="samValue">$6.8B</div>
+                            <div class="metric-label">SAM</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value" id="somValue">$340M</div>
+                            <div class="metric-label">SOM</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value" id="growthRate">25%</div>
+                            <div class="metric-label">YoY Growth</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Market Opportunity Card -->
+                <div class="market-card-full animate-in">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: var(--gradient-success);">🎯</div>
+                        <div class="card-title" style="background: var(--gradient-success); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Market Opportunity</div>
+                    </div>
+                    <div class="market-breakdown">
+                        <div class="market-segment">
+                            <div class="segment-title">Total Addressable Market</div>
+                            <div class="segment-value" id="tamBreakdown">$47B</div>
+                            <div class="segment-growth">Growing 15% annually</div>
+                        </div>
+                        <div class="market-segment">
+                            <div class="segment-title">Serviceable Addressable</div>
+                            <div class="segment-value" id="samBreakdown">$6.8B</div>
+                            <div class="segment-growth">Target enterprise segment</div>
+                        </div>
+                        <div class="market-segment">
+                            <div class="segment-title">Serviceable Obtainable</div>
+                            <div class="segment-value" id="somBreakdown">$340M</div>
+                            <div class="segment-growth">5-year capture goal</div>
+                        </div>
+                    </div>
+                    <div id="marketAnalysis">
+                        <!-- Market analysis content will be generated -->
+                    </div>
+                </div>
+
+                <!-- Business Model Card -->
+                <div class="business-card animate-in">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: var(--gradient-primary);">💼</div>
+                        <div class="card-title" style="background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Business Model</div>
+                    </div>
+                    <div class="revenue-streams" id="revenueStreams">
+                        <!-- Revenue streams will be generated -->
+                    </div>
+                </div>
+
+                <!-- Financial Projections Card -->
+                <div class="financial-card animate-in">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: var(--gradient-secondary);">📈</div>
+                        <div class="card-title" style="background: var(--gradient-secondary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Financial Projections</div>
+                    </div>
+                    <table class="projection-table">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Year 1</th>
+                                <th>Year 2</th>
+                                <th>Year 3</th>
+                                <th>Year 5</th>
+                            </tr>
+                        </thead>
+                        <tbody id="projectionData">
+                            <!-- Financial projections will be generated -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Export Section -->
+            <div class="export-section">
+                <h3 style="margin-bottom: var(--space-lg); color: var(--text-secondary);">Export Your Pitch Deck</h3>
+                <div class="export-buttons">
+                    <a href="#" class="export-btn primary" onclick="exportPowerPoint()">
+                        <span>📊</span>
+                        <span>PowerPoint Deck</span>
+                    </a>
+                    <a href="#" class="export-btn" onclick="exportPDF()">
+                        <span>📄</span>
+                        <span>PDF Summary</span>
+                    </a>
+                    <a href="#" class="export-btn" onclick="exportJSON()">
+                        <span>💾</span>
+                        <span>JSON Data</span>
+                    </a>
+                    <a href="#" class="export-btn" onclick="exportEmail()">
+                        <span>📧</span>
+                        <span>Email Template</span>
+                    </a>
+                    <a href="#" class="export-btn" onclick="exportLinkedIn()">
+                        <span>💼</span>
+                        <span>LinkedIn Post</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Market selection functionality
+        document.querySelectorAll('.market-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.market-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+            });
+        });
+
+        // Generate funding materials
+        document.getElementById('generateBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('generateBtn');
+            const resultsSection = document.getElementById('resultsSection');
+            
+            // Enhanced AI processing simulation
+            btn.classList.add('loading');
+            btn.querySelector('.btn-text').textContent = '🤖 Analyzing market data and competition...';
+            
+            await new Promise(resolve => setTimeout(resolve, 1800));
+            btn.querySelector('.btn-text').textContent = '📊 Generating executive summary with AI insights...';
+            
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            btn.querySelector('.btn-text').textContent = '💰 Creating intelligent financial projections...';
+            
+            await new Promise(resolve => setTimeout(resolve, 1300));
+            btn.querySelector('.btn-text').textContent = '🎯 Optimizing pitch for investor psychology...';
+            
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            btn.querySelector('.btn-text').textContent = '✨ Finalizing personalized pitch materials...';
+            
+            await new Promise(resolve => setTimeout(resolve, 800));
+            
+            // Generate intelligent content
+            generateIntelligentFundingMaterials();
+            resultsSection.classList.add('visible');
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+            
+            // Show success with insights
+            setTimeout(() => {
+                const industry = document.getElementById('industry').value;
+                const fundingStage = document.getElementById('fundingStage').value;
+                vibeSuccess(
+                    '🚀 Pitch Materials Generated!', 
+                    `Created investor-ready materials for ${industry} ${fundingStage} funding. Materials optimized for current market conditions and investor preferences.`
+                );
+            }, 500);
+            
+            // Reset button
+            btn.classList.remove('loading');
+            btn.querySelector('.btn-text').textContent = 'Regenerate Materials';
+        });
+
+        function generateIntelligentFundingMaterials() {
+            const companyName = document.getElementById('companyName').value;
+            const industry = document.getElementById('industry').value;
+            const stage = document.getElementById('fundingStage').value;
+            const description = document.getElementById('companyDescription').value;
+            
+            // Analyze company context for intelligent generation
+            const isAIPowered = description.toLowerCase().includes('ai') || description.toLowerCase().includes('machine learning');
+            const isB2B = description.toLowerCase().includes('business') || description.toLowerCase().includes('enterprise');
+            const isSaaS = description.toLowerCase().includes('saas') || description.toLowerCase().includes('software');
+            
+            // Generate contextual materials
+            generateEnhancedExecutiveSummary(companyName, description, { isAIPowered, isB2B, isSaaS, industry, stage });
+            generateIntelligentMarketAnalysis(industry, { isAIPowered, isB2B });
+            generateDynamicBusinessModel(industry, stage, { isAIPowered, isB2B, isSaaS });
+            generateSmartFinancialProjections(stage, industry, { isAIPowered, isB2B, isSaaS });
+        }
+
+        function generateFundingMaterials() {
+            const companyName = document.getElementById('companyName').value;
+            const industry = document.getElementById('industry').value;
+            const description = document.getElementById('companyDescription').value;
+            const problem = document.getElementById('problemStatement').value;
+            const solution = document.getElementById('solution').value;
+            
+            generateExecutiveSummary(companyName, description, problem, solution);
+            generateMarketAnalysis();
+            generateBusinessModel();
+            generateFinancialProjections();
+        }
+
+        // Enhanced intelligent generation functions
+        function generateEnhancedExecutiveSummary(companyName, description, context) {
+            const { isAIPowered, isB2B, industry, stage } = context;
+            const marketSize = isAIPowered ? '$2.9T AI market' : isB2B ? '$4.6T B2B software market' : '$800B consumer tech market';
+            const traction = stage === 'seed' ? '10+ pilot customers' : stage === 'series-a' ? '500+ active users' : '10K+ monthly active users';
+            
+            const summary = `
+                <strong>${companyName}</strong> is revolutionizing the ${industry} space through ${isAIPowered ? 'cutting-edge AI technology' : 'innovative technology solutions'}.
+                <br><br>
+                <strong>Market Opportunity:</strong> Targeting the ${marketSize} with a focus on ${isB2B ? 'enterprise clients' : 'consumer adoption'}.
+                <br><br>
+                <strong>Current Traction:</strong> ${traction} showing strong product-market fit with ${stage === 'pre-seed' ? '200%' : '150%'} month-over-month growth.
+                <br><br>
+                <strong>Competitive Advantage:</strong> ${isAIPowered ? 'Proprietary AI algorithms' : 'Patent-pending technology'} creating sustainable competitive moats and network effects.
+                <br><br>
+                <strong>Use of Funds:</strong> Accelerating product development, expanding team, and scaling ${isB2B ? 'enterprise sales' : 'user acquisition'}.
+            `;
+            document.getElementById('execSummary').innerHTML = summary;
+        }
+
+        function generateIntelligentMarketAnalysis(industry, context) {
+            const { isAIPowered, isB2B } = context;
+            const analysis = `
+                <p style="margin-bottom: var(--space-md); color: var(--text-secondary); line-height: 1.6;">
+                    The ${industry} market is experiencing ${isAIPowered ? 'explosive 40% YoY growth driven by AI adoption' : 'steady 15% annual growth'}.
+                    ${isB2B ? 'Enterprise buyers are prioritizing efficiency and automation' : 'Consumer demand for intuitive solutions is at an all-time high'}.
+                </p>
+                <p style="color: var(--text-secondary); line-height: 1.6;">
+                    <strong>Market Drivers:</strong> ${isAIPowered ? 'AI democratization, data explosion, and automation needs' : 'Digital transformation, remote work, and mobile-first experiences'}.
+                    Our solution addresses the ${isB2B ? '$50B efficiency gap' : '$200B user experience problem'} in this space.
+                </p>
+            `;
+            document.getElementById('marketAnalysis').innerHTML = analysis;
+        }
+
+        function generateDynamicBusinessModel(industry, stage, context) {
+            // Use the existing generateBusinessModel for now, but enhance it
+            generateBusinessModel();
+        }
+
+        function generateSmartFinancialProjections(stage, industry, context) {
+            // Use the existing generateFinancialProjections for now, but enhance it
+            generateFinancialProjections();
+        }
+
+        function generateExecutiveSummary(companyName, description, problem, solution) {
+            const summary = `
+                <strong>${companyName}</strong> addresses a critical gap in the productivity software market by leveraging AI to transform how teams manage workflows and priorities.
+                <br><br>
+                <strong>The Problem:</strong> ${problem.substring(0, 150)}...
+                <br><br>
+                <strong>Our Solution:</strong> ${solution.substring(0, 150)}...
+                <br><br>
+                <strong>Market Opportunity:</strong> We're targeting the rapidly growing productivity tools market, focusing on mid-market enterprises seeking intelligent automation.
+                <br><br>
+                <strong>Traction:</strong> Early pilots show 40% improvement in team productivity and 25% reduction in project delivery times.
+            `;
+            
+            document.getElementById('execSummary').innerHTML = summary;
+        }
+
+        function generateMarketAnalysis() {
+            const analysis = `
+                <p style="margin-bottom: var(--space-md); color: var(--text-secondary); line-height: 1.6;">
+                    The productivity software market is experiencing unprecedented growth, driven by remote work adoption and AI integration. 
+                    Key market drivers include the $2.9T annual cost of workplace inefficiency and the 73% of executives prioritizing productivity tools.
+                </p>
+                <p style="color: var(--text-secondary); line-height: 1.6;">
+                    <strong>Competitive Advantage:</strong> Unlike existing reactive tools, our AI-first approach provides predictive insights and 
+                    automated optimization, creating a sustainable moat through continuous learning from user behavior patterns.
+                </p>
+            `;
+            
+            document.getElementById('marketAnalysis').innerHTML = analysis;
+        }
+
+        function generateBusinessModel() {
+            const revenueStreams = [
+                {
+                    icon: '💳',
+                    name: 'SaaS Subscriptions',
+                    desc: 'Tiered monthly/annual plans',
+                    value: '$50-500/month per team'
+                },
+                {
+                    icon: '🏢',
+                    name: 'Enterprise Licenses',
+                    desc: 'Custom enterprise deployments',
+                    value: '$50K-500K annually'
+                },
+                {
+                    icon: '🔧',
+                    name: 'Professional Services',
+                    desc: 'Implementation and training',
+                    value: '20% of license value'
+                },
+                {
+                    icon: '📊',
+                    name: 'Analytics & Insights',
+                    desc: 'Premium analytics add-on',
+                    value: '$10-50/user/month'
+                }
+            ];
+
+            const container = document.getElementById('revenueStreams');
+            container.innerHTML = revenueStreams.map(stream => `
+                <div class="revenue-item">
+                    <div class="revenue-icon">${stream.icon}</div>
+                    <div class="revenue-info">
+                        <div class="revenue-name">${stream.name}</div>
+                        <div class="revenue-desc">${stream.desc}</div>
+                    </div>
+                    <div class="revenue-value">${stream.value}</div>
+                </div>
+            `).join('');
+        }
+
+        function generateFinancialProjections() {
+            const projections = [
+                { metric: 'Revenue', y1: '$150K', y2: '$800K', y3: '$3.2M', y5: '$25M' },
+                { metric: 'Gross Margin', y1: '65%', y2: '72%', y3: '78%', y5: '82%' },
+                { metric: 'Customers', y1: '50', y2: '200', y3: '800', y5: '5,000' },
+                { metric: 'CAC', y1: '$2,500', y2: '$1,800', y3: '$1,200', y5: '$800' },
+                { metric: 'LTV/CAC', y1: '2.5x', y2: '4.2x', y3: '6.8x', y5: '12x' },
+                { metric: 'Burn Rate', y1: '$80K/mo', y2: '$120K/mo', y3: '$200K/mo', y5: '$400K/mo' }
+            ];
+
+            const container = document.getElementById('projectionData');
+            container.innerHTML = projections.map(proj => `
+                <tr>
+                    <td style="font-weight: 600;">${proj.metric}</td>
+                    <td>${proj.y1}</td>
+                    <td>${proj.y2}</td>
+                    <td>${proj.y3}</td>
+                    <td style="color: var(--success); font-weight: 600;">${proj.y5}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Export functions
+        function exportPowerPoint() {
+            // Generate PowerPoint-compatible JSON
+            const companyName = document.getElementById('companyName').value;
+            const fundingAmount = document.getElementById('fundingAmount').value;
+            
+            const pitchData = {
+                title: `${companyName} - Funding Pitch Deck`,
+                subtitle: `Seeking ${fundingAmount} to scale intelligent productivity platform`,
+                slides: [
+                    {
+                        title: "Executive Summary",
+                        content: document.getElementById('execSummary').innerText
+                    },
+                    {
+                        title: "Market Opportunity", 
+                        content: document.getElementById('marketAnalysis').innerText
+                    },
+                    {
+                        title: "Business Model",
+                        content: "Multi-revenue stream SaaS model with enterprise focus"
+                    },
+                    {
+                        title: "Financial Projections",
+                        content: "Path to $25M ARR within 5 years"
+                    }
+                ]
+            };
+            
+            const blob = new Blob([JSON.stringify(pitchData, null, 2)], { type: 'application/json' });
+            downloadFile(blob, 'pitch-deck-data.json');
+        }
+
+        function exportPDF() {
+            // Generate comprehensive PDF content
+            const content = `
+                FUNDING SUMMARY - ${document.getElementById('companyName').value}
+                
+                ${document.getElementById('execSummary').innerText}
+                
+                MARKET ANALYSIS
+                ${document.getElementById('marketAnalysis').innerText}
+                
+                FINANCIAL PROJECTIONS
+                Year 1: $150K Revenue
+                Year 5: $25M Revenue
+                
+                Generated by Vibe Toolkit - Funding Card Generator
+            `;
+            
+            const blob = new Blob([content], { type: 'text/plain' });
+            downloadFile(blob, 'funding-summary.txt');
+        }
+
+        function exportJSON() {
+            const data = {
+                company: {
+                    name: document.getElementById('companyName').value,
+                    industry: document.getElementById('industry').value,
+                    description: document.getElementById('companyDescription').value,
+                    fundingStage: document.getElementById('fundingStage').value,
+                    targetFunding: document.getElementById('fundingAmount').value
+                },
+                market: {
+                    tam: "$47B",
+                    sam: "$6.8B", 
+                    som: "$340M",
+                    growth: "15% annually"
+                },
+                projections: {
+                    year1Revenue: "$150K",
+                    year5Revenue: "$25M",
+                    targetCustomers: "5,000 by Year 5"
+                },
+                generatedAt: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            downloadFile(blob, 'funding-data.json');
+        }
+
+        function exportEmail() {
+            const companyName = document.getElementById('companyName').value;
+            const fundingAmount = document.getElementById('fundingAmount').value;
+            
+            const emailTemplate = `
+Subject: Investment Opportunity - ${companyName} (${fundingAmount} Seed Round)
+
+Dear [Investor Name],
+
+I hope this email finds you well. I'm reaching out to introduce ${companyName}, an innovative AI-powered productivity platform that's revolutionizing how teams work.
+
+${document.getElementById('execSummary').innerText.substring(0, 300)}...
+
+We're currently raising ${fundingAmount} to accelerate our growth and capture the massive market opportunity ahead.
+
+Key Highlights:
+• $47B Total Addressable Market
+• 40% improvement in team productivity (early pilots)
+• Path to $25M ARR within 5 years
+• Strong founding team with domain expertise
+
+I'd love to schedule a brief call to share more details about our vision and traction.
+
+Best regards,
+[Your Name]
+[Your Title], ${companyName}
+            `;
+            
+            const blob = new Blob([emailTemplate], { type: 'text/plain' });
+            downloadFile(blob, 'investor-email-template.txt');
+        }
+
+        function exportLinkedIn() {
+            const companyName = document.getElementById('companyName').value;
+            const fundingAmount = document.getElementById('fundingAmount').value;
+            
+            const linkedInPost = `
+🚀 Excited to announce that ${companyName} is raising ${fundingAmount}!
+
+We're building the future of team productivity with AI-powered workflow optimization. Early results show 40% productivity improvements and 25% faster project delivery.
+
+💡 The Problem: Teams waste 40% of their time on administrative tasks
+🎯 Our Solution: Intelligent automation that learns and adapts
+📈 The Opportunity: $47B market growing 15% annually
+
+Looking for investors who share our vision of making teams work smarter, not harder.
+
+#startup #AI #productivity #funding #investors
+
+Feel free to reach out if you'd like to learn more!
+            `;
+            
+            const blob = new Blob([linkedInPost], { type: 'text/plain' });
+            downloadFile(blob, 'linkedin-post.txt');
+        }
+
+        function downloadFile(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Ultra-Premium Particle System (Funding Theme)
+        class FundingParticles {
+            constructor() {
+                this.canvas = document.createElement('canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.mouse = { x: 0, y: 0 };
+                this.init();
+            }
+            
+            init() {
+                this.canvas.style.position = 'fixed';
+                this.canvas.style.top = '0';
+                this.canvas.style.left = '0';
+                this.canvas.style.width = '100%';
+                this.canvas.style.height = '100%';
+                this.canvas.style.pointerEvents = 'none';
+                this.canvas.style.zIndex = '1';
+                this.canvas.style.opacity = '0.7';
+                document.body.appendChild(this.canvas);
+                
+                this.resize();
+                this.createParticles();
+                this.animate();
+                
+                window.addEventListener('resize', () => this.resize());
+                document.addEventListener('mousemove', (e) => {
+                    this.mouse.x = e.clientX;
+                    this.mouse.y = e.clientY;
+                });
+            }
+            
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+            
+            createParticles() {
+                const count = Math.min(40, window.innerWidth / 25);
+                for (let i = 0; i < count; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 0.3,
+                        vy: (Math.random() - 0.5) * 0.3,
+                        size: Math.random() * 3 + 1,
+                        opacity: Math.random() * 0.4 + 0.1,
+                        hue: Math.random() * 40 + 120, // Green to yellow (money theme)
+                        symbol: Math.random() > 0.8 ? '$' : '●'
+                    });
+                }
+            }
+            
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                this.particles.forEach((particle, index) => {
+                    // Update position
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    
+                    // Mouse interaction (attraction to money)
+                    const dx = this.mouse.x - particle.x;
+                    const dy = this.mouse.y - particle.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 120) {
+                        const force = (120 - distance) / 120;
+                        particle.vx += dx * force * 0.0001;
+                        particle.vy += dy * force * 0.0001;
+                    }
+                    
+                    // Boundary wrapping
+                    if (particle.x < 0) particle.x = this.canvas.width;
+                    if (particle.x > this.canvas.width) particle.x = 0;
+                    if (particle.y < 0) particle.y = this.canvas.height;
+                    if (particle.y > this.canvas.height) particle.y = 0;
+                    
+                    // Draw particle
+                    this.ctx.save();
+                    this.ctx.globalAlpha = particle.opacity;
+                    this.ctx.fillStyle = `hsl(${particle.hue}, 80%, 65%)`;
+                    
+                    if (particle.symbol === '$') {
+                        this.ctx.font = `${particle.size * 4}px Arial`;
+                        this.ctx.textAlign = 'center';
+                        this.ctx.fillText('$', particle.x, particle.y);
+                    } else {
+                        this.ctx.beginPath();
+                        this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                        this.ctx.fill();
+                    }
+                    this.ctx.restore();
+                });
+                
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // Enhanced button interactions with money theme
+        function addGoldRipple(event) {
+            const element = event.currentTarget;
+            const ripple = document.createElement('div');
+            const rect = element.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+            
+            ripple.className = 'gold-ripple';
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            
+            element.style.position = 'relative';
+            element.style.overflow = 'hidden';
+            element.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 1000);
+        }
+
+        // Initialize funding-specific features
+        function initializeFundingPremium() {
+            // Add money-themed particle system
+            new FundingParticles();
+            
+            // Add gold ripple effects to buttons
+            document.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', addGoldRipple);
+            });
+            
+            // Enhanced metric animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationDelay = Math.random() * 0.3 + 's';
+                        entry.target.classList.add('fade-in-scale');
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.metric-card, .section-card, .pitch-card').forEach(el => {
+                observer.observe(el);
+            });
+            
+            // Add counting animation to metrics
+            animateMetrics();
+            
+            console.log('💰 Funding Card Generator Ultra-Premium Experience Loaded');
+        }
+
+        function animateMetrics() {
+            const metrics = document.querySelectorAll('.metric-value');
+            metrics.forEach(metric => {
+                const text = metric.textContent;
+                const number = parseFloat(text.replace(/[^0-9.]/g, ''));
+                if (!isNaN(number)) {
+                    let current = 0;
+                    const increment = number / 50;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= number) {
+                            current = number;
+                            clearInterval(timer);
+                        }
+                        metric.textContent = text.replace(number.toString(), Math.floor(current).toLocaleString());
+                    }, 30);
+                }
+            });
+        }
+
+        // Auto-generate on page load for demo
+        setTimeout(() => {
+            document.getElementById('generateBtn').click();
+            initializeFundingPremium();
+        }, 1000);
+        
+        // Add funding-themed CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fade-in-scale {
+                from {
+                    opacity: 0;
+                    transform: scale(0.8) translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: scale(1) translateY(0);
+                }
+            }
+            
+            .fade-in-scale {
+                animation: fade-in-scale 0.9s ease-out forwards;
+            }
+            
+            @keyframes gold-ripple {
+                from {
+                    transform: scale(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+            
+            .gold-ripple {
+                position: absolute;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(255, 215, 0, 0.8) 0%, transparent 70%);
+                animation: gold-ripple 1s ease-out;
+                pointer-events: none;
+            }
+            
+            @keyframes money-glow {
+                0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+                50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.6); }
+            }
+            
+            /* Enhanced hover effects with money theme */
+            .metric-card, .section-card, .pitch-card {
+                transition: all var(--transition-smooth);
+                will-change: transform;
+            }
+            
+            .metric-card:hover, .section-card:hover, .pitch-card:hover {
+                transform: translateY(-10px) scale(1.03);
+                box-shadow: var(--shadow-lg);
+                animation: money-glow 2s infinite;
+            }
+            
+            button {
+                will-change: transform, filter;
+                transition: all var(--transition-base);
+                position: relative;
+            }
+            
+            button:hover {
+                transform: translateY(-3px);
+                filter: brightness(1.2);
+                box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+            }
+            
+            /* Metric value animations */
+            .metric-value {
+                font-variant-numeric: tabular-nums;
+                transition: all 0.3s ease;
+            }
+            
+            /* Export button special effects */
+            .export-buttons button:hover {
+                background: linear-gradient(135deg, #FFD700, #FFA500);
+                color: #000;
+                font-weight: bold;
+            }
+            
+            /* Reduced motion support */
+            @media (prefers-reduced-motion: reduce) {
+                .fade-in-scale, .gold-ripple, .money-glow {
+                    animation: none;
+                }
+                
+                .metric-card:hover, .section-card:hover, .pitch-card:hover {
+                    transform: scale(1.01);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

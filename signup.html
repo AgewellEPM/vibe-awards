@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Sign Up - The Vibe Awards</title>
+    <link rel="stylesheet" href="css/brand-system.css">
+    <link rel="stylesheet" href="css/apple-magic.css">
+    <link rel="stylesheet" href="css/typography.css">
+    <link rel="stylesheet" href="css/mobile-responsive.css">
+    <link rel="stylesheet" href="css/ultra-responsive.css">
+    <script src="js/accessibility.js"></script>
+    <script src="js/performance.js"></script>
+    <script src="js/validation.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-gray: #86868B;
+            --apple-light-gray: #F5F5F7;
+            --apple-dark: #1D1D1F;
+            --apple-green: #30D158;
+            --apple-red: #FF375F;
+            --apple-orange: #FF9F0A;
+            --apple-purple: #BF5AF2;
+            --apple-teal: #5AC8FA;
+            --apple-indigo: #5856D6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Animated Background */
+        .auth-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-gradient {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            top: -25%;
+            left: -25%;
+            background: radial-gradient(circle at 30% 40%, rgba(88, 86, 214, 0.4) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 60%, rgba(191, 90, 242, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 50% 50%, rgba(0, 113, 227, 0.2) 0%, transparent 70%);
+            animation: gradientRotate 30s linear infinite;
+        }
+
+        @keyframes gradientRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Auth Container */
+        .auth-container {
+            width: 100%;
+            max-width: clamp(288px, 30rem, 480px);
+            padding: var(--space-md);
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            padding: var(--space-lg);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-4xl);
+            margin-bottom: 16px;
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .auth-title {
+            font-size: var(--fs-3xl);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .auth-subtitle {
+            font-size: var(--fs-base);
+            color: rgba(245, 245, 247, 0.7);
+        }
+
+        /* Tabs */
+        .auth-tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: var(--space-xs);
+            margin-bottom: 32px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: var(--space-sm);
+            background: none;
+            border: none;
+            border-radius: 8px;
+            color: rgba(245, 245, 247, 0.6);
+            font-size: var(--fs-base);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        /* Form */
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+            animation: formFade 0.3s ease;
+        }
+
+        @keyframes formFade {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: var(--fs-sm);
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: rgba(245, 245, 247, 0.9);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: var(--space-sm) 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: var(--fs-base);
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--apple-blue);
+            box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: rgba(245, 245, 247, 0.4);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: rgba(245, 245, 247, 0.6);
+            cursor: pointer;
+            font-size: var(--fs-xl);
+        }
+
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-sm);
+            margin-bottom: 24px;
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--apple-blue);
+        }
+
+        .checkbox-label {
+            font-size: var(--fs-sm);
+            color: rgba(245, 245, 247, 0.8);
+        }
+
+        .form-link {
+            color: var(--apple-blue);
+            text-decoration: none;
+        }
+
+        .form-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Role Selection Grid */
+        .role-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: var(--gap-sm);
+            margin-top: 12px;
+        }
+
+        .role-option {
+            position: relative;
+        }
+
+        .role-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .role-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: var(--space-sm) 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+        }
+
+        .role-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .role-option input[type="radio"]:checked + .role-card {
+            background: linear-gradient(135deg, rgba(0, 113, 227, 0.2), rgba(90, 200, 250, 0.2));
+            border-color: var(--apple-blue);
+            box-shadow: 0 0 20px rgba(0, 113, 227, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .role-icon {
+            font-size: var(--fs-3xl);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .role-name {
+            font-size: var(--fs-sm);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .role-desc {
+            font-size: var(--fs-xs);
+            color: rgba(245, 245, 247, 0.6);
+            display: block;
+        }
+
+        /* Skill Level Selection */
+        .skill-levels {
+            display: flex;
+            gap: var(--gap-sm);
+            margin-top: 12px;
+        }
+
+        .skill-levels input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .skill-option {
+            flex: 1;
+            padding: var(--space-sm);
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--gap-xs);
+        }
+
+        .skill-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        input[type="radio"]:checked + .skill-option {
+            background: linear-gradient(135deg, rgba(48, 209, 88, 0.2), rgba(57, 255, 20, 0.2));
+            border-color: var(--apple-green);
+            box-shadow: 0 0 20px rgba(48, 209, 88, 0.3);
+        }
+
+        .skill-icon {
+            font-size: var(--fs-2xl);
+        }
+
+        .form-hint {
+            display: block;
+            margin-top: 6px;
+            font-size: var(--fs-xs);
+            color: rgba(245, 245, 247, 0.5);
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: var(--space-sm);
+            border-radius: 16px;
+            font-size: var(--fs-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            margin-bottom: 16px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 113, 227, 0.3);
+        }
+
+        .btn-social {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--gap-sm);
+        }
+
+        .btn-social:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-sm);
+            margin: var(--space-md) 0;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .divider-text {
+            font-size: var(--fs-sm);
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        /* Success State */
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: var(--space-md);
+            animation: successFade 0.5s ease;
+        }
+
+        .success-message.active {
+            display: block;
+        }
+
+        @keyframes successFade {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .success-icon {
+            font-size: var(--fs-5xl);
+            margin-bottom: 24px;
+            animation: successPulse 1s ease;
+        }
+
+        @keyframes successPulse {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .success-title {
+            font-size: var(--fs-3xl);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .success-text {
+            font-size: var(--fs-base);
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 24px;
+        }
+
+        /* Footer */
+        .auth-footer {
+            text-align: center;
+            margin-top: 32px;
+            font-size: var(--fs-sm);
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        /* Loading State */
+        .btn-loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
+            border: 2px solid white;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spinner 0.6s linear infinite;
+        }
+
+        @keyframes spinner {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Minimal Navigation */
+        .auth-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: var(--space-sm) 24px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            z-index: 9999;
+        }
+
+        .auth-nav-content {
+            max-width: clamp(720px, 75rem, 1200px);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: var(--fs-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--gap-xs);
+            transition: color 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: #F5F5F7;
+        }
+
+        .auth-logo-nav {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-xs);
+            color: #F5F5F7;
+            font-size: var(--fs-base);
+            font-weight: 600;
+        }
+
+        .logo-icon-nav {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-sm);
+        }
+
+        .auth-container {
+            padding-top: 80px;
+        }
+    </style>
+    <!-- Modal System -->
+    <script src="js/vibe-modal-system.js"></script>
+</head>
+<body>
+    <!-- Minimal Navigation -->
+    <nav class="auth-nav">
+        <div class="auth-nav-content">
+            <a href="index.html" class="back-link">
+                <span>←</span>
+                <span>Back to Home</span>
+            </a>
+            <div class="auth-logo-nav">
+                <div class="logo-icon-nav">🏆</div>
+                <span>The Vibe Awards</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Animated Background -->
+    <div class="auth-background">
+        <div class="bg-gradient"></div>
+    </div>
+
+    <!-- Auth Container -->
+    <div class="auth-container container-fluid">
+        <div class="auth-card card-fluid">
+            <div class="auth-logo">
+                <div class="logo-icon">🏆</div>
+                <h1 class="auth-title" style="font-size: var(--fs-4xl);">The Vibe Awards</h1>
+                <p class="auth-subtitle">Join the community of innovators</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="auth-tabs">
+                <button class="tab-btn active btn-fluid" onclick="switchTab('signup')">Sign Up</button>
+                <button class="tab-btn btn-fluid" onclick="switchTab('login')">Log In</button>
+            </div>
+
+            <!-- Sign Up Form -->
+            <form class="auth-form active" id="signupForm" data-validate>
+                <div class="form-group">
+                    <label class="form-label required">Full Name</label>
+                    <input type="text" class="form-input" name="fullName" placeholder="John Doe" data-validate="required name" required>
+                    <div class="form-help">Enter your first and last name</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Email</label>
+                    <input type="email" class="form-input" name="email" placeholder="john@example.com" data-validate="required email" required>
+                    <div class="form-help">We'll use this to send you updates</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" class="form-input" id="signupPassword" name="password" placeholder="Create a strong password" data-validate="required strong-password" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('signupPassword')">
+                            👁️
+                        </button>
+                    </div>
+                    <div class="form-help">Must be at least 8 characters with uppercase, lowercase, number, and special character</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Primary Role</label>
+                    <div class="role-grid ultra-grid-responsive">
+                        <div class="role-option" data-role="coder">
+                            <input type="radio" name="role" id="role-coder" value="coder" required>
+                            <label for="role-coder" class="role-card card-fluid">
+                                <span class="role-icon">👨‍💻</span>
+                                <span class="role-name">Coder</span>
+                                <span class="role-desc">Frontend, Backend, Full-Stack</span>
+                            </label>
+                        </div>
+                        
+                        <div class="role-option" data-role="designer">
+                            <input type="radio" name="role" id="role-designer" value="designer" required>
+                            <label for="role-designer" class="role-card card-fluid">
+                                <span class="role-icon">🎨</span>
+                                <span class="role-name">Designer</span>
+                                <span class="role-desc">UI/UX, Visual, Product</span>
+                            </label>
+                        </div>
+                        
+                        <div class="role-option" data-role="marketer">
+                            <input type="radio" name="role" id="role-marketer" value="marketer" required>
+                            <label for="role-marketer" class="role-card card-fluid">
+                                <span class="role-icon">📈</span>
+                                <span class="role-name">Marketer</span>
+                                <span class="role-desc">Growth, Content, Social</span>
+                            </label>
+                        </div>
+                        
+                        <div class="role-option" data-role="video">
+                            <input type="radio" name="role" id="role-video" value="video" required>
+                            <label for="role-video" class="role-card card-fluid">
+                                <span class="role-icon">🎥</span>
+                                <span class="role-name">Video</span>
+                                <span class="role-desc">Demo, Promo, Content</span>
+                            </label>
+                        </div>
+                        
+                        <div class="role-option" data-role="bizops">
+                            <input type="radio" name="role" id="role-bizops" value="bizops" required>
+                            <label for="role-bizops" class="role-card card-fluid">
+                                <span class="role-icon">📊</span>
+                                <span class="role-name">Biz Ops</span>
+                                <span class="role-desc">Strategy, Finance, Ops</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Skill Level</label>
+                    <div class="skill-levels">
+                        <input type="radio" name="skill" id="skill-beginner" value="beginner" required>
+                        <label for="skill-beginner" class="skill-option">
+                            <span class="skill-icon">🌱</span>
+                            <span>Beginner</span>
+                        </label>
+                        
+                        <input type="radio" name="skill" id="skill-intermediate" value="intermediate" required>
+                        <label for="skill-intermediate" class="skill-option">
+                            <span class="skill-icon">⚡</span>
+                            <span>Intermediate</span>
+                        </label>
+                        
+                        <input type="radio" name="skill" id="skill-expert" value="expert" required>
+                        <label for="skill-expert" class="skill-option">
+                            <span class="skill-icon">🔥</span>
+                            <span>Expert</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Top Skills (optional)</label>
+                    <input type="text" class="form-input" placeholder="e.g., React, Node.js, Figma, Python" id="skills">
+                    <small class="form-hint">Separate with commas. Helps with team matching.</small>
+                </div>
+
+                <div class="form-checkbox">
+                    <input type="checkbox" id="terms" class="checkbox" required>
+                    <label for="terms" class="checkbox-label">
+                        I agree to the <a href="#" class="form-link">Terms of Service</a> and <a href="#" class="form-link">Privacy Policy</a>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-fluid" onclick="handleSignup(event)">Create Account</button>
+
+                <div class="divider">
+                    <div class="divider-line"></div>
+                    <span class="divider-text">or continue with</span>
+                    <div class="divider-line"></div>
+                </div>
+
+                <button type="button" class="btn btn-social btn-fluid">
+                    <span>🍎</span>
+                    <span>Sign up with Apple</span>
+                </button>
+
+                <button type="button" class="btn btn-social btn-fluid">
+                    <span>🔵</span>
+                    <span>Sign up with Google</span>
+                </button>
+
+                <button type="button" class="btn btn-social btn-fluid">
+                    <span>🐙</span>
+                    <span>Sign up with GitHub</span>
+                </button>
+            </form>
+
+            <!-- Login Form -->
+            <form class="auth-form" id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" placeholder="john@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" class="form-input" id="loginPassword" placeholder="Enter your password" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">
+                            👁️
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-checkbox">
+                    <input type="checkbox" id="remember" class="checkbox">
+                    <label for="remember" class="checkbox-label">Remember me</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-fluid" onclick="handleLogin(event)">Log In</button>
+
+                <div style="text-align: center; margin: var(--space-sm) 0;">
+                    <a href="#" class="form-link">Forgot password?</a>
+                </div>
+
+                <div class="divider">
+                    <div class="divider-line"></div>
+                    <span class="divider-text">or continue with</span>
+                    <div class="divider-line"></div>
+                </div>
+
+                <button type="button" class="btn btn-social btn-fluid">
+                    <span>🍎</span>
+                    <span>Sign in with Apple</span>
+                </button>
+
+                <button type="button" class="btn btn-social btn-fluid">
+                    <span>🔵</span>
+                    <span>Sign in with Google</span>
+                </button>
+
+                <button type="button" class="btn btn-social btn-fluid">
+                    <span>🐙</span>
+                    <span>Sign in with GitHub</span>
+                </button>
+            </form>
+
+            <!-- Success Message -->
+            <div class="success-message" id="successMessage">
+                <div class="success-icon">🎉</div>
+                <h2 class="success-title">Welcome to The Vibe Awards!</h2>
+                <p class="success-text">Your account has been created successfully.</p>
+                <button class="btn btn-primary btn-fluid" onclick="window.location.href='dashboard.html'">Go to Dashboard</button>
+            </div>
+        </div>
+
+        <div class="auth-footer">
+            <p>© 2024 The Vibe Awards. All rights reserved.</p>
+            <p style="margin-top: 8px;">
+                <a href="index-magic.html" class="form-link">← Back to Home</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Switch between tabs
+        function switchTab(tab) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const forms = document.querySelectorAll('.auth-form');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            forms.forEach(f => f.classList.remove('active'));
+            
+            if (tab === 'signup') {
+                tabs[0].classList.add('active');
+                document.getElementById('signupForm').classList.add('active');
+            } else {
+                tabs[1].classList.add('active');
+                document.getElementById('loginForm').classList.add('active');
+            }
+        }
+
+        // Toggle password visibility
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const type = input.type === 'password' ? 'text' : 'password';
+            input.type = type;
+        }
+
+        // Handle signup
+        function handleSignup(e) {
+            e.preventDefault();
+            const btn = e.target;
+            btn.classList.add('btn-loading');
+            
+            // Get form data
+            const formData = {
+                name: document.querySelector('#signupForm input[type="text"]').value,
+                email: document.querySelector('#signupForm input[type="email"]').value,
+                role: document.querySelector('#signupForm input[name="role"]:checked')?.value,
+                skillLevel: document.querySelector('#signupForm input[name="skill"]:checked')?.value,
+                skills: document.getElementById('skills').value
+            };
+            
+            // Validate role selection
+            if (!formData.role) {
+                vibeError('Role Required', 'Please select your primary role to continue with registration.');
+                btn.classList.remove('btn-loading');
+                return;
+            }
+            
+            if (!formData.skillLevel) {
+                vibeError('Skill Level Required', 'Please select your skill level to help us match you with appropriate challenges.');
+                btn.classList.remove('btn-loading');
+                return;
+            }
+            
+            // Simulate API call
+            setTimeout(() => {
+                btn.classList.remove('btn-loading');
+                
+                // Store auth state with role info
+                localStorage.setItem('isAuthenticated', 'true');
+                localStorage.setItem('userName', formData.name);
+                localStorage.setItem('userRole', formData.role);
+                localStorage.setItem('userSkillLevel', formData.skillLevel);
+                localStorage.setItem('userSkills', formData.skills);
+                
+                // Track stats for matchmaking
+                updateRoleStats(formData.role);
+                
+                // Show success modal and redirect
+                vibeSuccess(
+                    'Welcome to The Vibe Awards!',
+                    `Welcome aboard, <strong>${formData.name}</strong>! Your ${formData.role} profile has been created. Get ready to experience the future of vibe coding competitions!`
+                ).then(() => {
+                    document.getElementById('signupForm').style.display = 'none';
+                    document.getElementById('successMessage').classList.add('active');
+                });
+            }, 2000);
+        }
+        
+        // Update role statistics for matchmaking
+        function updateRoleStats(role) {
+            const roleStats = JSON.parse(localStorage.getItem('roleStats') || '{}');
+            roleStats[role] = (roleStats[role] || 0) + 1;
+            localStorage.setItem('roleStats', JSON.stringify(roleStats));
+        }
+
+        // Handle login
+        function handleLogin(e) {
+            e.preventDefault();
+            const btn = e.target;
+            btn.classList.add('btn-loading');
+            
+            // Simulate API call
+            setTimeout(() => {
+                localStorage.setItem('isAuthenticated', 'true');
+                window.location.href = 'dashboard.html';
+            }, 1500);
+        }
+    </script>
+    <script src="js/animations.js"></script>
+    <script src="js/apple-magic-init.js"></script>
+</body>
+</html>

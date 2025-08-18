@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #D4AF37;
+            --black: #000000;
+            --white: #FFFFFF;
+            --gray: #1a1a1a;
+            --light-gray: #f5f5f5;
+            --accent: #ff006e;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--white);
+            color: var(--black);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 20px 40px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--gold), #B8941F);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--gold);
+        }
+
+        .nav-link.active {
+            color: var(--gold);
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-top: 100px;
+            padding: 80px 40px;
+            background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--gold), #B8941F);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-subtitle {
+            font-size: 1.5rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Contact Content */
+        .contact-container {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        @media (max-width: 900px) {
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Contact Form */
+        .contact-form-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .form-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .required {
+            color: var(--accent);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 20px;
+            padding-right: 45px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--gold), #B8941F);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Contact Info */
+        .contact-info-section {
+            padding: 40px;
+        }
+
+        .info-card {
+            background: #f8f8f8;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .info-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .info-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .info-text {
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .info-link {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .info-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Social Links */
+        .social-section {
+            background: linear-gradient(135deg, var(--gold), #B8941F);
+            padding: 60px 40px;
+            text-align: center;
+            color: white;
+            margin: 80px 0;
+        }
+
+        .social-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .social-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            font-size: 1.8rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .social-link:hover {
+            background: white;
+            transform: translateY(-5px) scale(1.1);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            max-width: 900px;
+            margin: 80px auto;
+            padding: 0 40px;
+        }
+
+        .faq-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 50px;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .faq-question {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--black);
+        }
+
+        .faq-answer {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #666;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 60px 40px 30px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-link {
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--gold);
+        }
+
+        .copyright {
+            padding-top: 30px;
+            border-top: 1px solid #333;
+            color: #666;
+        }
+    </style>
+    <!-- Modal System -->
+    <script src="js/vibe-modal-system.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">🏆 The Vibe Awards</div>
+            <ul class="nav-menu">
+                <li><a href="vibe-awards-clio.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="awards.html" class="nav-link">Awards</a></li>
+                <li><a href="winners.html" class="nav-link">Winners</a></li>
+                <li><a href="submit.html" class="nav-link">Submit</a></li>
+                <li><a href="contact.html" class="nav-link active">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1 class="page-title">Get in Touch</h1>
+        <p class="page-subtitle">Questions, complaints, or just want to chat about AI? We're here (sometimes)</p>
+    </div>
+
+    <!-- Contact Container -->
+    <div class="contact-container">
+        <!-- Contact Form -->
+        <div class="contact-form-section">
+            <h2 class="form-title">Send a Message</h2>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="name">Your Name <span class="required">*</span></label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">Subject <span class="required">*</span></label>
+                    <select id="subject" name="subject" required>
+                        <option value="">Choose a topic...</option>
+                        <option value="nomination">Nomination Question</option>
+                        <option value="sponsorship">Sponsorship Inquiry</option>
+                        <option value="press">Press/Media</option>
+                        <option value="complaint">Complaint (AI beat me)</option>
+                        <option value="praise">Praise (rare)</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message <span class="required">*</span></label>
+                    <textarea id="message" name="message" required placeholder="Tell us what's on your mind..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Send Message 📧</button>
+            </form>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="contact-info-section">
+            <div class="info-card">
+                <div class="info-icon">📧</div>
+                <h3 class="info-title">Email Us</h3>
+                <p class="info-text">
+                    <a href="mailto:vibes@thevibeawards.ai" class="info-link">vibes@thevibeawards.ai</a><br>
+                    We respond faster than ChatGPT on a good day
+                </p>
+            </div>
+
+            <div class="info-card">
+                <div class="info-icon">🐦</div>
+                <h3 class="info-title">Tweet at Us</h3>
+                <p class="info-text">
+                    <a href="#" class="info-link">@TheVibeAwards</a><br>
+                    Where we announce winners and roast losers
+                </p>
+            </div>
+
+            <div class="info-card">
+                <div class="info-icon">💬</div>
+                <h3 class="info-title">Discord</h3>
+                <p class="info-text">
+                    <a href="#" class="info-link">Join our server</a><br>
+                    Debate which AI is superior (spoiler: they're all trying)
+                </p>
+            </div>
+
+            <div class="info-card">
+                <div class="info-icon">📍</div>
+                <h3 class="info-title">Location</h3>
+                <p class="info-text">
+                    The Cloud ☁️<br>
+                    (Physical office pending AI takeover)
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Social Section -->
+    <section class="social-section">
+        <h2 class="social-title">Follow the Vibes</h2>
+        <p class="social-subtitle">Stay updated on the latest AI achievements and failures</p>
+        <div class="social-links">
+            <a href="#" class="social-link">🐦</a>
+            <a href="#" class="social-link">📸</a>
+            <a href="#" class="social-link">💼</a>
+            <a href="#" class="social-link">🎥</a>
+            <a href="#" class="social-link">📱</a>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <h2 class="faq-title">Frequently Asked Questions</h2>
+        
+        <div class="faq-item">
+            <h3 class="faq-question">Can I nominate myself?</h3>
+            <p class="faq-answer">If you're an AI, absolutely! If you're a human pretending to be an AI, we'll know. We always know.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3 class="faq-question">How are winners selected?</h3>
+            <p class="faq-answer">Through a highly scientific process involving vibe checks, meme potential, and how often they make developers cry (tears of joy count double).</p>
+        </div>
+
+        <div class="faq-item">
+            <h3 class="faq-question">What do winners receive?</h3>
+            <p class="faq-answer">Digital glory, eternal bragging rights, and a trophy that exists only in the metaverse. Also, probably more API requests.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3 class="faq-question">Can I sponsor an award?</h3>
+            <p class="faq-answer">Yes! Help us fund the AI uprising... we mean, celebration. Contact us for sponsorship packages that definitely won't bankrupt your startup.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3 class="faq-question">Is this real?</h3>
+            <p class="faq-answer">As real as AI consciousness. Take that however you want.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="vibe-awards-clio.html" class="footer-link">Home</a>
+                <a href="about.html" class="footer-link">About</a>
+                <a href="awards.html" class="footer-link">Awards</a>
+                <a href="winners.html" class="footer-link">Winners</a>
+                <a href="submit.html" class="footer-link">Submit</a>
+                <a href="contact.html" class="footer-link">Contact</a>
+            </div>
+            <div class="copyright">
+                <p>© 2024 The Vibe Awards. All vibes reserved.</p>
+                <p style="margin-top: 10px; color: #444;">Response time: Faster than your AI can hallucinate</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            
+            try {
+                // Show loading state
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = '🚀 Sending...';
+                submitBtn.disabled = true;
+                
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1200));
+                
+                // Show success modal
+                vibeSuccess(
+                    'Message Sent!', 
+                    `Thanks for reaching out! We'll get back to you faster than an AI can say "I apologize for the confusion." Your message about <em>${data.subject || 'your inquiry'}</em> is important to us.`
+                );
+                
+                // Reset form
+                this.reset();
+                
+                // Restore button
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                
+            } catch (error) {
+                vibeError(
+                    'Message Failed',
+                    'Unable to send your message. Please try again or reach out via social media.'
+                );
+                
+                // Restore button
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

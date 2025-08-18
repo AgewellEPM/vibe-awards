@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-gray: #86868B;
+            --apple-light-gray: #F5F5F7;
+            --apple-dark: #1D1D1F;
+            --apple-green: #30D158;
+            --apple-red: #FF375F;
+            --apple-orange: #FF9F0A;
+            --apple-purple: #BF5AF2;
+            --apple-teal: #5AC8FA;
+            --apple-indigo: #5856D6;
+            --apple-yellow: #FFD60A;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        /* Animated Background */
+        .notifications-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-gradient {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            top: -25%;
+            left: -25%;
+            background: radial-gradient(circle at 30% 70%, rgba(191, 90, 242, 0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 30%, rgba(0, 113, 227, 0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 50% 50%, rgba(48, 209, 88, 0.1) 0%, transparent 70%);
+            animation: gradientPulse 25s ease-in-out infinite;
+        }
+
+        @keyframes gradientPulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(180deg); }
+        }
+
+        /* Header */
+        .header {
+            padding: 30px 40px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 24px;
+            height: 24px;
+            background: var(--apple-red);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .title-text h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .title-text p {
+            font-size: 16px;
+            color: rgba(245, 245, 247, 0.7);
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .control-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .control-btn.active {
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            border-color: transparent;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+        }
+
+        /* Notifications Feed */
+        .notifications-feed {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            height: fit-content;
+        }
+
+        .feed-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feed-title {
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .feed-filters {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .filter-btn.active {
+            background: var(--apple-blue);
+            border-color: transparent;
+        }
+
+        /* Notification Items */
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .notification-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateX(5px);
+        }
+
+        .notification-item.unread {
+            border-left: 4px solid var(--apple-blue);
+            background: rgba(0, 113, 227, 0.1);
+        }
+
+        .notification-item.urgent {
+            border-left: 4px solid var(--apple-red);
+            background: rgba(255, 55, 95, 0.1);
+        }
+
+        .notification-item.success {
+            border-left: 4px solid var(--apple-green);
+            background: rgba(48, 209, 88, 0.1);
+        }
+
+        .notification-header {
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            margin-bottom: 12px;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .notification-icon.vote {
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+        }
+
+        .notification-icon.award {
+            background: linear-gradient(135deg, var(--apple-yellow), var(--apple-orange));
+        }
+
+        .notification-icon.system {
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+        }
+
+        .notification-icon.social {
+            background: linear-gradient(135deg, var(--apple-green), var(--apple-teal));
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+
+        .notification-message {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.8);
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+
+        .notification-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .notification-time {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-link {
+            color: var(--apple-blue);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .action-link:hover {
+            color: var(--apple-teal);
+            text-decoration: underline;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* Quick Stats */
+        .quick-stats {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .stats-header {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--apple-blue);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: rgba(245, 245, 247, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Notification Settings */
+        .notification-settings {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .settings-header {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-label {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.9);
+        }
+
+        .setting-toggle {
+            width: 40px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .setting-toggle.active {
+            background: var(--apple-green);
+        }
+
+        .setting-toggle::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .setting-toggle.active::after {
+            left: 22px;
+        }
+
+        /* Recent Activity */
+        .recent-activity {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .activity-header {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .activity-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .activity-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .activity-text {
+            flex: 1;
+            font-size: 13px;
+            color: rgba(245, 245, 247, 0.8);
+        }
+
+        .activity-time {
+            font-size: 11px;
+            color: rgba(245, 245, 247, 0.5);
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 16px 20px;
+            max-width: 350px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(400px);
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .toast.success .toast-icon {
+            background: var(--apple-green);
+        }
+
+        .toast.warning .toast-icon {
+            background: var(--apple-orange);
+        }
+
+        .toast.error .toast-icon {
+            background: var(--apple-red);
+        }
+
+        .toast.info .toast-icon {
+            background: var(--apple-blue);
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .toast-message {
+            font-size: 12px;
+            color: rgba(245, 245, 247, 0.8);
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(191, 90, 242, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(191, 90, 242, 0.4);
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--apple-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .empty-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .empty-text {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .notification-item {
+                padding: 15px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .toast-container {
+                left: 20px;
+                right: 20px;
+            }
+
+            .toast {
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="notifications-background">
+        <div class="bg-gradient"></div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="header-title">
+                <div class="header-icon">
+                    🔔
+                    <div class="notification-badge">7</div>
+                </div>
+                <div class="title-text">
+                    <h1>Notifications</h1>
+                    <p>Stay updated with your Vibe Awards activity</p>
+                </div>
+            </div>
+            <div class="header-controls">
+                <button class="control-btn active" onclick="markAllRead()">
+                    <span>✓</span>
+                    <span>Mark All Read</span>
+                </button>
+                <button class="control-btn" onclick="toggleSettings()">
+                    <span>⚙️</span>
+                    <span>Settings</span>
+                </button>
+                <a href="dashboard.html" class="control-btn">
+                    <span>🏠</span>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Notifications Feed -->
+        <div class="notifications-feed">
+            <div class="feed-header">
+                <div class="feed-title">
+                    📬 Recent Notifications
+                </div>
+                <div class="feed-filters">
+                    <button class="filter-btn active" onclick="filterNotifications('all')">All</button>
+                    <button class="filter-btn" onclick="filterNotifications('unread')">Unread</button>
+                    <button class="filter-btn" onclick="filterNotifications('votes')">Votes</button>
+                    <button class="filter-btn" onclick="filterNotifications('awards')">Awards</button>
+                    <button class="filter-btn" onclick="filterNotifications('system')">System</button>
+                </div>
+            </div>
+
+            <div class="notification-list" id="notificationList">
+                <!-- Notification 1 -->
+                <div class="notification-item unread" data-type="vote">
+                    <div class="notification-header">
+                        <div class="notification-icon vote">🗳️</div>
+                        <div class="notification-content">
+                            <div class="notification-title">New vote on your app!</div>
+                            <div class="notification-message">Sarah Chen gave TaskFlow Pro a 5-star rating: "This app revolutionized my productivity workflow!"</div>
+                            <div class="notification-meta">
+                                <div class="notification-time">
+                                    <span>⏰</span>
+                                    <span>2 minutes ago</span>
+                                </div>
+                                <div class="notification-actions">
+                                    <a href="#" class="action-link">View Vote</a>
+                                    <a href="#" class="action-link">Reply</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification 2 -->
+                <div class="notification-item urgent" data-type="award">
+                    <div class="notification-header">
+                        <div class="notification-icon award">🏆</div>
+                        <div class="notification-content">
+                            <div class="notification-title">Congratulations! You won an award!</div>
+                            <div class="notification-message">TaskFlow Pro has been selected as "Best Productivity App" in The Vibe Awards! Claim your digital certificate now.</div>
+                            <div class="notification-meta">
+                                <div class="notification-time">
+                                    <span>⏰</span>
+                                    <span>15 minutes ago</span>
+                                </div>
+                                <div class="notification-actions">
+                                    <a href="awards-ceremony.html" class="action-link">View Award</a>
+                                    <a href="#" class="action-link">Share</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification 3 -->
+                <div class="notification-item unread" data-type="social">
+                    <div class="notification-header">
+                        <div class="notification-icon social">👥</div>
+                        <div class="notification-content">
+                            <div class="notification-title">You have a new follower</div>
+                            <div class="notification-message">Alex Rodriguez (@alexdev) started following you. Check out their apps including the award-winning "Neural Translator".</div>
+                            <div class="notification-meta">
+                                <div class="notification-time">
+                                    <span>⏰</span>
+                                    <span>1 hour ago</span>
+                                </div>
+                                <div class="notification-actions">
+                                    <a href="#" class="action-link">View Profile</a>
+                                    <a href="#" class="action-link">Follow Back</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification 4 -->
+                <div class="notification-item" data-type="vote">
+                    <div class="notification-header">
+                        <div class="notification-icon vote">📊</div>
+                        <div class="notification-content">
+                            <div class="notification-title">Voting milestone reached!</div>
+                            <div class="notification-message">Your app has reached 1,000 votes! You're now eligible for the "Popular Choice" category.</div>
+                            <div class="notification-meta">
+                                <div class="notification-time">
+                                    <span>⏰</span>
+                                    <span>3 hours ago</span>
+                                </div>
+                                <div class="notification-actions">
+                                    <a href="leaderboard.html" class="action-link">View Stats</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification 5 -->
+                <div class="notification-item success" data-type="system">
+                    <div class="notification-header">
+                        <div class="notification-icon system">🚀</div>
+                        <div class="notification-content">
+                            <div class="notification-title">App submission approved!</div>
+                            <div class="notification-message">TaskFlow Pro has been approved and is now live on The Vibe Awards. Good luck in the competition!</div>
+                            <div class="notification-meta">
+                                <div class="notification-time">
+                                    <span>⏰</span>
+                                    <span>6 hours ago</span>
+                                </div>
+                                <div class="notification-actions">
+                                    <a href="#" class="action-link">View App</a>
+                                    <a href="#" class="action-link">Share</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification 6 -->
+                <div class="notification-item unread" data-type="vote">
+                    <div class="notification-header">
+                        <div class="notification-icon vote">💬</div>
+                        <div class="notification-content">
+                            <div class="notification-title">New comment on your app</div>
+                            <div class="notification-message">Mike Chen commented: "Love the AI features! Can you add dark mode support?" on TaskFlow Pro.</div>
+                            <div class="notification-meta">
+                                <div class="notification-time">
+                                    <span>⏰</span>
+                                    <span>8 hours ago</span>
+                                </div>
+                                <div class="notification-actions">
+                                    <a href="#" class="action-link">View Comment</a>
+                                    <a href="#" class="action-link">Reply</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification 7 -->
+                <div class="notification-item unread" data-type="system">
+                    <div class="notification-header">
+                        <div class="notification-icon system">📅</div>
+                        <div class="notification-content">
+                            <div class="notification-title">Awards ceremony reminder</div>
+                            <div class="notification-message">The Vibe Awards ceremony starts in 2 days! Make sure to tune in for the live stream and winner announcements.</div>
+                            <div class="notification-meta">
+                                <div class="notification-time">
+                                    <span>⏰</span>
+                                    <span>1 day ago</span>
+                                </div>
+                                <div class="notification-actions">
+                                    <a href="awards-ceremony.html" class="action-link">Set Reminder</a>
+                                    <a href="stream-overlay.html" class="action-link">Watch Live</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Load More Button -->
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="control-btn" onclick="loadMoreNotifications()">
+                    <span>📥</span>
+                    <span>Load More</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Quick Stats -->
+            <div class="quick-stats">
+                <div class="stats-header">
+                    📈 Quick Stats
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">7</div>
+                        <div class="stat-label">Unread</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">23</div>
+                        <div class="stat-label">Today</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">156</div>
+                        <div class="stat-label">This Week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">89%</div>
+                        <div class="stat-label">Read Rate</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Settings -->
+            <div class="notification-settings">
+                <div class="settings-header">
+                    ⚙️ Notification Settings
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">Email Notifications</div>
+                    <div class="setting-toggle active" onclick="toggleSetting(this)"></div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">Push Notifications</div>
+                    <div class="setting-toggle active" onclick="toggleSetting(this)"></div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">Vote Alerts</div>
+                    <div class="setting-toggle active" onclick="toggleSetting(this)"></div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">Award Updates</div>
+                    <div class="setting-toggle active" onclick="toggleSetting(this)"></div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">Social Activity</div>
+                    <div class="setting-toggle" onclick="toggleSetting(this)"></div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">System Messages</div>
+                    <div class="setting-toggle active" onclick="toggleSetting(this)"></div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="recent-activity">
+                <div class="activity-header">
+                    ⚡ Recent Activity
+                </div>
+                
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: var(--apple-green);">✓</div>
+                        <div class="activity-text">Marked 3 notifications as read</div>
+                        <div class="activity-time">2m</div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: var(--apple-blue);">👁️</div>
+                        <div class="activity-text">Viewed award notification</div>
+                        <div class="activity-time">5m</div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: var(--apple-purple);">🔔</div>
+                        <div class="activity-text">Enabled vote alerts</div>
+                        <div class="activity-time">1h</div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: var(--apple-orange);">📧</div>
+                        <div class="activity-text">Updated email preferences</div>
+                        <div class="activity-time">2h</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Floating Action Button -->
+    <button class="fab" onclick="composeNotification()" title="Compose Notification">
+        ✏️
+    </button>
+
+    <script>
+        // Notification management
+        let notifications = [];
+        let unreadCount = 7;
+
+        // Filter notifications
+        function filterNotifications(type) {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const items = document.querySelectorAll('.notification-item');
+            items.forEach(item => {
+                if (type === 'all') {
+                    item.style.display = 'block';
+                } else if (type === 'unread') {
+                    item.style.display = item.classList.contains('unread') ? 'block' : 'none';
+                } else {
+                    const itemType = item.getAttribute('data-type');
+                    item.style.display = itemType === type || (type === 'votes' && itemType === 'vote') || (type === 'awards' && itemType === 'award') || (type === 'system' && itemType === 'system') ? 'block' : 'none';
+                }
+            });
+        }
+
+        // Mark all as read
+        function markAllRead() {
+            const unreadItems = document.querySelectorAll('.notification-item.unread');
+            unreadItems.forEach(item => {
+                item.classList.remove('unread');
+            });
+            
+            updateUnreadCount(0);
+            showToast('success', 'All notifications marked as read', '');
+        }
+
+        // Update unread count
+        function updateUnreadCount(count) {
+            unreadCount = count;
+            const badge = document.querySelector('.notification-badge');
+            if (badge) {
+                badge.textContent = count;
+                badge.style.display = count > 0 ? 'flex' : 'none';
+            }
+            
+            // Update stats
+            const unreadStat = document.querySelector('.stat-value');
+            if (unreadStat) {
+                unreadStat.textContent = count;
+            }
+        }
+
+        // Toggle settings
+        function toggleSettings() {
+            const settingsPanel = document.querySelector('.notification-settings');
+            settingsPanel.style.display = settingsPanel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Toggle individual setting
+        function toggleSetting(toggle) {
+            toggle.classList.toggle('active');
+            const label = toggle.previousElementSibling.textContent;
+            const isActive = toggle.classList.contains('active');
+            
+            showToast('info', 'Setting Updated', `${label} ${isActive ? 'enabled' : 'disabled'}`);
+        }
+
+        // Show toast notification
+        function showToast(type, title, message) {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icons = {
+                success: '✓',
+                warning: '⚠️',
+                error: '✕',
+                info: 'ℹ️'
+            };
+            
+            toast.innerHTML = `
+                <div class="toast-icon">${icons[type] || 'ℹ️'}</div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    ${message ? `<div class="toast-message">${message}</div>` : ''}
+                </div>
+                <button class="toast-close" onclick="removeToast(this)">×</button>
+            `;
+            
+            document.getElementById('toastContainer').appendChild(toast);
+            
+            // Show with animation
+            setTimeout(() => toast.classList.add('show'), 100);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => removeToast(toast.querySelector('.toast-close')), 5000);
+        }
+
+        // Remove toast
+        function removeToast(closeBtn) {
+            const toast = closeBtn.closest('.toast');
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }
+
+        // Load more notifications
+        function loadMoreNotifications() {
+            showToast('info', 'Loading...', 'Fetching more notifications');
+            
+            // Simulate loading delay
+            setTimeout(() => {
+                showToast('success', 'Loaded', '5 more notifications loaded');
+            }, 1000);
+        }
+
+        // Compose notification (admin feature)
+        function composeNotification() {
+            showToast('info', 'Compose Feature', 'Notification composer coming soon');
+        }
+
+        // Mark notification as read when clicked
+        document.addEventListener('click', function(e) {
+            const notificationItem = e.target.closest('.notification-item');
+            if (notificationItem && notificationItem.classList.contains('unread')) {
+                notificationItem.classList.remove('unread');
+                updateUnreadCount(unreadCount - 1);
+            }
+        });
+
+        // Real-time notifications simulation
+        function simulateRealTimeNotifications() {
+            const notificationTypes = [
+                { type: 'vote', icon: '🗳️', title: 'New vote received!', message: 'Someone voted on your app' },
+                { type: 'social', icon: '👥', title: 'New follower', message: 'You have a new follower' },
+                { type: 'system', icon: '🔔', title: 'System update', message: 'Platform maintenance scheduled' }
+            ];
+            
+            const randomNotification = notificationTypes[Math.floor(Math.random() * notificationTypes.length)];
+            
+            showToast('info', randomNotification.title, randomNotification.message);
+            updateUnreadCount(unreadCount + 1);
+        }
+
+        // Simulate real-time notifications every 30 seconds
+        setInterval(simulateRealTimeNotifications, 30000);
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Request notification permission
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        showToast('success', 'Notifications Enabled', 'You will now receive browser notifications');
+                    }
+                });
+            }
+            
+            // Show welcome toast
+            setTimeout(() => {
+                showToast('info', 'Welcome to Notifications', 'Stay updated with your Vibe Awards activity');
+            }, 1000);
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'a' && e.ctrlKey) {
+                e.preventDefault();
+                markAllRead();
+            } else if (e.key === 'r' && e.ctrlKey) {
+                e.preventDefault();
+                location.reload();
+            } else if (e.key === 'Escape') {
+                const activeFilter = document.querySelector('.filter-btn.active');
+                if (activeFilter && activeFilter.textContent !== 'All') {
+                    filterNotifications('all');
+                    document.querySelector('.filter-btn').click();
+                }
+            }
+        });
+
+        // Add keyboard shortcut hints
+        console.log('🔔 Keyboard shortcuts:');
+        console.log('Ctrl+A: Mark all as read');
+        console.log('Ctrl+R: Refresh');
+        console.log('Escape: Show all notifications');
+
+        // Service Worker for push notifications (placeholder)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').then(registration => {
+                console.log('Service Worker registered:', registration);
+            }).catch(error => {
+                console.log('Service Worker registration failed:', error);
+            });
+        }
+
+        // Analytics tracking
+        function trackNotificationInteraction(action, notificationType) {
+            console.log(`Notification interaction: ${action} on ${notificationType}`);
+            // In a real app, this would send analytics data
+        }
+
+        // Add click tracking to notifications
+        document.addEventListener('click', function(e) {
+            const notificationItem = e.target.closest('.notification-item');
+            if (notificationItem) {
+                const type = notificationItem.getAttribute('data-type');
+                trackNotificationInteraction('click', type);
+            }
+        });
+    </script>
+</body>
+</html>

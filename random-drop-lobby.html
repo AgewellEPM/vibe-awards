@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Drop Lobby - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-green: #30D158;
+            --apple-red: #FF375F;
+            --apple-orange: #FF9F0A;
+            --apple-purple: #BF5AF2;
+            --apple-teal: #5AC8FA;
+            --apple-indigo: #5856D6;
+            --apple-yellow: #FFD60A;
+            --gold: #FFD700;
+            --glow-purple: #BF5AF2;
+            --glow-blue: #5AC8FA;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+            overflow: hidden;
+        }
+
+        /* Epic Battle Royale Background */
+        .battle-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .cyber-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(90, 200, 250, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(90, 200, 250, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridScroll 10s linear infinite;
+            transform: perspective(500px) rotateX(60deg);
+            transform-origin: center center;
+        }
+
+        @keyframes gridScroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+
+        .energy-pulse {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(191, 90, 242, 0.4) 0%, transparent 50%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1); 
+                opacity: 0.3;
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.5); 
+                opacity: 0.1;
+            }
+        }
+
+        /* Main Container */
+        .lobby-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Phase 1: Role Selection */
+        .role-selection {
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .lobby-title {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(90, 200, 250, 0.8) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        .lobby-subtitle {
+            font-size: 24px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 48px;
+        }
+
+        .role-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 200px);
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .role-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 32px 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .role-card::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(90, 200, 250, 0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .role-card:hover::before {
+            opacity: 1;
+        }
+
+        .role-card:hover {
+            transform: translateY(-8px) scale(1.05);
+            border-color: var(--glow-blue);
+            box-shadow: 0 20px 40px rgba(90, 200, 250, 0.3);
+        }
+
+        .role-card.selected {
+            background: linear-gradient(135deg, rgba(90, 200, 250, 0.2), rgba(191, 90, 242, 0.2));
+            border-color: var(--glow-purple);
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(191, 90, 242, 0.4);
+        }
+
+        .role-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .role-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .role-count {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .queue-btn {
+            padding: 20px 60px;
+            background: linear-gradient(135deg, var(--apple-teal), var(--apple-purple));
+            color: white;
+            border: none;
+            border-radius: 100px;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .queue-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .queue-btn:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .queue-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(90, 200, 250, 0.4);
+        }
+
+        .queue-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Phase 2: Queue Waiting */
+        .queue-waiting {
+            text-align: center;
+            display: none;
+            animation: fadeIn 1s ease;
+        }
+
+        .queue-counter {
+            font-size: 120px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, var(--apple-teal), var(--apple-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-variant-numeric: tabular-nums;
+            animation: counterPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes counterPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .queue-status {
+            font-size: 24px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 48px;
+        }
+
+        .loading-bar {
+            width: 400px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            overflow: hidden;
+            margin: 0 auto 24px;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--apple-teal), var(--apple-purple));
+            border-radius: 100px;
+            animation: loadingAnimation 2s ease-in-out infinite;
+        }
+
+        @keyframes loadingAnimation {
+            0% { width: 0%; }
+            50% { width: 100%; }
+            100% { width: 0%; }
+        }
+
+        .cancel-btn {
+            padding: 12px 32px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .cancel-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Phase 3: Team Reveal */
+        .team-reveal {
+            display: none;
+            animation: epicReveal 2s ease;
+        }
+
+        @keyframes epicReveal {
+            0% { 
+                opacity: 0; 
+                transform: scale(0.8) rotateY(180deg);
+            }
+            50% { 
+                transform: scale(1.1) rotateY(90deg);
+            }
+            100% { 
+                opacity: 1; 
+                transform: scale(1) rotateY(0deg);
+            }
+        }
+
+        .reveal-title {
+            font-size: 48px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 48px;
+            background: linear-gradient(135deg, var(--gold), var(--apple-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .team-members {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            margin-bottom: 48px;
+        }
+
+        .member-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 32px;
+            text-align: center;
+            min-width: 180px;
+            animation: memberSlide 0.5s ease forwards;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .member-card:nth-child(1) { animation-delay: 0.2s; }
+        .member-card:nth-child(2) { animation-delay: 0.4s; }
+        .member-card:nth-child(3) { animation-delay: 0.6s; }
+        .member-card:nth-child(4) { animation-delay: 0.8s; }
+        .member-card:nth-child(5) { animation-delay: 1s; }
+
+        @keyframes memberSlide {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .member-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 600;
+            margin: 0 auto 16px;
+        }
+
+        .member-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .member-role {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.6);
+            margin-bottom: 8px;
+        }
+
+        .member-stats {
+            font-size: 12px;
+            color: var(--apple-green);
+        }
+
+        .project-info {
+            text-align: center;
+            padding: 32px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            margin-bottom: 32px;
+        }
+
+        .project-name {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .project-brief {
+            font-size: 18px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 24px;
+        }
+
+        .countdown-start {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--apple-orange);
+            animation: countdownPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes countdownPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .enter-hub-btn {
+            padding: 20px 60px;
+            background: linear-gradient(135deg, var(--apple-green), var(--apple-teal));
+            color: white;
+            border: none;
+            border-radius: 100px;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: glowButton 2s ease-in-out infinite;
+        }
+
+        @keyframes glowButton {
+            0%, 100% { box-shadow: 0 0 20px rgba(48, 209, 88, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(48, 209, 88, 0.8); }
+        }
+
+        .enter-hub-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Live Player Count */
+        .player-count {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .online-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--apple-green);
+            border-radius: 50%;
+            animation: onlinePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes onlinePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .player-text {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .role-grid {
+                grid-template-columns: repeat(3, 200px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .lobby-title {
+                font-size: 36px;
+            }
+
+            .role-grid {
+                grid-template-columns: 1fr;
+                max-width: 300px;
+            }
+
+            .team-members {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Battle Royale Background -->
+    <div class="battle-background">
+        <div class="cyber-grid"></div>
+        <div class="energy-pulse"></div>
+    </div>
+
+    <!-- Live Player Count -->
+    <div class="player-count">
+        <div class="online-dot"></div>
+        <span class="player-text"><span id="playerCount">247</span> players online</span>
+    </div>
+
+    <!-- Main Container -->
+    <div class="lobby-container">
+        
+        <!-- Phase 1: Role Selection -->
+        <div class="role-selection" id="roleSelection">
+            <h1 class="lobby-title">Choose Your Class</h1>
+            <p class="lobby-subtitle">Select your role and drop into a random squad</p>
+            
+            <div class="role-grid">
+                <div class="role-card" data-role="coder" onclick="selectRole('coder')">
+                    <div class="role-icon">👨‍💻</div>
+                    <div class="role-name">Coder</div>
+                    <div class="role-count">42 in queue</div>
+                </div>
+                
+                <div class="role-card" data-role="designer" onclick="selectRole('designer')">
+                    <div class="role-icon">🎨</div>
+                    <div class="role-name">Designer</div>
+                    <div class="role-count">28 in queue</div>
+                </div>
+                
+                <div class="role-card" data-role="marketer" onclick="selectRole('marketer')">
+                    <div class="role-icon">📈</div>
+                    <div class="role-name">Marketer</div>
+                    <div class="role-count">19 in queue</div>
+                </div>
+                
+                <div class="role-card" data-role="video" onclick="selectRole('video')">
+                    <div class="role-icon">🎥</div>
+                    <div class="role-name">Video</div>
+                    <div class="role-count">15 in queue</div>
+                </div>
+                
+                <div class="role-card" data-role="bizops" onclick="selectRole('bizops')">
+                    <div class="role-icon">📊</div>
+                    <div class="role-name">Biz Ops</div>
+                    <div class="role-count">23 in queue</div>
+                </div>
+            </div>
+            
+            <button class="queue-btn" id="queueBtn" onclick="joinQueue()" disabled>
+                Join Random Drop →
+            </button>
+        </div>
+
+        <!-- Phase 2: Queue Waiting -->
+        <div class="queue-waiting" id="queueWaiting">
+            <div class="queue-counter" id="queueCounter">5</div>
+            <div class="queue-status">Finding your squad...</div>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <button class="cancel-btn" onclick="cancelQueue()">Cancel</button>
+        </div>
+
+        <!-- Phase 3: Team Reveal -->
+        <div class="team-reveal" id="teamReveal">
+            <h2 class="reveal-title">🎯 Your Squad Has Been Assembled!</h2>
+            
+            <div class="team-members">
+                <div class="member-card">
+                    <div class="member-avatar">AK</div>
+                    <div class="member-name">Alex Kim</div>
+                    <div class="member-role">👨‍💻 Coder</div>
+                    <div class="member-stats">⭐ 8 wins</div>
+                </div>
+                
+                <div class="member-card">
+                    <div class="member-avatar">SR</div>
+                    <div class="member-name">Sarah Rodriguez</div>
+                    <div class="member-role">🎨 Designer</div>
+                    <div class="member-stats">⭐ 5 wins</div>
+                </div>
+                
+                <div class="member-card">
+                    <div class="member-avatar">MJ</div>
+                    <div class="member-name">Marcus Johnson</div>
+                    <div class="member-role">📈 Marketer</div>
+                    <div class="member-stats">⭐ 3 wins</div>
+                </div>
+                
+                <div class="member-card">
+                    <div class="member-avatar">LP</div>
+                    <div class="member-name">Lisa Park</div>
+                    <div class="member-role">🎥 Video</div>
+                    <div class="member-stats">⭐ 6 wins</div>
+                </div>
+                
+                <div class="member-card">
+                    <div class="member-avatar">YOU</div>
+                    <div class="member-name">You</div>
+                    <div class="member-role">📊 Biz Ops</div>
+                    <div class="member-stats">⭐ First drop!</div>
+                </div>
+            </div>
+            
+            <div class="project-info">
+                <div class="project-name">Project: Social AR Shopping</div>
+                <div class="project-brief">Build an AR shopping experience with social features in 72 hours</div>
+                <div class="countdown-start">72:00:00</div>
+            </div>
+            
+            <button class="enter-hub-btn" onclick="enterProjectHub()">
+                Enter Project Hub →
+            </button>
+        </div>
+        
+    </div>
+
+    <script>
+        let selectedRole = null;
+        let queueTimer = null;
+        let matchmakingTimer = null;
+
+        // Select role
+        function selectRole(role) {
+            // Remove previous selection
+            document.querySelectorAll('.role-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selection to clicked role
+            document.querySelector(`[data-role="${role}"]`).classList.add('selected');
+            selectedRole = role;
+            
+            // Enable queue button
+            document.getElementById('queueBtn').disabled = false;
+        }
+
+        // Join queue
+        function joinQueue() {
+            if (!selectedRole) return;
+            
+            // Hide role selection
+            document.getElementById('roleSelection').style.display = 'none';
+            
+            // Show queue waiting
+            document.getElementById('queueWaiting').style.display = 'block';
+            
+            // Start countdown
+            let countdown = 5;
+            const counterEl = document.getElementById('queueCounter');
+            
+            queueTimer = setInterval(() => {
+                countdown--;
+                counterEl.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(queueTimer);
+                    matchFound();
+                }
+            }, 1000);
+            
+            // Simulate finding players
+            simulateMatchmaking();
+        }
+
+        // Cancel queue
+        function cancelQueue() {
+            clearInterval(queueTimer);
+            clearInterval(matchmakingTimer);
+            
+            document.getElementById('queueWaiting').style.display = 'none';
+            document.getElementById('roleSelection').style.display = 'block';
+        }
+
+        // Simulate matchmaking
+        function simulateMatchmaking() {
+            const statuses = [
+                "Finding players...",
+                "Matching skill levels...",
+                "Balancing teams...",
+                "Assembling squad...",
+                "Match found!"
+            ];
+            
+            let statusIndex = 0;
+            matchmakingTimer = setInterval(() => {
+                document.querySelector('.queue-status').textContent = statuses[statusIndex];
+                statusIndex = (statusIndex + 1) % statuses.length;
+            }, 1000);
+        }
+
+        // Match found - reveal team
+        function matchFound() {
+            clearInterval(matchmakingTimer);
+            
+            // Hide queue waiting
+            document.getElementById('queueWaiting').style.display = 'none';
+            
+            // Show team reveal with animation
+            document.getElementById('teamReveal').style.display = 'block';
+            
+            // Start project countdown
+            startProjectCountdown();
+        }
+
+        // Start project countdown
+        function startProjectCountdown() {
+            let hours = 72;
+            let minutes = 0;
+            let seconds = 0;
+            
+            const countdownEl = document.querySelector('.countdown-start');
+            
+            setInterval(() => {
+                seconds--;
+                if (seconds < 0) {
+                    seconds = 59;
+                    minutes--;
+                    if (minutes < 0) {
+                        minutes = 59;
+                        hours--;
+                    }
+                }
+                
+                const display = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                countdownEl.textContent = display;
+                
+                // Add urgency colors
+                if (hours < 24) {
+                    countdownEl.style.color = 'var(--apple-orange)';
+                }
+                if (hours < 1) {
+                    countdownEl.style.color = 'var(--apple-red)';
+                }
+            }, 1000);
+        }
+
+        // Enter project hub
+        function enterProjectHub() {
+            window.location.href = 'challenge-project.html';
+        }
+
+        // Simulate live player count
+        function updatePlayerCount() {
+            const countEl = document.getElementById('playerCount');
+            const currentCount = parseInt(countEl.textContent);
+            const change = Math.floor(Math.random() * 7) - 3; // Random change between -3 and +3
+            const newCount = Math.max(200, currentCount + change); // Keep above 200
+            countEl.textContent = newCount;
+        }
+
+        setInterval(updatePlayerCount, 3000);
+
+        // Simulate queue counts updating
+        function updateQueueCounts() {
+            document.querySelectorAll('.role-count').forEach(el => {
+                const currentText = el.textContent;
+                const currentCount = parseInt(currentText.match(/\d+/)[0]);
+                const change = Math.floor(Math.random() * 5) - 2;
+                const newCount = Math.max(10, currentCount + change);
+                el.textContent = `${newCount} in queue`;
+            });
+        }
+
+        setInterval(updateQueueCounts, 5000);
+    </script>
+</body>
+</html>

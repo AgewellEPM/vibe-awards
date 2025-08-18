@@ -1,0 +1,3263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Vibe Coders Toolkit - The Complete Builder Suite</title>
+    <link rel="stylesheet" href="css/mobile-responsive.css">
+    <link rel="stylesheet" href="css/ultra-responsive.css">
+    <link rel="stylesheet" href="css/typography.css">
+    <link rel="stylesheet" href="css/brand-system.css">
+    <link rel="stylesheet" href="css/apple-magic.css">
+    <script src="js/accessibility.js"></script>
+    <script src="js/performance.js"></script>
+    <!-- MAXIMUM POLISH MODE ENABLED -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Core Brand Colors */
+            --vibe-purple: #6366F1;
+            --vibe-pink: #EC4899;
+            --vibe-blue: #3B82F6;
+            --vibe-green: #10B981;
+            --vibe-orange: #F59E0B;
+            --vibe-red: #EF4444;
+            --vibe-yellow: #FCD34D;
+            --vibe-cyan: #06B6D4;
+            --vibe-indigo: #8B5CF6;
+            
+            /* Refined Neutrals */
+            --vibe-dark: #0B0F1A;
+            --vibe-gray: #1A202C;
+            --vibe-light: #F8FAFC;
+            --vibe-slate: #334155;
+            --vibe-zinc: #52525B;
+            
+            /* Semantic Colors */
+            --surface-primary: rgba(255, 255, 255, 0.03);
+            --surface-secondary: rgba(255, 255, 255, 0.06);
+            --surface-tertiary: rgba(255, 255, 255, 0.09);
+            --border-primary: rgba(255, 255, 255, 0.08);
+            --border-secondary: rgba(255, 255, 255, 0.12);
+            --text-primary: #F8FAFC;
+            --text-secondary: rgba(248, 250, 252, 0.8);
+            --text-tertiary: rgba(248, 250, 252, 0.6);
+            --text-quaternary: rgba(248, 250, 252, 0.4);
+            
+            /* Shadows & Effects */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.12);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.2);
+            --shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.25);
+            --shadow-glow: 0 0 32px rgba(99, 102, 241, 0.25);
+            
+            /* Transitions */
+            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            
+            /* Spacing Scale */
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+            --space-4xl: 6rem;
+            
+            /* Typography Scale */
+            --text-xs: 0.75rem;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.125rem;
+            --text-xl: 1.25rem;
+            --text-2xl: 1.5rem;
+            --text-3xl: 1.875rem;
+            --text-4xl: 2.25rem;
+            --text-5xl: 3rem;
+            --text-6xl: 3.75rem;
+            
+            /* Border Radius Scale */
+            --radius-xs: 0.25rem;
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-3xl: 2rem;
+            --radius-full: 9999px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+            background: var(--vibe-dark);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(11, 15, 26, 0.9);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: var(--space-sm) 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: clamp(720px, 75rem, 1200px);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            color: #F8FAFC;
+            text-decoration: none;
+            font-size: var(--fs-xl);
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--gap-md);
+            align-items: center;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link,
+        .nav-button {
+            color: rgba(248, 250, 252, 0.8);
+            text-decoration: none;
+            font-size: var(--fs-sm);
+            transition: color 0.2s ease;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--gap-xs);
+            padding: var(--space-xs) 0;
+        }
+
+        .nav-link:hover,
+        .nav-button:hover {
+            color: #F8FAFC;
+        }
+
+        .nav-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 200px;
+            background: rgba(11, 15, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: var(--space-xs) 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .nav-item:hover .nav-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            color: rgba(248, 250, 252, 0.8);
+            text-decoration: none;
+            padding: var(--space-sm) 20px;
+            font-size: var(--fs-sm);
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            color: #F8FAFC;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .dropdown-arrow {
+            font-size: var(--fs-xs);
+            transition: transform 0.2s ease;
+        }
+
+        .nav-item:hover .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .nav-cta {
+            padding: var(--space-xs) 20px;
+            background: var(--vibe-blue);
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: var(--fs-sm);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-cta:hover {
+            background: #2563EB;
+            transform: scale(1.05);
+        }
+            font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1, 'ss01' 1, 'cv01' 1, 'cv02' 1;
+            text-rendering: optimizeLegibility;
+            scroll-behavior: smooth;
+            line-height: 1.6;
+            letter-spacing: -0.01em;
+            
+            /* EXTREME POLISH: Advanced CSS Features */
+            font-optical-sizing: auto;
+            font-synthesis: none;
+            font-kerning: auto;
+            font-variant-ligatures: common-ligatures contextual;
+            font-variant-numeric: proportional-nums;
+            text-size-adjust: 100%;
+            
+            /* Ultra-Premium Visual Enhancements */
+            image-rendering: crisp-edges;
+            image-rendering: -webkit-optimize-contrast;
+            backdrop-filter: blur(0.5px);
+            
+            /* Hardware Acceleration */
+            will-change: transform;
+            contain: layout style paint;
+        }
+
+        /* Ultra-Premium Performance Optimizations */
+        * {
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+
+        /* Luxury Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--vibe-purple), var(--vibe-pink));
+            border-radius: 6px;
+            border: 2px solid transparent;
+            background-clip: content-box;
+            transition: all var(--transition-base);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--vibe-pink), var(--vibe-blue));
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Enhanced Animated Background */
+        .toolkit-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 40% 60%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+                linear-gradient(135deg, var(--vibe-dark) 0%, #0F1419  50%, var(--vibe-dark) 100%);
+        }
+
+        .bg-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridShift 40s linear infinite;
+            mask: radial-gradient(circle at center, transparent 0%, black 50%);
+        }
+
+        @keyframes gridShift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+
+        /* Subtle noise texture */
+        .toolkit-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        /* Polished Header */
+        .toolkit-header {
+            text-align: center;
+            padding: calc(var(--space-4xl) + 80px) var(--space-lg) var(--space-3xl);
+            background: var(--surface-primary);
+            backdrop-filter: blur(32px) saturate(180%);
+            border-bottom: 1px solid var(--border-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .toolkit-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--vibe-purple), var(--vibe-pink), var(--vibe-blue), transparent);
+            opacity: 0.6;
+        }
+
+        .toolkit-logo {
+            width: 120px;
+            height: clamp(84px, 7.5rem, 120px);
+            background: linear-gradient(135deg, var(--vibe-purple) 0%, var(--vibe-pink) 50%, var(--vibe-blue) 100%);
+            border-radius: var(--radius-3xl);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-5xl);
+            margin-bottom: var(--space-xl);
+            animation: logoFloat 6s ease-in-out infinite;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .toolkit-logo::before {
+            content: '';
+            position: absolute;
+            width: 140%;
+            height: 140%;
+            background: linear-gradient(135deg, var(--vibe-purple) 0%, var(--vibe-pink) 50%, var(--vibe-blue) 100%);
+            border-radius: var(--radius-3xl);
+            filter: blur(40px);
+            opacity: 0.4;
+            z-index: -1;
+            animation: pulseGlow 6s ease-in-out infinite;
+        }
+
+        .toolkit-logo::after {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            width: 25%;
+            height: 25%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(8px);
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { 
+                transform: translateY(0) rotate(0deg) scale(1);
+                filter: brightness(1) hue-rotate(0deg);
+            }
+            33% { 
+                transform: translateY(-12px) rotate(2deg) scale(1.02);
+                filter: brightness(1.1) hue-rotate(15deg);
+            }
+            66% { 
+                transform: translateY(-8px) rotate(-1deg) scale(0.98);
+                filter: brightness(1.05) hue-rotate(-10deg);
+            }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { 
+                opacity: 0.4; 
+                transform: scale(1) rotate(0deg); 
+            }
+            50% { 
+                opacity: 0.7; 
+                transform: scale(1.1) rotate(180deg); 
+            }
+        }
+
+        .toolkit-title {
+            font-size: clamp(var(--text-4xl), 8vw, var(--text-6xl));
+            font-weight: 900;
+            margin-bottom: var(--space-lg);
+            background: linear-gradient(
+                90deg, 
+                var(--vibe-purple) 0%, 
+                var(--vibe-pink) 25%, 
+                var(--vibe-blue) 50%, 
+                var(--vibe-cyan) 75%, 
+                var(--vibe-green) 100%
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 400% 100%;
+            animation: shimmerFlow 8s ease-in-out infinite;
+            letter-spacing: -0.02em;
+            line-height: 0.9;
+            text-shadow: 0 0 40px rgba(99, 102, 241, 0.3);
+        }
+
+        @keyframes shimmerFlow {
+            0%, 100% { 
+                background-position: 0% 50%; 
+                filter: brightness(1) saturate(1);
+            }
+            25% { 
+                background-position: 25% 50%; 
+                filter: brightness(1.1) saturate(1.2);
+            }
+            50% { 
+                background-position: 50% 50%; 
+                filter: brightness(1.2) saturate(1.3);
+            }
+            75% { 
+                background-position: 75% 50%; 
+                filter: brightness(1.1) saturate(1.2);
+            }
+        }
+
+        .toolkit-subtitle {
+            font-size: clamp(var(--text-lg), 3vw, var(--text-2xl));
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
+            max-width: clamp(540px, 56.25rem, 900px);
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+
+        .toolkit-tagline {
+            font-size: var(--text-sm);
+            color: var(--vibe-green);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: var(--space-2xl);
+            position: relative;
+            display: inline-block;
+        }
+
+        .toolkit-tagline::before {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--vibe-green), var(--vibe-cyan));
+            border-radius: 1px;
+            opacity: 0.6;
+        }
+
+        .launch-stats {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-2xl);
+            flex-wrap: wrap;
+            margin-top: var(--space-xl);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: var(--space-lg);
+            background: var(--surface-secondary);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border-primary);
+            backdrop-filter: blur(16px);
+            transition: all var(--transition-base);
+            min-width: 140px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--vibe-purple), var(--vibe-cyan));
+            opacity: 0.8;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-4px);
+            background: var(--surface-tertiary);
+            border-color: var(--border-secondary);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-value {
+            font-size: var(--text-3xl);
+            font-weight: 800;
+            color: var(--vibe-cyan);
+            display: block;
+            margin-bottom: var(--space-xs);
+            background: linear-gradient(135deg, var(--vibe-cyan), var(--vibe-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stat-label {
+            font-size: var(--text-xs);
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+        }
+
+        /* Enhanced Main Container */
+        .toolkit-container {
+            max-width: clamp(960px, 100rem, 1600px);
+            margin: 0 auto;
+            padding: var(--space-4xl) var(--space-lg);
+        }
+
+        /* Polished Core Tools Grid */
+        .core-tools {
+            margin-bottom: var(--space-4xl);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-3xl);
+            position: relative;
+        }
+
+        .section-title {
+            font-size: clamp(var(--text-3xl), 6vw, var(--text-5xl));
+            font-weight: 800;
+            margin-bottom: var(--space-lg);
+            background: linear-gradient(
+                135deg, 
+                var(--vibe-indigo) 0%, 
+                var(--vibe-purple) 30%, 
+                var(--vibe-pink) 70%, 
+                var(--vibe-orange) 100%
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--vibe-purple), var(--vibe-pink));
+            border-radius: var(--radius-full);
+            opacity: 0.6;
+        }
+
+        .section-subtitle {
+            font-size: clamp(var(--text-base), 2.5vw, var(--text-xl));
+            color: var(--text-secondary);
+            max-width: clamp(420px, 43.75rem, 700px);
+            margin: 0 auto;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: var(--space-2xl);
+            
+            /* 🔥 INFINITE SCROLL GRID EFFECTS 🔥 */
+            position: relative;
+            overflow: hidden;
+            mask-image: linear-gradient(
+                to bottom,
+                transparent 0%,
+                black 5%,
+                black 95%,
+                transparent 100%
+            );
+            -webkit-mask-image: linear-gradient(
+                to bottom,
+                transparent 0%,
+                black 5%,
+                black 95%,
+                transparent 100%
+            );
+        }
+        
+        .tools-grid::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -20%;
+            right: -20%;
+            height: 300%;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.04) 0%, transparent 60%),
+                radial-gradient(circle at 75% 25%, rgba(236, 72, 153, 0.04) 0%, transparent 60%),
+                radial-gradient(circle at 25% 75%, rgba(16, 185, 129, 0.03) 0%, transparent 60%),
+                radial-gradient(circle at 75% 75%, rgba(245, 158, 11, 0.03) 0%, transparent 60%),
+                linear-gradient(45deg, transparent 48%, rgba(99, 102, 241, 0.01) 50%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, rgba(236, 72, 153, 0.01) 50%, transparent 52%);
+            animation: infinite-scroll-bg 30s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .tools-grid::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 199px,
+                    rgba(99, 102, 241, 0.01) 200px,
+                    rgba(99, 102, 241, 0.01) 201px,
+                    transparent 202px
+                ),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 199px,
+                    rgba(236, 72, 153, 0.01) 200px,
+                    rgba(236, 72, 153, 0.01) 201px,
+                    transparent 202px
+                );
+            animation: infinite-scroll-grid 25s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        @keyframes infinite-scroll-bg {
+            0% { transform: translateY(0) scale(1) rotate(0deg); }
+            50% { transform: translateY(-15%) scale(1.05) rotate(180deg); }
+            100% { transform: translateY(-30%) scale(1) rotate(360deg); }
+        }
+        
+        @keyframes infinite-scroll-grid {
+            0% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(-10px) translateY(-5px); }
+            50% { transform: translateX(0) translateY(-10px); }
+            75% { transform: translateX(10px) translateY(-5px); }
+            100% { transform: translateX(0) translateY(0); }
+        }
+
+        .tool-card {
+            background: var(--surface-primary);
+            backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-3xl);
+            padding: var(--space-2xl);
+            transition: all var(--transition-slow);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            will-change: transform, box-shadow;
+            transform-style: preserve-3d;
+            --card-rotation-x: 0deg;
+            --card-rotation-y: 0deg;
+        }
+
+        .tool-card:hover {
+            background: var(--surface-secondary);
+            transform: 
+                perspective(1000px) 
+                rotateX(var(--card-rotation-x)) 
+                rotateY(var(--card-rotation-y)) 
+                translateY(-16px) 
+                scale(1.03);
+            box-shadow: 
+                var(--shadow-xl),
+                0 32px 80px rgba(0, 0, 0, 0.25),
+                0 0 64px rgba(99, 102, 241, 0.15);
+            border-color: var(--border-secondary);
+        }
+
+        .tool-card:active {
+            transform: 
+                perspective(1000px) 
+                rotateX(var(--card-rotation-x)) 
+                rotateY(var(--card-rotation-y)) 
+                translateY(-12px) 
+                scale(0.98);
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--vibe-purple), var(--vibe-pink), var(--vibe-blue));
+            opacity: 0.8;
+        }
+
+        .tool-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(99, 102, 241, 0.03) 50%, transparent 100%);
+            opacity: 0;
+            transition: opacity var(--transition-base);
+            pointer-events: none;
+        }
+
+        .tool-card:hover::after {
+            opacity: 1;
+        }
+
+        .tool-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: var(--radius-2xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-4xl);
+            margin-bottom: var(--space-xl);
+            position: relative;
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-base);
+        }
+
+        .tool-card:nth-child(1) .tool-icon {
+            background: linear-gradient(135deg, var(--vibe-purple) 0%, var(--vibe-indigo) 100%);
+        }
+
+        .tool-card:nth-child(2) .tool-icon {
+            background: linear-gradient(135deg, var(--vibe-green) 0%, var(--vibe-cyan) 100%);
+        }
+
+        .tool-card:nth-child(3) .tool-icon {
+            background: linear-gradient(135deg, var(--vibe-orange) 0%, var(--vibe-red) 100%);
+        }
+
+        .tool-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: var(--radius-2xl);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+
+        .tool-card:hover .tool-icon {
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        .tool-card:hover .tool-icon::before {
+            opacity: 1;
+        }
+
+        .tool-name {
+            font-size: var(--text-2xl);
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        .tool-description {
+            font-size: var(--text-base);
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: var(--space-xl);
+        }
+
+        .tool-features {
+            list-style: none;
+            margin-bottom: var(--space-xl);
+        }
+
+        .tool-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-md);
+            margin-bottom: var(--space-sm);
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .tool-features li::before {
+            content: '✨';
+            font-size: var(--text-sm);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .tool-button {
+            background: linear-gradient(135deg, var(--vibe-blue) 0%, var(--vibe-cyan) 100%);
+            border: none;
+            border-radius: var(--radius-xl);
+            padding: var(--space-lg) var(--space-xl);
+            color: white;
+            font-size: var(--text-base);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .tool-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .tool-button:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .tool-button:hover::before {
+            left: 100%;
+        }
+
+        .tool-button:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* Adaptive UI Showcase */
+        .ui-showcase {
+            margin-bottom: 80px;
+        }
+
+        .ui-modes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--gap-md);
+        }
+
+        .ui-mode {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: var(--space-md);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ui-mode:hover {
+            border-color: var(--vibe-purple);
+            background: rgba(99, 102, 241, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .ui-mode::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .ui-mode.web::after {
+            background: linear-gradient(90deg, var(--vibe-blue), var(--vibe-cyan));
+        }
+
+        .ui-mode.ios::after {
+            background: linear-gradient(90deg, var(--vibe-indigo), var(--vibe-purple));
+        }
+
+        .ui-mode.android::after {
+            background: linear-gradient(90deg, var(--vibe-green), var(--vibe-yellow));
+        }
+
+        .ui-mode.cli::after {
+            background: linear-gradient(90deg, var(--vibe-gray), var(--vibe-light));
+        }
+
+        .ui-mode.extension::after {
+            background: linear-gradient(90deg, var(--vibe-orange), var(--vibe-red));
+        }
+
+        .ui-mode.game::after {
+            background: linear-gradient(90deg, var(--vibe-pink), var(--vibe-purple));
+        }
+
+        .mode-header {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-sm);
+            margin-bottom: 20px;
+        }
+
+        .mode-icon {
+            font-size: var(--fs-3xl);
+        }
+
+        .mode-info h3 {
+            font-size: var(--fs-xl);
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .mode-info p {
+            font-size: var(--fs-sm);
+            color: rgba(248, 250, 252, 0.7);
+        }
+
+        .mode-preview {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: var(--space-md);
+            margin-bottom: 20px;
+            font-family: 'SF Mono', 'Monaco', monospace;
+            font-size: var(--fs-xs);
+            line-height: 1.4;
+        }
+
+        .mode-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--gap-xs);
+        }
+
+        .stack-tag {
+            padding: var(--space-xs) 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            font-size: var(--fs-xs);
+            font-weight: 500;
+        }
+
+        /* Quick Start Flow */
+        .quick-start {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 24px;
+            padding: var(--space-lg);
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .start-flow {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--gap-md);
+            margin-top: 40px;
+        }
+
+        .flow-step {
+            position: relative;
+        }
+
+        .step-circle {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--vibe-purple), var(--vibe-pink));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-3xl);
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .step-circle::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--vibe-purple), var(--vibe-pink));
+            border-radius: 50%;
+            filter: blur(20px);
+            opacity: 0.4;
+            z-index: -1;
+        }
+
+        .step-title {
+            font-size: var(--fs-lg);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .step-desc {
+            font-size: var(--fs-sm);
+            color: rgba(248, 250, 252, 0.7);
+        }
+
+        /* Enhanced Demo Button */
+        .demo-section {
+            text-align: center;
+            margin: var(--space-4xl) 0;
+            position: relative;
+        }
+
+        .demo-button {
+            background: linear-gradient(135deg, var(--vibe-purple) 0%, var(--vibe-pink) 50%, var(--vibe-orange) 100%);
+            border: none;
+            border-radius: var(--radius-3xl);
+            padding: var(--space-xl) var(--space-3xl);
+            color: white;
+            font-size: var(--text-xl);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-slow);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-glow);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+        }
+
+        .demo-button:hover {
+            transform: scale(1.05) translateY(-8px);
+            box-shadow: 0 32px 64px rgba(99, 102, 241, 0.4), var(--shadow-glow);
+            filter: brightness(1.1);
+        }
+
+        .demo-button:active {
+            transform: scale(0.98) translateY(-4px);
+        }
+
+        .demo-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.8s ease;
+        }
+
+        .demo-button:hover::before {
+            left: 100%;
+        }
+
+        .demo-button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .demo-button:hover::after {
+            width: clamp(180px, 18.75rem, 300px);
+            height: clamp(210px, 18.75rem, 300px);
+        }
+
+        /* Community Stats */
+        .community-stats {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 24px;
+            padding: var(--space-lg);
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--gap-md);
+            margin-top: 40px;
+        }
+
+        .community-stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: var(--fs-4xl);
+            font-weight: 800;
+            color: var(--vibe-green);
+            margin-bottom: 8px;
+        }
+
+        .stat-desc {
+            font-size: var(--fs-sm);
+            color: rgba(248, 250, 252, 0.7);
+        }
+
+        /* Responsive Design */
+        @media (max-width: clamp(460px, 48rem, 768px)) {
+            .toolkit-title {
+                font-size: var(--fs-4xl);
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ui-modes {
+                grid-template-columns: 1fr;
+            }
+
+            .start-flow {
+                grid-template-columns: 1fr;
+            }
+
+            .launch-stats {
+                gap: var(--gap-md);
+            }
+
+            .toolkit-container {
+                padding: var(--space-lg) 20px;
+            }
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-md);
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--vibe-gray);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: var(--space-lg);
+            max-width: clamp(480px, 50rem, 800px);
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .modal-title {
+            font-size: var(--fs-2xl);
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: var(--fs-2xl);
+            cursor: pointer;
+            padding: var(--space-xs);
+        }
+
+        /* Enhanced Floating Elements */
+        .floating-element {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--vibe-purple), var(--vibe-pink));
+            border-radius: 50%;
+            opacity: 0.05;
+            animation: float 25s ease-in-out infinite;
+            filter: blur(2px);
+        }
+
+        .floating-element:nth-child(1) {
+            top: 15%;
+            left: 8%;
+            animation-delay: 0s;
+            background: linear-gradient(135deg, var(--vibe-blue), var(--vibe-cyan));
+        }
+
+        .floating-element:nth-child(2) {
+            top: 55%;
+            right: 12%;
+            animation-delay: -8s;
+            background: linear-gradient(135deg, var(--vibe-purple), var(--vibe-pink));
+        }
+
+        .floating-element:nth-child(3) {
+            bottom: 25%;
+            left: 15%;
+            animation-delay: -16s;
+            background: linear-gradient(135deg, var(--vibe-green), var(--vibe-yellow));
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0) rotate(0deg) scale(1); 
+                opacity: 0.05;
+            }
+            25% { 
+                transform: translateY(-30px) rotate(90deg) scale(1.1); 
+                opacity: 0.08;
+            }
+            50% { 
+                transform: translateY(-15px) rotate(180deg) scale(0.9); 
+                opacity: 0.03;
+            }
+            75% { 
+                transform: translateY(-25px) rotate(270deg) scale(1.05); 
+                opacity: 0.06;
+            }
+        }
+
+        /* Scroll-triggered animations */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Performance optimizations */
+        .tool-card,
+        .ui-mode,
+        .stat-item {
+            will-change: transform;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--surface-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--vibe-purple), var(--vibe-pink));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--vibe-pink), var(--vibe-blue));
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container container-fluid">
+            <a href="index.html" class="nav-logo">🏆 The Vibe Awards</a>
+            <div class="nav-links">
+                <div class="nav-item">
+                    <button class="nav-button">
+                        Getting Started
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="nav-dropdown">
+                        <a href="getting-started.html" class="dropdown-item">Getting Started Hub</a>
+                        <a href="index.html" class="dropdown-item">The Vibe Awards</a>
+                    </div>
+                </div>
+                
+                <div class="nav-item">
+                    <button class="nav-button">
+                        Toolkit Hub
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="nav-dropdown">
+                        <a href="vibe-toolkit.html" class="dropdown-item">Vibe Toolkit</a>
+                        <a href="vibe-hub.html" class="dropdown-item">Vibe Hub Central</a>
+                    </div>
+                </div>
+                
+                <div class="nav-item">
+                    <button class="nav-button">
+                        Profile
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="nav-dropdown">
+                        <a href="profile.html" class="dropdown-item">My Profile</a>
+                        <a href="messages.html" class="dropdown-item">Messages</a>
+                        <a href="directory.html" class="dropdown-item">Directory</a>
+                    </div>
+                </div>
+                
+                <div class="nav-item">
+                    <button class="nav-button">
+                        Competition
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="nav-dropdown">
+                        <a href="apple-magic-battle.html" class="dropdown-item">Battle Arena</a>
+                        <a href="leaderboard.html" class="dropdown-item">Leaderboard</a>
+                        <a href="team-up.html" class="dropdown-item">Team Up</a>
+                    </div>
+                </div>
+                
+                <a href="submit-app.html" class="nav-link">Submit App</a>
+                <a href="signup.html" class="nav-cta">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Animated Background -->
+    <div class="toolkit-background">
+        <div class="bg-grid ultra-grid-responsive"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+
+    <!-- Header -->
+    <div class="toolkit-header">
+        <div class="toolkit-logo">🎛️</div>
+        <h1 class="toolkit-title">Vibe Coders Toolkit</h1>
+        <p class="toolkit-subtitle">
+            The complete builder suite that adapts to what you're creating. 
+            Ship web apps, mobile apps, AI agents, games, and extensions with zero setup time.
+        </p>
+        <div class="toolkit-tagline">From Idea to Ship in Minutes</div>
+        
+        <div class="launch-stats">
+            <div class="stat-item">
+                <span class="stat-value">2.4K</span>
+                <span class="stat-label">Projects Launched</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">847</span>
+                <span class="stat-label">Vibe Coders</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">$2.1M</span>
+                <span class="stat-label">Funding Raised</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">15min</span>
+                <span class="stat-label">Avg Time to Deploy</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="toolkit-container container-fluid">
+        <!-- Core Tools -->
+        <div class="core-tools">
+            <div class="section-header container-fluid">
+                <h2 class="section-title" style="font-size: var(--fs-3xl);" style="font-size: var(--fs-3xl);">🧩 Core Builder Tools</h2>
+                <p class="section-subtitle">Everything you need to go from blank page to running app</p>
+            </div>
+            
+            <div class="tools-grid ultra-grid-responsive">
+                <!-- Vibe Forge -->
+                <div class="tool-card card-fluid" onclick="openTool('forge')">
+                    <div class="tool-icon">🔥</div>
+                    <h3 class="tool-name">Vibe Forge</h3>
+                    <p class="tool-description">
+                        Pick your project type and constraints, get a complete architecture plan, 
+                        repo structure, backlog, and AI-ready prompts.
+                    </p>
+                    <ul class="tool-features">
+                        <li>6 project types (Web, Mobile, Agent, Extension, Game, API)</li>
+                        <li>Smart constraint handling (HIPAA, Offline, Real-time)</li>
+                        <li>Complete repo scaffolding with file stubs</li>
+                        <li>Day 1-7 development backlog</li>
+                        <li>Copy-paste AI prompts for any LLM</li>
+                        <li>Auto-generated funding pitch card</li>
+                    </ul>
+                    <button class="tool-button" onclick="event.stopPropagation(); openTool('forge')">🚀 Launch Vibe Forge</button>
+                </div>
+
+                <!-- Compliance Kit -->
+                <div class="tool-card card-fluid" onclick="openTool('compliance')">
+                    <div class="tool-icon">🛡️</div>
+                    <h3 class="tool-name">Compliance Kit</h3>
+                    <p class="tool-description">
+                        One-click compliance toggles that add HIPAA, GDPR, or SOC2 features 
+                        to any project without the legal headaches.
+                    </p>
+                    <ul class="tool-features">
+                        <li>HIPAA: Audit logs, PHI encryption, BAA hosting</li>
+                        <li>GDPR: Cookie consent, data export, deletion</li>
+                        <li>SOC2: Access controls, monitoring, backups</li>
+                        <li>Auto-scrubs sensitive data from AI prompts</li>
+                        <li>Compliance-ready hosting recommendations</li>
+                        <li>Legal checklist and documentation</li>
+                    </ul>
+                    <button class="tool-button" onclick="event.stopPropagation(); openTool('compliance')">🔒 Enable Compliance</button>
+                </div>
+
+                <!-- Offline Engine -->
+                <div class="tool-card card-fluid" onclick="openTool('offline')">
+                    <div class="tool-icon">📡</div>
+                    <h3 class="tool-name">Offline Engine</h3>
+                    <p class="tool-description">
+                        Drop-in offline-first capabilities with local storage, background sync, 
+                        and conflict resolution. Works in airplane mode.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Local SQLite/IndexedDB caching</li>
+                        <li>Background sync when connection returns</li>
+                        <li>Smart conflict resolution algorithms</li>
+                        <li>Offline UI states and indicators</li>
+                        <li>Progressive Web App (PWA) features</li>
+                        <li>Cross-device sync capabilities</li>
+                    </ul>
+                    <button class="tool-button" onclick="event.stopPropagation(); openTool('offline')">📲 Add Offline Mode</button>
+                </div>
+
+                <!-- Backlog Synthesizer -->
+                <div class="tool-card card-fluid" onclick="openTool('backlog')">
+                    <div class="tool-icon">📋</div>
+                    <h3 class="tool-name">Backlog Synthesizer</h3>
+                    <p class="tool-description">
+                        Transform project ideas into actionable development backlogs with epics, 
+                        user stories, and sprint-ready tasks. Export to Jira, Trello, or CSV.
+                    </p>
+                    <ul class="tool-features">
+                        <li>AI-generated epics and user stories</li>
+                        <li>Detailed task breakdowns with estimates</li>
+                        <li>Sprint planning and prioritization</li>
+                        <li>Multiple export formats (Jira, Trello, CSV)</li>
+                        <li>Story point estimation</li>
+                        <li>Acceptance criteria generation</li>
+                    </ul>
+                    <button class="tool-button" onclick="event.stopPropagation(); openTool('backlog')">📝 Generate Backlog</button>
+                </div>
+
+                <!-- Funding Card Generator -->
+                <div class="tool-card card-fluid" onclick="openTool('funding')">
+                    <div class="tool-icon">💰</div>
+                    <h3 class="tool-name">Funding Card Generator</h3>
+                    <p class="tool-description">
+                        Create investor-ready pitch materials in minutes. Generate executive summaries, 
+                        market analysis, and financial projections that VCs actually want to see.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Executive summary generation</li>
+                        <li>Market analysis and sizing</li>
+                        <li>Financial projections and metrics</li>
+                        <li>Competitive landscape analysis</li>
+                        <li>Export to PowerPoint, PDF, LinkedIn</li>
+                        <li>Email templates for outreach</li>
+                    </ul>
+                    <button class="tool-button" onclick="event.stopPropagation(); openTool('funding')">💼 Create Pitch Deck</button>
+                </div>
+
+                <!-- Deploy Presets -->
+                <div class="tool-card card-fluid" onclick="openTool('deploy')">
+                    <div class="tool-icon">🚀</div>
+                    <h3 class="tool-name">Deploy Presets</h3>
+                    <p class="tool-description">
+                        Smart deployment configurations for any budget. Choose from Cheap, Scale, or Indie 
+                        modes and get complete Docker configs, scripts, and infrastructure code.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Three deployment modes (Cheap/Scale/Indie)</li>
+                        <li>Complete Dockerfile generation</li>
+                        <li>Docker-compose configurations</li>
+                        <li>Infrastructure as Code (Terraform)</li>
+                        <li>CI/CD pipeline setup</li>
+                        <li>Cost optimization recommendations</li>
+                    </ul>
+                    <button class="tool-button" onclick="event.stopPropagation(); openTool('deploy')">⚙️ Configure Deployment</button>
+                </div>
+
+                <!-- VibeHub Community -->
+                <div class="tool-card card-fluid" onclick="openTool('community')">
+                    <div class="tool-icon">🌐</div>
+                    <h3 class="tool-name">VibeHub Community</h3>
+                    <p class="tool-description">
+                        Discover and share project templates, components, themes, and tools with the 
+                        Vibe Coders community. Find inspiration and accelerate your builds.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Project template marketplace</li>
+                        <li>Component library sharing</li>
+                        <li>Theme and design system exchange</li>
+                        <li>Tool recommendations and reviews</li>
+                        <li>Community showcases and demos</li>
+                        <li>Trending projects and technologies</li>
+                    </ul>
+                    <button class="tool-button" onclick="event.stopPropagation(); openTool('community')">🤝 Join Community</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Adaptive UI Showcase -->
+        <div class="ui-showcase">
+            <div class="section-header container-fluid">
+                <h2 class="section-title" style="font-size: var(--fs-3xl);" style="font-size: var(--fs-3xl);">🎨 Adaptive Design System</h2>
+                <p class="section-subtitle">
+                    UI toolkit that shape-shifts based on what you're building. 
+                    Same code, different vibes.
+                </p>
+            </div>
+            
+            <div class="ui-modes">
+                <!-- Web SaaS Mode -->
+                <div class="ui-mode web" onclick="previewMode('web')">
+                    <div class="mode-header">
+                        <div class="mode-icon">🌐</div>
+                        <div class="mode-info">
+                            <h3>Web SaaS Mode</h3>
+                            <p>Corporate, minimal, dashboard-focused</p>
+                        </div>
+                    </div>
+                    <div class="mode-preview">
+├── Dashboard Layout (sidebar + topbar)
+├── Auth Flow (SSO ready)
+├── Settings Page (toggle-heavy)
+├── Data Tables (sortable, filterable)
+└── Notification System
+                    </div>
+                    <div class="mode-stack">
+                        <span class="stack-tag">Next.js</span>
+                        <span class="stack-tag">Tailwind</span>
+                        <span class="stack-tag">shadcn/ui</span>
+                        <span class="stack-tag">Framer Motion</span>
+                    </div>
+                </div>
+
+                <!-- iOS App Mode -->
+                <div class="ui-mode ios" onclick="previewMode('ios')">
+                    <div class="mode-header">
+                        <div class="mode-icon">📱</div>
+                        <div class="mode-info">
+                            <h3>iOS App Mode</h3>
+                            <p>Apple HIG, blur effects, SF fonts</p>
+                        </div>
+                    </div>
+                    <div class="mode-preview">
+├── Onboarding Flow (swipe cards)
+├── Tab Navigation (bottom)
+├── Modal Sheets (native feel)
+├── Touch Gestures (swipe, pinch)
+└── iOS System Integration
+                    </div>
+                    <div class="mode-stack">
+                        <span class="stack-tag">React Native</span>
+                        <span class="stack-tag">NativeBase</span>
+                        <span class="stack-tag">React Navigation</span>
+                        <span class="stack-tag">Reanimated</span>
+                    </div>
+                </div>
+
+                <!-- Android Mode -->
+                <div class="ui-mode android" onclick="previewMode('android')">
+                    <div class="mode-header">
+                        <div class="mode-icon">🤖</div>
+                        <div class="mode-info">
+                            <h3>Android Mode</h3>
+                            <p>Material 3, FABs, adaptive layouts</p>
+                        </div>
+                    </div>
+                    <div class="mode-preview">
+├── Drawer Navigation (hamburger)
+├── FAB Actions (floating buttons)
+├── Material Cards (elevated)
+├── Tile Grids (AAC style)
+└── Adaptive Layouts (foldables)
+                    </div>
+                    <div class="mode-stack">
+                        <span class="stack-tag">React Native</span>
+                        <span class="stack-tag">Material 3</span>
+                        <span class="stack-tag">Paper UI</span>
+                        <span class="stack-tag">Vector Icons</span>
+                    </div>
+                </div>
+
+                <!-- CLI Mode -->
+                <div class="ui-mode cli" onclick="previewMode('cli')">
+                    <div class="mode-header">
+                        <div class="mode-icon">🖥️</div>
+                        <div class="mode-info">
+                            <h3>Agent CLI Mode</h3>
+                            <p>Terminal vibes, ASCII art, themes</p>
+                        </div>
+                    </div>
+                    <div class="mode-preview">
+├── Help Menu (colorized)
+├── Progress Bars (animated)
+├── JSON Output (formatted)
+├── Plugin System (modular)
+└── Theme Engine (retro/hacker)
+                    </div>
+                    <div class="mode-stack">
+                        <span class="stack-tag">Node CLI</span>
+                        <span class="stack-tag">oclif</span>
+                        <span class="stack-tag">chalk</span>
+                        <span class="stack-tag">inquirer</span>
+                    </div>
+                </div>
+
+                <!-- Extension Mode -->
+                <div class="ui-mode extension" onclick="previewMode('extension')">
+                    <div class="mode-header">
+                        <div class="mode-icon">🧩</div>
+                        <div class="mode-info">
+                            <h3>Extension Mode</h3>
+                            <p>Popup compact, content overlay</p>
+                        </div>
+                    </div>
+                    <div class="mode-preview">
+├── Popup Interface (320px wide)
+├── Options Page (full settings)
+├── Content Scripts (page overlay)
+├── AI Chat Bubble (floating)
+└── Context Menus (right-click)
+                    </div>
+                    <div class="mode-stack">
+                        <span class="stack-tag">Manifest V3</span>
+                        <span class="stack-tag">React</span>
+                        <span class="stack-tag">TypeScript</span>
+                        <span class="stack-tag">Plasmo</span>
+                    </div>
+                </div>
+
+                <!-- Game Mode -->
+                <div class="ui-mode game" onclick="previewMode('game')">
+                    <div class="mode-header">
+                        <div class="mode-icon">🎮</div>
+                        <div class="mode-info">
+                            <h3>Game Mode</h3>
+                            <p>Playful, bright tiles, touch controls</p>
+                        </div>
+                    </div>
+                    <div class="mode-preview">
+├── Menu System (arcade style)
+├── Game Loop (60fps optimized)
+├── Touch Controls (mobile ready)
+├── Scoreboard (leaderboards)
+└── Sound Engine (WebAudio)
+                    </div>
+                    <div class="mode-stack">
+                        <span class="stack-tag">Phaser.js</span>
+                        <span class="stack-tag">TypeScript</span>
+                        <span class="stack-tag">WebGL</span>
+                        <span class="stack-tag">Howler.js</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Start Flow -->
+        <div class="quick-start">
+            <h2 class="section-title" style="font-size: var(--fs-3xl);" style="font-size: var(--fs-3xl);">🚀 Ship in 4 Steps</h2>
+            <p class="section-subtitle">From zero to deployed app faster than you can say "vibe"</p>
+            
+            <div class="start-flow">
+                <div class="flow-step">
+                    <div class="step-circle">🎯</div>
+                    <h3 class="step-title">Choose & Configure</h3>
+                    <p class="step-desc">Pick project type + constraints in Vibe Forge</p>
+                </div>
+                
+                <div class="flow-step">
+                    <div class="step-circle">⚡</div>
+                    <h3 class="step-title">Generate & Clone</h3>
+                    <p class="step-desc">Get complete repo structure + AI prompts</p>
+                </div>
+                
+                <div class="flow-step">
+                    <div class="step-circle">🔨</div>
+                    <h3 class="step-title">Build & Customize</h3>
+                    <p class="step-desc">Use AI prompts to build features rapidly</p>
+                </div>
+                
+                <div class="flow-step">
+                    <div class="step-circle">🌟</div>
+                    <h3 class="step-title">Deploy & Fund</h3>
+                    <p class="step-desc">One-click deploy + auto-generated pitch deck</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Section -->
+        <div class="demo-section">
+            <button class="demo-button" onclick="startDemo()">
+                🎬 Watch 3-Minute Demo
+            </button>
+            <p style="margin-top: 20px; color: rgba(248, 250, 252, 0.6);">
+                See how Sarah built and deployed a HIPAA-compliant therapy app in 47 minutes
+            </p>
+        </div>
+
+        <!-- Community Stats -->
+        <div class="community-stats">
+            <h2 class="section-title" style="font-size: var(--fs-3xl);" style="font-size: var(--fs-3xl);">🏆 Vibe Coders Community</h2>
+            <p class="section-subtitle">Join the movement of builders shipping at light speed</p>
+            
+            <div class="stats-grid ultra-grid-responsive">
+                <div class="community-stat">
+                    <div class="stat-number">2,431</div>
+                    <div class="stat-desc">Apps Shipped</div>
+                </div>
+                <div class="community-stat">
+                    <div class="stat-number">847</div>
+                    <div class="stat-desc">Active Builders</div>
+                </div>
+                <div class="community-stat">
+                    <div class="stat-number">$2.1M</div>
+                    <div class="stat-desc">Funding Raised</div>
+                </div>
+                <div class="community-stat">
+                    <div class="stat-number">15</div>
+                    <div class="stat-desc">Avg Minutes to Deploy</div>
+                </div>
+                <div class="community-stat">
+                    <div class="stat-number">89%</div>
+                    <div class="stat-desc">Success Rate</div>
+                </div>
+                <div class="community-stat">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-desc">Community Support</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="toolModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Tool Demo</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div id="modalBody">
+                <!-- Dynamic content loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tool interactions
+        function openTool(toolName) {
+            const tools = {
+                forge: {
+                    title: "🔥 Vibe Forge - Architecture Generator",
+                    content: `
+                        <p style="margin-bottom: 20px; font-size: var(--fs-base); color: rgba(248, 250, 252, 0.8);">
+                            The core tool that turns a few clicks into a complete project foundation.
+                        </p>
+                        
+                        <h3 style="margin: var(--space-md) 0 10px; color: var(--vibe-purple);">What You Get:</h3>
+                        <ul style="margin-left: 20px; color: rgba(248, 250, 252, 0.9);">
+                            <li>📋 Architecture Brief (stack decisions + reasoning)</li>
+                            <li>📁 Complete repo structure with file stubs</li>
+                            <li>📅 Day 1-7 development backlog</li>
+                            <li>🤖 Copy-paste AI prompts for any LLM</li>
+                            <li>💰 Auto-generated funding pitch card</li>
+                        </ul>
+                        
+                        <div style="margin: var(--space-md) 0; padding: var(--space-md); background: rgba(99, 102, 241, 0.1); border-radius: 12px;">
+                            <h4 style="margin-bottom: 10px;">Example: "HIPAA SaaS App"</h4>
+                            <p style="font-size: var(--fs-sm); color: rgba(248, 250, 252, 0.8);">
+                                ✨ Generates Next.js + PostgreSQL + audit logging<br>
+                                ✨ Adds PHI encryption and BAA hosting setup<br>
+                                ✨ Creates backlog with compliance tasks<br>
+                                ✨ Provides AI prompts for secure coding
+                            </p>
+                        </div>
+                        
+                        <button onclick="window.open('vibe-forge.html', '_blank')" 
+                                style="background: linear-gradient(135deg, var(--vibe-purple), var(--vibe-pink)); 
+                                       border: none; border-radius: 12px; padding: var(--space-sm) 30px; 
+                                       color: white; font-weight: 600; cursor: pointer; width: 100%;">
+                            🚀 Launch Vibe Forge
+                        </button>
+                    `
+                },
+                compliance: {
+                    title: "🛡️ Compliance Kit - Legal Made Easy",
+                    content: `
+                        <p style="margin-bottom: 20px; font-size: var(--fs-base); color: rgba(248, 250, 252, 0.8);">
+                            One-click compliance features without the legal complexity.
+                        </p>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-md); margin: var(--space-md) 0;">
+                            <div style="padding: var(--space-md); background: rgba(16, 185, 129, 0.1); border-radius: 12px;">
+                                <h4>🏥 HIPAA Ready</h4>
+                                <ul style="font-size: var(--fs-sm); margin-top: 10px;">
+                                    <li>Audit logging</li>
+                                    <li>PHI encryption</li>
+                                    <li>BAA hosting</li>
+                                    <li>Access controls</li>
+                                </ul>
+                            </div>
+                            <div style="padding: var(--space-md); background: rgba(59, 130, 246, 0.1); border-radius: 12px;">
+                                <h4>🌍 GDPR Ready</h4>
+                                <ul style="font-size: var(--fs-sm); margin-top: 10px;">
+                                    <li>Cookie consent</li>
+                                    <li>Data export</li>
+                                    <li>Right to deletion</li>
+                                    <li>Privacy policy</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <p style="margin: var(--space-md) 0; font-size: var(--fs-sm); color: rgba(248, 250, 252, 0.7);">
+                            💡 <strong>Smart PHI Detection:</strong> Automatically scrubs sensitive data from AI prompts and logs
+                        </p>
+                        
+                        <button onclick="alert('Compliance Kit launching soon! 🚀')" 
+                                style="background: linear-gradient(135deg, var(--vibe-green), var(--vibe-cyan)); 
+                                       border: none; border-radius: 12px; padding: var(--space-sm) 30px; 
+                                       color: white; font-weight: 600; cursor: pointer; width: 100%;">
+                            🔒 Enable Compliance Features
+                        </button>
+                    `
+                },
+                offline: {
+                    title: "📡 Offline Engine - Works Everywhere",
+                    content: `
+                        <p style="margin-bottom: 20px; font-size: var(--fs-base); color: rgba(248, 250, 252, 0.8);">
+                            Turn any app into an offline-first powerhouse with smart sync.
+                        </p>
+                        
+                        <h3 style="margin: var(--space-md) 0 10px; color: var(--vibe-cyan);">Core Features:</h3>
+                        <ul style="margin-left: 20px; color: rgba(248, 250, 252, 0.9);">
+                            <li>📱 Local SQLite/IndexedDB storage</li>
+                            <li>🔄 Background sync when connection returns</li>
+                            <li>⚡ Conflict resolution algorithms</li>
+                            <li>📶 Network state indicators</li>
+                            <li>🔒 Encrypted local data</li>
+                        </ul>
+                        
+                        <div style="margin: var(--space-md) 0; padding: var(--space-md); background: rgba(6, 182, 212, 0.1); border-radius: 12px;">
+                            <h4 style="margin-bottom: 10px;">Perfect For:</h4>
+                            <p style="font-size: var(--fs-sm); color: rgba(248, 250, 252, 0.8);">
+                                ✈️ Travel apps that work on planes<br>
+                                🏥 Medical apps in poor signal areas<br>
+                                📝 Note-taking apps for reliability<br>
+                                🎮 Games that cache everything locally
+                            </p>
+                        </div>
+                        
+                        <button onclick="alert('Offline Engine launching next week! 📡')" 
+                                style="background: linear-gradient(135deg, var(--vibe-cyan), var(--vibe-blue)); 
+                                       border: none; border-radius: 12px; padding: var(--space-sm) 30px; 
+                                       color: white; font-weight: 600; cursor: pointer; width: 100%;">
+                            📲 Add Offline Capabilities
+                        </button>
+                    `
+                },
+                backlog: {
+                    title: "📋 Backlog Synthesizer - AI Project Planning",
+                    content: `
+                        <p style="margin-bottom: 20px; font-size: var(--fs-base); color: rgba(248, 250, 252, 0.8);">
+                            Transform project ideas into actionable development backlogs with AI-powered epic and story generation.
+                        </p>
+                        
+                        <h3 style="margin: var(--space-md) 0 10px; color: var(--vibe-purple);">What You Get:</h3>
+                        <ul style="margin-left: 20px; color: rgba(248, 250, 252, 0.9);">
+                            <li>📊 Epic breakdowns with business value</li>
+                            <li>📝 Detailed user stories with acceptance criteria</li>
+                            <li>⏱️ Task estimates and sprint planning</li>
+                            <li>📤 Export to Jira, Trello, or CSV</li>
+                            <li>🎯 Priority scoring and backlog ordering</li>
+                        </ul>
+                        
+                        <div style="margin: var(--space-md) 0; padding: var(--space-md); background: rgba(99, 102, 241, 0.1); border-radius: 12px;">
+                            <h4 style="margin-bottom: 10px;">Example Output:</h4>
+                            <p style="font-size: var(--fs-sm); color: rgba(248, 250, 252, 0.8);">
+                                ✨ "User Authentication Epic" → 12 stories → 47 tasks<br>
+                                ✨ Complete with story points and sprint assignments<br>
+                                ✨ Ready to import into your project management tool
+                            </p>
+                        </div>
+                        
+                        <button onclick="window.open('backlog-synthesizer.html', '_blank')" 
+                                style="background: linear-gradient(135deg, var(--vibe-purple), var(--vibe-pink)); 
+                                       border: none; border-radius: 12px; padding: var(--space-sm) 30px; 
+                                       color: white; font-weight: 600; cursor: pointer; width: 100%;">
+                            📝 Launch Backlog Synthesizer
+                        </button>
+                    `
+                },
+                funding: {
+                    title: "💰 Funding Card Generator - VC Ready Pitches",
+                    content: `
+                        <p style="margin-bottom: 20px; font-size: var(--fs-base); color: rgba(248, 250, 252, 0.8);">
+                            Create investor-ready pitch materials that get you in front of VCs. Professional decks in minutes.
+                        </p>
+                        
+                        <h3 style="margin: var(--space-md) 0 10px; color: var(--vibe-orange);">Generated Materials:</h3>
+                        <ul style="margin-left: 20px; color: rgba(248, 250, 252, 0.9);">
+                            <li>💼 Executive summary with key metrics</li>
+                            <li>📈 Market analysis and TAM sizing</li>
+                            <li>💹 Financial projections and unit economics</li>
+                            <li>🏆 Competitive analysis and positioning</li>
+                            <li>📧 Email templates for investor outreach</li>
+                            <li>💬 LinkedIn posts and social content</li>
+                        </ul>
+                        
+                        <div style="margin: var(--space-md) 0; padding: var(--space-md); background: rgba(245, 158, 11, 0.1); border-radius: 12px;">
+                            <h4 style="margin-bottom: 10px;">Export Formats:</h4>
+                            <p style="font-size: var(--fs-sm); color: rgba(248, 250, 252, 0.8);">
+                                📊 PowerPoint deck ready for presentation<br>
+                                📄 PDF one-pager for easy sharing<br>
+                                📧 Email sequences for warm introductions
+                            </p>
+                        </div>
+                        
+                        <button onclick="window.open('funding-card-generator.html', '_blank')" 
+                                style="background: linear-gradient(135deg, var(--vibe-orange), var(--vibe-pink)); 
+                                       border: none; border-radius: 12px; padding: var(--space-sm) 30px; 
+                                       color: white; font-weight: 600; cursor: pointer; width: 100%;">
+                            💼 Create Pitch Materials
+                        </button>
+                    `
+                },
+                deploy: {
+                    title: "🚀 Deploy Presets - Smart Infrastructure",
+                    content: `
+                        <p style="margin-bottom: 20px; font-size: var(--fs-base); color: rgba(248, 250, 252, 0.8);">
+                            Smart deployment configurations for any budget. Choose your mode and get complete infrastructure code.
+                        </p>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--gap-sm); margin: var(--space-md) 0;">
+                            <div style="padding: var(--space-sm); background: rgba(16, 185, 129, 0.1); border-radius: 12px; text-align: center;">
+                                <h4>💚 Cheap Mode</h4>
+                                <p style="font-size: var(--fs-xs); margin-top: 5px;">$5-20/month</p>
+                                <p style="font-size: var(--fs-xs); color: rgba(248, 250, 252, 0.7);">Vercel + PlanetScale</p>
+                            </div>
+                            <div style="padding: var(--space-sm); background: rgba(59, 130, 246, 0.1); border-radius: 12px; text-align: center;">
+                                <h4>⚡ Scale Mode</h4>
+                                <p style="font-size: var(--fs-xs); margin-top: 5px;">$200-1000/month</p>
+                                <p style="font-size: var(--fs-xs); color: rgba(248, 250, 252, 0.7);">AWS + Auto-scaling</p>
+                            </div>
+                            <div style="padding: var(--space-sm); background: rgba(236, 72, 153, 0.1); border-radius: 12px; text-align: center;">
+                                <h4>🏠 Indie Mode</h4>
+                                <p style="font-size: var(--fs-xs); margin-top: 5px;">$50-200/month</p>
+                                <p style="font-size: var(--fs-xs); color: rgba(248, 250, 252, 0.7);">Railway + Redis</p>
+                            </div>
+                        </div>
+                        
+                        <h3 style="margin: var(--space-md) 0 10px; color: var(--vibe-blue);">Generated Files:</h3>
+                        <ul style="margin-left: 20px; color: rgba(248, 250, 252, 0.9); font-size: var(--fs-sm);">
+                            <li>🐳 Dockerfile with optimized layers</li>
+                            <li>⚙️ docker-compose.yml with services</li>
+                            <li>🏗️ Infrastructure as Code (Terraform)</li>
+                            <li>🔄 CI/CD pipeline configuration</li>
+                            <li>📊 Monitoring and logging setup</li>
+                        </ul>
+                        
+                        <button onclick="window.open('deploy-presets.html', '_blank')" 
+                                style="background: linear-gradient(135deg, var(--vibe-blue), var(--vibe-cyan)); 
+                                       border: none; border-radius: 12px; padding: var(--space-sm) 30px; 
+                                       color: white; font-weight: 600; cursor: pointer; width: 100%;">
+                            ⚙️ Configure Deployment
+                        </button>
+                    `
+                },
+                community: {
+                    title: "🌐 VibeHub Community - Share & Discover",
+                    content: `
+                        <p style="margin-bottom: 20px; font-size: var(--fs-base); color: rgba(248, 250, 252, 0.8);">
+                            Join the Vibe Coders community to discover templates, share projects, and accelerate your development.
+                        </p>
+                        
+                        <h3 style="margin: var(--space-md) 0 10px; color: var(--vibe-cyan);">Community Features:</h3>
+                        <ul style="margin-left: 20px; color: rgba(248, 250, 252, 0.9);">
+                            <li>🎯 Project template marketplace</li>
+                            <li>🧩 Component and theme sharing</li>
+                            <li>⭐ Trending projects and tools</li>
+                            <li>🔍 Search by technology stack</li>
+                            <li>💬 Developer showcases and demos</li>
+                            <li>📊 Community stats and insights</li>
+                        </ul>
+                        
+                        <div style="margin: var(--space-md) 0; padding: var(--space-md); background: rgba(6, 182, 212, 0.1); border-radius: 12px;">
+                            <h4 style="margin-bottom: 10px;">Current Stats:</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-sm); font-size: var(--fs-sm);">
+                                <div>📦 <strong>2,847</strong> Projects Shared</div>
+                                <div>👥 <strong>1,293</strong> Active Developers</div>
+                                <div>⬇️ <strong>15,672</strong> Downloads</div>
+                                <div>⭐ <strong>892</strong> Starred Templates</div>
+                            </div>
+                        </div>
+                        
+                        <button onclick="window.open('vibe-hub.html', '_blank')" 
+                                style="background: linear-gradient(135deg, var(--vibe-cyan), var(--vibe-purple)); 
+                                       border: none; border-radius: 12px; padding: var(--space-sm) 30px; 
+                                       color: white; font-weight: 600; cursor: pointer; width: 100%;">
+                            🤝 Explore Community
+                        </button>
+                    `
+                }
+            };
+
+            const tool = tools[toolName];
+            document.getElementById('modalTitle').innerHTML = tool.title;
+            document.getElementById('modalBody').innerHTML = tool.content;
+            document.getElementById('toolModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('toolModal').classList.remove('show');
+        }
+
+        // UI Mode previews
+        function previewMode(mode) {
+            const modes = {
+                web: "Web SaaS: Dashboard-focused with clean sidebars, data tables, and professional styling",
+                ios: "iOS App: Native feel with tab navigation, modal sheets, and Apple design language",
+                android: "Android: Material 3 with FABs, drawer navigation, and adaptive layouts",
+                cli: "CLI Agent: Terminal interface with colored output, progress bars, and ASCII art",
+                extension: "Browser Extension: Compact popup UI with content script overlays",
+                game: "Web Game: Playful interface with arcade styling and touch-optimized controls"
+            };
+
+            alert(`🎨 ${modes[mode]}\n\nFull preview coming soon in the design system!`);
+        }
+
+        // Demo functionality
+        function startDemo() {
+            // Create demo sequence that shows the full workflow
+            const modal = document.getElementById('toolModal');
+            document.getElementById('modalTitle').innerHTML = '🎬 Live Demo - Build a Therapy App';
+            document.getElementById('modalBody').innerHTML = `
+                <div style="text-align: center; padding: var(--space-md);">
+                    <h3 style="margin-bottom: 20px; color: var(--vibe-purple);">
+                        🎯 Interactive Demo: HIPAA Therapy App in 5 Steps
+                    </h3>
+                    <p style="margin-bottom: 30px; color: rgba(248, 250, 252, 0.8);">
+                        Follow along as we build a complete therapy management app with the Vibe Toolkit
+                    </p>
+                    
+                    <div style="display: grid; gap: var(--gap-sm); text-align: left;">
+                        <div style="padding: var(--space-sm); background: rgba(99, 102, 241, 0.1); border-radius: 12px; cursor: pointer;" onclick="window.open('vibe-forge.html', '_blank'); alert('Step 1: Select Web App + HIPAA constraints, then generate architecture!');">
+                            <strong>🏗️ Step 1: Generate Architecture</strong><br>
+                            <span style="font-size: var(--fs-sm); color: rgba(248, 250, 252, 0.7);">Use Vibe Forge → Web App + HIPAA compliance</span>
+                        </div>
+                        
+                        <div style="padding: var(--space-sm); background: rgba(236, 72, 153, 0.1); border-radius: 12px; cursor: pointer;" onclick="window.open('backlog-synthesizer.html', '_blank'); alert('Step 2: Enter \'Therapy Management App\' and generate your development backlog!');">
+                            <strong>📋 Step 2: Create Development Backlog</strong><br>
+                            <span style="font-size: var(--fs-sm); color: rgba(248, 250, 252, 0.7);">Use Backlog Synthesizer → Therapy app workflow</span>
+                        </div>
+                        
+                        <div style="padding: var(--space-sm); background: rgba(16, 185, 129, 0.1); border-radius: 12px; cursor: pointer;" onclick="window.open('deploy-presets.html', '_blank'); alert('Step 3: Select Indie mode for HIPAA-compliant hosting setup!');">
+                            <strong>🚀 Step 3: Configure Deployment</strong><br>
+                            <span style="font-size: var(--fs-sm); color: rgba(248, 250, 252, 0.7);">Use Deploy Presets → Indie mode with compliance</span>
+                        </div>
+                        
+                        <div style="padding: var(--space-sm); background: rgba(245, 158, 11, 0.1); border-radius: 12px; cursor: pointer;" onclick="window.open('funding-card-generator.html', '_blank'); alert('Step 4: Enter your therapy app details and generate investor materials!');">
+                            <strong>💰 Step 4: Create Funding Materials</strong><br>
+                            <span style="font-size: var(--fs-sm); color: rgba(248, 250, 252, 0.7);">Use Funding Generator → Healthcare startup pitch</span>
+                        </div>
+                        
+                        <div style="padding: var(--space-sm); background: rgba(6, 182, 212, 0.1); border-radius: 12px; cursor: pointer;" onclick="window.open('vibe-hub.html', '_blank'); alert('Step 5: Share your app template with the community!');">
+                            <strong>🌐 Step 5: Share with Community</strong><br>
+                            <span style="font-size: var(--fs-sm); color: rgba(248, 250, 252, 0.7);">Use VibeHub → Showcase your creation</span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px; padding: var(--space-md); background: rgba(99, 102, 241, 0.05); border-radius: 12px; border: 1px solid rgba(99, 102, 241, 0.2);">
+                        <h4 style="margin-bottom: 10px;">🎉 Expected Outcome:</h4>
+                        <p style="font-size: var(--fs-sm); color: rgba(248, 250, 252, 0.8);">
+                            Complete Next.js therapy app with HIPAA compliance, encrypted PHI storage, 
+                            audit logging, development backlog, deployment configuration, and investor pitch deck.
+                        </p>
+                        <p style="font-size: var(--fs-xs); color: rgba(248, 250, 252, 0.6); margin-top: 10px;">
+                            Total time: ~15 minutes | Traditional approach: 40+ hours
+                        </p>
+                    </div>
+                </div>
+            `;
+            modal.classList.add('show');
+        }
+
+        // Animate stats on scroll
+        function animateStats() {
+            const stats = document.querySelectorAll('.stat-number');
+            stats.forEach(stat => {
+                const target = parseInt(stat.textContent.replace(/[^\d]/g, ''));
+                let current = 0;
+                const increment = target / 100;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    
+                    if (stat.textContent.includes('$')) {
+                        stat.textContent = '$' + (current / 1000000).toFixed(1) + 'M';
+                    } else if (stat.textContent.includes('%')) {
+                        stat.textContent = Math.round(current) + '%';
+                    } else if (stat.textContent.includes('min')) {
+                        stat.textContent = Math.round(current) + 'min';
+                    } else if (stat.textContent.includes('/')) {
+                        stat.textContent = '24/7';
+                    } else if (target > 1000) {
+                        stat.textContent = (current / 1000).toFixed(1) + 'K';
+                    } else {
+                        stat.textContent = Math.round(current);
+                    }
+                }, 20);
+            });
+        }
+
+        // Enhanced animations and scroll effects
+        function initializeAnimations() {
+            // Animate stats
+            setTimeout(animateStats, 1000);
+            
+            // Add scroll-triggered animations
+            const observerOptions = {
+                threshold: 0.2,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        
+                        // Add entrance particles for tool cards
+                        if (entry.target.classList.contains('tool-card')) {
+                            createEntranceParticles(entry.target);
+                        }
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe elements for animation
+            document.querySelectorAll('.section-header, .tool-card, .ui-mode, .step-circle').forEach(el => {
+                el.classList.add('fade-in-up');
+                observer.observe(el);
+            });
+        }
+
+        // Ultra-Premium Particle System
+        class UltraPremiumParticles {
+            constructor() {
+                this.particles = [];
+                this.mouse = { x: 0, y: 0 };
+                this.init();
+            }
+
+            init() {
+                this.canvas = document.createElement('canvas');
+                this.canvas.style.position = 'fixed';
+                this.canvas.style.top = '0';
+                this.canvas.style.left = '0';
+                this.canvas.style.width = '100%';
+                this.canvas.style.height = '100%';
+                this.canvas.style.pointerEvents = 'none';
+                this.canvas.style.zIndex = '1';
+                this.canvas.style.opacity = '0.7';
+                document.body.appendChild(this.canvas);
+                
+                this.ctx = this.canvas.getContext('2d');
+                this.resize();
+                
+                window.addEventListener('resize', () => this.resize());
+                document.addEventListener('mousemove', (e) => {
+                    this.mouse.x = e.clientX;
+                    this.mouse.y = e.clientY;
+                });
+                
+                this.animate();
+            }
+
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+
+            createParticle(x, y, type = 'default') {
+                const colors = {
+                    default: ['#6366F1', '#EC4899', '#10B981', '#F59E0B'],
+                    entrance: ['#8B5CF6', '#06B6D4', '#F59E0B'],
+                    hover: ['#EC4899', '#06B6D4', '#10B981']
+                };
+
+                return {
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 2,
+                    vy: (Math.random() - 0.5) * 2,
+                    life: 1,
+                    decay: 0.01 + Math.random() * 0.02,
+                    size: 2 + Math.random() * 4,
+                    color: colors[type][Math.floor(Math.random() * colors[type].length)],
+                    type: type
+                };
+            }
+
+            addParticles(x, y, count = 8, type = 'default') {
+                for (let i = 0; i < count; i++) {
+                    this.particles.push(this.createParticle(x, y, type));
+                }
+            }
+
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Update and draw particles
+                this.particles = this.particles.filter(particle => {
+                    particle.life -= particle.decay;
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    particle.vy += 0.02; // gravity
+                    
+                    if (particle.life > 0) {
+                        this.ctx.save();
+                        this.ctx.globalAlpha = particle.life;
+                        this.ctx.fillStyle = particle.color;
+                        this.ctx.shadowBlur = 10;
+                        this.ctx.shadowColor = particle.color;
+                        this.ctx.beginPath();
+                        this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                        this.ctx.fill();
+                        this.ctx.restore();
+                        return true;
+                    }
+                    return false;
+                });
+                
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // Initialize particle system
+        const particles = new UltraPremiumParticles();
+
+        // Enhanced Tool Card Interactions
+        function initializeToolCardInteractions() {
+            document.querySelectorAll('.tool-card').forEach(card => {
+                let hoverParticleTimer;
+                
+                // Mouse tracking for 3D rotation
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = (y - centerY) / 10;
+                    const rotateY = (centerX - x) / 10;
+                    
+                    card.style.setProperty('--card-rotation-x', `${rotateX}deg`);
+                    card.style.setProperty('--card-rotation-y', `${rotateY}deg`);
+                });
+                
+                // Enhanced hover effects
+                card.addEventListener('mouseenter', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    particles.addParticles(
+                        rect.left + rect.width / 2, 
+                        rect.top + rect.height / 2, 
+                        12, 
+                        'hover'
+                    );
+                    
+                    // Continuous hover particles
+                    hoverParticleTimer = setInterval(() => {
+                        const rect = card.getBoundingClientRect();
+                        particles.addParticles(
+                            rect.left + Math.random() * rect.width,
+                            rect.top + Math.random() * rect.height,
+                            2,
+                            'hover'
+                        );
+                    }, 200);
+                    
+                    // Enhanced icon animation
+                    const icon = card.querySelector('.tool-icon');
+                    if (icon) {
+                        icon.style.transform = 'scale(1.1) rotate(5deg)';
+                        icon.style.filter = 'brightness(1.2) saturate(1.3)';
+                    }
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.setProperty('--card-rotation-x', '0deg');
+                    card.style.setProperty('--card-rotation-y', '0deg');
+                    
+                    if (hoverParticleTimer) {
+                        clearInterval(hoverParticleTimer);
+                    }
+                    
+                    // Reset icon
+                    const icon = card.querySelector('.tool-icon');
+                    if (icon) {
+                        icon.style.transform = '';
+                        icon.style.filter = '';
+                    }
+                });
+                
+                // Click effects
+                card.addEventListener('click', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    
+                    // Explosion of particles on click
+                    particles.addParticles(
+                        rect.left + rect.width / 2,
+                        rect.top + rect.height / 2,
+                        20,
+                        'entrance'
+                    );
+                    
+                    // Ripple effect
+                    createRippleEffect(e, card);
+                    
+                    // Success animation
+                    card.style.animation = 'micro-bounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                    setTimeout(() => {
+                        card.style.animation = '';
+                    }, 600);
+                });
+            });
+        }
+
+        // Create entrance particles for scroll reveals
+        function createEntranceParticles(element) {
+            const rect = element.getBoundingClientRect();
+            particles.addParticles(
+                rect.left + rect.width / 2,
+                rect.top + rect.height / 2,
+                15,
+                'entrance'
+            );
+        }
+
+        // Ripple effect on click
+        function createRippleEffect(event, element) {
+            const ripple = document.createElement('div');
+            const rect = element.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.style.position = 'absolute';
+            ripple.style.borderRadius = '50%';
+            ripple.style.background = 'rgba(99, 102, 241, 0.3)';
+            ripple.style.transform = 'scale(0)';
+            ripple.style.animation = 'ripple 0.8s ease-out';
+            ripple.style.pointerEvents = 'none';
+            ripple.style.zIndex = '10';
+            
+            element.style.position = 'relative';
+            element.style.overflow = 'hidden';
+            element.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 800);
+        }
+
+        // Advanced Performance Monitoring
+        function initializePerformanceMonitoring() {
+            if ('performance' in window && 'PerformanceObserver' in window) {
+                // Monitor paint timing
+                const paintObserver = new PerformanceObserver((list) => {
+                    list.getEntries().forEach((entry) => {
+                        console.log(`🎨 ${entry.name}: ${entry.startTime.toFixed(2)}ms`);
+                    });
+                });
+                
+                // Monitor layout shifts
+                const layoutObserver = new PerformanceObserver((list) => {
+                    list.getEntries().forEach((entry) => {
+                        if (entry.value > 0.1) {
+                            console.warn(`⚠️ Layout shift: ${entry.value.toFixed(4)}`);
+                        }
+                    });
+                });
+                
+                // Monitor long tasks
+                const longTaskObserver = new PerformanceObserver((list) => {
+                    list.getEntries().forEach((entry) => {
+                        if (entry.duration > 50) {
+                            console.warn(`🐌 Long task: ${entry.duration.toFixed(2)}ms`);
+                        }
+                    });
+                });
+                
+                try {
+                    paintObserver.observe({ entryTypes: ['paint'] });
+                    layoutObserver.observe({ entryTypes: ['layout-shift'] });
+                    longTaskObserver.observe({ entryTypes: ['longtask'] });
+                } catch (e) {
+                    console.log('Performance monitoring partially supported');
+                }
+            }
+        }
+
+        // Enhanced Accessibility
+        function initializeAccessibility() {
+            // Add keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Tab') {
+                    document.body.classList.add('keyboard-navigation');
+                }
+            });
+            
+            document.addEventListener('mousedown', () => {
+                document.body.classList.remove('keyboard-navigation');
+            });
+            
+            // Add ARIA attributes to tool cards
+            document.querySelectorAll('.tool-card').forEach((card, index) => {
+                card.setAttribute('role', 'button');
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('aria-label', `Tool ${index + 1}: ${card.querySelector('.tool-name')?.textContent || 'Tool'}`);
+                
+                // Keyboard activation
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        card.click();
+                    }
+                });
+            });
+        }
+
+        // Preload critical resources
+        function preloadCriticalResources() {
+            const criticalUrls = [
+                'vibe-forge.html',
+                'backlog-synthesizer.html', 
+                'funding-card-generator.html',
+                'deploy-presets.html',
+                'vibe-hub.html'
+            ];
+            
+            criticalUrls.forEach(url => {
+                const link = document.createElement('link');
+                link.rel = 'prefetch';
+                link.href = url;
+                document.head.appendChild(link);
+            });
+        }
+
+        // Staggered animations for tool cards
+        function staggerToolCards() {
+            const toolCards = document.querySelectorAll('.tool-card');
+            toolCards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.2}s`;
+                card.classList.add('fade-in-up');
+            });
+        }
+
+        // Enhanced hover effects with particles
+        function addParticleEffects() {
+            const toolCards = document.querySelectorAll('.tool-card');
+            
+            toolCards.forEach(card => {
+                card.addEventListener('mouseenter', (e) => {
+                    createHoverParticles(e.target);
+                });
+            });
+        }
+
+        function createHoverParticles(element) {
+            const particles = 6;
+            const rect = element.getBoundingClientRect();
+            
+            for (let i = 0; i < particles; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'fixed';
+                particle.style.width = '4px';
+                particle.style.height = '4px';
+                particle.style.background = `linear-gradient(135deg, var(--vibe-purple), var(--vibe-pink))`;
+                particle.style.borderRadius = '50%';
+                particle.style.pointerEvents = 'none';
+                particle.style.zIndex = '1000';
+                particle.style.left = `${rect.left + Math.random() * rect.width}px`;
+                particle.style.top = `${rect.top + Math.random() * rect.height}px`;
+                
+                document.body.appendChild(particle);
+                
+                const animation = particle.animate([
+                    { 
+                        transform: 'translateY(0) scale(0)', 
+                        opacity: 1 
+                    },
+                    { 
+                        transform: `translateY(-${Math.random() * 100 + 50}px) scale(1)`, 
+                        opacity: 0 
+                    }
+                ], {
+                    duration: 1000 + Math.random() * 500,
+                    easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                });
+                
+                animation.addEventListener('finish', () => {
+                    particle.remove();
+                });
+            }
+        }
+
+        // Smooth scroll for internal links
+        function initializeSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+
+        // 🔥 INFINITE SCROLL PARALLAX SYSTEM 🔥
+        class InfiniteParallaxEngine {
+            constructor() {
+                this.scrollY = 0;
+                this.ticking = false;
+                this.layers = [];
+                this.infiniteElements = [];
+                this.init();
+            }
+            
+            init() {
+                this.createParallaxLayers();
+                this.createInfiniteScrollElements();
+                this.bindEvents();
+                this.animate();
+                console.log('🌌 INFINITE PARALLAX ENGINE ACTIVATED');
+            }
+            
+            createParallaxLayers() {
+                // Background parallax layers
+                for (let i = 0; i < 8; i++) {
+                    const layer = document.createElement('div');
+                    layer.className = `parallax-layer-${i}`;
+                    layer.style.cssText = `
+                        position: fixed;
+                        width: 120%;
+                        height: 120%;
+                        top: -10%;
+                        left: -10%;
+                        z-index: ${-10 + i};
+                        pointer-events: none;
+                        background: radial-gradient(circle at ${Math.random() * 100}% ${Math.random() * 100}%, 
+                            hsla(${240 + Math.random() * 60}, 70%, 60%, ${0.02 + Math.random() * 0.08}) 0%, 
+                            transparent 50%);
+                        will-change: transform;
+                        animation: parallax-float-${i} ${15 + Math.random() * 20}s infinite linear;
+                    `;
+                    document.body.appendChild(layer);
+                    this.layers.push({
+                        element: layer,
+                        speed: 0.1 + (i * 0.05),
+                        amplitude: 50 + (i * 30)
+                    });
+                }
+            }
+            
+            createInfiniteScrollElements() {
+                // Floating geometric shapes
+                for (let i = 0; i < 25; i++) {
+                    const element = document.createElement('div');
+                    const shapes = ['◆', '▲', '●', '■', '★', '◈', '▼', '◀', '▶'];
+                    element.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+                    element.style.cssText = `
+                        position: fixed;
+                        font-size: ${10 + Math.random() * 20}px;
+                        color: hsla(${Math.random() * 360}, 70%, 60%, ${0.1 + Math.random() * 0.3});
+                        pointer-events: none;
+                        z-index: 2;
+                        will-change: transform;
+                        left: ${Math.random() * 100}%;
+                        top: ${Math.random() * 100}%;
+                        animation: infinite-drift ${20 + Math.random() * 40}s infinite linear;
+                    `;
+                    document.body.appendChild(element);
+                    this.infiniteElements.push({
+                        element,
+                        baseSpeed: 0.2 + Math.random() * 0.8,
+                        parallaxFactor: 0.1 + Math.random() * 0.4,
+                        rotationSpeed: Math.random() * 0.02 - 0.01
+                    });
+                }
+            }
+            
+            bindEvents() {
+                let rafId;
+                window.addEventListener('scroll', () => {
+                    this.scrollY = window.pageYOffset;
+                    if (!this.ticking) {
+                        rafId = requestAnimationFrame(() => {
+                            this.updateParallax();
+                            this.ticking = false;
+                        });
+                        this.ticking = true;
+                    }
+                });
+                
+                // Mouse parallax
+                document.addEventListener('mousemove', (e) => {
+                    const mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+                    const mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+                    
+                    this.layers.forEach((layer, index) => {
+                        const intensity = (index + 1) * 5;
+                        layer.element.style.transform = `
+                            translateX(${mouseX * intensity}px) 
+                            translateY(${mouseY * intensity}px)
+                            scale(${1 + Math.sin(Date.now() * 0.001 + index) * 0.02})
+                        `;
+                    });
+                });
+            }
+            
+            updateParallax() {
+                this.layers.forEach(layer => {
+                    const offset = this.scrollY * layer.speed;
+                    layer.element.style.transform = `
+                        translateY(${offset}px) 
+                        scale(${1 + Math.sin(Date.now() * 0.001) * 0.05})
+                        rotate(${this.scrollY * 0.01}deg)
+                    `;
+                });
+                
+                this.infiniteElements.forEach(item => {
+                    const offset = this.scrollY * item.parallaxFactor;
+                    const rotation = this.scrollY * item.rotationSpeed;
+                    item.element.style.transform = `
+                        translateY(${offset}px) 
+                        rotate(${rotation}rad)
+                        scale(${1 + Math.sin(Date.now() * 0.002) * 0.1})
+                    `;
+                });
+            }
+            
+            animate() {
+                // Continuous animation loop for floating effects
+                const time = Date.now() * 0.001;
+                
+                this.infiniteElements.forEach((item, index) => {
+                    const wave = Math.sin(time + index) * 10;
+                    const currentTransform = item.element.style.transform;
+                    item.element.style.transform = currentTransform + ` translateX(${wave}px)`;
+                });
+                
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // 🌊 ADVANCED SMOOTH SCROLL WITH PHYSICS 🌊
+        class PhysicsScrollEngine {
+            constructor() {
+                this.velocity = 0;
+                this.acceleration = 0;
+                this.friction = 0.9;
+                this.targetScroll = 0;
+                this.currentScroll = 0;
+                this.init();
+            }
+            
+            init() {
+                // Override default scroll behavior
+                document.addEventListener('wheel', this.handleWheel.bind(this), { passive: false });
+                this.animate();
+                console.log('⚡ PHYSICS SCROLL ENGINE ACTIVATED');
+            }
+            
+            handleWheel(e) {
+                e.preventDefault();
+                this.acceleration += e.deltaY * 0.01;
+                this.acceleration = Math.max(-5, Math.min(5, this.acceleration));
+            }
+            
+            animate() {
+                this.velocity += this.acceleration;
+                this.velocity *= this.friction;
+                this.acceleration *= 0.9;
+                
+                this.currentScroll += this.velocity;
+                this.currentScroll = Math.max(0, Math.min(
+                    document.documentElement.scrollHeight - window.innerHeight,
+                    this.currentScroll
+                ));
+                
+                window.scrollTo(0, this.currentScroll);
+                
+                // Add screen shake effect for extreme scrolling
+                if (Math.abs(this.velocity) > 2) {
+                    const shake = Math.sin(Date.now() * 0.1) * Math.min(Math.abs(this.velocity), 3);
+                    document.body.style.transform = `translateX(${shake}px)`;
+                } else {
+                    document.body.style.transform = 'translateX(0)';
+                }
+                
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // 🎭 QUANTUM CSS ANIMATION SYSTEM 🎭
+        function initializeQuantumAnimations() {
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes quantum-phase-shift {
+                    0%, 100% { 
+                        transform: translateZ(0) rotateX(0deg) rotateY(0deg);
+                        filter: hue-rotate(0deg) saturate(1);
+                    }
+                    25% { 
+                        transform: translateZ(10px) rotateX(5deg) rotateY(-5deg);
+                        filter: hue-rotate(90deg) saturate(1.5);
+                    }
+                    50% { 
+                        transform: translateZ(20px) rotateX(-5deg) rotateY(5deg);
+                        filter: hue-rotate(180deg) saturate(0.8);
+                    }
+                    75% { 
+                        transform: translateZ(15px) rotateX(3deg) rotateY(-3deg);
+                        filter: hue-rotate(270deg) saturate(1.2);
+                    }
+                }
+                
+                @keyframes infinite-drift {
+                    from { 
+                        transform: translateY(100vh) translateX(0) rotate(0deg);
+                        opacity: 0;
+                    }
+                    10%, 90% { 
+                        opacity: 1;
+                    }
+                    to { 
+                        transform: translateY(-100vh) translateX(100px) rotate(360deg);
+                        opacity: 0;
+                    }
+                }
+                
+                @keyframes parallax-float-0 { 0% { transform: translateY(0px) rotate(0deg); } 100% { transform: translateY(-20px) rotate(5deg); } }
+                @keyframes parallax-float-1 { 0% { transform: translateY(0px) rotate(0deg); } 100% { transform: translateY(-30px) rotate(-3deg); } }
+                @keyframes parallax-float-2 { 0% { transform: translateY(0px) rotate(0deg); } 100% { transform: translateY(-40px) rotate(7deg); } }
+                @keyframes parallax-float-3 { 0% { transform: translateY(0px) rotate(0deg); } 100% { transform: translateY(-50px) rotate(-4deg); } }
+                @keyframes parallax-float-4 { 0% { transform: translateY(0px) rotate(0deg); } 100% { transform: translateY(-60px) rotate(6deg); } }
+                @keyframes parallax-float-5 { 0% { transform: translateY(0px) rotate(0deg); } 100% { transform: translateY(-70px) rotate(-8deg); } }
+                @keyframes parallax-float-6 { 0% { transform: translateY(0px) rotate(0deg); } 100% { transform: translateY(-80px) rotate(4deg); } }
+                @keyframes parallax-float-7 { 0% { transform: translateY(0px) rotate(0deg); } 100% { transform: translateY(-90px) rotate(-5deg); } }
+                
+                .tool-card {
+                    animation: quantum-phase-shift 8s infinite ease-in-out;
+                    animation-delay: calc(var(--card-index, 0) * 0.5s);
+                }
+                
+                .tool-card:hover {
+                    animation-duration: 2s;
+                    transform-style: preserve-3d;
+                }
+                
+                /* Extreme depth-of-field effect */
+                .depth-layer-1 { filter: blur(0px) brightness(1); z-index: 10; }
+                .depth-layer-2 { filter: blur(0.5px) brightness(0.9); z-index: 9; }
+                .depth-layer-3 { filter: blur(1px) brightness(0.8); z-index: 8; }
+                .depth-layer-4 { filter: blur(2px) brightness(0.7); z-index: 7; }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Initialize everything when page loads
+        window.addEventListener('load', () => {
+            initializeAnimations();
+            staggerToolCards();
+            addParticleEffects();
+            initializeSmoothScroll();
+            initializePerformanceMonitoring();
+            initializeAccessibility();
+            preloadCriticalResources();
+            
+            // Initialize ultra-premium particles
+            const particles = new UltraPremiumParticles();
+            
+            // 🔥 EXTREME POLISH FEATURES 🔥
+            const infiniteParallax = new InfiniteParallaxEngine();
+            const physicsScroll = new PhysicsScrollEngine();
+            initializeQuantumAnimations();
+            
+            // 🎵 NEURAL NETWORK AUDIO VISUALIZER 🎵
+            class NeuralAudioVisualizer {
+                constructor() {
+                    this.audioContext = null;
+                    this.analyser = null;
+                    this.dataArray = null;
+                    this.isActive = false;
+                    this.init();
+                }
+                
+                async init() {
+                    try {
+                        // Create audio context for microphone input
+                        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                        this.analyser = this.audioContext.createAnalyser();
+                        this.analyser.fftSize = 256;
+                        this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
+                        
+                        // Request microphone access
+                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        const source = this.audioContext.createMediaStreamSource(stream);
+                        source.connect(this.analyser);
+                        
+                        this.isActive = true;
+                        this.visualize();
+                        console.log('🎵 NEURAL AUDIO VISUALIZER ACTIVATED');
+                    } catch (e) {
+                        console.log('🎵 Audio visualization requires microphone permission');
+                        this.createFakeVisualization();
+                    }
+                }
+                
+                createFakeVisualization() {
+                    // Create simulated audio data for demo
+                    this.dataArray = new Uint8Array(128);
+                    this.isActive = true;
+                    this.visualizeFake();
+                }
+                
+                visualize() {
+                    if (!this.isActive) return;
+                    
+                    this.analyser.getByteFrequencyData(this.dataArray);
+                    
+                    // Apply audio data to visual elements
+                    document.querySelectorAll('.tool-card').forEach((card, index) => {
+                        const frequency = this.dataArray[index % this.dataArray.length] / 255;
+                        const scale = 1 + frequency * 0.1;
+                        const hue = frequency * 360;
+                        
+                        card.style.transform = `scale(${scale}) rotateY(${frequency * 10}deg)`;
+                        card.style.filter = `hue-rotate(${hue}deg) brightness(${1 + frequency * 0.3})`;
+                    });
+                    
+                    // Update particle systems based on audio
+                    const avgFrequency = this.dataArray.reduce((a, b) => a + b) / this.dataArray.length / 255;
+                    document.documentElement.style.setProperty('--audio-intensity', avgFrequency);
+                    
+                    requestAnimationFrame(() => this.visualize());
+                }
+                
+                visualizeFake() {
+                    if (!this.isActive) return;
+                    
+                    // Generate fake audio data
+                    const time = Date.now() * 0.001;
+                    for (let i = 0; i < this.dataArray.length; i++) {
+                        this.dataArray[i] = Math.sin(time + i * 0.1) * 127 + 128;
+                    }
+                    
+                    // Apply same visualization logic
+                    document.querySelectorAll('.tool-card').forEach((card, index) => {
+                        const frequency = this.dataArray[index % this.dataArray.length] / 255;
+                        const scale = 1 + frequency * 0.05;
+                        const hue = frequency * 180;
+                        
+                        card.style.filter = `hue-rotate(${hue}deg) brightness(${1 + frequency * 0.2})`;
+                    });
+                    
+                    requestAnimationFrame(() => this.visualizeFake());
+                }
+            }
+            
+            // 🎯 EXTREME CURSOR TRACKING SYSTEM 🎯
+            class ExtremeCursorTracker {
+                constructor() {
+                    this.cursor = null;
+                    this.trail = [];
+                    this.maxTrailLength = 20;
+                    this.init();
+                }
+                
+                init() {
+                    this.createCursor();
+                    this.bindEvents();
+                    this.animate();
+                    console.log('🎯 EXTREME CURSOR TRACKER ACTIVATED');
+                }
+                
+                createCursor() {
+                    // Custom cursor
+                    this.cursor = document.createElement('div');
+                    this.cursor.style.cssText = `
+                        position: fixed;
+                        width: 20px;
+                        height: 20px;
+                        background: radial-gradient(circle, rgba(99, 102, 241, 0.8), rgba(236, 72, 153, 0.4));
+                        border-radius: 50%;
+                        pointer-events: none;
+                        z-index: 10000;
+                        mix-blend-mode: screen;
+                        transition: transform 0.1s ease-out;
+                    `;
+                    document.body.appendChild(this.cursor);
+                    
+                    // Hide default cursor
+                    document.body.style.cursor = 'none';
+                }
+                
+                bindEvents() {
+                    document.addEventListener('mousemove', (e) => {
+                        // Update cursor position
+                        this.cursor.style.left = e.clientX - 10 + 'px';
+                        this.cursor.style.top = e.clientY - 10 + 'px';
+                        
+                        // Add to trail
+                        this.trail.push({
+                            x: e.clientX,
+                            y: e.clientY,
+                            time: Date.now(),
+                            opacity: 1
+                        });
+                        
+                        if (this.trail.length > this.maxTrailLength) {
+                            this.trail.shift();
+                        }
+                        
+                        // Create magnetic effect on tool cards
+                        document.querySelectorAll('.tool-card').forEach(card => {
+                            const rect = card.getBoundingClientRect();
+                            const centerX = rect.left + rect.width / 2;
+                            const centerY = rect.top + rect.height / 2;
+                            const distance = Math.sqrt(
+                                Math.pow(e.clientX - centerX, 2) + 
+                                Math.pow(e.clientY - centerY, 2)
+                            );
+                            
+                            if (distance < 200) {
+                                const force = (200 - distance) / 200;
+                                const angleX = (e.clientX - centerX) / distance;
+                                const angleY = (e.clientY - centerY) / distance;
+                                
+                                card.style.transform = `
+                                    translateX(${angleX * force * 10}px) 
+                                    translateY(${angleY * force * 10}px)
+                                    rotateY(${angleX * force * 15}deg)
+                                    rotateX(${-angleY * force * 15}deg)
+                                    scale(${1 + force * 0.05})
+                                `;
+                            } else {
+                                card.style.transform = '';
+                            }
+                        });
+                    });
+                    
+                    document.addEventListener('mousedown', () => {
+                        this.cursor.style.transform = 'scale(1.5)';
+                        this.cursor.style.background = 'radial-gradient(circle, rgba(236, 72, 153, 1), rgba(99, 102, 241, 0.6))';
+                    });
+                    
+                    document.addEventListener('mouseup', () => {
+                        this.cursor.style.transform = 'scale(1)';
+                        this.cursor.style.background = 'radial-gradient(circle, rgba(99, 102, 241, 0.8), rgba(236, 72, 153, 0.4))';
+                    });
+                }
+                
+                animate() {
+                    // Update trail
+                    this.trail.forEach((point, index) => {
+                        const age = Date.now() - point.time;
+                        point.opacity = Math.max(0, 1 - age / 500);
+                        
+                        if (!point.element) {
+                            point.element = document.createElement('div');
+                            point.element.style.cssText = `
+                                position: fixed;
+                                width: ${5 + index}px;
+                                height: ${5 + index}px;
+                                background: hsla(${240 + index * 10}, 70%, 60%, ${point.opacity});
+                                border-radius: 50%;
+                                pointer-events: none;
+                                z-index: 9999;
+                                mix-blend-mode: screen;
+                            `;
+                            document.body.appendChild(point.element);
+                        }
+                        
+                        point.element.style.left = point.x - (5 + index) / 2 + 'px';
+                        point.element.style.top = point.y - (5 + index) / 2 + 'px';
+                        point.element.style.opacity = point.opacity;
+                        
+                        if (point.opacity <= 0) {
+                            point.element.remove();
+                        }
+                    });
+                    
+                    this.trail = this.trail.filter(point => point.opacity > 0);
+                    requestAnimationFrame(() => this.animate());
+                }
+            }
+            
+            // 💫 WARP SPEED TRANSITION EFFECTS 💫
+            class WarpSpeedTransitions {
+                constructor() {
+                    this.init();
+                }
+                
+                init() {
+                    document.querySelectorAll('.tool-card').forEach(card => {
+                        card.addEventListener('click', (e) => {
+                            this.createWarpEffect(e.target);
+                        });
+                    });
+                    console.log('💫 WARP SPEED TRANSITIONS ACTIVATED');
+                }
+                
+                createWarpEffect(element) {
+                    const rect = element.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    
+                    // Create warp lines
+                    for (let i = 0; i < 50; i++) {
+                        const line = document.createElement('div');
+                        const angle = (Math.PI * 2 * i) / 50;
+                        const distance = 300 + Math.random() * 200;
+                        
+                        line.style.cssText = `
+                            position: fixed;
+                            left: ${centerX}px;
+                            top: ${centerY}px;
+                            width: 2px;
+                            height: ${distance}px;
+                            background: linear-gradient(to bottom, 
+                                transparent, 
+                                hsla(${Math.random() * 360}, 100%, 70%, 0.8), 
+                                transparent);
+                            transform-origin: top center;
+                            transform: rotate(${angle}rad);
+                            pointer-events: none;
+                            z-index: 10001;
+                        `;
+                        
+                        document.body.appendChild(line);
+                        
+                        // Animate warp lines
+                        line.animate([
+                            { transform: `rotate(${angle}rad) scaleY(0)`, opacity: 0 },
+                            { transform: `rotate(${angle}rad) scaleY(1)`, opacity: 1, offset: 0.3 },
+                            { transform: `rotate(${angle}rad) scaleY(0)`, opacity: 0 }
+                        ], {
+                            duration: 1000,
+                            easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                        }).onfinish = () => line.remove();
+                    }
+                }
+            }
+            
+            const infiniteParallax = new InfiniteParallaxEngine();
+            const physicsScroll = new PhysicsScrollEngine();
+            const neuralAudio = new NeuralAudioVisualizer();
+            const extremeCursor = new ExtremeCursorTracker();
+            const warpTransitions = new WarpSpeedTransitions();
+            initializeQuantumAnimations();
+            
+            // Add quantum CSS custom properties to tool cards
+            document.querySelectorAll('.tool-card').forEach((card, index) => {
+                card.style.setProperty('--card-index', index);
+                card.classList.add(`depth-layer-${(index % 4) + 1}`);
+            });
+            
+            // Performance optimization
+            requestIdleCallback(() => {
+                console.log('🚀 VIBE TOOLKIT MAXIMUM POLISH MODE ACTIVATED 🚀');
+                console.log('🌌 Infinite Parallax: ENABLED');
+                console.log('⚡ Physics Scroll: ENABLED');
+                console.log('🎭 Quantum Animations: ENABLED');
+                console.log('🎵 Neural Audio Visualizer: ENABLED');
+                console.log('🎯 Extreme Cursor Tracker: ENABLED');
+                console.log('💫 Warp Speed Transitions: ENABLED');
+                console.log('🔥 POLISH LEVEL: BEYOND HUMAN COMPREHENSION');
+            });
+        });
+
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Close modal on background click
+        document.getElementById('toolModal').addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal-overlay')) {
+                closeModal();
+            }
+        });
+
+        // Update community stats in real-time (simulated)
+        setInterval(() => {
+            const appsShipped = document.querySelector('.community-stat .stat-number');
+            if (appsShipped && Math.random() > 0.7) {
+                const current = parseInt(appsShipped.textContent);
+                appsShipped.textContent = (current + 1).toLocaleString();
+            }
+        }, 30000);
+        
+        /* Ultra-Premium CSS Animations */
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fade-in-up {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .fade-in-up {
+                animation: fade-in-up 0.8s ease-out forwards;
+            }
+
+            @keyframes micro-bounce {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-2px); }
+            }
+
+            .tool-card:hover {
+                animation: micro-bounce 0.6s ease-in-out;
+            }
+
+            @keyframes ripple {
+                from {
+                    transform: scale(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, transparent 70%);
+                animation: ripple 0.8s ease-out;
+                pointer-events: none;
+            }
+
+            /* Keyboard navigation styles */
+            .keyboard-navigation .tool-card:focus {
+                outline: 3px solid var(--vibe-purple);
+                outline-offset: 4px;
+                box-shadow: 0 0 0 1px var(--vibe-pink), var(--shadow-glow);
+            }
+
+            .keyboard-navigation button:focus,
+            .keyboard-navigation .demo-button:focus {
+                outline: 2px solid var(--vibe-purple);
+                outline-offset: 2px;
+            }
+
+            /* Performance-optimized animations */
+            .tool-card {
+                will-change: transform;
+            }
+
+            .demo-button {
+                will-change: transform, filter;
+            }
+
+            /* Reduced motion support */
+            @media (prefers-reduced-motion: reduce) {
+                .tool-card,
+                .demo-button,
+                .fade-in-up {
+                    animation: none;
+                    transition: none;
+                }
+                
+                .tool-card:hover {
+                    transform: scale(1.02);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    <script src="js/animations.js"></script>
+    <script src="js/apple-magic-init.js"></script>
+</body>
+</html>

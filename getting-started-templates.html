@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Templates - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-purple: #BF5AF2;
+            --apple-indigo: #5856D6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+
+        .page-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: radial-gradient(circle at 30% 20%, rgba(191, 90, 242, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(88, 86, 214, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 20% 70%, rgba(0, 113, 227, 0.08) 0%, transparent 50%);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 9999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #F5F5F7;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-link {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #F5F5F7;
+        }
+
+        .nav-cta {
+            padding: 8px 20px;
+            background: var(--apple-blue);
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-cta:hover {
+            background: #005bb5;
+            transform: scale(1.05);
+        }
+
+        .content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 120px 24px 80px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 40px;
+        }
+
+        .breadcrumb a {
+            color: var(--apple-blue);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .breadcrumb span {
+            color: rgba(245, 245, 247, 0.6);
+            margin: 0 8px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 32px;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 24px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 48px;
+        }
+
+        /* Template Categories */
+        .template-categories {
+            display: grid;
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .category-section {
+            margin-bottom: 60px;
+        }
+
+        .category-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #F5F5F7;
+            text-align: center;
+        }
+
+        .category-subtitle {
+            font-size: 18px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 40px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .templates-grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        /* Template Cards */
+        .template-card {
+            padding: 32px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .template-card:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(0, 113, 227, 0.2);
+        }
+
+        .template-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .template-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .template-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .template-details h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #F5F5F7;
+            margin-bottom: 4px;
+        }
+
+        .template-type {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .template-description {
+            font-size: 16px;
+            color: rgba(245, 245, 247, 0.8);
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+
+        .template-preview {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .template-preview pre {
+            color: var(--apple-green);
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #F5F5F7;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .template-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .template-tag {
+            padding: 4px 12px;
+            background: rgba(0, 113, 227, 0.2);
+            border: 1px solid rgba(0, 113, 227, 0.3);
+            border-radius: 16px;
+            font-size: 12px;
+            color: var(--apple-blue);
+        }
+
+        /* Quick Access */
+        .quick-access {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .quick-access h3 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #F5F5F7;
+            margin-bottom: 16px;
+        }
+
+        .quick-access p {
+            font-size: 16px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 24px;
+        }
+
+        .quick-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .quick-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .quick-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 113, 227, 0.3);
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-btn {
+            display: inline-block;
+            padding: 16px 32px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            color: #F5F5F7;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.primary {
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+        }
+
+        .nav-btn.primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 113, 227, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 40px;
+            }
+
+            .template-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .quick-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-background"></div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index-magic.html" class="nav-logo">
+                <span>🏆</span>
+                <span>The Vibe Awards</span>
+            </a>
+            <div class="nav-menu">
+                <a href="index-magic.html" class="nav-link">Home</a>
+                <a href="showcase.html" class="nav-link">Showcase</a>
+                <a href="apple-magic-battle.html" class="nav-link">Battle Arena</a>
+                <a href="team-up.html" class="nav-link">Team Up</a>
+                <a href="getting-started.html" class="nav-link active">Getting Started</a>
+                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+                <a href="submit-app.html" class="nav-link">Submit App</a>
+                <a href="signup.html" class="nav-cta">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="getting-started.html">Getting Started</a>
+            <span>→</span>
+            <span>Prompt Templates</span>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-badge">📝 Copy & Paste Templates</div>
+            <h1 class="hero-title">Prompt Templates</h1>
+            <p class="hero-subtitle">
+                Ready-to-use prompts for every type of app. Just copy, customize, and build.
+            </p>
+        </div>
+
+        <!-- Quick Access -->
+        <div class="quick-access">
+            <h3>🚀 Popular Templates</h3>
+            <p>Jump straight to the most requested app types</p>
+            <div class="quick-buttons">
+                <a href="#productivity" class="quick-btn">Productivity Apps</a>
+                <a href="#wellness" class="quick-btn">Health & Wellness</a>
+                <a href="#social" class="quick-btn">Social & Community</a>
+                <a href="#creative" class="quick-btn">Creative Tools</a>
+                <a href="#business" class="quick-btn">Business & Finance</a>
+            </div>
+        </div>
+
+        <!-- Productivity Apps -->
+        <section id="productivity" class="category-section">
+            <h2 class="category-title">📊 Productivity Apps</h2>
+            <p class="category-subtitle">Apps that help users get things done efficiently and feel organized</p>
+            
+            <div class="templates-grid">
+                <div class="template-card">
+                    <div class="template-header">
+                        <div class="template-info">
+                            <div class="template-icon" style="background: linear-gradient(135deg, #30D158, #34C759);">
+                                ✅
+                            </div>
+                            <div class="template-details">
+                                <h3>Task Manager</h3>
+                                <div class="template-type">Productivity • Organization</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="template-description">
+                        A task management app that feels encouraging and helps users build momentum.
+                    </p>
+                    <div class="template-preview">
+                        <button class="copy-button" onclick="copyToClipboard('task-manager')">Copy</button>
+                        <pre id="task-manager">"Build me a task management app that feels motivating and celebrates progress, not just completion.
+
+Core Features:
+• Task creation with priority levels (urgent, important, someday)
+• Project organization with color coding
+• Completion celebrations with satisfying animations
+• Progress tracking that shows momentum, not just lists
+• Gentle reminders that encourage rather than nag
+• Weekly/monthly review summaries that highlight wins
+
+Design Vibe:
+Make it feel like a supportive coach, not a demanding boss. Use warm, energizing colors and smooth animations. When users complete tasks, celebrate with confetti or gentle animations. The overall feeling should be 'I'm making real progress' rather than 'I have so much to do.'
+
+Mobile-first design with thumb-friendly interactions. Make adding tasks quick and effortless - like jotting down thoughts."</pre>
+                    </div>
+                    <div class="template-tags">
+                        <span class="template-tag">Tasks</span>
+                        <span class="template-tag">Productivity</span>
+                        <span class="template-tag">Mobile-friendly</span>
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-header">
+                        <div class="template-info">
+                            <div class="template-icon" style="background: linear-gradient(135deg, #FF9F0A, #FFCC02);">
+                                📝
+                            </div>
+                            <div class="template-details">
+                                <h3>Note-Taking App</h3>
+                                <div class="template-type">Productivity • Knowledge</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="template-description">
+                        A note-taking app that feels like your personal thinking space.
+                    </p>
+                    <div class="template-preview">
+                        <button class="copy-button" onclick="copyToClipboard('note-taking')">Copy</button>
+                        <pre id="note-taking">"Create a note-taking app that feels like a cozy, organized thinking space - like Notion meets Obsidian but more approachable.
+
+Features I want:
+• Rich text editing with markdown support
+• Folder organization and tags
+• Quick capture for fleeting thoughts
+• Search that finds context, not just keywords
+• Link notes together to build knowledge webs
+• Template system for common note types
+• Dark/light mode with beautiful typography
+
+Emotional Design:
+Should feel like a warm, well-lit library where ideas can grow. Use comfortable typography, plenty of white space, and subtle animations. When creating new notes, make it feel inspiring - like opening a fresh journal page.
+
+The interface should disappear and let ideas flow. No cognitive overhead - just pure thinking and writing."</pre>
+                    </div>
+                    <div class="template-tags">
+                        <span class="template-tag">Notes</span>
+                        <span class="template-tag">Knowledge</span>
+                        <span class="template-tag">Writing</span>
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-header">
+                        <div class="template-info">
+                            <div class="template-icon" style="background: linear-gradient(135deg, #5856D6, #AF52DE);">
+                                🎯
+                            </div>
+                            <div class="template-details">
+                                <h3>Goal Tracker</h3>
+                                <div class="template-type">Productivity • Personal Growth</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="template-description">
+                        Help users achieve their goals with an encouraging, progress-focused approach.
+                    </p>
+                    <div class="template-preview">
+                        <button class="copy-button" onclick="copyToClipboard('goal-tracker')">Copy</button>
+                        <pre id="goal-tracker">"Build a goal tracking app that feels empowering and focuses on progress over perfection.
+
+Core Features:
+• SMART goal setting with guided questions
+• Daily/weekly check-ins with mood tracking
+• Visual progress charts that show trends
+• Milestone celebrations and achievements
+• Habit tracking for supporting behaviors
+• Reflection prompts for learning from setbacks
+• Progress photos for visual goals
+
+Psychology-Informed Design:
+Focus on growth mindset - celebrate effort and learning, not just results. Use encouraging language like 'building momentum' instead of 'behind schedule.' Show progress as a journey with ups and downs, not a straight line.
+
+Color Psychology: Use blues and greens for trust and growth, warm accents for celebration. Animations should feel uplifting and energizing."</pre>
+                    </div>
+                    <div class="template-tags">
+                        <span class="template-tag">Goals</span>
+                        <span class="template-tag">Habits</span>
+                        <span class="template-tag">Progress</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Health & Wellness -->
+        <section id="wellness" class="category-section">
+            <h2 class="category-title">🧘 Health & Wellness</h2>
+            <p class="category-subtitle">Apps that promote mental and physical wellbeing with gentle, supportive interfaces</p>
+            
+            <div class="templates-grid">
+                <div class="template-card">
+                    <div class="template-header">
+                        <div class="template-info">
+                            <div class="template-icon" style="background: linear-gradient(135deg, #5AC8FA, #007AFF);">
+                                🧘
+                            </div>
+                            <div class="template-details">
+                                <h3>Meditation App</h3>
+                                <div class="template-type">Wellness • Mindfulness</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="template-description">
+                        A calming meditation app that feels like a peaceful digital sanctuary.
+                    </p>
+                    <div class="template-preview">
+                        <button class="copy-button" onclick="copyToClipboard('meditation-app')">Copy</button>
+                        <pre id="meditation-app">"Create a meditation app that feels like stepping into a peaceful digital sanctuary.
+
+Features:
+• Guided meditations for different needs (sleep, anxiety, focus)
+• Breathing exercises with visual guides
+• Progress tracking that feels encouraging, not competitive
+• Ambient sounds and nature recordings
+• Customizable session lengths (2-60 minutes)
+• Gentle reminders that respect user's schedule
+• Journal for reflection after sessions
+
+Design Philosophy:
+Should feel like a calm, minimalist space - think Japanese zen garden meets Scandinavian design. Use soft, natural colors (muted greens, warm beiges, soft blues). Animations should be slow and breathing-like.
+
+No harsh edges, bright colors, or overwhelming UI. Every interaction should feel intentional and calming. The loading states should be meditative, not rushed."</pre>
+                    </div>
+                    <div class="template-tags">
+                        <span class="template-tag">Meditation</span>
+                        <span class="template-tag">Mindfulness</span>
+                        <span class="template-tag">Breathing</span>
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-header">
+                        <div class="template-info">
+                            <div class="template-icon" style="background: linear-gradient(135deg, #FF6B6B, #FF8E53);">
+                                😊
+                            </div>
+                            <div class="template-details">
+                                <h3>Mood Tracker</h3>
+                                <div class="template-type">Wellness • Mental Health</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="template-description">
+                        Track moods and emotions with a supportive, non-judgmental interface.
+                    </p>
+                    <div class="template-preview">
+                        <button class="copy-button" onclick="copyToClipboard('mood-tracker')">Copy</button>
+                        <pre id="mood-tracker">"Build a mood tracking app that feels like a caring friend, not a clinical tool.
+
+Core Features:
+• Simple mood selection with customizable emotions
+• Context tracking (what influenced your mood)
+• Pattern recognition and gentle insights
+• Weekly/monthly mood summaries with encouraging language
+• Coping strategy suggestions based on patterns
+• Gratitude journaling integrated naturally
+• Crisis resources easily accessible but not overwhelming
+
+Emotional Safety:
+Use warm, supportive language. Instead of 'bad' moods, frame as 'challenging' or 'difficult.' Focus on validation and growth. Show that all emotions are valid and temporary.
+
+Visual Design: Soft, warm colors that feel safe. Avoid clinical whites or harsh contrasts. Think sunset gradients, forest greens, ocean blues."</pre>
+                    </div>
+                    <div class="template-tags">
+                        <span class="template-tag">Mental Health</span>
+                        <span class="template-tag">Emotions</span>
+                        <span class="template-tag">Support</span>
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-header">
+                        <div class="template-info">
+                            <div class="template-icon" style="background: linear-gradient(135deg, #32D74B, #30B446);">
+                                💪
+                            </div>
+                            <div class="template-details">
+                                <h3>Fitness Tracker</h3>
+                                <div class="template-type">Wellness • Physical Health</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="template-description">
+                        A motivating fitness app that celebrates every step of the journey.
+                    </p>
+                    <div class="template-preview">
+                        <button class="copy-button" onclick="copyToClipboard('fitness-tracker')">Copy</button>
+                        <pre id="fitness-tracker">"Create a fitness tracking app that feels motivating and celebrates every win, big or small.
+
+Features:
+• Workout logging with customizable exercises
+• Progress photos with encouraging before/after comparisons
+• Achievement system that rewards consistency over intensity
+• Social features for accountability and support
+• Flexible goal setting (time, reps, weight, feeling-based)
+• Recovery tracking and rest day encouragement
+• Nutrition integration without diet culture messaging
+
+Motivational Design:
+Focus on how users FEEL, not just numbers. Use energizing colors (oranges, greens, blues) and dynamic animations. Celebrate effort and consistency, not just results.
+
+Language should be empowering: 'building strength,' 'gaining energy,' 'feeling confident' rather than 'burning calories' or 'losing weight.'"</pre>
+                    </div>
+                    <div class="template-tags">
+                        <span class="template-tag">Fitness</span>
+                        <span class="template-tag">Motivation</span>
+                        <span class="template-tag">Progress</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social & Community -->
+        <section id="social" class="category-section">
+            <h2 class="category-title">👥 Social & Community</h2>
+            <p class="category-subtitle">Apps that bring people together and foster meaningful connections</p>
+            
+            <div class="templates-grid">
+                <div class="template-card">
+                    <div class="template-header">
+                        <div class="template-info">
+                            <div class="template-icon" style="background: linear-gradient(135deg, #FF3B30, #FF6B6B);">
+                                💬
+                            </div>
+                            <div class="template-details">
+                                <h3>Community Forum</h3>
+                                <div class="template-type">Social • Discussion</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="template-description">
+                        A welcoming community space that encourages thoughtful discussion.
+                    </p>
+                    <div class="template-preview">
+                        <button class="copy-button" onclick="copyToClipboard('community-forum')">Copy</button>
+                        <pre id="community-forum">"Build a community forum that feels welcoming and encourages thoughtful, respectful discussion.
+
+Community Features:
+• Topic-based discussions with threaded replies
+• User profiles that highlight contributions, not just statistics
+• Reputation system based on helpfulness, not just activity
+• Moderation tools that promote positive interactions
+• Search functionality that surfaces quality content
+• Direct messaging for deeper connections
+• Event planning and group coordination
+
+Community Culture:
+Design should encourage empathy and understanding. Use warm, inclusive colors and language. Show appreciation for diverse perspectives. Built-in features that discourage trolling and promote constructive dialogue.
+
+Think 'neighborhood coffee shop' vibe - welcoming, diverse, thoughtful conversation encouraged."</pre>
+                    </div>
+                    <div class="template-tags">
+                        <span class="template-tag">Community</span>
+                        <span class="template-tag">Discussion</span>
+                        <span class="template-tag">Social</span>
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-header">
+                        <div class="template-info">
+                            <div class="template-icon" style="background: linear-gradient(135deg, #34C759, #00C896);">
+                                🤝
+                            </div>
+                            <div class="template-details">
+                                <h3>Networking App</h3>
+                                <div class="template-type">Social • Professional</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="template-description">
+                        Professional networking that feels authentic and relationship-focused.
+                    </p>
+                    <div class="template-preview">
+                        <button class="copy-button" onclick="copyToClipboard('networking-app')">Copy</button>
+                        <pre id="networking-app">"Create a professional networking app that feels authentic and relationship-focused, not transactional.
+
+Core Features:
+• Profile creation that highlights personality alongside professional skills
+• Interest-based matching for meaningful connections
+• Event discovery and attendance tracking
+• Follow-up reminders that suggest genuine conversation starters
+• Collaboration project board for finding partners
+• Mentorship matching program
+• Knowledge sharing through micro-learning posts
+
+Human-Centered Design:
+Focus on building real relationships, not just collecting contacts. Use warm, professional colors that feel approachable. Encourage users to share interests, values, and goals beyond just job titles.
+
+Language should emphasize collaboration, learning, and mutual benefit rather than 'networking' or 'using' connections."</pre>
+                    </div>
+                    <div class="template-tags">
+                        <span class="template-tag">Professional</span>
+                        <span class="template-tag">Networking</span>
+                        <span class="template-tag">Collaboration</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <a href="getting-started-guides.html" class="nav-btn">← Platform Guides</a>
+            <a href="getting-started-architecture.html" class="nav-btn primary">App Architecture →</a>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const button = element.parentElement.querySelector('.copy-button');
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = 'var(--apple-green)';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = 'rgba(255, 255, 255, 0.1)';
+                }, 2000);
+            });
+        }
+
+        // Smooth scrolling for quick access buttons
+        document.querySelectorAll('.quick-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

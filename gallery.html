@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battle Gallery - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-gray: #86868B;
+            --apple-light-gray: #F5F5F7;
+            --apple-dark: #1D1D1F;
+            --apple-green: #30D158;
+            --apple-red: #FF375F;
+            --apple-orange: #FF9F0A;
+            --apple-purple: #BF5AF2;
+            --apple-teal: #5AC8FA;
+            --apple-indigo: #5856D6;
+            --gold: #FFD700;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Background */
+        .gallery-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(88, 86, 214, 0.3) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(191, 90, 242, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 40% 60%, rgba(0, 113, 227, 0.2) 0%, transparent 40%);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 9999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #F5F5F7;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-link {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #F5F5F7;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 120px 24px 40px;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 21px;
+            color: rgba(245, 245, 247, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 24px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+        }
+
+        .filter-tab {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: rgba(245, 245, 247, 0.8);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .filter-tab:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+
+        .filter-tab.active {
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            color: white;
+            border-color: transparent;
+        }
+
+        .date-filter {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .date-select {
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* Gallery Grid */
+        .gallery-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px 80px;
+        }
+
+        .battles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 24px;
+        }
+
+        .battle-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .battle-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .battle-header {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .battle-date {
+            font-size: 12px;
+            color: rgba(245, 245, 247, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .battle-category {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .battle-category.health {
+            background: rgba(48, 209, 88, 0.2);
+            color: var(--apple-green);
+        }
+
+        .battle-category.education {
+            background: rgba(90, 200, 250, 0.2);
+            color: var(--apple-teal);
+        }
+
+        .battle-category.entertainment {
+            background: rgba(191, 90, 242, 0.2);
+            color: var(--apple-purple);
+        }
+
+        .battle-category.productivity {
+            background: rgba(255, 159, 10, 0.2);
+            color: var(--apple-orange);
+        }
+
+        .battle-category.finance {
+            background: rgba(88, 86, 214, 0.2);
+            color: var(--apple-indigo);
+        }
+
+        .battle-apps {
+            padding: 20px;
+        }
+
+        .app-vs-app {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .app-contestant {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .app-contestant.winner {
+            position: relative;
+        }
+
+        .winner-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--gold), var(--apple-orange));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+        }
+
+        .app-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .app-info {
+            flex: 1;
+        }
+
+        .app-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .app-developer {
+            font-size: 12px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .vs-divider {
+            padding: 0 16px;
+            color: rgba(245, 245, 247, 0.4);
+            font-weight: 600;
+        }
+
+        .battle-results {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .result-bar {
+            flex: 1;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .result-fill {
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.5s ease;
+        }
+
+        .result-fill.winner {
+            background: linear-gradient(90deg, var(--apple-green), var(--apple-teal));
+            justify-content: flex-end;
+        }
+
+        .result-fill.loser {
+            background: rgba(255, 55, 95, 0.8);
+            justify-content: flex-start;
+        }
+
+        .total-votes {
+            font-size: 12px;
+            color: rgba(245, 245, 247, 0.6);
+            white-space: nowrap;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 24px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        /* Load More */
+        .load-more-section {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .load-more-btn {
+            padding: 14px 32px;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .load-more-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 113, 227, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 40px;
+            }
+
+            .battles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .app-vs-app {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .vs-divider {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="gallery-background"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index-magic.html" class="nav-logo">
+                <span>🏆</span>
+                <span>The Vibe Awards</span>
+            </a>
+            <div class="nav-menu">
+                <a href="index-magic.html" class="nav-link">Home</a>
+                <a href="apple-magic-battle.html" class="nav-link">Battle Arena</a>
+                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+                <a href="gallery.html" class="nav-link active">Gallery</a>
+                <a href="categories.html" class="nav-link">Categories</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <h1 class="hero-title">Battle Gallery</h1>
+        <p class="hero-subtitle">Explore the history of epic app battles and legendary victories</p>
+    </section>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <div class="filter-tabs">
+            <div class="filter-tab active">All Battles</div>
+            <div class="filter-tab">Epic Battles</div>
+            <div class="filter-tab">Close Calls</div>
+            <div class="filter-tab">Upsets</div>
+            <div class="filter-tab">Championship</div>
+        </div>
+        <div class="date-filter">
+            <select class="date-select">
+                <option>This Week</option>
+                <option>This Month</option>
+                <option>Last 3 Months</option>
+                <option>2024</option>
+                <option>All Time</option>
+            </select>
+            <select class="date-select">
+                <option>All Categories</option>
+                <option>Healthcare</option>
+                <option>Education</option>
+                <option>Entertainment</option>
+                <option>Productivity</option>
+                <option>Finance</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">⚔️</div>
+                <div class="stat-value">1,247</div>
+                <div class="stat-label">Total Battles</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🗳️</div>
+                <div class="stat-value">3.2M</div>
+                <div class="stat-label">Votes Cast</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🏅</div>
+                <div class="stat-value">347</div>
+                <div class="stat-label">Unique Winners</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-value">89</div>
+                <div class="stat-label">Perfect Victories</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="gallery-container">
+        <div class="battles-grid">
+            <!-- Battle Card 1 -->
+            <div class="battle-card">
+                <div class="battle-header">
+                    <div class="battle-date">December 15, 2024 • Final Round</div>
+                    <span class="battle-category health">Healthcare</span>
+                </div>
+                <div class="battle-apps">
+                    <div class="app-vs-app">
+                        <div class="app-contestant winner">
+                            <div class="winner-badge">👑</div>
+                            <div class="app-icon">🗣️</div>
+                            <div class="app-info">
+                                <div class="app-name">TinkyBink AAC</div>
+                                <div class="app-developer">Luke Kist</div>
+                            </div>
+                        </div>
+                        <div class="vs-divider">VS</div>
+                        <div class="app-contestant">
+                            <div class="app-icon">🧠</div>
+                            <div class="app-info">
+                                <div class="app-name">MindSync Pro</div>
+                                <div class="app-developer">Neural Labs</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="battle-results">
+                    <div class="result-bar">
+                        <div class="result-fill winner" style="width: 68%">68%</div>
+                        <div class="result-fill loser" style="width: 32%">32%</div>
+                    </div>
+                    <span class="total-votes">45.2K votes</span>
+                </div>
+            </div>
+
+            <!-- Battle Card 2 -->
+            <div class="battle-card">
+                <div class="battle-header">
+                    <div class="battle-date">December 14, 2024 • Semi-Final</div>
+                    <span class="battle-category education">Education</span>
+                </div>
+                <div class="battle-apps">
+                    <div class="app-vs-app">
+                        <div class="app-contestant winner">
+                            <div class="winner-badge">🏆</div>
+                            <div class="app-icon">📚</div>
+                            <div class="app-info">
+                                <div class="app-name">StudyBuddy AI</div>
+                                <div class="app-developer">EduTech Labs</div>
+                            </div>
+                        </div>
+                        <div class="vs-divider">VS</div>
+                        <div class="app-contestant">
+                            <div class="app-icon">🎓</div>
+                            <div class="app-info">
+                                <div class="app-name">LearnMaster Pro</div>
+                                <div class="app-developer">Academic Co</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="battle-results">
+                    <div class="result-bar">
+                        <div class="result-fill winner" style="width: 52%">52%</div>
+                        <div class="result-fill loser" style="width: 48%">48%</div>
+                    </div>
+                    <span class="total-votes">38.7K votes</span>
+                </div>
+            </div>
+
+            <!-- Battle Card 3 -->
+            <div class="battle-card">
+                <div class="battle-header">
+                    <div class="battle-date">December 13, 2024 • Quarter-Final</div>
+                    <span class="battle-category entertainment">Entertainment</span>
+                </div>
+                <div class="battle-apps">
+                    <div class="app-vs-app">
+                        <div class="app-contestant winner">
+                            <div class="winner-badge">⭐</div>
+                            <div class="app-icon">🎵</div>
+                            <div class="app-info">
+                                <div class="app-name">BeatMaker Studio</div>
+                                <div class="app-developer">Sonic Innovations</div>
+                            </div>
+                        </div>
+                        <div class="vs-divider">VS</div>
+                        <div class="app-contestant">
+                            <div class="app-icon">🎮</div>
+                            <div class="app-info">
+                                <div class="app-name">PixelQuest Pro</div>
+                                <div class="app-developer">GameForge</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="battle-results">
+                    <div class="result-bar">
+                        <div class="result-fill winner" style="width: 71%">71%</div>
+                        <div class="result-fill loser" style="width: 29%">29%</div>
+                    </div>
+                    <span class="total-votes">29.4K votes</span>
+                </div>
+            </div>
+
+            <!-- Battle Card 4 -->
+            <div class="battle-card">
+                <div class="battle-header">
+                    <div class="battle-date">December 12, 2024 • Daily Battle</div>
+                    <span class="battle-category productivity">Productivity</span>
+                </div>
+                <div class="battle-apps">
+                    <div class="app-vs-app">
+                        <div class="app-contestant">
+                            <div class="app-icon">📝</div>
+                            <div class="app-info">
+                                <div class="app-name">TaskMaster AI</div>
+                                <div class="app-developer">Productivity Inc</div>
+                            </div>
+                        </div>
+                        <div class="vs-divider">VS</div>
+                        <div class="app-contestant winner">
+                            <div class="winner-badge">🏅</div>
+                            <div class="app-icon">📊</div>
+                            <div class="app-info">
+                                <div class="app-name">FlowState Pro</div>
+                                <div class="app-developer">Focus Labs</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="battle-results">
+                    <div class="result-bar">
+                        <div class="result-fill loser" style="width: 44%">44%</div>
+                        <div class="result-fill winner" style="width: 56%">56%</div>
+                    </div>
+                    <span class="total-votes">22.1K votes</span>
+                </div>
+            </div>
+
+            <!-- Battle Card 5 -->
+            <div class="battle-card">
+                <div class="battle-header">
+                    <div class="battle-date">December 11, 2024 • Epic Battle</div>
+                    <span class="battle-category finance">Finance</span>
+                </div>
+                <div class="battle-apps">
+                    <div class="app-vs-app">
+                        <div class="app-contestant winner">
+                            <div class="winner-badge">💎</div>
+                            <div class="app-icon">💰</div>
+                            <div class="app-info">
+                                <div class="app-name">WealthWise AI</div>
+                                <div class="app-developer">FinTech Pioneers</div>
+                            </div>
+                        </div>
+                        <div class="vs-divider">VS</div>
+                        <div class="app-contestant">
+                            <div class="app-icon">📈</div>
+                            <div class="app-info">
+                                <div class="app-name">InvestSmart</div>
+                                <div class="app-developer">Capital Tech</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="battle-results">
+                    <div class="result-bar">
+                        <div class="result-fill winner" style="width: 63%">63%</div>
+                        <div class="result-fill loser" style="width: 37%">37%</div>
+                    </div>
+                    <span class="total-votes">34.5K votes</span>
+                </div>
+            </div>
+
+            <!-- Battle Card 6 -->
+            <div class="battle-card">
+                <div class="battle-header">
+                    <div class="battle-date">December 10, 2024 • Upset Victory</div>
+                    <span class="battle-category health">Healthcare</span>
+                </div>
+                <div class="battle-apps">
+                    <div class="app-vs-app">
+                        <div class="app-contestant">
+                            <div class="app-icon">💊</div>
+                            <div class="app-info">
+                                <div class="app-name">MediTrack AI</div>
+                                <div class="app-developer">HealthTech Solutions</div>
+                            </div>
+                        </div>
+                        <div class="vs-divider">VS</div>
+                        <div class="app-contestant winner">
+                            <div class="winner-badge">🌟</div>
+                            <div class="app-icon">🏃</div>
+                            <div class="app-info">
+                                <div class="app-name">FitGenius Pro</div>
+                                <div class="app-developer">FitTech Inc</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="battle-results">
+                    <div class="result-bar">
+                        <div class="result-fill loser" style="width: 49%">49%</div>
+                        <div class="result-fill winner" style="width: 51%">51%</div>
+                    </div>
+                    <span class="total-votes">41.2K votes</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="load-more-section">
+            <button class="load-more-btn">Load More Battles</button>
+        </div>
+    </div>
+
+    <script>
+        // Filter functionality
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Filter logic would go here
+                console.log('Filter:', this.textContent);
+            });
+        });
+
+        // Animate battle results on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const fills = entry.target.querySelectorAll('.result-fill');
+                    fills.forEach(fill => {
+                        const width = fill.style.width;
+                        fill.style.width = '0';
+                        setTimeout(() => {
+                            fill.style.width = width;
+                        }, 100);
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+
+        document.querySelectorAll('.battle-results').forEach(result => {
+            observer.observe(result);
+        });
+
+        // Battle card click handler
+        document.querySelectorAll('.battle-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // Navigate to battle details
+                window.location.href = 'apple-magic-battle.html';
+            });
+        });
+
+        // Load more functionality
+        document.querySelector('.load-more-btn').addEventListener('click', function() {
+            this.textContent = 'Loading...';
+            
+            // Simulate loading more battles
+            setTimeout(() => {
+                this.textContent = 'Load More Battles';
+                // Add more battle cards here
+            }, 1000);
+        });
+
+        // Animate stats on load
+        function animateValue(element, start, end, duration) {
+            const range = end - start;
+            const increment = range / (duration / 16);
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= end) {
+                    current = end;
+                    clearInterval(timer);
+                }
+                
+                if (element.textContent.includes('M')) {
+                    element.textContent = (current / 1000000).toFixed(1) + 'M';
+                } else if (element.textContent.includes('K')) {
+                    element.textContent = (current / 1000).toFixed(1) + 'K';
+                } else {
+                    element.textContent = Math.round(current).toLocaleString();
+                }
+            }, 16);
+        }
+
+        // Animate stats when they come into view
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const value = entry.target.querySelector('.stat-value');
+                    const text = value.textContent;
+                    let num = 0;
+                    
+                    if (text.includes('M')) {
+                        num = parseFloat(text) * 1000000;
+                    } else if (text.includes('K')) {
+                        num = parseFloat(text) * 1000;
+                    } else {
+                        num = parseInt(text.replace(/,/g, ''));
+                    }
+                    
+                    animateValue(value, 0, num, 1000);
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        });
+
+        document.querySelectorAll('.stat-card').forEach(card => {
+            statsObserver.observe(card);
+        });
+    </script>
+</body>
+</html>

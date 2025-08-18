@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Vibe-Coding - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-purple: #BF5AF2;
+            --apple-indigo: #5856D6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+
+        .page-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: radial-gradient(circle at 30% 20%, rgba(191, 90, 242, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(88, 86, 214, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 20% 70%, rgba(0, 113, 227, 0.08) 0%, transparent 50%);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 9999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #F5F5F7;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-link {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #F5F5F7;
+        }
+
+        .nav-cta {
+            padding: 8px 20px;
+            background: var(--apple-blue);
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-cta:hover {
+            background: #005bb5;
+            transform: scale(1.05);
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 24px 80px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 40px;
+        }
+
+        .breadcrumb a {
+            color: var(--apple-blue);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .breadcrumb span {
+            color: rgba(245, 245, 247, 0.6);
+            margin: 0 8px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 32px;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 24px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 48px;
+        }
+
+        .technique-card {
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            margin-bottom: 32px;
+        }
+
+        .technique-card h3 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #F5F5F7;
+            margin-bottom: 16px;
+        }
+
+        .technique-card p {
+            font-size: 16px;
+            color: rgba(245, 245, 247, 0.8);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .code-example {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .code-example pre {
+            color: var(--apple-green);
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #F5F5F7;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-btn {
+            display: inline-block;
+            padding: 16px 32px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            color: #F5F5F7;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.primary {
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+        }
+
+        .nav-btn.primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 113, 227, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="page-background"></div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index-magic.html" class="nav-logo">
+                <span>🏆</span>
+                <span>The Vibe Awards</span>
+            </a>
+            <div class="nav-menu">
+                <a href="index-magic.html" class="nav-link">Home</a>
+                <a href="showcase.html" class="nav-link">Showcase</a>
+                <a href="apple-magic-battle.html" class="nav-link">Battle Arena</a>
+                <a href="team-up.html" class="nav-link">Team Up</a>
+                <a href="getting-started.html" class="nav-link active">Getting Started</a>
+                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+                <a href="submit-app.html" class="nav-link">Submit App</a>
+                <a href="signup.html" class="nav-cta">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="getting-started.html">Getting Started</a>
+            <span>→</span>
+            <span>Professional Techniques</span>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-badge">🎓 Advanced Techniques</div>
+            <h1 class="hero-title">Professional Vibe-Coding</h1>
+            <p class="hero-subtitle">
+                Advanced prompting strategies for senior developers and complex projects
+            </p>
+        </div>
+
+        <!-- Advanced Techniques -->
+        <div class="technique-card">
+            <h3>🔧 System Architecture Prompting</h3>
+            <p>Design entire system architectures with AI by describing high-level requirements and constraints.</p>
+            <div class="code-example">
+                <button class="copy-button" onclick="copyToClipboard('architecture-prompt')">Copy</button>
+                <pre id="architecture-prompt">"Design a scalable e-commerce platform architecture that handles 100k+ users.
+
+Requirements:
+• Microservices architecture with API gateway
+• Event-driven communication between services
+• CQRS pattern for order management
+• Redis for caching and sessions
+• PostgreSQL for transactional data
+• Elasticsearch for product search
+• CDN for static assets
+• Docker containers with Kubernetes orchestration
+
+Non-functional requirements:
+• 99.9% uptime
+• Sub-200ms API response times
+• PCI compliance for payments
+• GDPR compliance for user data
+• Auto-scaling based on load
+
+Generate:
+1. System architecture diagram
+2. Service boundaries and responsibilities
+3. Data flow diagrams
+4. Deployment pipeline
+5. Monitoring and observability strategy"</pre>
+            </div>
+        </div>
+
+        <div class="technique-card">
+            <h3>🧪 Test-Driven Development</h3>
+            <p>Generate comprehensive test suites alongside application code for robust, maintainable systems.</p>
+            <div class="code-example">
+                <button class="copy-button" onclick="copyToClipboard('tdd-prompt')">Copy</button>
+                <pre id="tdd-prompt">"Build a user authentication system using TDD principles.
+
+Requirements:
+• JWT-based authentication
+• Password hashing with bcrypt
+• Email verification
+• Password reset functionality
+• Rate limiting for security
+
+For each feature, generate:
+1. Unit tests (Jest/Vitest)
+2. Integration tests
+3. End-to-end tests (Playwright)
+4. Security tests
+5. Performance tests
+
+Test coverage should be 95%+. Include edge cases, error scenarios, and security attack vectors. Make tests readable and maintainable with clear descriptions."</pre>
+            </div>
+        </div>
+
+        <div class="technique-card">
+            <h3>🔄 Refactoring Legacy Code</h3>
+            <p>Transform existing codebases with AI assistance while maintaining functionality and improving architecture.</p>
+            <div class="code-example">
+                <button class="copy-button" onclick="copyToClipboard('refactor-prompt')">Copy</button>
+                <pre id="refactor-prompt">"Refactor this legacy jQuery application to modern React with TypeScript.
+
+[Paste your legacy code here]
+
+Refactoring goals:
+• Convert to functional React components with hooks
+• Add TypeScript for type safety
+• Implement proper state management (Context/Redux)
+• Replace jQuery DOM manipulation with React patterns
+• Add error boundaries and loading states
+• Implement proper testing
+• Maintain existing functionality exactly
+
+Provide:
+1. Step-by-step migration plan
+2. Refactored code with explanations
+3. Test coverage for new implementation
+4. Performance comparison
+5. Deployment strategy for zero-downtime migration"</pre>
+            </div>
+        </div>
+
+        <div class="technique-card">
+            <h3>📊 Performance Optimization</h3>
+            <p>Identify and resolve performance bottlenecks with AI-guided analysis and optimization strategies.</p>
+            <div class="code-example">
+                <button class="copy-button" onclick="copyToClipboard('performance-prompt')">Copy</button>
+                <pre id="performance-prompt">"Analyze and optimize this React application for performance.
+
+[Paste your component code]
+
+Performance goals:
+• Lighthouse score 95+
+• First Contentful Paint < 1.5s
+• Largest Contentful Paint < 2.5s
+• Cumulative Layout Shift < 0.1
+• Time to Interactive < 3.5s
+
+Optimization areas:
+• Bundle size reduction
+• Code splitting and lazy loading
+• Image optimization
+• Caching strategies
+• Database query optimization
+• API response optimization
+• Memory leak prevention
+
+Provide specific optimizations with before/after metrics and implementation details."</pre>
+            </div>
+        </div>
+
+        <div class="technique-card">
+            <h3>🛡️ Security Implementation</h3>
+            <p>Build security-first applications with comprehensive threat modeling and protection strategies.</p>
+            <div class="code-example">
+                <button class="copy-button" onclick="copyToClipboard('security-prompt')">Copy</button>
+                <pre id="security-prompt">"Implement comprehensive security for a financial application.
+
+Security requirements:
+• OWASP Top 10 protection
+• Multi-factor authentication
+• API rate limiting and DDoS protection
+• SQL injection prevention
+• XSS and CSRF protection
+• Data encryption at rest and in transit
+• Audit logging and monitoring
+• Secure session management
+• Input validation and sanitization
+• Security headers implementation
+
+Generate:
+1. Threat model and risk assessment
+2. Security architecture diagram
+3. Implementation code with security controls
+4. Security testing procedures
+5. Incident response plan
+6. Compliance documentation (SOX, PCI DSS)"</pre>
+            </div>
+        </div>
+
+        <div class="technique-card">
+            <h3>🔗 API Design & Documentation</h3>
+            <p>Create production-ready APIs with comprehensive documentation and developer experience.</p>
+            <div class="code-example">
+                <button class="copy-button" onclick="copyToClipboard('api-prompt')">Copy</button>
+                <pre id="api-prompt">"Design a RESTful API for a social media platform with excellent DX.
+
+API requirements:
+• RESTful design with clear resource modeling
+• OpenAPI 3.0 specification
+• Consistent error handling
+• Pagination for large datasets
+• Filtering, sorting, and searching
+• Versioning strategy
+• Rate limiting with clear feedback
+• Comprehensive documentation
+• SDK generation for multiple languages
+• Interactive API explorer
+
+Generate:
+1. Complete OpenAPI specification
+2. Implementation with validation
+3. Error handling middleware
+4. Documentation website
+5. SDK examples (JavaScript, Python, Go)
+6. Testing suite with example requests
+7. Developer onboarding guide"</pre>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <a href="getting-started-architecture.html" class="nav-btn">← App Architecture</a>
+            <a href="getting-started-example.html" class="nav-btn primary">Complete Example →</a>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const button = element.parentElement.querySelector('.copy-button');
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = 'var(--apple-green)';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = 'rgba(255, 255, 255, 0.1)';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

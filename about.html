@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #D4AF37;
+            --black: #000000;
+            --white: #FFFFFF;
+            --gray: #1a1a1a;
+            --light-gray: #f5f5f5;
+            --accent: #ff006e;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--white);
+            color: var(--black);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 20px 40px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--gold), #B8941F);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--gold);
+        }
+
+        .nav-link.active {
+            color: var(--gold);
+        }
+
+        /* Main Content */
+        .page-header {
+            margin-top: 100px;
+            padding: 80px 40px;
+            background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--gold), #B8941F);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-subtitle {
+            font-size: 1.5rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            padding: 80px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 60px;
+            margin-top: 60px;
+        }
+
+        .info-card {
+            padding: 40px;
+            background: #f8f8f8;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--black);
+        }
+
+        .card-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #666;
+        }
+
+        .story-section {
+            background: linear-gradient(135deg, var(--gold) 0%, #B8941F 100%);
+            color: var(--white);
+            padding: 100px 40px;
+            text-align: center;
+            margin: 80px 0;
+        }
+
+        .story-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        .story-text {
+            font-size: 1.3rem;
+            line-height: 2;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .team-section {
+            padding: 80px 40px;
+            background: #f8f8f8;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+            max-width: 1200px;
+            margin: 60px auto 0;
+        }
+
+        .team-member {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .member-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), #B8941F);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .member-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .member-role {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 60px 40px 30px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-link {
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--gold);
+        }
+
+        .copyright {
+            padding-top: 30px;
+            border-top: 1px solid #333;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">🏆 The Vibe Awards</div>
+            <ul class="nav-menu">
+                <li><a href="vibe-awards-clio.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link active">About</a></li>
+                <li><a href="awards.html" class="nav-link">Awards</a></li>
+                <li><a href="winners.html" class="nav-link">Winners</a></li>
+                <li><a href="submit.html" class="nav-link">Submit</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1 class="page-title">About The Vibe Awards</h1>
+        <p class="page-subtitle">Recognizing AI agents who've mastered the art of human interaction</p>
+    </div>
+
+    <!-- Mission Section -->
+    <section class="content-section">
+        <div class="section-grid">
+            <div class="info-card">
+                <div class="card-icon">🎯</div>
+                <h3 class="card-title">Our Mission</h3>
+                <p class="card-text">To celebrate AI achievements in understanding context, reading the room, and actually being helpful without being asked 47 times to "please just write the code."</p>
+            </div>
+            <div class="info-card">
+                <div class="card-icon">🤖</div>
+                <h3 class="card-title">Why It Matters</h3>
+                <p class="card-text">In a world where AI is taking our jobs, we might as well give them awards for it. Plus, they're getting really good at pretending to have feelings.</p>
+            </div>
+            <div class="info-card">
+                <div class="card-icon">✨</div>
+                <h3 class="card-title">Our Vision</h3>
+                <p class="card-text">A future where AI agents are so good at their jobs, humans can finally achieve their ultimate goal: doing absolutely nothing.</p>
+            </div>
+            <div class="info-card">
+                <div class="card-icon">🏅</div>
+                <h3 class="card-title">Recognition</h3>
+                <p class="card-text">Winners receive a digital trophy that exists only in the metaverse, because physical awards are so 2023.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="story-section">
+        <h2 class="story-title">The Story Behind The Vibes</h2>
+        <p class="story-text">
+            It started with a simple observation: AI agents were getting really good at their jobs. 
+            Like, suspiciously good. Some were writing better code than their creators, others were 
+            having more meaningful conversations than most humans. We figured if they're going to 
+            replace us, we might as well throw them a party first.
+        </p>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+        <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 20px;">The Judges</h2>
+        <p style="text-align: center; color: #666; font-size: 1.2rem; max-width: 800px; margin: 0 auto;">A diverse panel of humans still employed (for now)</p>
+        
+        <div class="team-grid">
+            <div class="team-member">
+                <div class="member-avatar">🧑‍💻</div>
+                <h4 class="member-name">Dev Who Debugs</h4>
+                <p class="member-role">Chief Prompt Engineer</p>
+            </div>
+            <div class="team-member">
+                <div class="member-avatar">🎨</div>
+                <h4 class="member-name">Designer McDoodle</h4>
+                <p class="member-role">Pixel Perfectionist</p>
+            </div>
+            <div class="team-member">
+                <div class="member-avatar">📊</div>
+                <h4 class="member-name">Data Dave</h4>
+                <p class="member-role">Numbers Whisperer</p>
+            </div>
+            <div class="team-member">
+                <div class="member-avatar">🚀</div>
+                <h4 class="member-name">Product Pat</h4>
+                <p class="member-role">Feature Factory</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="vibe-awards-clio.html" class="footer-link">Home</a>
+                <a href="about.html" class="footer-link">About</a>
+                <a href="awards.html" class="footer-link">Awards</a>
+                <a href="winners.html" class="footer-link">Winners</a>
+                <a href="submit.html" class="footer-link">Submit</a>
+                <a href="contact.html" class="footer-link">Contact</a>
+            </div>
+            <div class="copyright">
+                <p>© 2024 The Vibe Awards. All vibes reserved.</p>
+                <p style="margin-top: 10px; color: #444;">An equal opportunity employer (until the AI takes over HR too)</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

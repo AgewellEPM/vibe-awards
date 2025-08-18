@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Roadmap - The Vibe Awards</title>
+    <link rel="stylesheet" href="css/mobile-responsive.css">
+    <link rel="stylesheet" href="css/ultra-responsive.css">
+    <link rel="stylesheet" href="css/apple-magic.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-black: #1d1d1f;
+            --apple-white: #f5f5f7;
+            --apple-gray: #86868b;
+            --apple-blue: #0071e3;
+            --apple-green: #30d158;
+            --apple-purple: #bf5af2;
+            --apple-orange: #ff9f0a;
+            --apple-red: #ff375f;
+            --apple-yellow: #ffd60a;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', sans-serif;
+            background: #000000;
+            color: var(--apple-white);
+            line-height: 1.47059;
+            font-weight: 400;
+            letter-spacing: -0.022em;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(29, 29, 31, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 9999;
+            border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: 0 22px;
+            height: 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 21px;
+            font-weight: 600;
+            color: var(--apple-white);
+            text-decoration: none;
+            letter-spacing: -0.015em;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--apple-white);
+        }
+
+        /* Hero */
+        .hero {
+            padding-top: 120px;
+            padding-bottom: 80px;
+            text-align: center;
+            background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(191, 90, 242, 0.3), transparent);
+        }
+
+        .hero-label {
+            font-size: 17px;
+            line-height: 1.23536;
+            font-weight: 600;
+            letter-spacing: -0.022em;
+            color: var(--apple-purple);
+            margin-bottom: 8px;
+        }
+
+        .hero-headline {
+            font-size: 96px;
+            line-height: 1.0625;
+            font-weight: 700;
+            letter-spacing: -0.015em;
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subhead {
+            font-size: 28px;
+            line-height: 1.14286;
+            font-weight: 400;
+            letter-spacing: 0.007em;
+            color: var(--apple-gray);
+            max-width: 820px;
+            margin: 0 auto;
+        }
+
+        /* Timeline */
+        .timeline-section {
+            padding: 100px 22px;
+            max-width: 1024px;
+            margin: 0 auto;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--apple-purple), var(--apple-blue));
+            transform: translateX(-50%);
+        }
+
+        /* Phase Cards */
+        .phase {
+            position: relative;
+            margin: 80px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .phase:nth-child(even) {
+            direction: rtl;
+        }
+
+        .phase:nth-child(even) > * {
+            direction: ltr;
+        }
+
+        .phase-marker {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            z-index: 2;
+            box-shadow: 0 0 40px rgba(191, 90, 242, 0.6);
+        }
+
+        .phase-content {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .phase-content:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 30px 60px rgba(191, 90, 242, 0.2);
+        }
+
+        .phase-status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 980px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 16px;
+        }
+
+        .status-live {
+            background: rgba(48, 209, 88, 0.2);
+            color: var(--apple-green);
+            border: 1px solid var(--apple-green);
+        }
+
+        .status-soon {
+            background: rgba(255, 159, 10, 0.2);
+            color: var(--apple-orange);
+            border: 1px solid var(--apple-orange);
+        }
+
+        .status-future {
+            background: rgba(191, 90, 242, 0.2);
+            color: var(--apple-purple);
+            border: 1px solid var(--apple-purple);
+        }
+
+        .phase-quarter {
+            font-size: 14px;
+            color: var(--apple-gray);
+            margin-bottom: 8px;
+        }
+
+        .phase-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .phase-description {
+            font-size: 17px;
+            line-height: 1.47059;
+            color: var(--apple-gray);
+            margin-bottom: 24px;
+        }
+
+        .phase-features {
+            list-style: none;
+        }
+
+        .phase-feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .phase-feature::before {
+            content: '✓';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, var(--apple-green), #00c851);
+            color: white;
+            border-radius: 50%;
+            margin-right: 12px;
+            text-align: center;
+            line-height: 20px;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .phase-feature.pending::before {
+            content: '○';
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .phase-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        /* Metrics Section */
+        .metrics-section {
+            padding: 100px 22px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .metrics-container {
+            max-width: 1024px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .metrics-headline {
+            font-size: 64px;
+            line-height: 1.0625;
+            font-weight: 700;
+            letter-spacing: -0.009em;
+            margin-bottom: 60px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+        }
+
+        .metric-card {
+            text-align: center;
+        }
+
+        .metric-number {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(180deg, var(--apple-purple), var(--apple-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            font-size: 14px;
+            color: var(--apple-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        /* Coming Soon Section */
+        .coming-soon {
+            padding: 100px 22px;
+            text-align: center;
+        }
+
+        .coming-soon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1024px;
+            margin: 60px auto;
+        }
+
+        .coming-card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .coming-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .coming-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .coming-title {
+            font-size: 21px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .coming-date {
+            font-size: 14px;
+            color: var(--apple-orange);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 120px 22px;
+            text-align: center;
+            background: radial-gradient(ellipse 80% 50% at 50% 50%, rgba(191, 90, 242, 0.2), transparent);
+        }
+
+        .cta-headline {
+            font-size: 64px;
+            line-height: 1.0625;
+            font-weight: 700;
+            letter-spacing: -0.009em;
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .btn {
+            display: inline-block;
+            font-size: 17px;
+            line-height: 1.17648;
+            font-weight: 400;
+            padding: 12px 32px;
+            border-radius: 980px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--apple-purple);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #a845d8;
+        }
+
+        .btn-secondary {
+            color: var(--apple-purple);
+            border: 1px solid var(--apple-purple);
+        }
+
+        .btn-secondary:hover {
+            background: var(--apple-purple);
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 1068px) {
+            .hero-headline {
+                font-size: 64px;
+            }
+
+            .timeline::before {
+                left: 40px;
+            }
+
+            .phase {
+                grid-template-columns: 1fr;
+                margin-left: 60px;
+            }
+
+            .phase:nth-child(even) {
+                direction: ltr;
+            }
+
+            .phase-marker {
+                left: 40px;
+            }
+
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 734px) {
+            .hero-headline {
+                font-size: 48px;
+            }
+
+            .phase-title {
+                font-size: 24px;
+            }
+
+            .metrics-headline {
+                font-size: 40px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">The Vibe Awards</a>
+            <div class="nav-menu">
+                <a href="competition.html" class="nav-link">Competition</a>
+                <a href="challenge-mode.html" class="nav-link">Challenges</a>
+                <a href="roadmap.html" class="nav-link" style="color: var(--apple-white);">Roadmap</a>
+                <a href="vibe-manifesto.html" class="nav-link">Manifesto</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-label">The Master Plan</div>
+        <h1 class="hero-headline">Roadmap to Dominance</h1>
+        <p class="hero-subhead">From underground movement to global phenomenon.<br>This is how we build the future of creative competition.</p>
+    </section>
+
+    <!-- Timeline -->
+    <section class="timeline-section">
+        <div class="timeline">
+            <!-- Phase 1 -->
+            <div class="phase">
+                <div class="phase-marker">1</div>
+                <div class="phase-content">
+                    <span class="phase-status status-live">LIVE NOW</span>
+                    <div class="phase-quarter">Q1 2024</div>
+                    <h3 class="phase-title">Build the Culture</h3>
+                    <p class="phase-description">Create the legends before the ceremony. Launch the platform, host battles, let unknowns become heroes.</p>
+                    <ul class="phase-features">
+                        <li class="phase-feature">Launch Vibe Wars competition platform</li>
+                        <li class="phase-feature">Weekly Flash Fire challenges (24h)</li>
+                        <li class="phase-feature">Monthly Long Cook marathons (30d)</li>
+                        <li class="phase-feature">Live streaming integration</li>
+                        <li class="phase-feature pending">10,000 active builders</li>
+                    </ul>
+                </div>
+                <div class="phase-placeholder"></div>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="phase">
+                <div class="phase-marker">2</div>
+                <div class="phase-placeholder"></div>
+                <div class="phase-content">
+                    <span class="phase-status status-soon">COMING SOON</span>
+                    <div class="phase-quarter">Q2 2024</div>
+                    <h3 class="phase-title">Scale the Movement</h3>
+                    <p class="phase-description">Expand globally. Partner with AI labs. Create regional championships. Build the ecosystem.</p>
+                    <ul class="phase-features">
+                        <li class="phase-feature pending">Partnership with OpenAI, Anthropic, Google</li>
+                        <li class="phase-feature pending">$100K prize pools</li>
+                        <li class="phase-feature pending">Regional Vibe Wars (US, EU, Asia)</li>
+                        <li class="phase-feature pending">Team matching algorithm</li>
+                        <li class="phase-feature pending">50,000 active builders</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Phase 3 -->
+            <div class="phase">
+                <div class="phase-marker">3</div>
+                <div class="phase-content">
+                    <span class="phase-status status-future">Q3 2024</span>
+                    <div class="phase-quarter">Q3 2024</div>
+                    <h3 class="phase-title">Launch the Awards</h3>
+                    <p class="phase-description">The ceremony that changes everything. Live event, global streaming, legendary moments.</p>
+                    <ul class="phase-features">
+                        <li class="phase-feature pending">Annual Vibe Awards ceremony</li>
+                        <li class="phase-feature pending">Best AI Music Video category</li>
+                        <li class="phase-feature pending">Most Human AI Moment award</li>
+                        <li class="phase-feature pending">Live performances & demos</li>
+                        <li class="phase-feature pending">1M+ viewers worldwide</li>
+                    </ul>
+                </div>
+                <div class="phase-placeholder"></div>
+            </div>
+
+            <!-- Phase 4 -->
+            <div class="phase">
+                <div class="phase-marker">4</div>
+                <div class="phase-placeholder"></div>
+                <div class="phase-content">
+                    <span class="phase-status status-future">Q4 2024</span>
+                    <div class="phase-quarter">Q4 2024</div>
+                    <h3 class="phase-title">Build the Empire</h3>
+                    <p class="phase-description">Transform winners into unicorns. Launch accelerator. Create the new creative economy.</p>
+                    <ul class="phase-features">
+                        <li class="phase-feature pending">Vibe Accelerator for winners</li>
+                        <li class="phase-feature pending">$10M seed fund</li>
+                        <li class="phase-feature pending">Corporate sponsorships</li>
+                        <li class="phase-feature pending">Vibe Studios production house</li>
+                        <li class="phase-feature pending">3 unicorns born</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Phase 5 -->
+            <div class="phase">
+                <div class="phase-marker">5</div>
+                <div class="phase-content">
+                    <span class="phase-status status-future">2025</span>
+                    <div class="phase-quarter">2025 and Beyond</div>
+                    <h3 class="phase-title">Global Domination</h3>
+                    <p class="phase-description">The new standard for creative competition. Where every builder dreams of competing.</p>
+                    <ul class="phase-features">
+                        <li class="phase-feature pending">Vibe Wars in 50 countries</li>
+                        <li class="phase-feature pending">$100M in prizes awarded</li>
+                        <li class="phase-feature pending">1M active builders</li>
+                        <li class="phase-feature pending">Vibe Network streaming platform</li>
+                        <li class="phase-feature pending">IPO or acquisition</li>
+                    </ul>
+                </div>
+                <div class="phase-placeholder"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics -->
+    <section class="metrics-section">
+        <div class="metrics-container">
+            <h2 class="metrics-headline">Current Momentum</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-number">487</div>
+                    <div class="metric-label">Active Teams</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">2,847</div>
+                    <div class="metric-label">Builders</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">$50K</div>
+                    <div class="metric-label">Prizes This Month</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">24/7</div>
+                    <div class="metric-label">Live Battles</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Coming Soon -->
+    <section class="coming-soon">
+        <h2 class="metrics-headline">Coming Soon</h2>
+        <div class="coming-soon-grid">
+            <div class="coming-card">
+                <div class="coming-icon">🤖</div>
+                <h3 class="coming-title">AI Judge Panel</h3>
+                <div class="coming-date">March 2024</div>
+            </div>
+            <div class="coming-card">
+                <div class="coming-icon">🎮</div>
+                <h3 class="coming-title">VR Competition Mode</h3>
+                <div class="coming-date">April 2024</div>
+            </div>
+            <div class="coming-card">
+                <div class="coming-icon">🌍</div>
+                <h3 class="coming-title">Global Expansion</h3>
+                <div class="coming-date">May 2024</div>
+            </div>
+            <div class="coming-card">
+                <div class="coming-icon">💰</div>
+                <h3 class="coming-title">Vibe Token Launch</h3>
+                <div class="coming-date">June 2024</div>
+            </div>
+            <div class="coming-card">
+                <div class="coming-icon">🏆</div>
+                <h3 class="coming-title">First Annual Awards</h3>
+                <div class="coming-date">September 2024</div>
+            </div>
+            <div class="coming-card">
+                <div class="coming-icon">🦄</div>
+                <h3 class="coming-title">Accelerator Program</h3>
+                <div class="coming-date">Q4 2024</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <h2 class="cta-headline">Be Part of History</h2>
+        <p style="font-size: 21px; color: var(--apple-gray); margin-bottom: 40px;">
+            Join now and become one of the founding builders of The Vibe Wars.
+        </p>
+        <div class="cta-buttons">
+            <a href="competition.html" class="btn btn-primary">Start Building</a>
+            <a href="vibe-manifesto.html" class="btn btn-secondary">Read Manifesto</a>
+        </div>
+    </section>
+
+    <script>
+        // Animate metrics on scroll
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateValue(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.metric-number').forEach(el => {
+            observer.observe(el);
+        });
+
+        function animateValue(element) {
+            const text = element.textContent;
+            const isPercentage = text.includes('%');
+            const isDollar = text.includes('$');
+            const is247 = text.includes('24/7');
+            
+            if (is247) return; // Don't animate 24/7
+            
+            let endValue = parseInt(text.replace(/[^0-9]/g, ''));
+            if (isDollar && text.includes('K')) {
+                endValue = endValue * 1000;
+            }
+            
+            const duration = 1500;
+            const startTime = performance.now();
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                const currentValue = Math.floor(progress * endValue);
+                
+                if (isDollar) {
+                    if (endValue >= 1000) {
+                        element.textContent = '$' + (currentValue / 1000) + 'K';
+                    } else {
+                        element.textContent = '$' + currentValue;
+                    }
+                } else {
+                    element.textContent = currentValue.toLocaleString();
+                }
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+
+        // Add scroll animations to phase cards
+        const phaseObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, {
+            threshold: 0.2,
+            rootMargin: '0px'
+        });
+
+        document.querySelectorAll('.phase-content').forEach((el, index) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = `all 0.6s ease ${index * 0.1}s`;
+            phaseObserver.observe(el);
+        });
+    </script>
+</body>
+</html>

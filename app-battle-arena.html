@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Battle Arena - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #D4AF37;
+            --silver: #C0C0C0;
+            --bronze: #CD7F32;
+            --black: #000000;
+            --white: #FFFFFF;
+            --red: #ff4444;
+            --blue: #4444ff;
+            --green: #44ff44;
+            --purple: #ff44ff;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+            color: var(--white);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 20px 40px;
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--gold), #B8941F);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--gold);
+        }
+
+        .nav-link.active {
+            color: var(--gold);
+        }
+
+        /* Battle Arena Header */
+        .arena-header {
+            margin-top: 100px;
+            padding: 60px 40px;
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.1), transparent);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .arena-title {
+            font-size: 5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--gold), var(--red), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 2s infinite;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .arena-subtitle {
+            font-size: 1.5rem;
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Daily Battle Countdown */
+        .countdown-section {
+            text-align: center;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border-top: 1px solid var(--gold);
+            border-bottom: 1px solid var(--gold);
+        }
+
+        .countdown-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--gold);
+        }
+
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .time-unit {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.2));
+            border: 2px solid var(--gold);
+            border-radius: 10px;
+            padding: 20px;
+            min-width: 100px;
+        }
+
+        .time-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--gold);
+        }
+
+        .time-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 5px;
+        }
+
+        /* Current Battle */
+        .battle-container {
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 40px;
+        }
+
+        .battle-stage {
+            background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.05), transparent);
+            border: 3px solid var(--gold);
+            border-radius: 30px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .battle-stage::before {
+            content: '⚔️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 100px;
+            opacity: 0.1;
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .battle-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .battle-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .battle-category {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 10px;
+        }
+
+        .battle-description {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* App Fighters */
+        .fighters-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 40px;
+            align-items: stretch;
+            margin: 40px 0;
+        }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.3);
+        }
+
+        .app-card.team-red {
+            background: linear-gradient(135deg, rgba(255, 68, 68, 0.1), transparent);
+            border-color: var(--red);
+        }
+
+        .app-card.team-blue {
+            background: linear-gradient(135deg, rgba(68, 68, 255, 0.1), transparent);
+            border-color: var(--blue);
+        }
+
+        .app-screenshot {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-screenshot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .app-name {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .app-developer {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 10px;
+        }
+
+        .app-category {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid var(--gold);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .app-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--gold);
+        }
+
+        .stat-name {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 5px;
+        }
+
+        .app-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 15px;
+            flex-grow: 1;
+        }
+
+        .vs-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--gold);
+            text-shadow: 0 0 20px var(--gold);
+            animation: pulse 1s infinite;
+        }
+
+        /* Voting Section */
+        .voting-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        .vote-button {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            margin: 10px 0;
+        }
+
+        .vote-red {
+            background: linear-gradient(135deg, var(--red), #cc0000);
+            color: white;
+        }
+
+        .vote-blue {
+            background: linear-gradient(135deg, var(--blue), #0000cc);
+            color: white;
+        }
+
+        .vote-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .vote-count {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .vote-bar {
+            flex: 1;
+            height: 40px;
+            background: linear-gradient(90deg, var(--red) 0%, var(--red) 45%, transparent 45%, transparent 55%, var(--blue) 55%, var(--blue) 100%);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vote-fill {
+            position: absolute;
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+
+        .vote-fill.red {
+            background: var(--red);
+            left: 0;
+        }
+
+        .vote-fill.blue {
+            background: var(--blue);
+            right: 0;
+        }
+
+        .vote-percentage {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        /* App Gallery */
+        .gallery-section {
+            max-width: 1400px;
+            margin: 80px auto;
+            padding: 0 40px;
+        }
+
+        .gallery-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--gold);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .gallery-app {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .gallery-app:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+        }
+
+        .gallery-app-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--gold), #B8941F);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .gallery-app-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .gallery-app-dev {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 10px;
+        }
+
+        .gallery-app-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 0.9rem;
+            color: var(--gold);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 60px 40px 30px;
+            text-align: center;
+            border-top: 1px solid var(--gold);
+        }
+
+        @media (max-width: 900px) {
+            .fighters-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .vs-divider {
+                transform: rotate(90deg);
+                margin: 20px 0;
+            }
+        }
+    </style>
+    <!-- Modal System -->
+    <script src="js/vibe-modal-system.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">🏆 The Vibe Awards</div>
+            <ul class="nav-menu">
+                <li><a href="vibe-awards-clio.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="awards.html" class="nav-link">Awards</a></li>
+                <li><a href="winners.html" class="nav-link">Winners</a></li>
+                <li><a href="app-battle-arena.html" class="nav-link active">App Battle</a></li>
+                <li><a href="submit.html" class="nav-link">Submit</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Arena Header -->
+    <div class="arena-header">
+        <h1 class="arena-title">⚔️ APP BATTLE ARENA ⚔️</h1>
+        <p class="arena-subtitle">Daily App Showdowns - Vote for the Best Creation!</p>
+    </div>
+
+    <!-- Countdown Timer -->
+    <div class="countdown-section">
+        <h2 class="countdown-title">⏰ Next Battle In:</h2>
+        <div class="countdown-timer">
+            <div class="time-unit">
+                <div class="time-number" id="hours">23</div>
+                <div class="time-label">HOURS</div>
+            </div>
+            <div class="time-unit">
+                <div class="time-number" id="minutes">47</div>
+                <div class="time-label">MINUTES</div>
+            </div>
+            <div class="time-unit">
+                <div class="time-number" id="seconds">32</div>
+                <div class="time-label">SECONDS</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Current Battle -->
+    <div class="battle-container">
+        <div class="battle-stage">
+            <div class="battle-header">
+                <h2 class="battle-title">TODAY'S EPIC SHOWDOWN</h2>
+                <h3 class="battle-category">Category: Best AI-Powered Healthcare App</h3>
+                <p class="battle-description">Which app better solves real-world problems? You decide!</p>
+            </div>
+
+            <div class="fighters-grid">
+                <!-- App 1 -->
+                <div class="app-card team-red" onclick="vote('red')">
+                    <div class="app-screenshot">
+                        <span>📱</span>
+                    </div>
+                    <h3 class="app-name">TinkyBink AAC</h3>
+                    <p class="app-developer">by Luke Kist</p>
+                    <span class="app-category">Healthcare/Education</span>
+                    <p class="app-description">
+                        Revolutionary AI-powered AAC platform that transforms therapy through predictive analytics, 
+                        automated documentation, and real-time family engagement. Built with 63 modules in one conversation.
+                    </p>
+                    <div class="app-stats">
+                        <div class="stat">
+                            <div class="stat-value">147</div>
+                            <div class="stat-name">Wins</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">4.9⭐</div>
+                            <div class="stat-name">Rating</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">89%</div>
+                            <div class="stat-name">Win Rate</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VS Divider -->
+                <div class="vs-divider">VS</div>
+
+                <!-- App 2 -->
+                <div class="app-card team-blue" onclick="vote('blue')">
+                    <div class="app-screenshot">
+                        <span>🎮</span>
+                    </div>
+                    <h3 class="app-name">NeuroLink Trainer</h3>
+                    <p class="app-developer">by Sarah Chen</p>
+                    <span class="app-category">Mental Health/Gaming</span>
+                    <p class="app-description">
+                        Gamified cognitive training app using AI to adapt difficulty in real-time. 
+                        Helps patients with neurological conditions improve motor skills through engaging mini-games.
+                    </p>
+                    <div class="app-stats">
+                        <div class="stat">
+                            <div class="stat-value">98</div>
+                            <div class="stat-name">Wins</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">4.7⭐</div>
+                            <div class="stat-name">Rating</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">67%</div>
+                            <div class="stat-name">Win Rate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Voting Section -->
+            <div class="voting-section">
+                <h3 style="text-align: center; font-size: 1.8rem; margin-bottom: 20px; color: var(--gold);">
+                    🗳️ CAST YOUR VOTE
+                </h3>
+                
+                <div class="vote-count">
+                    <div class="vote-percentage" style="color: var(--red);">
+                        <span id="redVotes">58</span>%
+                    </div>
+                    <div class="vote-percentage" style="color: var(--blue);">
+                        <span id="blueVotes">42</span>%
+                    </div>
+                </div>
+
+                <div class="vote-bar">
+                    <div class="vote-fill red" id="redBar" style="width: 58%;"></div>
+                    <div class="vote-fill blue" id="blueBar" style="width: 42%;"></div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px;">
+                    <button class="vote-button vote-red" onclick="vote('red')">
+                        🔴 Vote TinkyBink
+                    </button>
+                    <button class="vote-button vote-blue" onclick="vote('blue')">
+                        🔵 Vote NeuroLink
+                    </button>
+                </div>
+
+                <p style="text-align: center; margin-top: 20px; color: rgba(255, 255, 255, 0.6);">
+                    Total Votes: <span id="totalVotes">18,432</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Gallery -->
+    <div class="gallery-section">
+        <h2 class="gallery-title">🚀 SUBMITTED APPS IN THE ARENA</h2>
+        <div class="gallery-grid">
+            <div class="gallery-app">
+                <div class="gallery-app-icon">🏥</div>
+                <div class="gallery-app-name">TinkyBink AAC</div>
+                <div class="gallery-app-dev">Luke Kist</div>
+                <div class="gallery-app-stats">
+                    <span>147 Wins</span>
+                    <span>89% Win Rate</span>
+                </div>
+            </div>
+            <div class="gallery-app">
+                <div class="gallery-app-icon">🧠</div>
+                <div class="gallery-app-name">NeuroLink Trainer</div>
+                <div class="gallery-app-dev">Sarah Chen</div>
+                <div class="gallery-app-stats">
+                    <span>98 Wins</span>
+                    <span>67% Win Rate</span>
+                </div>
+            </div>
+            <div class="gallery-app">
+                <div class="gallery-app-icon">💰</div>
+                <div class="gallery-app-name">CryptoVibe Wallet</div>
+                <div class="gallery-app-dev">Alex Kumar</div>
+                <div class="gallery-app-stats">
+                    <span>76 Wins</span>
+                    <span>71% Win Rate</span>
+                </div>
+            </div>
+            <div class="gallery-app">
+                <div class="gallery-app-icon">🎨</div>
+                <div class="gallery-app-name">AI Canvas Pro</div>
+                <div class="gallery-app-dev">Maria Rodriguez</div>
+                <div class="gallery-app-stats">
+                    <span>82 Wins</span>
+                    <span>75% Win Rate</span>
+                </div>
+            </div>
+            <div class="gallery-app">
+                <div class="gallery-app-icon">📚</div>
+                <div class="gallery-app-name">StudyBuddy AI</div>
+                <div class="gallery-app-dev">James Park</div>
+                <div class="gallery-app-stats">
+                    <span>64 Wins</span>
+                    <span>58% Win Rate</span>
+                </div>
+            </div>
+            <div class="gallery-app">
+                <div class="gallery-app-icon">🍔</div>
+                <div class="gallery-app-name">FoodieAI</div>
+                <div class="gallery-app-dev">Emma Wilson</div>
+                <div class="gallery-app-stats">
+                    <span>91 Wins</span>
+                    <span>82% Win Rate</span>
+                </div>
+            </div>
+            <div class="gallery-app">
+                <div class="gallery-app-icon">🏃</div>
+                <div class="gallery-app-name">FitnessPal Plus</div>
+                <div class="gallery-app-dev">Mike Johnson</div>
+                <div class="gallery-app-stats">
+                    <span>55 Wins</span>
+                    <span>61% Win Rate</span>
+                </div>
+            </div>
+            <div class="gallery-app">
+                <div class="gallery-app-icon">🎵</div>
+                <div class="gallery-app-name">BeatMaker AI</div>
+                <div class="gallery-app-dev">DJ TechFlow</div>
+                <div class="gallery-app-stats">
+                    <span>103 Wins</span>
+                    <span>78% Win Rate</span>
+                </div>
+            </div>
+            <div class="gallery-app">
+                <div class="gallery-app-icon">🌍</div>
+                <div class="gallery-app-name">EcoTracker</div>
+                <div class="gallery-app-dev">Green Team</div>
+                <div class="gallery-app-stats">
+                    <span>45 Wins</span>
+                    <span>52% Win Rate</span>
+                </div>
+            </div>
+            <div class="gallery-app">
+                <div class="gallery-app-icon">🚗</div>
+                <div class="gallery-app-name">AutoPilot Assistant</div>
+                <div class="gallery-app-dev">Tesla Fan</div>
+                <div class="gallery-app-stats">
+                    <span>88 Wins</span>
+                    <span>73% Win Rate</span>
+                </div>
+            </div>
+            <div class="gallery-app">
+                <div class="gallery-app-icon">🏠</div>
+                <div class="gallery-app-name">SmartHome Hub</div>
+                <div class="gallery-app-dev">IoT Innovators</div>
+                <div class="gallery-app-stats">
+                    <span>72 Wins</span>
+                    <span>69% Win Rate</span>
+                </div>
+            </div>
+            <div class="gallery-app">
+                <div class="gallery-app-icon">📈</div>
+                <div class="gallery-app-name">StockVibe Pro</div>
+                <div class="gallery-app-dev">Wall Street Coder</div>
+                <div class="gallery-app-stats">
+                    <span>119 Wins</span>
+                    <span>85% Win Rate</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 The Vibe Awards - App Battle Arena</p>
+        <p style="margin-top: 10px; color: #666;">Where apps built with AI compete for glory</p>
+    </footer>
+
+    <script>
+        // Countdown Timer
+        function updateCountdown() {
+            const now = new Date();
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            
+            const diff = tomorrow - now;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+        
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Voting System
+        let redVoteCount = 10732;
+        let blueVoteCount = 7700;
+        let hasVoted = localStorage.getItem('hasVoted_app_today') === 'true';
+
+        function updateVoteDisplay() {
+            const total = redVoteCount + blueVoteCount;
+            const redPercent = Math.round((redVoteCount / total) * 100);
+            const bluePercent = Math.round((blueVoteCount / total) * 100);
+            
+            document.getElementById('redVotes').textContent = redPercent;
+            document.getElementById('blueVotes').textContent = bluePercent;
+            document.getElementById('redBar').style.width = redPercent + '%';
+            document.getElementById('blueBar').style.width = bluePercent + '%';
+            document.getElementById('totalVotes').textContent = total.toLocaleString();
+        }
+
+        function vote(team) {
+            if (hasVoted) {
+                vibeInfo('Already Voted', 'You have already voted in today\'s app battle! Come back tomorrow for the next match.');
+                return;
+            }
+            
+            if (team === 'red') {
+                redVoteCount++;
+            } else {
+                blueVoteCount++;
+            }
+            
+            hasVoted = true;
+            localStorage.setItem('hasVoted_app_today', 'true');
+            updateVoteDisplay();
+            
+            // Animate the vote
+            const app = document.querySelector(`.team-${team}`);
+            app.style.transform = 'scale(1.1)';
+            app.style.boxShadow = `0 0 50px var(--${team})`;
+            
+            setTimeout(() => {
+                app.style.transform = '';
+                app.style.boxShadow = '';
+            }, 500);
+            
+            vibeSuccess('Vote Cast!', `You voted for ${team === 'red' ? 'TinkyBink AAC' : 'NeuroLink Trainer'}. Thanks for participating in today's app battle!`);
+        }
+
+        // Reset votes at midnight
+        function checkNewDay() {
+            const lastVoteDate = localStorage.getItem('lastAppVoteDate');
+            const today = new Date().toDateString();
+            
+            if (lastVoteDate !== today) {
+                localStorage.removeItem('hasVoted_app_today');
+                localStorage.setItem('lastAppVoteDate', today);
+                hasVoted = false;
+            }
+        }
+
+        checkNewDay();
+        updateVoteDisplay();
+
+        // Add some random vote simulation
+        setInterval(() => {
+            if (Math.random() > 0.5) {
+                redVoteCount += Math.floor(Math.random() * 3) + 1;
+            } else {
+                blueVoteCount += Math.floor(Math.random() * 3) + 1;
+            }
+            updateVoteDisplay();
+        }, 5000);
+    </script>
+</body>
+</html>

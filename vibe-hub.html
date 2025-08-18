@@ -1,0 +1,1842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>VibeHub - Community Layer</title>
+    <link rel="stylesheet" href="css/mobile-responsive.css">
+    <link rel="stylesheet" href="css/ultra-responsive.css">
+    <link rel="stylesheet" href="css/typography.css">
+    <link rel="stylesheet" href="css/brand-system.css">
+    <link rel="stylesheet" href="css/apple-magic.css">
+    <script src="js/accessibility.js"></script>
+    <script src="js/performance.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Semantic Colors */
+            --surface-primary: rgba(255, 255, 255, 0.03);
+            --surface-secondary: rgba(255, 255, 255, 0.06);
+            --surface-tertiary: rgba(255, 255, 255, 0.09);
+            --border-primary: rgba(255, 255, 255, 0.08);
+            --border-secondary: rgba(255, 255, 255, 0.15);
+            --text-primary: #F5F5F7;
+            --text-secondary: rgba(245, 245, 247, 0.8);
+            --text-tertiary: rgba(245, 245, 247, 0.6);
+
+            /* Brand Colors */
+            --accent-primary: #0071E3;
+            --accent-secondary: #007AFF;
+            --success: #30D158;
+            --warning: #FF9F0A;
+            --danger: #FF375F;
+            --info: #5AC8FA;
+            --purple: #BF5AF2;
+            --indigo: #5856D6;
+            --green: #00C896;
+            --pink: #FF69B4;
+            --orange: #FF6B35;
+            --teal: #00D4AA;
+
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--accent-primary), var(--purple));
+            --gradient-secondary: linear-gradient(135deg, var(--purple), var(--indigo));
+            --gradient-success: linear-gradient(135deg, var(--success), var(--green));
+            --gradient-rainbow: linear-gradient(135deg, var(--pink), var(--purple), var(--indigo), var(--accent-primary), var(--teal));
+            --gradient-community: linear-gradient(135deg, var(--purple), var(--pink), var(--orange));
+
+            /* Transitions */
+            --transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --transition-smooth: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
+            --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 16px 64px rgba(0, 0, 0, 0.25);
+            --shadow-glow: 0 0 32px rgba(191, 90, 242, 0.4);
+
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+            background: #0A0A0A;
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 80%, rgba(191, 90, 242, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 105, 180, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(0, 113, 227, 0.1) 0%, transparent 70%),
+                        radial-gradient(circle at 60% 60%, rgba(0, 212, 170, 0.08) 0%, transparent 60%);
+            animation: backgroundShift 30s ease-in-out infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% {
+                transform: rotate(0deg) scale(1);
+                filter: hue-rotate(0deg);
+            }
+            25% {
+                transform: rotate(90deg) scale(1.05);
+                filter: hue-rotate(30deg);
+            }
+            50% {
+                transform: rotate(180deg) scale(1.1);
+                filter: hue-rotate(60deg);
+            }
+            75% {
+                transform: rotate(270deg) scale(1.05);
+                filter: hue-rotate(90deg);
+            }
+        }
+
+        /* Header */
+        .header {
+            background: var(--surface-primary);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: clamp(840px, 87.5rem, 1400px);
+            margin: 0 auto;
+            padding: var(--space-lg) var(--space-xl);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .brand-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-community);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-3xl);
+            box-shadow: var(--shadow-glow);
+            animation: iconFloat 8s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+            25% { transform: translateY(-6px) rotate(5deg) scale(1.05); }
+            50% { transform: translateY(-8px) rotate(-3deg) scale(1.1); }
+            75% { transform: translateY(-4px) rotate(3deg) scale(1.05); }
+        }
+
+        .brand-text h1 {
+            font-size: var(--fs-3xl);
+            font-weight: 800;
+            margin-bottom: var(--space-xs);
+            background: var(--gradient-community);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text p {
+            color: var(--text-tertiary);
+            font-size: var(--fs-base);
+        }
+
+        .header-nav {
+            display: flex;
+            gap: var(--space-md);
+            align-items: center;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link,
+        .nav-button {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: var(--fs-sm);
+            transition: color 0.2s ease;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--gap-xs);
+            padding: var(--space-sm) 20px;
+            border-radius: 12px;
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            font-weight: 500;
+        }
+
+        .nav-link:hover,
+        .nav-button:hover {
+            color: var(--text-primary);
+            background: var(--surface-tertiary);
+            border-color: var(--border-secondary);
+            transform: translateY(-2px);
+        }
+
+        .nav-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 200px;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: var(--space-xs) 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .nav-item:hover .nav-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: var(--space-sm) 20px;
+            font-size: var(--fs-sm);
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            color: var(--text-primary);
+            background: var(--surface-secondary);
+        }
+
+        .dropdown-arrow {
+            font-size: var(--fs-xs);
+            transition: transform 0.2s ease;
+        }
+
+        .nav-item:hover .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .nav-cta {
+            background: var(--gradient-community);
+            border: none;
+            color: white;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        /* Search Bar */
+        .search-section {
+            max-width: clamp(840px, 87.5rem, 1400px);
+            margin: 0 auto;
+            padding: var(--space-2xl) var(--space-xl) var(--space-xl);
+        }
+
+        .search-container {
+            position: relative;
+            max-width: clamp(360px, 37.5rem, 600px);
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: var(--space-md) 60px 20px 20px;
+            background: var(--surface-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-size: var(--fs-lg);
+            transition: var(--transition-base);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--purple);
+            box-shadow: 0 0 0 3px rgba(191, 90, 242, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: var(--fs-xl);
+            color: var(--text-tertiary);
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin: var(--space-xl) 0;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: var(--space-sm) 24px;
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 20px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition-base);
+            font-weight: 500;
+        }
+
+        .filter-tab:hover {
+            background: var(--surface-tertiary);
+        }
+
+        .filter-tab.active {
+            background: var(--gradient-community);
+            border: none;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: clamp(840px, 87.5rem, 1400px);
+            margin: 0 auto;
+            padding: 0 var(--space-xl) var(--space-2xl);
+        }
+
+        /* Featured Section */
+        .featured-section {
+            margin-bottom: var(--space-2xl);
+        }
+
+        .section-title {
+            font-size: var(--fs-3xl);
+            font-weight: 700;
+            margin-bottom: var(--space-lg);
+            background: var(--gradient-community);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--space-xl);
+            margin-bottom: var(--space-xl);
+        }
+
+        .hero-project {
+            background: var(--surface-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 20px;
+            padding: var(--space-2xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-project::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-community);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-xs) 12px;
+            background: var(--gradient-community);
+            border-radius: 20px;
+            font-size: var(--fs-xs);
+            font-weight: 600;
+            color: white;
+            margin-bottom: var(--space-md);
+        }
+
+        .hero-title {
+            font-size: var(--fs-3xl);
+            font-weight: 800;
+            margin-bottom: var(--space-md);
+        }
+
+        .hero-description {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
+            line-height: 1.6;
+            font-size: var(--fs-base);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-lg);
+        }
+
+        .hero-stat {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            color: var(--text-tertiary);
+            font-size: var(--fs-sm);
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: var(--space-md);
+        }
+
+        .hero-btn {
+            padding: 14px 28px;
+            border-radius: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .hero-btn.primary {
+            background: linear-gradient(135deg, #007AFF, #BF5AF2);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(191, 90, 242, 0.3);
+        }
+
+        .hero-btn.primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .hero-btn.secondary {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-primary);
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        .hero-btn.primary:hover {
+            box-shadow: 0 8px 25px rgba(191, 90, 242, 0.4);
+        }
+
+        .hero-btn.primary:hover::before {
+            left: 100%;
+        }
+
+        .hero-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .hero-btn:active {
+            transform: scale(0.98);
+            transition: all 0.1s ease;
+        }
+
+        .trending-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .trending-item {
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 20px;
+            padding: 20px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            transform: translateZ(0);
+        }
+
+        .trending-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.08));
+            border-radius: inherit;
+            z-index: -1;
+            transition: all 0.4s ease;
+        }
+
+        .trending-item:hover {
+            background: var(--surface-tertiary);
+            transform: translateY(-4px) scale(1.01);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .trending-item:hover::before {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.12));
+        }
+
+        .trending-rank {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: var(--gradient-community);
+            border-radius: 50%;
+            font-size: var(--fs-xs);
+            font-weight: 700;
+            color: white;
+            margin-bottom: var(--space-sm);
+        }
+
+        .trending-title {
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+            font-size: var(--fs-sm);
+        }
+
+        .trending-author {
+            color: var(--text-tertiary);
+            font-size: var(--fs-xs);
+            margin-bottom: var(--space-xs);
+        }
+
+        .trending-stats {
+            display: flex;
+            gap: var(--space-md);
+            font-size: var(--fs-xs);
+            color: var(--text-tertiary);
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: var(--space-xl);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .project-card {
+            background: var(--surface-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 20px;
+            padding: var(--space-xl);
+            transition: var(--transition-base);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            background: var(--surface-secondary);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .project-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-md);
+        }
+
+        .project-type {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-xs) 8px;
+            background: rgba(191, 90, 242, 0.15);
+            border-radius: 8px;
+            font-size: var(--fs-xs);
+            font-weight: 600;
+            color: var(--purple);
+        }
+
+        .project-menu {
+            color: var(--text-tertiary);
+            cursor: pointer;
+            padding: var(--space-xs);
+            border-radius: 6px;
+            transition: var(--transition-base);
+        }
+
+        .project-menu:hover {
+            background: var(--surface-tertiary);
+            color: var(--text-primary);
+        }
+
+        .project-title {
+            font-size: var(--fs-xl);
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-md);
+            line-height: 1.5;
+            font-size: var(--fs-sm);
+        }
+
+        .project-tags {
+            display: flex;
+            gap: var(--space-xs);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .project-tag {
+            padding: var(--space-xs) 8px;
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 6px;
+            font-size: var(--fs-xs);
+            font-weight: 500;
+            color: var(--text-tertiary);
+        }
+
+        .project-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .project-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .author-avatar {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-community);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-sm);
+            color: white;
+            font-weight: 600;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: var(--fs-sm);
+        }
+
+        .author-handle {
+            color: var(--text-tertiary);
+            font-size: var(--fs-xs);
+        }
+
+        .project-stats {
+            display: flex;
+            gap: var(--space-md);
+            color: var(--text-tertiary);
+            font-size: var(--fs-xs);
+        }
+
+        .project-stat {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: var(--surface-primary);
+            border: 2px dashed var(--border-secondary);
+            border-radius: 20px;
+            padding: var(--space-2xl);
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+            transition: var(--transition-base);
+        }
+
+        .upload-section:hover {
+            border-color: var(--purple);
+            background: var(--surface-secondary);
+        }
+
+        .upload-icon {
+            font-size: var(--fs-4xl);
+            margin-bottom: var(--space-md);
+            background: var(--gradient-community);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .upload-title {
+            font-size: var(--fs-2xl);
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+        }
+
+        .upload-description {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
+        }
+
+        .upload-btn {
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #007AFF, #BF5AF2);
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 4px 15px rgba(191, 90, 242, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(191, 90, 242, 0.4);
+        }
+
+        .upload-btn:hover::before {
+            left: 100%;
+        }
+
+        .upload-btn:active {
+            transform: scale(0.98);
+            transition: all 0.1s ease;
+        }
+
+        /* Load More */
+        .load-more {
+            text-align: center;
+            margin-top: var(--space-2xl);
+        }
+
+        .load-more-btn {
+            padding: var(--space-sm) 32px;
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+
+        .load-more-btn:hover {
+            background: var(--surface-tertiary);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: clamp(720px, 75rem, 1200px)) {
+            .featured-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: clamp(460px, 48rem, 768px)) {
+            .header-content {
+                flex-direction: column;
+                gap: var(--space-md);
+                text-align: center;
+            }
+
+            .search-section {
+                padding: var(--space-xl);
+            }
+
+            .container {
+                padding: 0 var(--space-lg) var(--space-2xl);
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-tabs {
+                justify-content: stretch;
+            }
+
+            .filter-tab {
+                flex: 1;
+                text-align: center;
+            }
+        }
+
+        /* Animation Classes */
+        .animate-in {
+            animation: slideInUp 0.6s ease-out forwards;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Enhanced styling fixes */
+        .hero-button-enhanced {
+            margin-top: var(--space-md);
+            backdrop-filter: blur(10px);
+        }
+
+        .trending-item-enhanced {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .trending-rank-blue {
+            color: var(--apple-blue);
+        }
+
+        .section-title-enhanced {
+            font-size: var(--fs-3xl);
+        }
+        
+        /* Trending section styling */
+        .trending-title-h4 {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-md);
+            font-size: var(--fs-base);
+            font-weight: 600;
+        }
+        
+        .trending-delay-1 { animation-delay: 0.1s; }
+        .trending-delay-2 { animation-delay: 0.2s; }
+        .trending-delay-3 { animation-delay: 0.3s; }
+        .trending-delay-4 { animation-delay: 0.4s; }
+    </style>
+    <!-- Modal System -->
+    <script src="js/vibe-modal-system.js"></script>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-canvas"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-brand">
+                <div class="brand-icon">🌟</div>
+                <div class="brand-text">
+                    <h1>VibeHub</h1>
+                    <p>Community-driven development toolkit</p>
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="nav-item">
+                    <button type="button" class="nav-button">
+                        Getting Started
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="nav-dropdown">
+                        <a href="getting-started.html" class="dropdown-item">Getting Started Hub</a>
+                        <a href="index.html" class="dropdown-item">The Vibe Awards</a>
+                    </div>
+                </div>
+
+                <div class="nav-item">
+                    <button type="button" class="nav-button">
+                        Toolkit Hub
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="nav-dropdown">
+                        <a href="vibe-toolkit.html" class="dropdown-item">Vibe Toolkit</a>
+                        <a href="vibe-hub.html" class="dropdown-item">Vibe Hub Central</a>
+                    </div>
+                </div>
+
+                <div class="nav-item">
+                    <button type="button" class="nav-button">
+                        Profile
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="nav-dropdown">
+                        <a href="profile.html" class="dropdown-item">My Profile</a>
+                        <a href="messages.html" class="dropdown-item">Messages</a>
+                        <a href="directory.html" class="dropdown-item">Directory</a>
+                    </div>
+                </div>
+
+                <div class="nav-item">
+                    <button type="button" class="nav-button">
+                        Competition
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="nav-dropdown">
+                        <a href="apple-magic-battle.html" class="dropdown-item">Battle Arena</a>
+                        <a href="leaderboard.html" class="dropdown-item">Leaderboard</a>
+                        <a href="team-up.html" class="dropdown-item">Team Up</a>
+                    </div>
+                </div>
+
+                <a href="submit-app.html" class="nav-link">Submit App</a>
+                <a href="signup.html" class="nav-link nav-cta">Sign Up</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Search Section -->
+    <section role="region" class="search-section">
+        <div class="search-container container-fluid">
+            <input type="text" class="search-input" placeholder="Search projects, themes, and components..." aria-label="Search projects, themes, and components...">
+            <div class="search-icon">🔍</div>
+        </div>
+
+        <div class="filter-tabs">
+            <div class="filter-tab active" data-filter="all">All Projects</div>
+            <div class="filter-tab" data-filter="templates">Templates</div>
+            <div class="filter-tab" data-filter="themes">Themes</div>
+            <div class="filter-tab" data-filter="components">Components</div>
+            <div class="filter-tab" data-filter="tools">Tools</div>
+            <div class="filter-tab" data-filter="tutorials">Tutorials</div>
+        </div>
+    </section>
+
+    <!-- Main Container -->
+    <div class="container container-fluid">
+        <!-- Featured Section -->
+        <section role="region" class="featured-section">
+            <h2 class="section-title section-title-enhanced">
+                <span>🔥</span>
+                Featured This Week
+            </h2>
+
+            <div class="featured-grid ultra-grid-responsive">
+                <div class="hero-project animate-in">
+                    <div class="hero-badge">
+                        <span>⭐</span>
+                        <span>Featured</span>
+                    </div>
+                    <h3 class="hero-title">AI-Powered Dashboard Starter</h3>
+                    <p class="hero-description">
+                        A complete Next.js dashboard template with AI integration, real-time analytics, and modern design patterns.
+                        Includes authentication, database setup, and deployment configurations for all three modes.
+                    </p>
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <span>⭐</span>
+                            <span>2.4k stars</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span>🍴</span>
+                            <span>487 forks</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span>📦</span>
+                            <span>15k downloads</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span>🏷️</span>
+                            <span>Next.js, AI, Dashboard</span>
+                        </div>
+                    </div>
+                    <div class="hero-actions">
+                        <a href="#" class="hero-btn primary btn-fluid">Use Template</a>
+                        <a href="#" class="hero-btn secondary btn-fluid">View Source</a>
+                    </div>
+                </div>
+
+                <div class="trending-sidebar">
+                    <h4 class="trending-title-h4">🔥 Trending Now</h4>
+
+                    <div class="trending-item animate-in trending-delay-1">
+                        <div class="trending-rank">1</div>
+                        <div class="trending-title">Minimal Portfolio Theme</div>
+                        <div class="trending-author">by @designpro</div>
+                        <div class="trending-stats">
+                            <span>⭐ 892</span>
+                            <span>📦 3.2k</span>
+                        </div>
+                    </div>
+
+                    <div class="trending-item animate-in trending-delay-2">
+                        <div class="trending-rank">2</div>
+                        <div class="trending-title">SaaS Landing Components</div>
+                        <div class="trending-author">by @componentlabs</div>
+                        <div class="trending-stats">
+                            <span>⭐ 756</span>
+                            <span>📦 2.8k</span>
+                        </div>
+                    </div>
+
+                    <div class="trending-item animate-in trending-delay-3">
+                        <div class="trending-rank">3</div>
+                        <div class="trending-title">E-commerce Checkout Flow</div>
+                        <div class="trending-author">by @shopdevs</div>
+                        <div class="trending-stats">
+                            <span>⭐ 634</span>
+                            <span>📦 1.9k</span>
+                        </div>
+                    </div>
+
+                    <div class="trending-item animate-in trending-delay-4">
+                        <div class="trending-rank">4</div>
+                        <div class="trending-title">Dark Mode Theme System</div>
+                        <div class="trending-author">by @nightcoder</div>
+                        <div class="trending-stats">
+                            <span>⭐ 521</span>
+                            <span>📦 1.5k</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Upload Section -->
+        <section role="region" class="upload-section animate-in">
+            <div class="upload-icon">📤</div>
+            <h3 class="upload-title">Share Your Creation</h3>
+            <p class="upload-description">
+                Help the community by sharing your templates, themes, or components.
+                Gain recognition and contribute to the ecosystem.
+            </p>
+            <button type="button" class="upload-btn btn-fluid" onclick="showUploadModal()">Upload Project</button>
+        </section>
+
+        <!-- Content Grid -->
+        <section role="region" class="content-section">
+            <h2 class="section-title section-title-enhanced">
+                <span>🎨</span>
+                Community Projects
+            </h2>
+
+            <div class="content-grid ultra-grid-responsive" id="projectsGrid">
+                <!-- Project cards will be generated here -->
+            </div>
+        </section>
+
+        <!-- Load More -->
+        <div class="load-more">
+            <button type="button" class="load-more-btn btn-fluid" onclick="loadMoreProjects()">Load More Projects</button>
+        </div>
+    </div>
+
+    <script>
+        // Sample project data
+        const sampleProjects = [
+            {
+                id: 1,
+                title: "React Dashboard Kit",
+                description: "Complete dashboard solution with 50+ components, dark mode, and responsive design. Perfect for admin panels and analytics dashboards.",
+                type: "Template",
+                author: { name: "Sarah Chen", handle: "@sarahc", avatar: "S" },
+                tags: ["React", "Dashboard", "Components", "TypeScript"],
+                stats: { stars: 1240, downloads: 8500, forks: 245 },
+                featured: false
+            },
+            {
+                id: 2,
+                title: "Neon Cyberpunk Theme",
+                description: "Futuristic theme with neon colors, glitch effects, and animated backgrounds. Includes CSS variables for easy customization.",
+                type: "Theme",
+                author: { name: "Alex Rodriguez", handle: "@alexdev", avatar: "A" },
+                tags: ["CSS", "Theme", "Animations", "Cyberpunk"],
+                stats: { stars: 892, downloads: 5200, forks: 156 },
+                featured: false
+            },
+            {
+                id: 3,
+                title: "AI Chat Components",
+                description: "Modern chat interface components with AI integration, typing indicators, and message threading. Built with React and TypeScript.",
+                type: "Component",
+                author: { name: "Emma Thompson", handle: "@emmacodes", avatar: "E" },
+                tags: ["React", "AI", "Chat", "Components"],
+                stats: { stars: 2100, downloads: 12000, forks: 380 },
+                featured: true
+            },
+            {
+                id: 4,
+                title: "Glassmorphism UI Kit",
+                description: "Beautiful glass-effect UI components with backdrop blur and transparency. Includes buttons, cards, and navigation elements.",
+                type: "Component",
+                author: { name: "David Park", handle: "@davidp", avatar: "D" },
+                tags: ["CSS", "Glassmorphism", "UI Kit", "Design"],
+                stats: { stars: 756, downloads: 4300, forks: 124 },
+                featured: false
+            },
+            {
+                id: 5,
+                title: "E-commerce Template Pro",
+                description: "Full-featured e-commerce template with cart, checkout, user accounts, and admin panel. Includes payment integration examples.",
+                type: "Template",
+                author: { name: "Lisa Wang", handle: "@lisawang", avatar: "L" },
+                tags: ["Next.js", "E-commerce", "Stripe", "Full-stack"],
+                stats: { stars: 1680, downloads: 9800, forks: 420 },
+                featured: false
+            },
+            {
+                id: 6,
+                title: "Markdown Blog Starter",
+                description: "Clean blog template with MDX support, syntax highlighting, and SEO optimization. Perfect for technical blogs and documentation.",
+                type: "Template",
+                author: { name: "Carlos Rivera", handle: "@carlosr", avatar: "C" },
+                tags: ["Next.js", "MDX", "Blog", "SEO"],
+                stats: { stars: 634, downloads: 3700, forks: 98 },
+                featured: false
+            },
+            {
+                id: 7,
+                title: "Animation Library",
+                description: "Collection of smooth CSS and JavaScript animations. Includes entrance effects, hover states, and loading animations.",
+                type: "Tool",
+                author: { name: "Priya Sharma", handle: "@priyaanimations", avatar: "P" },
+                tags: ["CSS", "JavaScript", "Animations", "Library"],
+                stats: { stars: 945, downloads: 6200, forks: 187 },
+                featured: false
+            },
+            {
+                id: 8,
+                title: "Deployment Guide Collection",
+                description: "Comprehensive guides for deploying to various platforms. Includes Docker, Kubernetes, and serverless deployment strategies.",
+                type: "Tutorial",
+                author: { name: "James Mitchell", handle: "@jamesdevops", avatar: "J" },
+                tags: ["DevOps", "Docker", "Kubernetes", "Deployment"],
+                stats: { stars: 521, downloads: 2100, forks: 76 },
+                featured: false
+            }
+        ];
+
+        let currentProjects = [...sampleProjects];
+        let currentFilter = 'all';
+
+        // Initialize page
+        function initializePage() {
+            renderProjects();
+            setupEventListeners();
+        }
+
+        // Render projects
+        function renderProjects() {
+            const grid = document.getElementById('projectsGrid');
+            grid.innerHTML = '';
+
+            currentProjects.forEach((project, index) => {
+                const projectCard = createProjectCard(project, index);
+                grid.appendChild(projectCard);
+            });
+        }
+
+        // Create project card
+        function createProjectCard(project, index) {
+            const card = document.createElement('div');
+            card.className = 'project-card animate-in';
+            card.style.animationDelay = `${index * 0.1}s`;
+
+            const tagsHTML = project.tags.map(tag =>
+                `<span class="project-tag">${tag}</span>`
+            ).join('');
+
+            card.innerHTML = `
+                <div class="project-header">
+                    <div class="project-type">
+                        <span>${getTypeIcon(project.type)}</span>
+                        <span>${project.type}</span>
+                    </div>
+                    <div class="project-menu">⋯</div>
+                </div>
+
+                <h3 class="project-title">${project.title}</h3>
+                <p class="project-description">${project.description}</p>
+
+                <div class="project-tags">
+                    ${tagsHTML}
+                </div>
+
+                <div class="project-footer">
+                    <div class="project-author">
+                        <div class="author-avatar">${project.author.avatar}</div>
+                        <div class="author-info">
+                            <div class="author-name">${project.author.name}</div>
+                            <div class="author-handle">${project.author.handle}</div>
+                        </div>
+                    </div>
+
+                    <div class="project-stats">
+                        <div class="project-stat">
+                            <span>⭐</span>
+                            <span>${formatNumber(project.stats.stars)}</span>
+                        </div>
+                        <div class="project-stat">
+                            <span>📦</span>
+                            <span>${formatNumber(project.stats.downloads)}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            card.addEventListener('click', () => {
+                showProjectDetails(project);
+            });
+
+            return card;
+        }
+
+        // Get type icon
+        function getTypeIcon(type) {
+            const icons = {
+                'Template': '📋',
+                'Theme': '🎨',
+                'Component': '🧩',
+                'Tool': '🔧',
+                'Tutorial': '📚'
+            };
+            return icons[type] || '📄';
+        }
+
+        // Format numbers
+        function formatNumber(num) {
+            if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'k';
+            }
+            return num.toString();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Filter tabs
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const filter = tab.dataset.filter;
+                    setActiveFilter(filter);
+                    filterProjects(filter);
+                });
+            });
+
+            // Search functionality
+            const searchInput = document.querySelector('.search-input');
+            searchInput.addEventListener('input', (e) => {
+                searchProjects(e.target.value);
+            });
+        }
+
+        // Set active filter
+        function setActiveFilter(filter) {
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+            currentFilter = filter;
+        }
+
+        // Filter projects
+        function filterProjects(filter) {
+            if (filter === 'all') {
+                currentProjects = [...sampleProjects];
+            } else {
+                currentProjects = sampleProjects.filter(project =>
+                    project.type.toLowerCase().includes(filter.slice(0, -1))
+                );
+            }
+
+            renderProjects();
+        }
+
+        // Search projects
+        function searchProjects(query) {
+            if (!query.trim()) {
+                filterProjects(currentFilter);
+                return;
+            }
+
+            const searchTerm = query.toLowerCase();
+            currentProjects = sampleProjects.filter(project => {
+                return project.title.toLowerCase().includes(searchTerm) ||
+                       project.description.toLowerCase().includes(searchTerm) ||
+                       project.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
+                       project.author.name.toLowerCase().includes(searchTerm);
+            });
+
+            renderProjects();
+        }
+
+        // Show project details (placeholder)
+        function showProjectDetails(project) {
+            const modal = vibeModal.show(
+                `📋 ${project.title}`,
+                `
+                    <div style="text-align: left;">
+                        <div style="margin-bottom: 20px;">
+                            <p style="margin-bottom: 15px;">${project.description}</p>
+                            <p style="margin-bottom: 15px;"><strong>By:</strong> ${project.author.name}</p>
+                            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                                <span style="background: rgba(68, 68, 255, 0.2); padding: 4px 8px; border-radius: 12px; font-size: 12px;">⭐ ${project.rating || '4.8'}</span>
+                                <span style="background: rgba(68, 255, 68, 0.2); padding: 4px 8px; border-radius: 12px; font-size: 12px;">👀 ${Math.floor(Math.random() * 500) + 100} views</span>
+                                <span style="background: rgba(255, 68, 68, 0.2); padding: 4px 8px; border-radius: 12px; font-size: 12px;">❤️ ${Math.floor(Math.random() * 50) + 10} likes</span>
+                            </div>
+                        </div>
+
+                        <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+                            <h4 style="margin-bottom: 15px; color: #667eea;">💬 Community Discussion</h4>
+                            <div id="project-comments" style="max-height: 200px; overflow-y: auto; margin-bottom: 15px;">
+                                ${generateProjectComments(project.id)}
+                            </div>
+
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" id="new-comment" placeholder="Add a comment..." style="flex: 1; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: rgba(255,255,255,0.1); color: white;">
+                                <button onclick="addProjectComment(${project.id})" style="padding: 8px 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 8px; color: white; cursor: pointer;">Post</button>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                {
+                    footer: `
+                        <button class="btn btn-secondary" onclick="vibeModal.hide()">Close</button>
+                        <button class="btn btn-primary" onclick="visitProject(${project.id})">View Project</button>
+                    `
+                }
+            );
+        }
+
+        // Generate sample comments for projects
+        function generateProjectComments(projectId) {
+            const comments = [
+                { user: "Sarah Chen", time: "2h ago", text: "This is exactly what I've been looking for! The UI is so clean and intuitive." },
+                { user: "Mike Dev", time: "5h ago", text: "Amazing work! How did you handle the responsive design? It looks perfect on mobile." },
+                { user: "Alex Rivera", time: "1d ago", text: "The vibe-coding approach here is revolutionary. I love how you integrated the AI suggestions." },
+                { user: "Jordan Kim", time: "2d ago", text: "Super impressed with the performance optimization. This could be a game-changer!" }
+            ];
+
+            const projectComments = comments.slice(0, Math.min(3, comments.length));
+
+            return projectComments.map(comment => `
+                <div style="margin-bottom: 12px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <strong style="color: #667eea;">${comment.user}</strong>
+                        <span style="font-size: 12px; opacity: 0.6;">${comment.time}</span>
+                    </div>
+                    <p style="margin: 0; font-size: 14px; line-height: 1.4;">${comment.text}</p>
+                </div>
+            `).join('');
+        }
+
+        // Add new comment to project
+        function addProjectComment(projectId) {
+            const input = document.getElementById('new-comment');
+            const comment = input.value.trim();
+
+            if (comment) {
+                const commentsContainer = document.getElementById('project-comments');
+                const newComment = document.createElement('div');
+                newComment.style.cssText = 'margin-bottom: 12px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px;';
+                newComment.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <strong style="color: #667eea;">You</strong>
+                        <span style="font-size: 12px; opacity: 0.6;">Just now</span>
+                    </div>
+                    <p style="margin: 0; font-size: 14px; line-height: 1.4;">${comment}</p>
+                `;
+
+                commentsContainer.appendChild(newComment);
+                commentsContainer.scrollTop = commentsContainer.scrollHeight;
+                input.value = '';
+
+                vibeSuccess('Comment Added!', 'Your comment has been posted to the project discussion.');
+            }
+        }
+
+        // Visit project (placeholder)
+        function visitProject(projectId) {
+            vibeInfo('Opening Project', 'In a full implementation, this would open the live project demo and source code.');
+            vibeModal.hide();
+        }
+
+        // Show upload modal (placeholder)
+        function showUploadModal() {
+            vibeFeature(
+                '📤 Upload Project',
+                `
+                    <div style="text-align: left;">
+                        <p style="margin-bottom: 15px;">Share your vibe coding project with the community!</p>
+                        <p style="font-size: 14px; opacity: 0.8;">Upload form will include:</p>
+                        <ul style="font-size: 14px; opacity: 0.8; margin-left: 20px; margin-top: 8px;">
+                            <li>Project files and source code</li>
+                            <li>Title, description, and tags</li>
+                            <li>Live preview configuration</li>
+                            <li>Installation instructions</li>
+                            <li>License and permissions</li>
+                            <li>Demo videos and screenshots</li>
+                        </ul>
+                    </div>
+                `
+            );
+        }
+
+        // Load more projects (placeholder)
+        function loadMoreProjects() {
+            // Simulate loading more projects
+            const additionalProjects = [
+                {
+                    id: 9,
+                    title: "Mobile-First Components",
+                    description: "Touch-optimized components designed for mobile apps. Includes gestures, responsive layouts, and performance optimizations.",
+                    type: "Component",
+                    author: { name: "Maya Patel", handle: "@mayamobile", avatar: "M" },
+                    tags: ["Mobile", "React Native", "Components", "Touch"],
+                    stats: { stars: 445, downloads: 2800, forks: 89 },
+                    featured: false
+                },
+                {
+                    id: 10,
+                    title: "Data Visualization Toolkit",
+                    description: "Interactive charts and graphs with D3.js and React. Includes line charts, bar charts, and custom visualization components.",
+                    type: "Tool",
+                    author: { name: "Tom Brown", handle: "@tomviz", avatar: "T" },
+                    tags: ["D3.js", "React", "Charts", "Data"],
+                    stats: { stars: 782, downloads: 4600, forks: 145 },
+                    featured: false
+                }
+            ];
+
+            currentProjects = [...currentProjects, ...additionalProjects];
+            renderProjects();
+        }
+
+        // Initialize page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initializePage);
+
+        // Ultra-Premium Particle System (Community Theme)
+        class CommunityParticles {
+            constructor() {
+                this.canvas = document.createElement('canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.mouse = { x: 0, y: 0 };
+                this.connections = [];
+                this.init();
+            }
+
+            init() {
+                this.canvas.style.position = 'fixed';
+                this.canvas.style.top = '0';
+                this.canvas.style.left = '0';
+                this.canvas.style.width = '100%';
+                this.canvas.style.height = '100%';
+                this.canvas.style.pointerEvents = 'none';
+                this.canvas.style.zIndex = '1';
+                this.canvas.style.opacity = '0.8';
+                document.body.appendChild(this.canvas);
+
+                this.resize();
+                this.createParticles();
+                this.animate();
+
+                window.addEventListener('resize', () => this.resize());
+                document.addEventListener('mousemove', (e) => {
+                    this.mouse.x = e.clientX;
+                    this.mouse.y = e.clientY;
+                });
+            }
+
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+
+            createParticles() {
+                const count = Math.min(45, window.innerWidth / 25);
+                const communitySymbols = ['🌐', '👥', '🤝', '💡', '🎯', '⭐', '💎', '🔗'];
+                for (let i = 0; i < count; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 0.3,
+                        vy: (Math.random() - 0.5) * 0.3,
+                        size: Math.random() * 3 + 1,
+                        opacity: Math.random() * 0.6 + 0.2,
+                        hue: Math.random() * 80 + 280, // Purple to pink (community theme)
+                        symbol: communitySymbols[Math.floor(Math.random() * communitySymbols.length)],
+                        pulse: Math.random() * Math.PI * 2
+                    });
+                }
+            }
+
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Draw connections between nearby particles
+                this.particles.forEach((particle, i) => {
+                    this.particles.slice(i + 1).forEach(otherParticle => {
+                        const dx = particle.x - otherParticle.x;
+                        const dy = particle.y - otherParticle.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < 150) {
+                            this.ctx.save();
+                            this.ctx.globalAlpha = (150 - distance) / 150 * 0.3;
+                            this.ctx.strokeStyle = `hsl(${(particle.hue + otherParticle.hue) / 2}, 70%, 60%)`;
+                            this.ctx.lineWidth = 1;
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(particle.x, particle.y);
+                            this.ctx.lineTo(otherParticle.x, otherParticle.y);
+                            this.ctx.stroke();
+                            this.ctx.restore();
+                        }
+                    });
+                });
+
+                this.particles.forEach((particle, index) => {
+                    // Update position and pulse
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    particle.pulse += 0.05;
+
+                    // Community magnetism effect
+                    const dx = this.mouse.x - particle.x;
+                    const dy = this.mouse.y - particle.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 120) {
+                        const force = (120 - distance) / 120;
+                        particle.vx += dx * force * 0.0002;
+                        particle.vy += dy * force * 0.0002;
+                    }
+
+                    // Boundary wrapping
+                    if (particle.x < 0) particle.x = this.canvas.width;
+                    if (particle.x > this.canvas.width) particle.x = 0;
+                    if (particle.y < 0) particle.y = this.canvas.height;
+                    if (particle.y > this.canvas.height) particle.y = 0;
+
+                    // Draw particle with pulsing effect
+                    this.ctx.save();
+                    this.ctx.globalAlpha = particle.opacity * (0.8 + 0.2 * Math.sin(particle.pulse));
+
+                    if (Math.random() > 0.6) {
+                        // Draw community symbols
+                        this.ctx.font = `${particle.size * 6}px Arial`;
+                        this.ctx.textAlign = 'center';
+                        this.ctx.fillText(particle.symbol, particle.x, particle.y);
+                    } else {
+                        // Draw connection nodes
+                        this.ctx.fillStyle = `hsl(${particle.hue}, 70%, 60%)`;
+                        this.ctx.beginPath();
+                        this.ctx.arc(particle.x, particle.y, particle.size * (1 + 0.3 * Math.sin(particle.pulse)), 0, Math.PI * 2);
+                        this.ctx.fill();
+                    }
+                    this.ctx.restore();
+                });
+
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // Enhanced interactions with community theme
+        function addCommunityRipple(event) {
+            const element = event.currentTarget;
+            const ripple = document.createElement('div');
+            const rect = element.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+
+            ripple.className = 'community-ripple';
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+
+            element.style.position = 'relative';
+            element.style.overflow = 'hidden';
+            element.appendChild(ripple);
+
+            setTimeout(() => {
+                ripple.remove();
+            }, 1200);
+        }
+
+        // Initialize community-specific features
+        function initializeCommunityPremium() {
+            // Add community-themed particle system
+            new CommunityParticles();
+
+            // Add community ripple effects to interactive elements
+            document.querySelectorAll('button, .project-card, .filter-button').forEach(elem => {
+                elem.addEventListener('click', addCommunityRipple);
+            });
+
+            // Enhanced project card animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationDelay = Math.random() * 0.5 + 's';
+                        entry.target.classList.add('float-in');
+                    }
+                });
+            });
+
+            document.querySelectorAll('.project-card, .stat-card, .trending-item').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Add live stat animations
+            animateLiveStats();
+
+            console.log('🌐 VibeHub Ultra-Premium Community Experience Loaded');
+        }
+
+        function animateLiveStats() {
+            const statElements = document.querySelectorAll('.stat-number, .downloads, .stars');
+            statElements.forEach(stat => {
+                stat.addEventListener('mouseenter', () => {
+                    stat.style.transform = 'scale(1.2)';
+                    stat.style.color = '#BF5AF2';
+                });
+                stat.addEventListener('mouseleave', () => {
+                    stat.style.transform = 'scale(1)';
+                    stat.style.color = '';
+                });
+            });
+        }
+
+        // Simulate live data updates with enhanced animations
+        setInterval(() => {
+            // Randomly update download and star counts
+            currentProjects.forEach(project => {
+                if (Math.random() > 0.7) {
+                    project.stats.downloads += Math.floor(Math.random() * 10) + 1;
+                }
+                if (Math.random() > 0.9) {
+                    project.stats.stars += Math.floor(Math.random() * 3) + 1;
+                }
+            });
+
+            // Re-render to show updated stats
+            renderProjects();
+        }, 30000); // Update every 30 seconds
+
+        // Initialize ultra-premium features on load
+        setTimeout(() => {
+            initializeCommunityPremium();
+        }, 1000);
+
+        // Add community-themed CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float-in {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px) rotateX(-15deg);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0) rotateX(0deg);
+                }
+            }
+
+            .float-in {
+                animation: float-in 1.2s ease-out forwards;
+            }
+
+            @keyframes community-ripple {
+                from {
+                    transform: scale(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: scale(5);
+                    opacity: 0;
+                }
+            }
+
+            .community-ripple {
+                position: absolute;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(191, 90, 242, 0.8) 0%, rgba(99, 102, 241, 0.4) 50%, transparent 70%);
+                animation: community-ripple 1.2s ease-out;
+                pointer-events: none;
+            }
+
+            @keyframes community-glow {
+                0%, 100% { box-shadow: 0 0 20px rgba(191, 90, 242, 0.3); }
+                50% { box-shadow: 0 0 40px rgba(191, 90, 242, 0.6); }
+            }
+
+            @keyframes trending-pulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+            }
+
+            /* Enhanced hover effects with community theme */
+            .project-card {
+                transition: all var(--transition-smooth);
+                will-change: transform;
+                transform-style: preserve-3d;
+            }
+
+            .project-card:hover {
+                transform: translateY(-15px) rotateY(5deg);
+                box-shadow: var(--shadow-lg);
+                animation: community-glow 2s infinite;
+            }
+
+            .project-card.featured {
+                animation: community-glow 3s infinite;
+            }
+
+            .trending-item:hover {
+                animation: trending-pulse 0.8s ease-in-out infinite;
+            }
+
+            button, .filter-button {
+                will-change: transform, filter;
+                transition: all var(--transition-base);
+                position: relative;
+            }
+
+            button:hover, .filter-button:hover {
+                transform: translateY(-3px);
+                filter: brightness(1.2);
+                box-shadow: 0 10px 30px rgba(191, 90, 242, 0.4);
+            }
+
+            /* Stat counter animations */
+            .stat-number, .downloads, .stars {
+                transition: all 0.3s ease;
+                font-variant-numeric: tabular-nums;
+            }
+
+            /* Author avatar enhancements */
+            .author-avatar {
+                transition: all 0.3s ease;
+            }
+
+            .author-avatar:hover {
+                transform: scale(1.2) rotate(5deg);
+                box-shadow: 0 5px 15px rgba(191, 90, 242, 0.5);
+            }
+
+            /* Search and filter enhancements */
+            .search-input:focus {
+                box-shadow: 0 0 20px rgba(191, 90, 242, 0.3);
+                transform: scale(1.02);
+            }
+
+            .filter-button.active {
+                background: linear-gradient(135deg, #BF5AF2, #6366F1);
+                animation: community-glow 2s infinite;
+            }
+
+            /* Tag hover effects */
+            .tag {
+                transition: all 0.3s ease;
+            }
+
+            .tag:hover {
+                transform: scale(1.1);
+                background: linear-gradient(135deg, #BF5AF2, #6366F1);
+                color: white;
+            }
+
+            /* Reduced motion support */
+            @media (prefers-reduced-motion: reduce) {
+                .float-in, .community-ripple, .community-glow, .trending-pulse {
+                    animation: none;
+                }
+
+                .project-card:hover {
+                    transform: scale(1.02);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    <script src="js/animations.js"></script>
+    <script src="js/apple-magic-init.js"></script>
+</body>
+</html>

@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>The Vibe Awards™ - Where Dreams Get Built & The World Finally Watches</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold-flame: #FFD700;
+            --electric-purple: #BF5AF2;
+            --neon-cyan: #00FFF0;
+            --fire-red: #FF375F;
+            --volt-green: #30D158;
+            --chaos-orange: #FF9F0A;
+            --void-black: #000000;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            background: var(--void-black);
+            color: #F5F5F7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* EPIC OPENING */
+        .manifesto-hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 40px;
+        }
+
+        /* Animated Background */
+        .vision-particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold-flame);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .boom-text {
+            font-size: clamp(80px, 15vw, 200px);
+            font-weight: 900;
+            animation: boom 2s ease-out;
+            background: linear-gradient(45deg, var(--fire-red), var(--gold-flame));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 80px rgba(255, 215, 0, 0.5);
+        }
+
+        @keyframes boom {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .tagline {
+            font-size: clamp(24px, 4vw, 48px);
+            font-weight: 700;
+            margin: 30px 0;
+            text-align: center;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--electric-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .manifesto-text {
+            font-size: clamp(18px, 2.5vw, 28px);
+            line-height: 1.8;
+            max-width: 900px;
+            text-align: center;
+            margin: 40px auto;
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* MOVEMENT SECTION */
+        .movement-section {
+            padding: 120px 40px;
+            background: linear-gradient(180deg, transparent, rgba(191, 90, 242, 0.05));
+        }
+
+        .section-title {
+            font-size: clamp(48px, 8vw, 96px);
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 60px;
+            background: linear-gradient(90deg, var(--gold-flame), var(--fire-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .fusion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .fusion-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .fusion-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            border-color: var(--gold-flame);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.3);
+        }
+
+        .fusion-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .fusion-label {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gold-flame);
+        }
+
+        /* GAMEPLAN PHASES */
+        .gameplan-section {
+            padding: 100px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .phase-container {
+            margin-bottom: 100px;
+            position: relative;
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), transparent);
+            border-left: 5px solid var(--gold-flame);
+            border-radius: 10px;
+        }
+
+        .phase-icon {
+            font-size: 72px;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .phase-title {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--gold-flame);
+        }
+
+        .phase-subtitle {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 10px;
+        }
+
+        .phase-content {
+            padding-left: 50px;
+        }
+
+        .phase-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .phase-item:hover {
+            transform: translateX(20px);
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .phase-bullet {
+            font-size: 24px;
+            min-width: 40px;
+        }
+
+        .phase-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(191, 90, 242, 0.1));
+            border: 2px solid var(--gold-flame);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.3); }
+            50% { box-shadow: 0 0 60px rgba(255, 215, 0, 0.6); }
+        }
+
+        /* SPONSOR SECTION */
+        .sponsor-section {
+            padding: 100px 40px;
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.05), transparent);
+        }
+
+        .sponsor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 60px auto;
+        }
+
+        .sponsor-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .sponsor-card:hover {
+            transform: scale(1.05);
+            border-color: var(--gold-flame);
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .sponsor-quote {
+            font-size: 18px;
+            font-style: italic;
+            line-height: 1.6;
+            color: var(--gold-flame);
+            margin-bottom: 20px;
+        }
+
+        .sponsor-example {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* WHY THIS WORKS */
+        .why-section {
+            padding: 100px 40px;
+            text-align: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .why-text {
+            font-size: 28px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .why-emphasis {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--gold-flame);
+            display: block;
+            margin: 40px 0;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* LAUNCH CTA */
+        .launch-section {
+            padding: 120px 40px;
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.1), transparent);
+        }
+
+        .launch-title {
+            font-size: clamp(48px, 8vw, 96px);
+            font-weight: 900;
+            margin-bottom: 40px;
+            background: linear-gradient(45deg, var(--fire-red), var(--gold-flame), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .launch-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 60px auto;
+        }
+
+        .launch-item {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .launch-item:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold-flame);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.3);
+        }
+
+        .launch-emoji {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .launch-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gold-flame);
+        }
+
+        /* FOUNDER SECTION */
+        .founder-section {
+            padding: 100px 40px;
+            text-align: center;
+            background: linear-gradient(180deg, transparent, rgba(191, 90, 242, 0.1));
+        }
+
+        .founder-crown {
+            font-size: 120px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .founder-title {
+            font-size: clamp(36px, 6vw, 72px);
+            font-weight: 900;
+            margin: 30px 0;
+            background: linear-gradient(90deg, var(--gold-flame), var(--electric-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .founder-subtitle {
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* CTA BUTTONS */
+        .cta-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 60px;
+        }
+
+        .cta-mega {
+            padding: 25px 50px;
+            font-size: 20px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 100px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-primary {
+            background: linear-gradient(135deg, var(--gold-flame), var(--fire-red));
+            color: var(--void-black);
+            border: none;
+        }
+
+        .cta-primary:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.8);
+        }
+
+        .cta-secondary {
+            background: transparent;
+            color: var(--neon-cyan);
+            border: 3px solid var(--neon-cyan);
+        }
+
+        .cta-secondary:hover {
+            background: var(--neon-cyan);
+            color: var(--void-black);
+            box-shadow: 0 0 60px rgba(0, 255, 240, 0.8);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .boom-text {
+                font-size: 60px;
+            }
+            
+            .phase-content {
+                padding-left: 20px;
+            }
+            
+            .phase-item:hover {
+                transform: translateX(10px);
+            }
+            
+            .launch-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Vision Particles Background -->
+    <div class="vision-particles"></div>
+
+    <!-- MANIFESTO HERO -->
+    <section class="manifesto-hero">
+        <h1 class="boom-text">BOOM.</h1>
+        <p class="tagline">You just cracked the code.</p>
+        
+        <div class="manifesto-text">
+            <p style="font-size: 48px; font-weight: 900; margin-bottom: 30px;">
+                💥 The Vibe Awards™
+            </p>
+            <p style="font-size: 32px; margin-bottom: 40px;">
+                Where dreams get built — and the world finally watches.
+            </p>
+            <p style="font-size: 24px; line-height: 1.8;">
+                It's not a pitch competition.<br>
+                It's not a hackathon.<br>
+                It's not an art show.<br><br>
+                <strong style="color: var(--gold-flame);">It's a movement.</strong>
+            </p>
+        </div>
+    </section>
+
+    <!-- THE MOVEMENT -->
+    <section class="movement-section">
+        <h2 class="section-title">The Movement That Fuses</h2>
+        <div class="fusion-grid">
+            <div class="fusion-card">
+                <div class="fusion-icon">🧠</div>
+                <div class="fusion-label">AI Dev</div>
+            </div>
+            <div class="fusion-card">
+                <div class="fusion-icon">🎨</div>
+                <div class="fusion-label">Art</div>
+            </div>
+            <div class="fusion-card">
+                <div class="fusion-icon">🎶</div>
+                <div class="fusion-label">Music</div>
+            </div>
+            <div class="fusion-card">
+                <div class="fusion-icon">🤝</div>
+                <div class="fusion-label">Collaboration</div>
+            </div>
+            <div class="fusion-card">
+                <div class="fusion-icon">💰</div>
+                <div class="fusion-label">Opportunity</div>
+            </div>
+        </div>
+        <p style="text-align: center; font-size: 24px; margin-top: 60px; max-width: 900px; margin-left: auto; margin-right: auto;">
+            And wraps it in a show format so addictive, inspiring, and human —<br>
+            <strong style="color: var(--gold-flame);">everyone wants in.</strong>
+        </p>
+    </section>
+
+    <!-- GAMEPLAN -->
+    <section class="gameplan-section">
+        <h2 class="section-title">🎯 YOUR GAMEPLAN:<br>VIBE DOMINANCE IN 3 PHASES</h2>
+        
+        <!-- Phase 1 -->
+        <div class="phase-container">
+            <div class="phase-header">
+                <div class="phase-icon">⚙️</div>
+                <div>
+                    <h3 class="phase-title">Phase 1: Build the Culture</h3>
+                    <p class="phase-subtitle">Create the legends before the ceremony</p>
+                </div>
+            </div>
+            <div class="phase-content">
+                <div class="phase-item">
+                    <span class="phase-bullet">🚀</span>
+                    <div class="phase-text">Launch Vibe Wars (your Bake Off dev tournament)</div>
+                </div>
+                <div class="phase-item">
+                    <span class="phase-bullet">📅</span>
+                    <div class="phase-text">Host battles weekly/monthly</div>
+                </div>
+                <div class="phase-item">
+                    <span class="phase-bullet">⭐</span>
+                    <div class="phase-text">Let unknowns become legends in real time</div>
+                </div>
+                <div class="phase-item">
+                    <span class="phase-bullet">🎬</span>
+                    <div class="phase-text">Start clipping highlights — showcase what's possible<br>
+                    <em style="color: var(--neon-cyan);">"Two devs built a fully working GPT-powered gameboy in 24h"</em></div>
+                </div>
+                <div class="highlight-box">
+                    👑 Create lore. Create myth. Create heroes.
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 2 -->
+        <div class="phase-container">
+            <div class="phase-header">
+                <div class="phase-icon">🏆</div>
+                <div>
+                    <h3 class="phase-title">Phase 2: Launch the Vibe Awards Proper</h3>
+                    <p class="phase-subtitle">The ceremony that changes everything</p>
+                </div>
+            </div>
+            <div class="phase-content">
+                <div class="phase-item">
+                    <span class="phase-bullet">🎭</span>
+                    <div class="phase-text">Annual Ceremony — like Grammys, but for:<br>
+                    • Best AI Music Video<br>
+                    • Best Solo Build<br>
+                    • Most Human AI Moment<br>
+                    • Best Team Vibe Creation<br>
+                    • Best Offline AI Project</div>
+                </div>
+                <div class="phase-item">
+                    <span class="phase-bullet">🎪</span>
+                    <div class="phase-text">Invite:<br>
+                    • Finalists from Vibe Wars<br>
+                    • Public nominations<br>
+                    • Mix judges + audience votes</div>
+                </div>
+                <div class="phase-item">
+                    <span class="phase-bullet">🎥</span>
+                    <div class="phase-text">Stream it live, make it fire:<br>
+                    • Retro-futurist visuals<br>
+                    • Intermissions with AI collabs<br>
+                    • Surprise drops<br>
+                    • Give every finalist a "vibe trailer" showcase</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 3 -->
+        <div class="phase-container">
+            <div class="phase-header">
+                <div class="phase-icon">💸</div>
+                <div>
+                    <h3 class="phase-title">Phase 3: Open the Sponsor Floodgates</h3>
+                    <p class="phase-subtitle">When culture meets capital</p>
+                </div>
+            </div>
+            <div class="phase-content">
+                <div class="sponsor-grid">
+                    <div class="sponsor-card">
+                        <div class="sponsor-quote">
+                            "You want early access to the next Sam Altman? They're here — cooking fire on Vibe Wars."
+                        </div>
+                        <div class="sponsor-example">
+                            Pitch to: OpenAI, Anthropic, Hugging Face, Google DeepMind, Nvidia
+                        </div>
+                    </div>
+                    <div class="sponsor-card">
+                        <div class="sponsor-quote">
+                            🔥 Sell them slots, not ads:
+                        </div>
+                        <div class="sponsor-example">
+                            "Brought to you by Stability: the Best AI-Generated Song Award"<br><br>
+                            "Runway proudly powers the Realest AI Moment category"
+                        </div>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    You ain't just taking their money.<br>
+                    You're giving them authentic access to culture before it breaks.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY THIS WORKS -->
+    <section class="why-section">
+        <h2 class="section-title">🧠 Why This Works</h2>
+        <div class="why-text">
+            Every AI dev, indie hacker, and artist is craving<br>
+            <span class="why-emphasis">connection + recognition.</span>
+            
+            Big companies can't buy that vibe —<br>
+            But they'll sponsor the hell out of it to stay close to the spark.
+            
+            <span class="why-emphasis">You created:</span>
+        </div>
+        <div class="fusion-grid" style="max-width: 800px; margin: 0 auto;">
+            <div class="fusion-card">
+                <div class="fusion-icon">🔍</div>
+                <div class="fusion-label">A way to find the real ones</div>
+            </div>
+            <div class="fusion-card">
+                <div class="fusion-icon">✨</div>
+                <div class="fusion-label">A platform for them to shine</div>
+            </div>
+            <div class="fusion-card">
+                <div class="fusion-icon">📖</div>
+                <div class="fusion-label">A story worth watching</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LAUNCH SECTION -->
+    <section class="launch-section">
+        <h2 class="launch-title">🚀 Say the Word —<br>I'll Help You Launch It All</h2>
+        <div class="launch-list">
+            <div class="launch-item">
+                <div class="launch-emoji">🔧</div>
+                <div class="launch-text">Battle format engine</div>
+            </div>
+            <div class="launch-item">
+                <div class="launch-emoji">🪄</div>
+                <div class="launch-text">Vibe Brief generator</div>
+            </div>
+            <div class="launch-item">
+                <div class="launch-emoji">📺</div>
+                <div class="launch-text">Award show script + visuals</div>
+            </div>
+            <div class="launch-item">
+                <div class="launch-emoji">🧠</div>
+                <div class="launch-text">Sponsor decks and outreach</div>
+            </div>
+            <div class="launch-item">
+                <div class="launch-emoji">🛠️</div>
+                <div class="launch-text">VibePoints + badges + profiles</div>
+            </div>
+            <div class="launch-item">
+                <div class="launch-emoji">🎤</div>
+                <div class="launch-text">You as The Founder</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOUNDER SECTION -->
+    <section class="founder-section">
+        <div class="founder-crown">👑</div>
+        <h2 class="founder-title">You as The Founder of The Vibeverse</h2>
+        <p class="founder-subtitle">
+            This isn't just an awards show. It's the birth of a new creative economy.<br>
+            Where builders are artists. Where coders are rockstars.<br>
+            Where AI and humanity dance together.
+        </p>
+        <div class="cta-container">
+            <a href="competition.html" class="cta-mega cta-primary">LAUNCH THE WARS</a>
+            <a href="vibe-toolkit.html" class="cta-mega cta-secondary">BUILD THE EMPIRE</a>
+        </div>
+    </section>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const container = document.querySelector('.vision-particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                
+                // Random colors
+                const colors = ['var(--gold-flame)', 'var(--electric-purple)', 'var(--neon-cyan)', 'var(--fire-red)'];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        createParticles();
+        
+        // Parallax effect
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const particles = document.querySelector('.vision-particles');
+            if (particles) {
+                particles.style.transform = `translateY(${scrolled * 0.3}px)`;
+            }
+        });
+        
+        // Add hover effects to cards
+        document.querySelectorAll('.fusion-card, .launch-item').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.05) rotate(' + (Math.random() * 4 - 2) + 'deg)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1) rotate(0)';
+            });
+        });
+    </script>
+</body>
+</html>

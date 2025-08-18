@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Vibe Awards | Excellence in AI Development</title>
+    
+    <!-- Professional Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #C9A961;
+            --gold-dark: #B8935A;
+            --gold-light: #E4C584;
+            --black: #0A0A0A;
+            --white: #FFFFFF;
+            --gray-dark: #1a1a1a;
+            --gray: #2d2d2d;
+            --gray-light: #f8f8f8;
+            --text-light: #666666;
+            --accent: #E63946;
+        }
+
+        ::selection {
+            background: var(--gold);
+            color: var(--black);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--white);
+            color: var(--black);
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Professional Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 40px;
+            transition: padding 0.3s ease;
+        }
+
+        nav.scrolled .nav-container {
+            padding: 20px 40px;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            font-weight: 400;
+            letter-spacing: 4px;
+            color: var(--black);
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
+
+        .logo span {
+            font-weight: 900;
+            color: var(--gold);
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 45px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 13px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -5px;
+            left: 50%;
+            background-color: var(--gold);
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold-dark);
+        }
+
+        /* Hero Section - Refined */
+        .hero {
+            margin-top: 76px;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0A0A0A 0%, #1a1a1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated Background Pattern */
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse"><path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(201,169,97,0.03)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)"/></svg>');
+            animation: slide 20s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-60px, -60px); }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            padding: 60px 40px;
+            max-width: 1200px;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3.5rem, 8vw, 7rem);
+            font-weight: 900;
+            color: var(--white);
+            margin-bottom: 30px;
+            letter-spacing: -2px;
+            line-height: 0.95;
+        }
+
+        .hero-title .year {
+            display: block;
+            font-size: 0.4em;
+            font-weight: 300;
+            letter-spacing: 20px;
+            color: var(--gold);
+            margin-top: 30px;
+            text-indent: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 300;
+            letter-spacing: 3px;
+            margin-bottom: 60px;
+            text-transform: uppercase;
+        }
+
+        /* Professional Stats */
+        .hero-stats {
+            display: flex;
+            gap: 80px;
+            justify-content: center;
+            margin-top: 80px;
+            padding-top: 60px;
+            border-top: 1px solid rgba(201, 169, 97, 0.2);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 120px 40px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 100px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 25px;
+            letter-spacing: -1px;
+            color: var(--black);
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            font-weight: 400;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Categories - Premium Cards */
+        .categories {
+            background: var(--gray-light);
+        }
+
+        .categories-grid {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 40px;
+        }
+
+        .category-card {
+            background: var(--white);
+            padding: 50px 40px;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            transform: translateX(-100%);
+            transition: transform 0.4s ease;
+        }
+
+        .category-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .category-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+        }
+
+        .category-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
+            font-weight: 900;
+            color: rgba(201, 169, 97, 0.15);
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            line-height: 1;
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            display: inline-block;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .category-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--black);
+        }
+
+        .category-description {
+            color: var(--text-light);
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        /* Winners Gallery - Refined */
+        .winners {
+            background: var(--white);
+        }
+
+        .winner-showcase {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .winner-card {
+            background: var(--white);
+            overflow: hidden;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        .winner-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .winner-rank {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--gold);
+            color: var(--white);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            z-index: 2;
+        }
+
+        .winner-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .winner-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .winner-card:hover .winner-image::after {
+            opacity: 1;
+        }
+
+        .winner-info {
+            padding: 35px 30px;
+        }
+
+        .winner-category {
+            font-size: 0.85rem;
+            color: var(--gold-dark);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .winner-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--black);
+        }
+
+        .winner-description {
+            color: var(--text-light);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .winner-link {
+            color: var(--gold-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: gap 0.3s ease;
+        }
+
+        .winner-link:hover {
+            gap: 15px;
+        }
+
+        /* Judges Section */
+        .judges {
+            background: linear-gradient(135deg, #0A0A0A 0%, #1a1a1a 100%);
+            color: var(--white);
+            position: relative;
+        }
+
+        .judges .section-title {
+            color: var(--white);
+        }
+
+        .judges .section-subtitle {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .judges-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 50px;
+        }
+
+        .judge-card {
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .judge-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .judge-avatar {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .judge-avatar::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid var(--gold);
+            opacity: 0.3;
+            transform: scale(1.1);
+        }
+
+        .judge-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .judge-title {
+            color: var(--gold);
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .judge-company {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Sponsors - Premium */
+        .sponsors {
+            background: var(--white);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .sponsors-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .sponsor-tier {
+            margin-bottom: 80px;
+        }
+
+        .sponsor-tier:last-child {
+            margin-bottom: 0;
+        }
+
+        .tier-title {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--gold-dark);
+            margin-bottom: 50px;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .tier-title::before,
+        .tier-title::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .tier-title::before {
+            left: 0;
+        }
+
+        .tier-title::after {
+            right: 0;
+        }
+
+        .sponsors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 60px;
+            align-items: center;
+            justify-items: center;
+        }
+
+        .sponsor-logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray);
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding: 20px;
+        }
+
+        .sponsor-logo:hover {
+            opacity: 1;
+            color: var(--gold-dark);
+            transform: scale(1.1);
+        }
+
+        /* CTA Section - Premium */
+        .cta {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            padding: 150px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="dots" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100%" height="100%" fill="url(%23dots)"/></svg>');
+            animation: slide 15s linear infinite;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            color: var(--white);
+            margin-bottom: 25px;
+            font-weight: 900;
+        }
+
+        .cta-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 50px;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 18px 45px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: left 0.3s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--black);
+            color: var(--white);
+            border-color: var(--black);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--black);
+            border-color: var(--black);
+        }
+
+        .btn-secondary:hover {
+            background: var(--black);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        /* Footer - Professional */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 80px 40px 40px;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 60px;
+            padding-bottom: 60px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-brand h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--gold);
+        }
+
+        .footer-brand p {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.8;
+            max-width: 400px;
+        }
+
+        .footer-column h4 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 25px;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 15px;
+        }
+
+        .footer-column ul li a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--gold);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 40px;
+        }
+
+        .footer-copy {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.9rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .categories-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+
+            .footer-top {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .categories-grid,
+            .winner-showcase {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .footer-top {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 30px;
+            }
+        }
+
+        /* Loading Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Scroll Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            z-index: 10000;
+            transition: width 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">THE <span>VIBE</span> AWARDS</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#categories">Categories</a></li>
+                <li><a href="#winners">Winners</a></li>
+                <li><a href="#judges">Judges</a></li>
+                <li><a href="#sponsors">Partners</a></li>
+                <li><a href="#submit">Submit</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                THE VIBE AWARDS
+                <span class="year">2024</span>
+            </h1>
+            <p class="hero-subtitle">Honoring Excellence in AI-Powered Development</p>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number" id="computeInvested">$47M+</div>
+                    <div class="stat-label">Compute Invested</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="projectsBuilt">10,483</div>
+                    <div class="stat-label">Projects Built</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="globalReach">127</div>
+                    <div class="stat-label">Countries</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories fade-in" id="categories">
+        <div class="section-header">
+            <h2 class="section-title">Award Categories</h2>
+            <p class="section-subtitle">Recognizing Innovation Across All Domains</p>
+        </div>
+        
+        <div class="categories-grid">
+            <div class="category-card">
+                <span class="category-number">01</span>
+                <div class="category-icon">🏆</div>
+                <h3 class="category-title">Grand Prix</h3>
+                <p class="category-description">The ultimate achievement in vibe-coding. Awarded to the project that exemplifies innovation, impact, and technical excellence.</p>
+            </div>
+            
+            <div class="category-card">
+                <span class="category-number">02</span>
+                <div class="category-icon">💎</div>
+                <h3 class="category-title">Technical Innovation</h3>
+                <p class="category-description">Honoring breakthrough technical achievements that push the boundaries of what's possible with AI-assisted development.</p>
+            </div>
+            
+            <div class="category-card">
+                <span class="category-number">03</span>
+                <div class="category-icon">🚀</div>
+                <h3 class="category-title">Startup of the Year</h3>
+                <p class="category-description">Recognizing the most promising startup built entirely through AI collaboration, from concept to market.</p>
+            </div>
+            
+            <div class="category-card">
+                <span class="category-number">04</span>
+                <div class="category-icon">❤️</div>
+                <h3 class="category-title">Social Impact</h3>
+                <p class="category-description">Celebrating projects that leverage AI development to address critical social challenges and improve lives.</p>
+            </div>
+            
+            <div class="category-card">
+                <span class="category-number">05</span>
+                <div class="category-icon">🎨</div>
+                <h3 class="category-title">Design Excellence</h3>
+                <p class="category-description">Awarded to projects demonstrating exceptional design and user experience created through AI collaboration.</p>
+            </div>
+            
+            <div class="category-card">
+                <span class="category-number">06</span>
+                <div class="category-icon">⚡</div>
+                <h3 class="category-title">Speed Development</h3>
+                <p class="category-description">Recognizing remarkable efficiency in development, showcasing the power of rapid AI-assisted creation.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Winners Gallery -->
+    <section class="winners fade-in" id="winners">
+        <div class="section-header">
+            <h2 class="section-title">2024 Winners</h2>
+            <p class="section-subtitle">Projects That Define Excellence</p>
+        </div>
+        
+        <div class="winner-showcase">
+            <div class="winner-card">
+                <div class="winner-rank">1st</div>
+                <div class="winner-image">🏥</div>
+                <div class="winner-info">
+                    <div class="winner-category">Social Impact</div>
+                    <h3 class="winner-title">TinkyBink AAC</h3>
+                    <p class="winner-description">Revolutionary communication platform for non-verbal individuals, transforming accessibility through AI.</p>
+                    <a href="#" class="winner-link">View Project →</a>
+                </div>
+            </div>
+            
+            <div class="winner-card">
+                <div class="winner-rank">2nd</div>
+                <div class="winner-image">🤖</div>
+                <div class="winner-info">
+                    <div class="winner-category">Technical Innovation</div>
+                    <h3 class="winner-title">NeuralFlow Platform</h3>
+                    <p class="winner-description">Advanced AI orchestration system enabling seamless integration of multiple language models.</p>
+                    <a href="#" class="winner-link">View Project →</a>
+                </div>
+            </div>
+            
+            <div class="winner-card">
+                <div class="winner-rank">3rd</div>
+                <div class="winner-image">🎯</div>
+                <div class="winner-info">
+                    <div class="winner-category">Startup Excellence</div>
+                    <h3 class="winner-title">VisionBoard AI</h3>
+                    <p class="winner-description">AI-powered goal tracking and visualization platform built entirely through vibe-coding.</p>
+                    <a href="#" class="winner-link">View Project →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Judges Section -->
+    <section class="judges fade-in" id="judges">
+        <div class="section-header">
+            <h2 class="section-title">Distinguished Judges</h2>
+            <p class="section-subtitle">Industry Leaders & Innovators</p>
+        </div>
+        
+        <div class="judges-grid">
+            <div class="judge-card">
+                <div class="judge-avatar">👨‍💼</div>
+                <h3 class="judge-name">Alexander Chen</h3>
+                <p class="judge-title">Chief Innovation Officer</p>
+                <p class="judge-company">OpenAI</p>
+            </div>
+            
+            <div class="judge-card">
+                <div class="judge-avatar">👩‍💻</div>
+                <h3 class="judge-name">Dr. Sarah Mitchell</h3>
+                <p class="judge-title">VP of Engineering</p>
+                <p class="judge-company">Anthropic</p>
+            </div>
+            
+            <div class="judge-card">
+                <div class="judge-avatar">👨‍🔬</div>
+                <h3 class="judge-name">Marcus Rodriguez</h3>
+                <p class="judge-title">Research Director</p>
+                <p class="judge-company">Google DeepMind</p>
+            </div>
+            
+            <div class="judge-card">
+                <div class="judge-avatar">👩‍🚀</div>
+                <h3 class="judge-name">Emily Watson</h3>
+                <p class="judge-title">Founder & CEO</p>
+                <p class="judge-company">Future Labs</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sponsors Section -->
+    <section class="sponsors fade-in" id="sponsors">
+        <div class="section-header">
+            <h2 class="section-title">Our Partners</h2>
+            <p class="section-subtitle">Supporting the Future of Innovation</p>
+        </div>
+        
+        <div class="sponsors-container">
+            <div class="sponsor-tier">
+                <h3 class="tier-title">Platinum Partners</h3>
+                <div class="sponsors-grid">
+                    <div class="sponsor-logo">OpenAI</div>
+                    <div class="sponsor-logo">Anthropic</div>
+                    <div class="sponsor-logo">Google</div>
+                </div>
+            </div>
+            
+            <div class="sponsor-tier">
+                <h3 class="tier-title">Gold Partners</h3>
+                <div class="sponsors-grid">
+                    <div class="sponsor-logo">Microsoft</div>
+                    <div class="sponsor-logo">Meta</div>
+                    <div class="sponsor-logo">Amazon</div>
+                    <div class="sponsor-logo">NVIDIA</div>
+                </div>
+            </div>
+            
+            <div class="sponsor-tier">
+                <h3 class="tier-title">Silver Partners</h3>
+                <div class="sponsors-grid">
+                    <div class="sponsor-logo">IBM</div>
+                    <div class="sponsor-logo">Tesla</div>
+                    <div class="sponsor-logo">Apple</div>
+                    <div class="sponsor-logo">Mistral</div>
+                    <div class="sponsor-logo">Cohere</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="submit">
+        <div class="cta-content">
+            <h2 class="cta-title">Submit Your Project</h2>
+            <p class="cta-subtitle">Join the elite community of vibe-coders shaping the future</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">Submit Entry</a>
+                <a href="#" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <h3>The Vibe Awards</h3>
+                    <p>Celebrating excellence in AI-powered development. Recognizing the innovators who are building the future through human-AI collaboration.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Categories</a></li>
+                        <li><a href="#">Past Winners</a></li>
+                        <li><a href="#">Judges</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Submission Guide</a></li>
+                        <li><a href="#">Rules & Eligibility</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Press Kit</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Connect</h4>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Newsletter</a></li>
+                        <li><a href="#">Partnerships</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-copy">
+                    &copy; 2024 The Vibe Awards. All rights reserved.
+                </div>
+                <div class="footer-social">
+                    <a href="#" class="social-link">𝕏</a>
+                    <a href="#" class="social-link">in</a>
+                    <a href="#" class="social-link">f</a>
+                    <a href="#" class="social-link">@</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar Scroll Effect
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Intersection Observer for Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0.1s';
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Counter Animation
+        function animateCounter(id, start, end, duration = 2000) {
+            const element = document.getElementById(id);
+            const increment = (end - start) / (duration / 16);
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= end) {
+                    current = end;
+                    clearInterval(timer);
+                }
+                
+                if (id === 'computeInvested') {
+                    element.textContent = '$' + Math.floor(current) + 'M+';
+                } else if (id === 'projectsBuilt') {
+                    element.textContent = Math.floor(current).toLocaleString();
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 16);
+        }
+
+        // Start animations when hero section is visible
+        const heroObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounter('computeInvested', 0, 47, 2000);
+                    animateCounter('projectsBuilt', 0, 10483, 2500);
+                    animateCounter('globalReach', 0, 127, 1500);
+                    heroObserver.unobserve(entry.target);
+                }
+            });
+        });
+
+        const heroStats = document.querySelector('.hero-stats');
+        if (heroStats) {
+            heroObserver.observe(heroStats);
+        }
+    </script>
+</body>
+</html>

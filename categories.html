@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Categories - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-gray: #86868B;
+            --apple-light-gray: #F5F5F7;
+            --apple-dark: #1D1D1F;
+            --apple-green: #30D158;
+            --apple-red: #FF375F;
+            --apple-orange: #FF9F0A;
+            --apple-purple: #BF5AF2;
+            --apple-teal: #5AC8FA;
+            --apple-indigo: #5856D6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Background */
+        .categories-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .gradient-mesh {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(191, 90, 242, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 60%, rgba(88, 86, 214, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 50% 90%, rgba(0, 113, 227, 0.2) 0%, transparent 50%);
+            animation: meshMove 30s ease-in-out infinite;
+        }
+
+        @keyframes meshMove {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 9999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #F5F5F7;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-link {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #F5F5F7;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 120px 24px 60px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .hero-title {
+            font-size: 72px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 24px;
+            color: rgba(245, 245, 247, 0.8);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Categories Grid */
+        .categories-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px 80px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 32px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .category-card:hover::before {
+            opacity: 1;
+        }
+
+        .category-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .category-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin-bottom: 24px;
+        }
+
+        .category-card.health .category-icon {
+            background: linear-gradient(135deg, var(--apple-green), var(--apple-teal));
+        }
+
+        .category-card.education .category-icon {
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+        }
+
+        .category-card.entertainment .category-icon {
+            background: linear-gradient(135deg, var(--apple-purple), #FF375F);
+        }
+
+        .category-card.productivity .category-icon {
+            background: linear-gradient(135deg, var(--apple-orange), var(--apple-red));
+        }
+
+        .category-card.finance .category-icon {
+            background: linear-gradient(135deg, var(--apple-indigo), var(--apple-purple));
+        }
+
+        .category-card.social .category-icon {
+            background: linear-gradient(135deg, #FF2D55, #FF6482);
+        }
+
+        .category-card.games .category-icon {
+            background: linear-gradient(135deg, #5AC8FA, #007AFF);
+        }
+
+        .category-card.lifestyle .category-icon {
+            background: linear-gradient(135deg, #FF9500, #FFCC00);
+        }
+
+        .category-card.utilities .category-icon {
+            background: linear-gradient(135deg, #8E8E93, #636366);
+        }
+
+        .category-name {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .category-description {
+            font-size: 16px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .category-stats {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .category-stat {
+            text-align: center;
+        }
+
+        .category-stat-value {
+            font-size: 20px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .category-stat-label {
+            font-size: 12px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        /* Featured Section */
+        .featured-section {
+            margin-bottom: 60px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .see-all-link {
+            color: var(--apple-blue);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: opacity 0.2s ease;
+        }
+
+        .see-all-link:hover {
+            opacity: 0.8;
+        }
+
+        .featured-apps {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .featured-app {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .featured-app:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-4px);
+        }
+
+        .featured-app-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin: 0 auto 12px;
+        }
+
+        .featured-app-name {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .featured-app-category {
+            font-size: 12px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        /* Trending Tags */
+        .trending-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 60px;
+        }
+
+        .trending-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .trending-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .trending-tag {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .trending-tag:hover {
+            background: var(--apple-blue);
+            border-color: transparent;
+            transform: scale(1.05);
+        }
+
+        .tag-hot {
+            background: rgba(255, 55, 95, 0.2);
+            border-color: var(--apple-red);
+            color: var(--apple-red);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 48px;
+            }
+
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .featured-apps {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="categories-background">
+        <div class="gradient-mesh"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index-magic.html" class="nav-logo">
+                <span>🏆</span>
+                <span>The Vibe Awards</span>
+            </a>
+            <div class="nav-menu">
+                <a href="index-magic.html" class="nav-link">Home</a>
+                <a href="apple-magic-battle.html" class="nav-link">Battle Arena</a>
+                <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+                <a href="gallery.html" class="nav-link">Gallery</a>
+                <a href="categories.html" class="nav-link active">Categories</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-badge">🎯 Explore by Category</div>
+        <h1 class="hero-title">Categories</h1>
+        <p class="hero-subtitle">Discover amazing apps across every category and find your next favorite</p>
+    </section>
+
+    <!-- Categories Container -->
+    <div class="categories-container">
+        <!-- Trending Tags -->
+        <div class="trending-section">
+            <h3 class="trending-title">🔥 Trending Now</h3>
+            <div class="trending-tags">
+                <span class="trending-tag tag-hot">AI-Powered</span>
+                <span class="trending-tag">Voice Control</span>
+                <span class="trending-tag">Machine Learning</span>
+                <span class="trending-tag">Real-time Sync</span>
+                <span class="trending-tag tag-hot">ChatGPT Integration</span>
+                <span class="trending-tag">Cross-Platform</span>
+                <span class="trending-tag">Blockchain</span>
+                <span class="trending-tag">AR/VR</span>
+                <span class="trending-tag">No-Code</span>
+                <span class="trending-tag tag-hot">HIPAA Compliant</span>
+            </div>
+        </div>
+
+        <!-- Categories Grid -->
+        <div class="categories-grid">
+            <div class="category-card health">
+                <div class="category-icon">🏥</div>
+                <h3 class="category-name">Healthcare & Medical</h3>
+                <p class="category-description">Revolutionary health apps transforming patient care and medical practice</p>
+                <div class="category-stats">
+                    <div class="category-stat">
+                        <span class="category-stat-value">47</span>
+                        <span class="category-stat-label">Apps</span>
+                    </div>
+                    <div class="category-stat">
+                        <span class="category-stat-value">156</span>
+                        <span class="category-stat-label">Battles</span>
+                    </div>
+                    <div class="category-stat">
+                        <span class="category-stat-value">82%</span>
+                        <span class="category-stat-label">Avg Win Rate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card education">
+                <div class="category-icon">📚</div>
+                <h3 class="category-name">Education</h3>
+                <p class="category-description">Learning platforms and educational tools for students and educators</p>
+                <div class="category-stats">
+                    <div class="category-stat">
+                        <span class="category-stat-value">63</span>
+                        <span class="category-stat-label">Apps</span>
+                    </div>
+                    <div class="category-stat">
+                        <span class="category-stat-value">198</span>
+                        <span class="category-stat-label">Battles</span>
+                    </div>
+                    <div class="category-stat">
+                        <span class="category-stat-value">78%</span>
+                        <span class="category-stat-label">Avg Win Rate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card entertainment">
+                <div class="category-icon">🎬</div>
+                <h3 class="category-name">Entertainment</h3>
+                <p class="category-description">Streaming, music, and entertainment apps for endless enjoyment</p>
+                <div class="category-stats">
+                    <div class="category-stat">
+                        <span class="category-stat-value">89</span>
+                        <span class="category-stat-label">Apps</span>
+                    </div>
+                    <div class="category-stat">
+                        <span class="category-stat-value">267</span>
+                        <span class="category-stat-label">Battles</span>
+                    </div>
+                    <div class="category-stat">
+                        <span class="category-stat-value">71%</span>
+                        <span class="category-stat-label">Avg Win Rate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card productivity">
+                <div class="category-icon">📊</div>
+                <h3 class="category-name">Productivity</h3>
+                <p class="category-description">Tools to boost efficiency and streamline your workflow</p>
+                <div class="category-stats">
+                    <div class="category-stat">
+                        <span class="category-stat-value">52</span>
+                        <span class="category-stat-label">Apps</span>
+                    </div>
+                    <div class="category-stat">
+                        <span class="category-stat-value">143</span>
+                        <span class="category-stat-label">Battles</span>
+                    </div>
+                    <div class="category-stat">
+                        <span class="category-stat-value">75%</span>
+                        <span class="category-stat-label">Avg Win Rate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card finance">
+                <div class="category-icon">💰</div>
+                <h3 class="category-name">Finance</h3>
+                <p class="category-description">Banking, investing, and financial management solutions</p>
+                <div class="category-stats">
+                    <div class="category-stat">
+                        <span class="category-stat-value">38</span>
+                        <span class="category-stat-label">Apps</span>
+                    </div>
+                    <div class="category-stat">
+                        <span class="category-stat-value">112</span>
+                        <span class="category-stat-label">Battles</span>
+                    </div>
+                    <div class="category-stat">
+                        <span class="category-stat-value">73%</span>
+                        <span class="category-stat-label">Avg Win Rate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card social">
+                <div class="category-icon">💬</div>
+                <h3 class="category-name">Social Networking</h3>
+                <p class="category-description">Connect, share, and communicate with the world</p>
+                <div class="category-stats">
+                    <div class="category-stat">
+                        <span class="category-stat-value">41</span>
+                        <span class="category-stat-label">Apps</span>
+                    </div>
+                    <div class="category-stat">
+                        <span class="category-stat-value">124</span>
+                        <span class="category-stat-label">Battles</span>
+                    </div>
+                    <div class="category-stat">
+                        <span class="category-stat-value">69%</span>
+                        <span class="category-stat-label">Avg Win Rate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card games">
+                <div class="category-icon">🎮</div>
+                <h3 class="category-name">Games</h3>
+                <p class="category-description">Immersive gaming experiences for all platforms</p>
+                <div class="category-stats">
+                    <div class="category-stat">
+                        <span class="category-stat-value">76</span>
+                        <span class="category-stat-label">Apps</span>
+                    </div>
+                    <div class="category-stat">
+                        <span class="category-stat-value">234</span>
+                        <span class="category-stat-label">Battles</span>
+                    </div>
+                    <div class="category-stat">
+                        <span class="category-stat-value">68%</span>
+                        <span class="category-stat-label">Avg Win Rate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card lifestyle">
+                <div class="category-icon">🌟</div>
+                <h3 class="category-name">Lifestyle</h3>
+                <p class="category-description">Apps to enhance your daily life and personal interests</p>
+                <div class="category-stats">
+                    <div class="category-stat">
+                        <span class="category-stat-value">58</span>
+                        <span class="category-stat-label">Apps</span>
+                    </div>
+                    <div class="category-stat">
+                        <span class="category-stat-value">167</span>
+                        <span class="category-stat-label">Battles</span>
+                    </div>
+                    <div class="category-stat">
+                        <span class="category-stat-value">70%</span>
+                        <span class="category-stat-label">Avg Win Rate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card utilities">
+                <div class="category-icon">🔧</div>
+                <h3 class="category-name">Utilities</h3>
+                <p class="category-description">Essential tools and utilities for everyday tasks</p>
+                <div class="category-stats">
+                    <div class="category-stat">
+                        <span class="category-stat-value">44</span>
+                        <span class="category-stat-label">Apps</span>
+                    </div>
+                    <div class="category-stat">
+                        <span class="category-stat-value">128</span>
+                        <span class="category-stat-label">Battles</span>
+                    </div>
+                    <div class="category-stat">
+                        <span class="category-stat-value">72%</span>
+                        <span class="category-stat-label">Avg Win Rate</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Section -->
+        <div class="featured-section">
+            <div class="section-header">
+                <h2 class="section-title">Featured Apps This Week</h2>
+                <a href="leaderboard.html" class="see-all-link">See All →</a>
+            </div>
+            <div class="featured-apps">
+                <div class="featured-app">
+                    <div class="featured-app-icon">🗣️</div>
+                    <div class="featured-app-name">TinkyBink AAC</div>
+                    <div class="featured-app-category">Healthcare</div>
+                </div>
+                <div class="featured-app">
+                    <div class="featured-app-icon">📚</div>
+                    <div class="featured-app-name">StudyBuddy AI</div>
+                    <div class="featured-app-category">Education</div>
+                </div>
+                <div class="featured-app">
+                    <div class="featured-app-icon">🎵</div>
+                    <div class="featured-app-name">BeatMaker Studio</div>
+                    <div class="featured-app-category">Entertainment</div>
+                </div>
+                <div class="featured-app">
+                    <div class="featured-app-icon">💰</div>
+                    <div class="featured-app-name">WealthWise AI</div>
+                    <div class="featured-app-category">Finance</div>
+                </div>
+                <div class="featured-app">
+                    <div class="featured-app-icon">🎮</div>
+                    <div class="featured-app-name">PixelQuest Pro</div>
+                    <div class="featured-app-category">Games</div>
+                </div>
+                <div class="featured-app">
+                    <div class="featured-app-icon">🏃</div>
+                    <div class="featured-app-name">FitGenius Pro</div>
+                    <div class="featured-app-category">Lifestyle</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Category card click handler
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const categoryName = this.querySelector('.category-name').textContent;
+                console.log('Navigate to category:', categoryName);
+                // Navigate to category page
+                window.location.href = `leaderboard.html?category=${encodeURIComponent(categoryName)}`;
+            });
+        });
+
+        // Featured app click handler
+        document.querySelectorAll('.featured-app').forEach(app => {
+            app.addEventListener('click', function() {
+                window.location.href = 'app-details.html';
+            });
+        });
+
+        // Trending tag click handler
+        document.querySelectorAll('.trending-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                console.log('Filter by tag:', this.textContent);
+            });
+        });
+
+        // Animate stats on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.6s ease forwards';
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+
+        document.querySelectorAll('.category-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Add animation keyframe
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

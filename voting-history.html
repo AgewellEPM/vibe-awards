@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting History - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-gray: #86868B;
+            --apple-light-gray: #F5F5F7;
+            --apple-dark: #1D1D1F;
+            --apple-green: #30D158;
+            --apple-red: #FF375F;
+            --apple-orange: #FF9F0A;
+            --apple-purple: #BF5AF2;
+            --apple-teal: #5AC8FA;
+            --apple-indigo: #5856D6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        /* Animated Background */
+        .voting-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-gradient {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            top: -25%;
+            left: -25%;
+            background: radial-gradient(circle at 20% 80%, rgba(0, 113, 227, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(191, 90, 242, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(48, 209, 88, 0.2) 0%, transparent 70%);
+            animation: gradientShift 20s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+        }
+
+        /* Header */
+        .header {
+            padding: 30px 40px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .title-text h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .title-text p {
+            font-size: 16px;
+            color: rgba(245, 245, 247, 0.7);
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .filter-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .filter-title {
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .filter-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--apple-blue);
+        }
+
+        .stat-label {
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .filter-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(245, 245, 247, 0.8);
+        }
+
+        .filter-select {
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--apple-blue);
+            box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
+        }
+
+        /* Voting History Grid */
+        .history-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .history-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .history-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .history-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--apple-purple), var(--apple-blue), var(--apple-teal));
+        }
+
+        .history-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .history-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .app-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .app-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .app-info p {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .vote-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .vote-badge.upvote {
+            background: linear-gradient(135deg, var(--apple-green), #00FF88);
+            color: black;
+        }
+
+        .vote-badge.downvote {
+            background: linear-gradient(135deg, var(--apple-red), #FF0040);
+            color: white;
+        }
+
+        .vote-badge.neutral {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .history-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            text-align: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: rgba(245, 245, 247, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .vote-reason {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .reason-label {
+            font-size: 12px;
+            color: rgba(245, 245, 247, 0.6);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .reason-text {
+            font-size: 14px;
+            line-height: 1.5;
+            color: rgba(245, 245, 247, 0.9);
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            border: none;
+        }
+
+        /* Analytics Dashboard */
+        .analytics-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .analytics-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .analytics-title {
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .analytics-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .analytics-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .analytics-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--apple-blue);
+            margin-bottom: 6px;
+        }
+
+        .analytics-label {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        /* Vote Pattern Chart */
+        .chart-container {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 25px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .chart-placeholder {
+            text-align: center;
+            color: rgba(245, 245, 247, 0.5);
+        }
+
+        .chart-placeholder svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 15px;
+            opacity: 0.3;
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--apple-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .empty-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .empty-text {
+            font-size: 16px;
+            color: rgba(245, 245, 247, 0.6);
+            margin-bottom: 30px;
+        }
+
+        .empty-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .empty-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 20px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .filter-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .history-details {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .analytics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="voting-background">
+        <div class="bg-gradient"></div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="header-title">
+                <div class="header-icon">📊</div>
+                <div class="title-text">
+                    <h1>Voting History</h1>
+                    <p>Track your voting patterns and impact</p>
+                </div>
+            </div>
+            <div class="header-nav">
+                <a href="dashboard.html" class="nav-btn">Dashboard</a>
+                <a href="leaderboard.html" class="nav-btn">Leaderboard</a>
+                <a href="index-magic.html" class="nav-btn">Home</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Analytics Section -->
+        <div class="analytics-section">
+            <div class="analytics-header">
+                <div class="analytics-title">
+                    📈 Your Voting Analytics
+                </div>
+            </div>
+            
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <div class="analytics-icon">🗳️</div>
+                    <div class="analytics-value">127</div>
+                    <div class="analytics-label">Total Votes</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-icon">👍</div>
+                    <div class="analytics-value">89</div>
+                    <div class="analytics-label">Upvotes</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-icon">👎</div>
+                    <div class="analytics-value">24</div>
+                    <div class="analytics-label">Downvotes</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-icon">😐</div>
+                    <div class="analytics-value">14</div>
+                    <div class="analytics-label">Neutral</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-icon">🎯</div>
+                    <div class="analytics-value">92%</div>
+                    <div class="analytics-label">Accuracy</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-icon">🔥</div>
+                    <div class="analytics-value">15</div>
+                    <div class="analytics-label">Streak</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-placeholder">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+                    </svg>
+                    <div>
+                        <h3>Vote Pattern Analysis</h3>
+                        <p>Interactive charts coming soon</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-header">
+                <div class="filter-title">
+                    🔍 Filter & Search
+                </div>
+                <div class="filter-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">127</div>
+                        <div class="stat-label">Total Votes</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">38</div>
+                        <div class="stat-label">Apps Voted</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">30</div>
+                        <div class="stat-label">Days Active</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label class="filter-label">Vote Type</label>
+                    <select class="filter-select" id="voteTypeFilter">
+                        <option value="all">All Votes</option>
+                        <option value="upvote">Upvotes Only</option>
+                        <option value="downvote">Downvotes Only</option>
+                        <option value="neutral">Neutral Only</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Category</label>
+                    <select class="filter-select" id="categoryFilter">
+                        <option value="all">All Categories</option>
+                        <option value="productivity">Productivity</option>
+                        <option value="games">Games</option>
+                        <option value="social">Social</option>
+                        <option value="utilities">Utilities</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Time Period</label>
+                    <select class="filter-select" id="timeFilter">
+                        <option value="all">All Time</option>
+                        <option value="week">Last Week</option>
+                        <option value="month">Last Month</option>
+                        <option value="quarter">Last Quarter</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Sort By</label>
+                    <select class="filter-select" id="sortFilter">
+                        <option value="recent">Most Recent</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="rating">Highest Rated</option>
+                        <option value="impact">Most Impact</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Voting History -->
+        <div class="history-grid" id="historyGrid">
+            <!-- History Card 1 -->
+            <div class="history-card">
+                <div class="history-header">
+                    <div class="history-title">
+                        <div class="app-icon">📱</div>
+                        <div class="app-info">
+                            <h3>TaskFlow Pro</h3>
+                            <p>Productivity • by @alexdev</p>
+                        </div>
+                    </div>
+                    <div class="vote-badge upvote">👍 Upvote</div>
+                </div>
+                
+                <div class="history-details">
+                    <div class="detail-item">
+                        <div class="detail-value">2 hours ago</div>
+                        <div class="detail-label">Voted</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">9.2/10</div>
+                        <div class="detail-label">My Rating</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">+15</div>
+                        <div class="detail-label">Impact Score</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">4.8★</div>
+                        <div class="detail-label">App Rating</div>
+                    </div>
+                </div>
+                
+                <div class="vote-reason">
+                    <div class="reason-label">Vote Reason</div>
+                    <div class="reason-text">Amazing productivity features and clean UI. The AI task prioritization is game-changing!</div>
+                </div>
+                
+                <div class="history-actions">
+                    <a href="#" class="action-btn">View App</a>
+                    <a href="#" class="action-btn">Update Vote</a>
+                    <a href="#" class="action-btn primary">Share</a>
+                </div>
+            </div>
+
+            <!-- History Card 2 -->
+            <div class="history-card">
+                <div class="history-header">
+                    <div class="history-title">
+                        <div class="app-icon">🎮</div>
+                        <div class="app-info">
+                            <h3>Pixel Quest</h3>
+                            <p>Games • by @pixelstudio</p>
+                        </div>
+                    </div>
+                    <div class="vote-badge downvote">👎 Downvote</div>
+                </div>
+                
+                <div class="history-details">
+                    <div class="detail-item">
+                        <div class="detail-value">1 day ago</div>
+                        <div class="detail-label">Voted</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">4.1/10</div>
+                        <div class="detail-label">My Rating</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">-8</div>
+                        <div class="detail-label">Impact Score</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">3.2★</div>
+                        <div class="detail-label">App Rating</div>
+                    </div>
+                </div>
+                
+                <div class="vote-reason">
+                    <div class="reason-label">Vote Reason</div>
+                    <div class="reason-text">Too many ads and pay-to-win mechanics. Graphics are good but gameplay feels repetitive.</div>
+                </div>
+                
+                <div class="history-actions">
+                    <a href="#" class="action-btn">View App</a>
+                    <a href="#" class="action-btn">Update Vote</a>
+                    <a href="#" class="action-btn primary">Share</a>
+                </div>
+            </div>
+
+            <!-- History Card 3 -->
+            <div class="history-card">
+                <div class="history-header">
+                    <div class="history-title">
+                        <div class="app-icon">💬</div>
+                        <div class="app-info">
+                            <h3>ChatBridge</h3>
+                            <p>Social • by @bridgetech</p>
+                        </div>
+                    </div>
+                    <div class="vote-badge upvote">👍 Upvote</div>
+                </div>
+                
+                <div class="history-details">
+                    <div class="detail-item">
+                        <div class="detail-value">3 days ago</div>
+                        <div class="detail-label">Voted</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">8.7/10</div>
+                        <div class="detail-label">My Rating</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">+12</div>
+                        <div class="detail-label">Impact Score</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">4.6★</div>
+                        <div class="detail-label">App Rating</div>
+                    </div>
+                </div>
+                
+                <div class="vote-reason">
+                    <div class="reason-label">Vote Reason</div>
+                    <div class="reason-text">Great concept for cross-platform messaging. Privacy features are solid and the E2E encryption works perfectly.</div>
+                </div>
+                
+                <div class="history-actions">
+                    <a href="#" class="action-btn">View App</a>
+                    <a href="#" class="action-btn">Update Vote</a>
+                    <a href="#" class="action-btn primary">Share</a>
+                </div>
+            </div>
+
+            <!-- History Card 4 -->
+            <div class="history-card">
+                <div class="history-header">
+                    <div class="history-title">
+                        <div class="app-icon">🔧</div>
+                        <div class="app-info">
+                            <h3>DevTools++</h3>
+                            <p>Utilities • by @devmaster</p>
+                        </div>
+                    </div>
+                    <div class="vote-badge neutral">😐 Neutral</div>
+                </div>
+                
+                <div class="history-details">
+                    <div class="detail-item">
+                        <div class="detail-value">1 week ago</div>
+                        <div class="detail-label">Voted</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">6.5/10</div>
+                        <div class="detail-label">My Rating</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">0</div>
+                        <div class="detail-label">Impact Score</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">4.1★</div>
+                        <div class="detail-label">App Rating</div>
+                    </div>
+                </div>
+                
+                <div class="vote-reason">
+                    <div class="reason-label">Vote Reason</div>
+                    <div class="reason-text">Decent tool collection but nothing groundbreaking. Some features work well, others need polish. Mixed feelings overall.</div>
+                </div>
+                
+                <div class="history-actions">
+                    <a href="#" class="action-btn">View App</a>
+                    <a href="#" class="action-btn">Update Vote</a>
+                    <a href="#" class="action-btn primary">Share</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Load More Button -->
+        <div style="text-align: center; margin-top: 40px;">
+            <button class="empty-btn" onclick="loadMoreHistory()">Load More History</button>
+        </div>
+    </div>
+
+    <script>
+        // Sample voting history data
+        const votingHistory = [
+            {
+                id: 1,
+                app: { name: "TaskFlow Pro", category: "Productivity", author: "@alexdev", icon: "📱" },
+                vote: "upvote",
+                rating: 9.2,
+                impact: 15,
+                appRating: 4.8,
+                timestamp: "2 hours ago",
+                reason: "Amazing productivity features and clean UI. The AI task prioritization is game-changing!"
+            },
+            {
+                id: 2,
+                app: { name: "Pixel Quest", category: "Games", author: "@pixelstudio", icon: "🎮" },
+                vote: "downvote",
+                rating: 4.1,
+                impact: -8,
+                appRating: 3.2,
+                timestamp: "1 day ago",
+                reason: "Too many ads and pay-to-win mechanics. Graphics are good but gameplay feels repetitive."
+            },
+            {
+                id: 3,
+                app: { name: "ChatBridge", category: "Social", author: "@bridgetech", icon: "💬" },
+                vote: "upvote",
+                rating: 8.7,
+                impact: 12,
+                appRating: 4.6,
+                timestamp: "3 days ago",
+                reason: "Great concept for cross-platform messaging. Privacy features are solid and the E2E encryption works perfectly."
+            },
+            {
+                id: 4,
+                app: { name: "DevTools++", category: "Utilities", author: "@devmaster", icon: "🔧" },
+                vote: "neutral",
+                rating: 6.5,
+                impact: 0,
+                appRating: 4.1,
+                timestamp: "1 week ago",
+                reason: "Decent tool collection but nothing groundbreaking. Some features work well, others need polish. Mixed feelings overall."
+            }
+        ];
+
+        // Filter functionality
+        function applyFilters() {
+            const voteType = document.getElementById('voteTypeFilter').value;
+            const category = document.getElementById('categoryFilter').value;
+            const timeFilter = document.getElementById('timeFilter').value;
+            const sortFilter = document.getElementById('sortFilter').value;
+
+            // Simulate filtering logic
+            console.log('Applying filters:', { voteType, category, timeFilter, sortFilter });
+            
+            // In a real app, this would filter the displayed history cards
+            // For now, we'll just show a loading state briefly
+            showLoadingState();
+            setTimeout(() => {
+                hideLoadingState();
+            }, 500);
+        }
+
+        function showLoadingState() {
+            const grid = document.getElementById('historyGrid');
+            grid.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+        }
+
+        function hideLoadingState() {
+            // Restore the original content
+            location.reload();
+        }
+
+        function loadMoreHistory() {
+            showLoadingState();
+            setTimeout(() => {
+                hideLoadingState();
+                // In a real app, this would load more history items
+            }, 1000);
+        }
+
+        // Add event listeners to filters
+        document.addEventListener('DOMContentLoaded', function() {
+            const filters = ['voteTypeFilter', 'categoryFilter', 'timeFilter', 'sortFilter'];
+            filters.forEach(filterId => {
+                document.getElementById(filterId).addEventListener('change', applyFilters);
+            });
+        });
+
+        // Simulate real-time updates
+        function updateAnalytics() {
+            const analyticsValues = document.querySelectorAll('.analytics-value');
+            analyticsValues.forEach(element => {
+                if (element.textContent.includes('%')) {
+                    // Update percentage values
+                    const current = parseInt(element.textContent);
+                    const change = Math.random() > 0.5 ? 1 : -1;
+                    element.textContent = Math.max(0, Math.min(100, current + change)) + '%';
+                } else if (!element.textContent.includes('.')) {
+                    // Update integer values
+                    const current = parseInt(element.textContent);
+                    const change = Math.floor(Math.random() * 3) - 1;
+                    element.textContent = Math.max(0, current + change);
+                }
+            });
+        }
+
+        // Update analytics every 30 seconds
+        setInterval(updateAnalytics, 30000);
+
+        // Track user interactions
+        function trackVoteUpdate(appName, newVote) {
+            console.log(`Vote updated for ${appName}: ${newVote}`);
+            // In a real app, this would send data to analytics
+        }
+
+        function trackAppView(appName) {
+            console.log(`Viewed app: ${appName}`);
+            // In a real app, this would track app views
+        }
+
+        function trackShare(appName) {
+            console.log(`Shared vote for: ${appName}`);
+            // In a real app, this would handle sharing
+        }
+
+        // Add click handlers to action buttons
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('action-btn')) {
+                const card = e.target.closest('.history-card');
+                const appName = card.querySelector('.app-info h3').textContent;
+                
+                if (e.target.textContent.includes('View App')) {
+                    trackAppView(appName);
+                } else if (e.target.textContent.includes('Update Vote')) {
+                    // Show update vote modal (placeholder)
+                    alert(`Update vote for ${appName}`);
+                } else if (e.target.textContent.includes('Share')) {
+                    trackShare(appName);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

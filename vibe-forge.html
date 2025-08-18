@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Forge - Anthropic Vibe Coding Tool | Vibe Coders AI Architect</title>
+    
+    <!-- SEO Meta Tags for Vibe Forge -->
+    <meta name="description" content="Vibe Forge: The ultimate Anthropic-powered vibe coding tool for vibe coders. Generate complete projects with AI-driven vibe coding architecture in seconds.">
+    <meta name="keywords" content="vibe forge, anthropic vibe coding, vibe coders tool, AI vibe coding, vibe coding generator, anthropic vibe platform, vibe coding architect">
+    <meta name="author" content="The Vibe Awards">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Vibe Forge - Anthropic Vibe Coding Tool">
+    <meta property="og:description" content="The ultimate Anthropic-powered vibe coding tool for vibe coders. Generate complete projects instantly.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vibeawards.com/vibe-forge">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Vibe Forge",
+      "description": "Anthropic-powered vibe coding tool for vibe coders to generate complete project architectures",
+      "url": "https://vibeawards.com/vibe-forge",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #151922;
+            --bg-tertiary: #1e2530;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a7b5;
+            --accent-green: #4ade80;
+            --accent-orange: #fb923c;
+            --accent-pink: #f472b6;
+            --accent-blue: #60a5fa;
+            --border-color: #2a3441;
+            --code-bg: #0d1117;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+            background: linear-gradient(135deg, #0a0e17 0%, #1a1f2e 50%, #0a0e17 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 0;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .header h1 {
+            font-size: 48px;
+            background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .tagline {
+            font-size: 18px;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        /* Section */
+        .section {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: var(--text-primary);
+        }
+
+        .section-title .icon {
+            font-size: 24px;
+        }
+
+        /* Project Types */
+        .project-types {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .project-type {
+            padding: 10px 20px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .project-type:hover {
+            border-color: var(--accent-green);
+            transform: translateY(-2px);
+        }
+
+        .project-type.active {
+            background: var(--accent-green);
+            color: var(--bg-primary);
+            border-color: var(--accent-green);
+        }
+
+        /* Constraints */
+        .constraint-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .constraint {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .constraint:hover {
+            background: rgba(74, 222, 128, 0.1);
+        }
+
+        .constraint.active {
+            background: rgba(74, 222, 128, 0.2);
+            border: 1px solid var(--accent-green);
+        }
+
+        .constraint input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent-green);
+        }
+
+        .constraint-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            min-width: 100px;
+        }
+
+        .constraint-desc {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Stack Table */
+        .stack-table {
+            width: 100%;
+        }
+
+        .stack-row {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            padding: 15px;
+            background: var(--bg-tertiary);
+            margin-bottom: 10px;
+            border-radius: 8px;
+            align-items: center;
+        }
+
+        .stack-layer {
+            font-weight: 600;
+            color: var(--accent-blue);
+        }
+
+        .stack-tech {
+            color: var(--text-secondary);
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #e6edf3;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 8px 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-green);
+            color: var(--bg-primary);
+        }
+
+        /* Backlog */
+        .backlog-item {
+            padding: 15px;
+            background: var(--bg-tertiary);
+            border-left: 3px solid var(--accent-green);
+            margin-bottom: 12px;
+            border-radius: 4px;
+        }
+
+        .backlog-item.completed {
+            opacity: 0.6;
+            border-left-color: var(--accent-blue);
+        }
+
+        .day-label {
+            font-weight: 600;
+            color: var(--accent-orange);
+            margin-bottom: 5px;
+        }
+
+        /* Generate Button */
+        .generate-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(74, 222, 128, 0.3);
+        }
+
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Output Section */
+        .output-section {
+            grid-column: span 2;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            display: none;
+        }
+
+        .output-section.active {
+            display: block;
+        }
+
+        .file-tree {
+            font-family: 'SF Mono', monospace;
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .file-tree .folder {
+            color: var(--accent-blue);
+        }
+
+        .file-tree .file {
+            color: var(--text-primary);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--accent-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .output-section {
+                grid-column: span 1;
+            }
+        }
+    </style>
+    <!-- Modal System -->
+    <script src="js/vibe-modal-system.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🔥 Vibe Forge - Anthropic Vibe Coding Tool</h1>
+            <p class="tagline">The ultimate vibe coding tool for vibe coders. Pick your project type and Anthropic-powered constraints — we'll generate your complete vibe coding blueprint.</p>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Left Column -->
+            <div>
+                <!-- Project Types Section -->
+                <div class="section">
+                    <h2 class="section-title">
+                        <span class="icon">🚀</span>
+                        Project Types
+                    </h2>
+                    <div class="project-types">
+                        <div class="project-type" data-type="Web">Web</div>
+                        <div class="project-type" data-type="Mobile">Mobile</div>
+                        <div class="project-type" data-type="Agent">Agent</div>
+                        <div class="project-type" data-type="Extension">Extension</div>
+                        <div class="project-type" data-type="Game">Game</div>
+                        <div class="project-type" data-type="API">API</div>
+                    </div>
+                </div>
+
+                <!-- Smart Constraints Section -->
+                <div class="section">
+                    <h2 class="section-title">
+                        <span class="icon">⚙️</span>
+                        Smart Constraints
+                    </h2>
+                    <div class="constraint-list">
+                        <div class="constraint" data-constraint="HIPAA">
+                            <input type="checkbox" id="hipaa">
+                            <label for="hipaa">
+                                <div class="constraint-name">HIPAA</div>
+                                <div class="constraint-desc">Adds encryption notes, privacy wrappers</div>
+                            </label>
+                        </div>
+                        <div class="constraint" data-constraint="Offline">
+                            <input type="checkbox" id="offline">
+                            <label for="offline">
+                                <div class="constraint-name">Offline</div>
+                                <div class="constraint-desc">LocalStorage, indexedDB, ollama, Mistral</div>
+                            </label>
+                        </div>
+                        <div class="constraint" data-constraint="Real-time">
+                            <input type="checkbox" id="realtime">
+                            <label for="realtime">
+                                <div class="constraint-name">Real-time</div>
+                                <div class="constraint-desc">WebSocket instead of REST, optimistic UI</div>
+                            </label>
+                        </div>
+                        <div class="constraint" data-constraint="Multilingual">
+                            <input type="checkbox" id="multilingual">
+                            <label for="multilingual">
+                                <div class="constraint-name">Multilingual</div>
+                                <div class="constraint-desc">Adds i18n scaffolds + data flow</div>
+                            </label>
+                        </div>
+                        <div class="constraint" data-constraint="Low Power">
+                            <input type="checkbox" id="lowpower">
+                            <label for="lowpower">
+                                <div class="constraint-name">Low Power</div>
+                                <div class="constraint-desc">Avoids polling / heavy computation</div>
+                            </label>
+                        </div>
+                        <div class="constraint" data-constraint="No JS">
+                            <input type="checkbox" id="nojs">
+                            <label for="nojs">
+                                <div class="constraint-name">No JS</div>
+                                <div class="constraint-desc">Static site generator, 11ty</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div>
+                <!-- Stack Section -->
+                <div class="section">
+                    <h2 class="section-title">
+                        <span class="icon">⚡</span>
+                        Stack + Constraints
+                    </h2>
+                    <div class="stack-table">
+                        <div class="stack-row">
+                            <div class="stack-layer">Frontend UI</div>
+                            <div class="stack-tech">React or SvelteKit</div>
+                        </div>
+                        <div class="stack-row">
+                            <div class="stack-layer">Backend</div>
+                            <div class="stack-tech">Node.js or Python FastAPI</div>
+                        </div>
+                        <div class="stack-row">
+                            <div class="stack-layer">Claude/GPT</div>
+                            <div class="stack-tech">Via Claude SDK or OpenAI API</div>
+                        </div>
+                        <div class="stack-row">
+                            <div class="stack-layer">Repo Gen</div>
+                            <div class="stack-tech">Uses templates + ejs for injection</div>
+                        </div>
+                        <div class="stack-row">
+                            <div class="stack-layer">Storage</div>
+                            <div class="stack-tech">Local (download), or Firebase if saving</div>
+                        </div>
+                        <div class="stack-row">
+                            <div class="stack-layer">Hosting</div>
+                            <div class="stack-tech">Vercel or Render (free)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backlog Section -->
+                <div class="section">
+                    <h2 class="section-title">
+                        <span class="icon">✅</span>
+                        7-Day Backlog
+                    </h2>
+                    <div class="backlog-list">
+                        <div class="backlog-item">
+                            <div class="day-label">Day 1: Scaffolding</div>
+                        </div>
+                        <div class="backlog-item">
+                            <div class="day-label">Day 2: Core UI</div>
+                        </div>
+                        <div class="backlog-item">
+                            <div class="day-label">Day 3: Prompt templates</div>
+                        </div>
+                        <div class="backlog-item">
+                            <div class="day-label">Day 4: LLM integration</div>
+                        </div>
+                        <div class="backlog-item">
+                            <div class="day-label">Day 5-6: Constraint wiring</div>
+                        </div>
+                        <div class="backlog-item">
+                            <div class="day-label">Day 7: Pitch prep + deploy</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Generate Button -->
+        <button class="generate-btn" onclick="generateProject()">
+            🚀 Generate Complete Project Blueprint
+        </button>
+
+        <!-- Output Section -->
+        <div class="output-section" id="output">
+            <h2 class="section-title">
+                <span class="icon">📁</span>
+                Generated Project Structure
+            </h2>
+            
+            <div class="loading" id="loading">
+                <div class="loading-spinner"></div>
+                <p>Generating your AI-powered startup architecture...</p>
+            </div>
+
+            <div class="code-block" id="structure" style="display: none;">
+                <button class="copy-btn" onclick="copyToClipboard('structure-content')">📋 Copy</button>
+                <pre id="structure-content"></pre>
+            </div>
+
+            <h3 class="section-title" style="margin-top: 30px;">
+                <span class="icon">🧠</span>
+                AI Prompt Pack
+            </h3>
+            <div class="code-block" id="prompts" style="display: none;">
+                <button class="copy-btn" onclick="copyToClipboard('prompts-content')">📋 Copy</button>
+                <pre id="prompts-content"></pre>
+            </div>
+
+            <h3 class="section-title" style="margin-top: 30px;">
+                <span class="icon">📄</span>
+                Starter Files
+            </h3>
+            <div class="code-block" id="files" style="display: none;">
+                <button class="copy-btn" onclick="copyToClipboard('files-content')">📋 Copy</button>
+                <pre id="files-content"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Project Types Handler
+        document.querySelectorAll('.project-type').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.project-type').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                updateStack();
+            });
+        });
+
+        // Constraints Handler
+        document.querySelectorAll('.constraint').forEach(constraint => {
+            constraint.addEventListener('click', function(e) {
+                if (e.target.type !== 'checkbox') {
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    checkbox.checked = !checkbox.checked;
+                }
+                this.classList.toggle('active');
+                updateStack();
+            });
+        });
+
+        // Update Stack based on selections
+        function updateStack() {
+            const projectType = document.querySelector('.project-type.active')?.dataset.type || 'Web';
+            const constraints = Array.from(document.querySelectorAll('.constraint input:checked'))
+                .map(input => input.id);
+
+            // Update stack display based on selections
+            const stackRows = document.querySelectorAll('.stack-row');
+            
+            // Frontend
+            if (projectType === 'Mobile') {
+                stackRows[0].querySelector('.stack-tech').textContent = 'React Native or Flutter';
+            } else if (projectType === 'Extension') {
+                stackRows[0].querySelector('.stack-tech').textContent = 'Vanilla JS + Chrome APIs';
+            } else if (projectType === 'Game') {
+                stackRows[0].querySelector('.stack-tech').textContent = 'Phaser.js or Unity WebGL';
+            } else {
+                stackRows[0].querySelector('.stack-tech').textContent = 'React or SvelteKit';
+            }
+
+            // Backend
+            if (constraints.includes('realtime')) {
+                stackRows[1].querySelector('.stack-tech').textContent = 'Node.js + Socket.io';
+            } else if (constraints.includes('nojs')) {
+                stackRows[1].querySelector('.stack-tech').textContent = 'Static Site Generator (11ty)';
+            } else {
+                stackRows[1].querySelector('.stack-tech').textContent = 'Node.js or Python FastAPI';
+            }
+
+            // Storage
+            if (constraints.includes('offline')) {
+                stackRows[4].querySelector('.stack-tech').textContent = 'IndexedDB + Local Storage';
+            } else if (constraints.includes('hipaa')) {
+                stackRows[4].querySelector('.stack-tech').textContent = 'Encrypted PostgreSQL + Vault';
+            } else {
+                stackRows[4].querySelector('.stack-tech').textContent = 'Local (download), or Firebase if saving';
+            }
+        }
+
+        // Generate Project
+        async function generateProject() {
+            const projectType = document.querySelector('.project-type.active')?.dataset.type || 'Web';
+            const constraints = Array.from(document.querySelectorAll('.constraint input:checked'))
+                .map(input => {
+                    const constraintMap = {
+                        'hipaa': 'HIPAA',
+                        'offline': 'Offline',
+                        'realtime': 'Real-time',
+                        'multilingual': 'Multilingual',
+                        'lowpower': 'Low Power',
+                        'nojs': 'No JS'
+                    };
+                    return constraintMap[input.id];
+                });
+
+            // Show output section
+            const outputSection = document.getElementById('output');
+            outputSection.classList.add('active');
+            
+            // Show loading
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('structure').style.display = 'none';
+            document.getElementById('prompts').style.display = 'none';
+            document.getElementById('files').style.display = 'none';
+
+            try {
+                // Call the actual API
+                const response = await fetch('http://localhost:3457/api/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        projectType: projectType,
+                        constraints: constraints,
+                        projectName: `vibe-${projectType.toLowerCase()}-${Date.now()}`
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Generate preview while we have the download ready
+                    generateStructure(projectType, constraints);
+                    generatePrompts(projectType, constraints);
+                    generateFiles(projectType, constraints);
+
+                    // Add download button
+                    const downloadBtn = document.createElement('button');
+                    downloadBtn.className = 'generate-btn';
+                    downloadBtn.style.marginTop = '20px';
+                    downloadBtn.textContent = '📥 Download Generated Project';
+                    downloadBtn.onclick = () => {
+                        // Create download link
+                        const blob = new Blob([atob(data.download.data)], { type: 'application/zip' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = data.download.filename;
+                        a.click();
+                        URL.revokeObjectURL(url);
+                    };
+                    
+                    // Add download button after the output section
+                    if (!document.getElementById('download-btn')) {
+                        downloadBtn.id = 'download-btn';
+                        outputSection.appendChild(downloadBtn);
+                    }
+
+                    // Show enhanced success message with project insights
+                    const projectInsights = analyzeGeneratedProject(projectType, constraints);
+                    vibeSuccess(
+                        '🚀 Project Generated Successfully!',
+                        `
+                            <div style="text-align: left;">
+                                <p style="margin-bottom: 15px;">Your <strong>${projectType}</strong> project has been generated with AI-powered architecture!</p>
+                                <p style="margin-bottom: 10px;"><strong>Project Analysis:</strong></p>
+                                <ul style="margin-left: 20px; margin-bottom: 15px;">
+                                    <li>Complexity Level: ${projectInsights.complexity}</li>
+                                    <li>Estimated Dev Time: ${projectInsights.devTime}</li>
+                                    <li>Tech Stack: ${projectInsights.stack}</li>
+                                    <li>Features: ${constraints.length} specialized constraints</li>
+                                </ul>
+                                <p style="font-size: 14px; opacity: 0.8;">Download your complete project structure, AI prompts, and starter code below.</p>
+                            </div>
+                        `
+                    );
+                } else {
+                    throw new Error(data.error || 'Generation failed');
+                }
+
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('structure').style.display = 'block';
+                document.getElementById('prompts').style.display = 'block';
+                document.getElementById('files').style.display = 'block';
+
+                // Scroll to output
+                outputSection.scrollIntoView({ behavior: 'smooth' });
+
+            } catch (error) {
+                console.error('Generation error:', error);
+                
+                // Show error modal
+                vibeError('Generation Error', `
+                    <p>Failed to generate project: ${error.message}</p>
+                    <p style="margin-top: 15px; font-size: 14px;">Make sure the Vibe Forge server is running:</p>
+                    <code style="background: #1e2530; padding: 8px; border-radius: 4px; display: block; margin-top: 8px;">node vibe-forge-server.js</code>
+                    <p style="margin-top: 10px; font-size: 12px; opacity: 0.8;">Falling back to client-side generation...</p>
+                `);
+                
+                // Show minimal loading message
+                document.getElementById('loading').innerHTML = `
+                    <div style="color: #ef4444;">
+                        <p>⚠️ Server unavailable - using fallback generation</p>
+                    </div>
+                `;
+                
+                // Fallback to simulated generation
+                setTimeout(() => {
+                    generateStructure(projectType, constraints);
+                    generatePrompts(projectType, constraints);
+                    generateFiles(projectType, constraints);
+                    
+                    document.getElementById('loading').classList.remove('active');
+                    document.getElementById('structure').style.display = 'block';
+                    document.getElementById('prompts').style.display = 'block';
+                    document.getElementById('files').style.display = 'block';
+                }, 1000);
+            }
+        }
+
+        // Generate Project Structure
+        function generateStructure(type, constraints) {
+            let structure = `📁 vibe-forge-${type.toLowerCase()}/
+├── 📄 README.md
+├── 📄 .env.example
+├── 📄 .gitignore
+├── 📄 package.json`;
+
+            if (type === 'Web' || type === 'Mobile') {
+                structure += `
+├── 📁 frontend/
+│   ├── 📁 src/
+│   │   ├── 📁 components/
+│   │   ├── 📁 hooks/
+│   │   ├── 📁 utils/
+│   │   └── 📄 App.${type === 'Mobile' ? 'tsx' : 'jsx'}
+│   └── 📄 vite.config.js`;
+            }
+
+            if (!constraints.includes('nojs')) {
+                structure += `
+├── 📁 backend/
+│   ├── 📁 api/
+│   │   ├── 📁 routes/
+│   │   └── 📁 middleware/
+│   ├── 📁 services/
+│   └── 📄 server.js`;
+            }
+
+            structure += `
+├── 📁 ai/
+│   ├── 📁 prompts/
+│   ├── 📁 chains/
+│   └── 📄 llm-config.js`;
+
+            if (constraints.includes('hipaa')) {
+                structure += `
+├── 📁 security/
+│   ├── 📄 encryption.js
+│   ├── 📄 audit-log.js
+│   └── 📄 hipaa-compliance.md`;
+            }
+
+            structure += `
+└── 📁 deploy/
+    ├── 📄 Dockerfile
+    └── 📄 vercel.json`;
+
+            document.getElementById('structure-content').textContent = structure;
+        }
+
+        // Enhanced AI Prompts Generation
+        function generatePrompts(type, constraints) {
+            let prompts = `// 🤖 AI Intent Chain for ${type} Project\n// Generated with Vibe Forge - Anthropic-Powered Development\n\n`;
+            
+            prompts += `const systemPrompt = \`You are an expert ${type.toLowerCase()} developer specializing in vibe coding.
+Build production-ready applications with clean architecture, modern patterns, and exceptional UX.
+Focus on: performance, accessibility, security, and maintainable code structure.\`;\n\n`;
+            
+            // Add type-specific prompts
+            if (type === 'Web') {
+                prompts += `const webSpecificPrompt = \`Create a modern React application with:
+- TypeScript for type safety
+- Tailwind CSS for styling
+- Vite for fast development
+- Component-based architecture
+- Responsive design principles\`;\n\n`;
+            } else if (type === 'Mobile') {
+                prompts += `const mobileSpecificPrompt = \`Build a cross-platform mobile app with:
+- React Native or Flutter
+- Native performance optimizations
+- Platform-specific UI guidelines
+- Offline-first architecture
+- Push notification support\`;\n\n`;
+            }
+
+            if (constraints.includes('hipaa')) {
+                prompts += `// HIPAA Compliance Prompt\nconst hipaaPrompt = \`Ensure all data handling follows HIPAA guidelines:
+- Encrypt all PHI at rest and in transit
+- Implement audit logging for all access
+- Use secure authentication (OAuth2/JWT)
+- Add data retention policies\`;\n\n`;
+            }
+
+            if (constraints.includes('realtime')) {
+                prompts += `// Real-time Architecture Prompt\nconst realtimePrompt = \`Implement real-time features using:
+- WebSocket connections for live updates
+- Optimistic UI updates
+- Event-driven architecture
+- Efficient state synchronization\`;\n\n`;
+            }
+
+            prompts += `// Feature Generation Prompt\nconst featurePrompt = \`Generate a ${type} application with:
+- Modern UI/UX best practices
+- Responsive design
+- Accessibility features (WCAG 2.1)
+- Progressive enhancement\`;\n\n`;
+
+            prompts += `// Testing Strategy\nconst testingPrompt = \`Include comprehensive testing:
+- Unit tests for business logic
+- Integration tests for APIs
+- E2E tests for critical paths
+- Performance benchmarks\`;`;
+
+            document.getElementById('prompts-content').textContent = prompts;
+        }
+
+        // Generate Starter Files
+        function generateFiles(type, constraints) {
+            let files = '';
+
+            // Package.json
+            files += `// package.json\n{\n  "name": "vibe-forge-${type.toLowerCase()}",\n  "version": "1.0.0",\n  "scripts": {\n    "dev": "vite",\n    "build": "vite build",\n    "start": "node backend/server.js"\n  },\n  "dependencies": {\n    "@anthropic-ai/sdk": "^0.20.0",\n    "openai": "^4.28.0",\n    "express": "^4.18.0"`;
+
+            if (constraints.includes('realtime')) {
+                files += `,\n    "socket.io": "^4.6.0"`;
+            }
+
+            files += `\n  }\n}\n\n`;
+
+            // Main app file
+            if (type === 'Web') {
+                files += `// frontend/src/App.jsx\nimport React, { useState, useEffect } from 'react';\nimport { generateContent } from './services/ai';\n\nfunction App() {\n  const [output, setOutput] = useState('');\n  const [loading, setLoading] = useState(false);\n\n  const handleGenerate = async () => {\n    setLoading(true);\n    const result = await generateContent();\n    setOutput(result);\n    setLoading(false);\n  };\n\n  return (\n    <div className="app">\n      <h1>Vibe Forge ${type}</h1>\n      <button onClick={handleGenerate}>\n        {loading ? 'Generating...' : 'Generate'}\n      </button>\n      {output && <pre>{output}</pre>}\n    </div>\n  );\n}\n\nexport default App;\n\n`;
+            }
+
+            // Backend server
+            files += `// backend/server.js\nconst express = require('express');\nconst cors = require('cors');\n`;
+
+            if (constraints.includes('realtime')) {
+                files += `const { Server } = require('socket.io');\nconst http = require('http');\n`;
+            }
+
+            files += `\nconst app = express();\napp.use(cors());\napp.use(express.json());\n\n`;
+
+            if (constraints.includes('hipaa')) {
+                files += `// HIPAA compliance middleware\napp.use(require('./middleware/audit-logger'));\napp.use(require('./middleware/encryption'));\n\n`;
+            }
+
+            files += `app.post('/api/generate', async (req, res) => {\n  try {\n    // AI generation with Anthropic Claude integration\n    const { Anthropic } = require('@anthropic-ai/sdk');\n    const anthropic = new Anthropic({\n      apiKey: process.env.ANTHROPIC_API_KEY\n    });\n\n    const prompt = \\`Generate \\${req.body.projectType} application with constraints: \\${req.body.constraints.join(', ')}\\`;\n    \n    const response = await anthropic.messages.create({\n      model: 'claude-3-sonnet-20240229',\n      max_tokens: 4000,\n      messages: [{\n        role: 'user',\n        content: prompt\n      }]\n    });\n\n    res.json({ \n      success: true, \n      generated: response.content[0].text,\n      timestamp: new Date().toISOString(),\n      projectName: req.body.projectName\n    });\n  } catch (error) {\n    res.status(500).json({ success: false, error: error.message });\n  }\n});\n\napp.listen(3000, () => {\n  console.log('🚀 Vibe Forge AI Server running on port 3000');\n});`;
+
+            document.getElementById('files-content').textContent = files;
+        }
+
+        // Copy to Clipboard
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                // Show copied feedback
+                vibeSuccess('Copied!', 'Code has been copied to your clipboard.');
+                event.target.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    event.target.textContent = '📋 Copy';
+                }, 2000);
+            });
+        }
+
+        // AI-powered project analysis
+        function analyzeGeneratedProject(type, constraints) {
+            let complexity = 'Medium';
+            let devTime = '2-4 weeks';
+            let stack = 'React + Node.js';
+            
+            // Analyze complexity based on type and constraints
+            const complexityScore = constraints.length + (type === 'Game' ? 2 : type === 'Mobile' ? 1 : 0);
+            
+            if (complexityScore <= 2) {
+                complexity = 'Simple';
+                devTime = '1-2 weeks';
+            } else if (complexityScore >= 5) {
+                complexity = 'Complex';
+                devTime = '4-8 weeks';
+            }
+            
+            // Determine stack based on type and constraints
+            if (type === 'Mobile') {
+                stack = constraints.includes('HIPAA') ? 'React Native + Encrypted Backend' : 'React Native + Firebase';
+            } else if (type === 'Game') {
+                stack = 'Phaser.js + WebSocket + Canvas';
+            } else if (type === 'Extension') {
+                stack = 'Vanilla JS + Chrome APIs';
+            } else if (constraints.includes('HIPAA')) {
+                stack = 'React + Encrypted PostgreSQL';
+            } else if (constraints.includes('Real-time')) {
+                stack = 'React + Socket.io + Redis';
+            }
+            
+            return { complexity, devTime, stack };
+        }
+
+        // Initialize with Web selected
+        document.querySelector('[data-type="Web"]').click();
+    </script>
+</body>
+</html>

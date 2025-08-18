@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Terminal & Vibe Coding Journey - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-gray: #86868B;
+            --apple-light-gray: #F5F5F7;
+            --apple-dark: #1D1D1F;
+            --apple-green: #30D158;
+            --apple-red: #FF375F;
+            --apple-orange: #FF9F0A;
+            --apple-purple: #BF5AF2;
+            --apple-teal: #5AC8FA;
+            --apple-indigo: #5856D6;
+            --apple-yellow: #FFD60A;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+
+        .page-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: radial-gradient(circle at 30% 20%, rgba(191, 90, 242, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(88, 86, 214, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 20% 70%, rgba(0, 113, 227, 0.08) 0%, transparent 50%);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 9999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #F5F5F7;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #F5F5F7;
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 24px 80px;
+        }
+
+        .breadcrumb {
+            margin-bottom: 40px;
+        }
+
+        .breadcrumb a {
+            color: var(--apple-blue);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .breadcrumb span {
+            color: rgba(245, 245, 247, 0.6);
+            margin: 0 8px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 32px;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 24px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 48px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .journey-section {
+            margin-bottom: 80px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-header h2 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .section-header p {
+            font-size: 20px;
+            color: rgba(245, 245, 247, 0.8);
+        }
+
+        .journey-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+            margin-bottom: 60px;
+        }
+
+        .journey-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .journey-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 30px 60px rgba(0, 113, 227, 0.2);
+        }
+
+        .journey-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin-bottom: 24px;
+        }
+
+        .journey-level {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .journey-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .journey-description {
+            font-size: 16px;
+            color: rgba(245, 245, 247, 0.8);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .journey-skills {
+            margin-bottom: 24px;
+        }
+
+        .journey-skills h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--apple-blue);
+        }
+
+        .skill-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .skill-list li {
+            padding: 8px 0;
+            color: rgba(245, 245, 247, 0.8);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .skill-list li::before {
+            content: '✓';
+            color: var(--apple-green);
+            font-weight: bold;
+        }
+
+        .terminal-section {
+            background: #1a1a1c;
+            border-radius: 24px;
+            padding: 48px;
+            margin-bottom: 60px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red { background: #FF5F57; }
+        .terminal-dot.yellow { background: #FFBD2E; }
+        .terminal-dot.green { background: #28CA42; }
+
+        .terminal-title {
+            margin-left: auto;
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.6);
+        }
+
+        .terminal-content {
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+        }
+
+        .command-block {
+            margin-bottom: 32px;
+        }
+
+        .command-block h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: var(--apple-teal);
+        }
+
+        .command {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+        }
+
+        .command-line {
+            color: #F5F5F7;
+            margin-bottom: 8px;
+        }
+
+        .command-description {
+            color: rgba(245, 245, 247, 0.6);
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .prompt { color: var(--apple-green); }
+        .command-text { color: #F5F5F7; }
+        .output { color: rgba(245, 245, 247, 0.8); }
+
+        .progress-tracker {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .progress-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .progress-percentage {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--apple-green), var(--apple-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 32px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--apple-green), var(--apple-teal));
+            border-radius: 4px;
+            width: 25%;
+            transition: width 0.5s ease;
+        }
+
+        .milestones {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .milestone {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .milestone.completed {
+            background: rgba(48, 209, 88, 0.1);
+            border: 1px solid rgba(48, 209, 88, 0.3);
+        }
+
+        .milestone-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .milestone-text {
+            font-size: 14px;
+            color: rgba(245, 245, 247, 0.8);
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, rgba(88, 86, 214, 0.1), rgba(191, 90, 242, 0.1));
+            border-radius: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 60px;
+        }
+
+        .cta-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .cta-subtitle {
+            font-size: 18px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 32px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            color: white;
+            text-decoration: none;
+            border-radius: 24px;
+            font-size: 17px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 113, 227, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="page-background"></div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span>🏆</span>
+                <span>The Vibe Awards</span>
+            </a>
+            <div class="nav-menu">
+                <a href="getting-started.html" class="nav-link">Getting Started</a>
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="apple-magic-battle.html" class="nav-link">Battle Arena</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+                <a href="submit-app.html" class="nav-link">Submit App</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="breadcrumb">
+            <a href="getting-started.html">Getting Started</a>
+            <span>→</span>
+            <span>Your Terminal & Vibe Journey</span>
+        </div>
+
+        <div class="hero">
+            <div class="hero-badge">🚀 Master the Terminal & AI</div>
+            <h1 class="hero-title">Your Vibe-Coding Journey</h1>
+            <p class="hero-subtitle">
+                Learn terminal commands while mastering AI-assisted development. From zero to vibe-coding hero in 30 days.
+            </p>
+        </div>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-header">
+                <div class="progress-title">Your Learning Progress</div>
+                <div class="progress-percentage">25%</div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="milestones">
+                <div class="milestone completed">
+                    <div class="milestone-icon">✅</div>
+                    <div class="milestone-text">Terminal Basics</div>
+                </div>
+                <div class="milestone">
+                    <div class="milestone-icon">🔄</div>
+                    <div class="milestone-text">AI Integration</div>
+                </div>
+                <div class="milestone">
+                    <div class="milestone-icon">⏳</div>
+                    <div class="milestone-text">First App</div>
+                </div>
+                <div class="milestone">
+                    <div class="milestone-icon">🔒</div>
+                    <div class="milestone-text">Battle Ready</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Terminal Learning Section -->
+        <div class="terminal-section">
+            <div class="terminal-header">
+                <div class="terminal-dot red"></div>
+                <div class="terminal-dot yellow"></div>
+                <div class="terminal-dot green"></div>
+                <div class="terminal-title">Terminal Mastery - Essential Commands</div>
+            </div>
+            
+            <div class="terminal-content">
+                <div class="command-block">
+                    <h3>📁 Navigation Commands</h3>
+                    <div class="command">
+                        <div class="command-line">
+                            <span class="prompt">$</span> <span class="command-text">pwd</span>
+                        </div>
+                        <div class="output">/Users/vibecoder/projects</div>
+                        <div class="command-description">Print Working Directory - Shows where you are</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-line">
+                            <span class="prompt">$</span> <span class="command-text">ls -la</span>
+                        </div>
+                        <div class="output">total 16
+drwxr-xr-x  4 vibecoder  staff   128 Aug 17 10:00 .
+drwxr-xr-x  6 vibecoder  staff   192 Aug 17 09:30 ..
+-rw-r--r--  1 vibecoder  staff  1024 Aug 17 09:45 app.js
+-rw-r--r--  1 vibecoder  staff   512 Aug 17 09:50 README.md</div>
+                        <div class="command-description">List all files including hidden ones with details</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-line">
+                            <span class="prompt">$</span> <span class="command-text">cd projects/my-vibe-app</span>
+                        </div>
+                        <div class="command-description">Change Directory - Navigate to your project</div>
+                    </div>
+                </div>
+
+                <div class="command-block">
+                    <h3>🚀 Git & Version Control</h3>
+                    <div class="command">
+                        <div class="command-line">
+                            <span class="prompt">$</span> <span class="command-text">git init</span>
+                        </div>
+                        <div class="output">Initialized empty Git repository in .git/</div>
+                        <div class="command-description">Initialize a new git repository</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-line">
+                            <span class="prompt">$</span> <span class="command-text">git add .</span>
+                        </div>
+                        <div class="command-description">Stage all changes for commit</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-line">
+                            <span class="prompt">$</span> <span class="command-text">git commit -m "Initial vibe-coded app"</span>
+                        </div>
+                        <div class="output">[main 7a3f2d1] Initial vibe-coded app
+ 3 files changed, 150 insertions(+)</div>
+                        <div class="command-description">Commit your AI-assisted code</div>
+                    </div>
+                </div>
+
+                <div class="command-block">
+                    <h3>🤖 AI Tool Integration</h3>
+                    <div class="command">
+                        <div class="command-line">
+                            <span class="prompt">$</span> <span class="command-text">npm install -g cursor-cli</span>
+                        </div>
+                        <div class="output">+ cursor-cli@1.0.0
+added 1 package in 2.341s</div>
+                        <div class="command-description">Install Cursor AI editor CLI</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-line">
+                            <span class="prompt">$</span> <span class="command-text">cursor .</span>
+                        </div>
+                        <div class="command-description">Open current directory in Cursor for AI coding</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-line">
+                            <span class="prompt">$</span> <span class="command-text">npx create-react-app my-vibe-app</span>
+                        </div>
+                        <div class="output">Creating a new React app in /Users/vibecoder/my-vibe-app...</div>
+                        <div class="command-description">Create a new React app to vibe-code with</div>
+                    </div>
+                </div>
+
+                <div class="command-block">
+                    <h3>🔥 Development Commands</h3>
+                    <div class="command">
+                        <div class="command-line">
+                            <span class="prompt">$</span> <span class="command-text">npm run dev</span>
+                        </div>
+                        <div class="output">  ➜  Local:   http://localhost:3000
+  ➜  Network: http://192.168.1.10:3000</div>
+                        <div class="command-description">Start your development server</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-line">
+                            <span class="prompt">$</span> <span class="command-text">npm install axios react-router-dom</span>
+                        </div>
+                        <div class="command-description">Install packages for your vibe-coded app</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Journey Levels -->
+        <div class="journey-section">
+            <div class="section-header">
+                <h2>Your 4-Week Learning Path</h2>
+                <p>Master vibe-coding step by step with terminal power</p>
+            </div>
+
+            <div class="journey-grid">
+                <div class="journey-card">
+                    <div class="journey-icon" style="background: linear-gradient(135deg, var(--apple-green), var(--apple-teal));">
+                        🎯
+                    </div>
+                    <div class="journey-level">Week 1 - Beginner</div>
+                    <h3 class="journey-title">Terminal Foundations</h3>
+                    <p class="journey-description">
+                        Master the command line basics. Learn to navigate, create files, and manage projects like a pro developer.
+                    </p>
+                    <div class="journey-skills">
+                        <h4>You'll Learn:</h4>
+                        <ul class="skill-list">
+                            <li>Basic terminal navigation (cd, ls, pwd)</li>
+                            <li>File management (touch, mkdir, rm, cp, mv)</li>
+                            <li>Text editing with nano/vim basics</li>
+                            <li>Installing Node.js and npm</li>
+                            <li>Running your first JavaScript file</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="journey-card">
+                    <div class="journey-icon" style="background: linear-gradient(135deg, var(--apple-blue), var(--apple-purple));">
+                        🤖
+                    </div>
+                    <div class="journey-level">Week 2 - AI Integration</div>
+                    <h3 class="journey-title">AI Tools Setup</h3>
+                    <p class="journey-description">
+                        Connect powerful AI tools to your terminal workflow. Learn Cursor, Claude, and ChatGPT integration.
+                    </p>
+                    <div class="journey-skills">
+                        <h4>You'll Master:</h4>
+                        <ul class="skill-list">
+                            <li>Installing and configuring Cursor AI</li>
+                            <li>Setting up API keys for OpenAI/Claude</li>
+                            <li>Using AI for code generation</li>
+                            <li>Terminal shortcuts for AI commands</li>
+                            <li>Debugging with AI assistance</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="journey-card">
+                    <div class="journey-icon" style="background: linear-gradient(135deg, var(--apple-orange), var(--apple-red));">
+                        🚀
+                    </div>
+                    <div class="journey-level">Week 3 - First App</div>
+                    <h3 class="journey-title">Build Your First Vibe App</h3>
+                    <p class="journey-description">
+                        Create a complete app using AI conversation. From idea to deployment in pure vibe-coding style.
+                    </p>
+                    <div class="journey-skills">
+                        <h4>You'll Build:</h4>
+                        <ul class="skill-list">
+                            <li>React app with AI-generated components</li>
+                            <li>Git version control workflow</li>
+                            <li>Deploy to Vercel/Netlify via terminal</li>
+                            <li>Add animations and interactions</li>
+                            <li>Implement API connections</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="journey-card">
+                    <div class="journey-icon" style="background: linear-gradient(135deg, var(--apple-indigo), var(--apple-yellow));">
+                        ⚔️
+                    </div>
+                    <div class="journey-level">Week 4 - Battle Ready</div>
+                    <h3 class="journey-title">Competition Level</h3>
+                    <p class="journey-description">
+                        Advanced vibe-coding techniques. Build battle-worthy apps that win competitions.
+                    </p>
+                    <div class="journey-skills">
+                        <h4>Advanced Skills:</h4>
+                        <ul class="skill-list">
+                            <li>Complex prompting strategies</li>
+                            <li>Multi-file project management</li>
+                            <li>Performance optimization with AI</li>
+                            <li>Automated testing setup</li>
+                            <li>Production deployment pipeline</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Daily Practice -->
+        <div class="journey-section">
+            <div class="section-header">
+                <h2>Daily Terminal Challenges</h2>
+                <p>Practice these commands every day to build muscle memory</p>
+            </div>
+
+            <div class="terminal-section">
+                <div class="terminal-header">
+                    <div class="terminal-dot red"></div>
+                    <div class="terminal-dot yellow"></div>
+                    <div class="terminal-dot green"></div>
+                    <div class="terminal-title">Today's Challenge - Day 1</div>
+                </div>
+                
+                <div class="terminal-content">
+                    <div class="command-block">
+                        <h3>🎯 Challenge: Create Your First Vibe Project</h3>
+                        <div class="command">
+                            <div class="command-line">
+                                <span class="prompt">$</span> <span class="command-text">mkdir my-vibe-journey && cd my-vibe-journey</span>
+                            </div>
+                            <div class="command-description">Step 1: Create and enter your project directory</div>
+                        </div>
+                        <div class="command">
+                            <div class="command-line">
+                                <span class="prompt">$</span> <span class="command-text">echo "# My Vibe Coding Journey" > README.md</span>
+                            </div>
+                            <div class="command-description">Step 2: Create a README file</div>
+                        </div>
+                        <div class="command">
+                            <div class="command-line">
+                                <span class="prompt">$</span> <span class="command-text">git init && git add . && git commit -m "Start my vibe journey"</span>
+                            </div>
+                            <div class="command-description">Step 3: Initialize git and make your first commit</div>
+                        </div>
+                        <div class="command">
+                            <div class="command-line">
+                                <span class="prompt">$</span> <span class="command-text">npx create-vite@latest my-first-app --template react</span>
+                            </div>
+                            <div class="command-description">Step 4: Create a React app with Vite (faster than create-react-app)</div>
+                        </div>
+                        <div class="command">
+                            <div class="command-line">
+                                <span class="prompt">$</span> <span class="command-text">cd my-first-app && npm install && npm run dev</span>
+                            </div>
+                            <div class="command-description">Step 5: Install dependencies and start developing!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resources Section -->
+        <div class="journey-section">
+            <div class="section-header">
+                <h2>Essential Resources</h2>
+                <p>Everything you need to succeed in vibe-coding</p>
+            </div>
+
+            <div class="journey-grid">
+                <div class="journey-card">
+                    <div class="journey-icon" style="background: linear-gradient(135deg, var(--apple-purple), var(--apple-pink));">
+                        📚
+                    </div>
+                    <h3 class="journey-title">Terminal Cheat Sheet</h3>
+                    <p class="journey-description">
+                        Quick reference for 50+ essential terminal commands. Print it out and keep it handy.
+                    </p>
+                    <a href="#" class="cta-button" style="display: inline-block; margin-top: 16px; padding: 12px 24px; font-size: 14px;">Download PDF</a>
+                </div>
+
+                <div class="journey-card">
+                    <div class="journey-icon" style="background: linear-gradient(135deg, var(--apple-teal), var(--apple-green));">
+                        🎥
+                    </div>
+                    <h3 class="journey-title">Video Tutorials</h3>
+                    <p class="journey-description">
+                        10-minute daily videos walking through each terminal command and AI integration.
+                    </p>
+                    <a href="#" class="cta-button" style="display: inline-block; margin-top: 16px; padding: 12px 24px; font-size: 14px;">Watch Now</a>
+                </div>
+
+                <div class="journey-card">
+                    <div class="journey-icon" style="background: linear-gradient(135deg, var(--apple-orange), var(--apple-yellow));">
+                        💬
+                    </div>
+                    <h3 class="journey-title">Discord Community</h3>
+                    <p class="journey-description">
+                        Join 10,000+ vibe-coders. Get help, share projects, and find collaboration partners.
+                    </p>
+                    <a href="#" class="cta-button" style="display: inline-block; margin-top: 16px; padding: 12px 24px; font-size: 14px;">Join Discord</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2 class="cta-title">Ready to Start Your Journey?</h2>
+            <p class="cta-subtitle">
+                Open your terminal right now and type your first command. Your vibe-coding adventure begins today!
+            </p>
+            <a href="getting-started-quickstart.html" class="cta-button">Start Week 1 Training</a>
+        </div>
+    </div>
+</body>
+</html>

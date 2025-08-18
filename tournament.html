@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tournament Bracket - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #D4AF37;
+            --silver: #C0C0C0;
+            --bronze: #CD7F32;
+            --black: #000000;
+            --white: #FFFFFF;
+            --green: #44ff44;
+            --red: #ff4444;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+            color: var(--white);
+            overflow-x: auto;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 20px 40px;
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--gold), #B8941F);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--gold);
+        }
+
+        .nav-link.active {
+            color: var(--gold);
+        }
+
+        /* Tournament Header */
+        .tournament-header {
+            margin-top: 100px;
+            padding: 60px 40px;
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.1), transparent);
+        }
+
+        .tournament-title {
+            font-size: 4rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--gold), var(--silver), var(--bronze));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .tournament-subtitle {
+            font-size: 1.5rem;
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Tournament Info */
+        .tournament-info {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .info-card {
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .info-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .info-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .info-value {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        /* Tournament Bracket */
+        .tournament-container {
+            max-width: 1600px;
+            margin: 60px auto;
+            padding: 40px;
+            overflow-x: auto;
+        }
+
+        .bracket {
+            display: flex;
+            gap: 60px;
+            min-width: 1400px;
+            position: relative;
+        }
+
+        .round {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            gap: 30px;
+        }
+
+        .round-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .match {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+            position: relative;
+            min-width: 250px;
+        }
+
+        .match::after {
+            content: '';
+            position: absolute;
+            right: -60px;
+            top: 50%;
+            width: 60px;
+            height: 2px;
+            background: rgba(212, 175, 55, 0.3);
+        }
+
+        .round:last-child .match::after {
+            display: none;
+        }
+
+        .match-number {
+            font-size: 0.9rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .competitor {
+            padding: 12px;
+            margin: 5px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .competitor:hover {
+            background: rgba(212, 175, 55, 0.2);
+            transform: translateX(5px);
+        }
+
+        .competitor.winner {
+            background: rgba(68, 255, 68, 0.1);
+            border: 1px solid var(--green);
+        }
+
+        .competitor.loser {
+            opacity: 0.5;
+        }
+
+        .competitor.active {
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid var(--gold);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.5); }
+            50% { box-shadow: 0 0 20px 5px rgba(212, 175, 55, 0.5); }
+        }
+
+        .ai-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-avatar {
+            font-size: 1.5rem;
+        }
+
+        .ai-name {
+            font-weight: 600;
+        }
+
+        .ai-company {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .score {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--gold);
+        }
+
+        /* Finals */
+        .finals {
+            margin-top: 80px;
+            text-align: center;
+        }
+
+        .champion-section {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.1));
+            border: 3px solid var(--gold);
+            border-radius: 30px;
+            padding: 40px;
+            margin: 40px auto;
+            max-width: 600px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .champion-section::before {
+            content: '👑';
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 100px;
+            opacity: 0.2;
+        }
+
+        .champion-title {
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            font-weight: 900;
+        }
+
+        .champion-name {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 20px 0;
+            background: linear-gradient(135deg, var(--gold), var(--silver));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Schedule */
+        .schedule-section {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 40px;
+        }
+
+        .schedule-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--gold);
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .schedule-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .schedule-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+        }
+
+        .schedule-date {
+            font-size: 1.1rem;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .schedule-matches {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .live-badge {
+            display: inline-block;
+            background: var(--red);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            animation: blink 1s infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Vote Button */
+        .vote-cta {
+            text-align: center;
+            margin: 60px 0;
+        }
+
+        .vote-button {
+            display: inline-block;
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--gold), #B8941F);
+            color: var(--black);
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .vote-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.5);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 60px 40px 30px;
+            text-align: center;
+            border-top: 1px solid var(--gold);
+        }
+
+        @media (max-width: 1200px) {
+            .bracket {
+                overflow-x: auto;
+                padding-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">🏆 The Vibe Awards</div>
+            <ul class="nav-menu">
+                <li><a href="vibe-awards-clio.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="awards.html" class="nav-link">Awards</a></li>
+                <li><a href="winners.html" class="nav-link">Winners</a></li>
+                <li><a href="battle-arena.html" class="nav-link">Battle</a></li>
+                <li><a href="tournament.html" class="nav-link active">Tournament</a></li>
+                <li><a href="submit.html" class="nav-link">Submit</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Tournament Header -->
+    <div class="tournament-header">
+        <h1 class="tournament-title">🏆 AI CHAMPIONSHIP TOURNAMENT 🏆</h1>
+        <p class="tournament-subtitle">The Ultimate Battle Royale - Every AI Fights Every AI</p>
+    </div>
+
+    <!-- Tournament Info -->
+    <div class="tournament-info">
+        <div class="info-card">
+            <div class="info-icon">🤖</div>
+            <div class="info-title">Total Competitors</div>
+            <div class="info-value">16</div>
+        </div>
+        <div class="info-card">
+            <div class="info-icon">⚔️</div>
+            <div class="info-title">Total Matches</div>
+            <div class="info-value">120</div>
+        </div>
+        <div class="info-card">
+            <div class="info-icon">📅</div>
+            <div class="info-title">Duration</div>
+            <div class="info-value">30 Days</div>
+        </div>
+        <div class="info-card">
+            <div class="info-icon">🗳️</div>
+            <div class="info-title">Total Votes Cast</div>
+            <div class="info-value">2.4M+</div>
+        </div>
+    </div>
+
+    <!-- Tournament Bracket -->
+    <div class="tournament-container">
+        <h2 style="text-align: center; font-size: 2rem; margin-bottom: 40px; color: var(--gold);">
+            ELIMINATION BRACKET - ROUND OF 16
+        </h2>
+        
+        <div class="bracket">
+            <!-- Round of 16 -->
+            <div class="round">
+                <div class="round-title">Round of 16</div>
+                
+                <div class="match">
+                    <div class="match-number">Match 1</div>
+                    <div class="competitor winner">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">Claude 3.5 Sonnet</div>
+                                <div class="ai-company">Anthropic</div>
+                            </div>
+                        </div>
+                        <span class="score">78%</span>
+                    </div>
+                    <div class="competitor loser">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">Llama 3 8B</div>
+                                <div class="ai-company">Meta</div>
+                            </div>
+                        </div>
+                        <span class="score">22%</span>
+                    </div>
+                </div>
+
+                <div class="match">
+                    <div class="match-number">Match 2</div>
+                    <div class="competitor winner">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">GPT-4o</div>
+                                <div class="ai-company">OpenAI</div>
+                            </div>
+                        </div>
+                        <span class="score">65%</span>
+                    </div>
+                    <div class="competitor loser">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">Mistral Medium</div>
+                                <div class="ai-company">Mistral</div>
+                            </div>
+                        </div>
+                        <span class="score">35%</span>
+                    </div>
+                </div>
+
+                <div class="match">
+                    <div class="match-number">Match 3</div>
+                    <div class="competitor winner">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">Gemini Pro</div>
+                                <div class="ai-company">Google</div>
+                            </div>
+                        </div>
+                        <span class="score">71%</span>
+                    </div>
+                    <div class="competitor loser">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">Cohere Command</div>
+                                <div class="ai-company">Cohere</div>
+                            </div>
+                        </div>
+                        <span class="score">29%</span>
+                    </div>
+                </div>
+
+                <div class="match">
+                    <div class="match-number">Match 4</div>
+                    <div class="competitor winner">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">Claude 3 Opus</div>
+                                <div class="ai-company">Anthropic</div>
+                            </div>
+                        </div>
+                        <span class="score">58%</span>
+                    </div>
+                    <div class="competitor loser">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">Bard</div>
+                                <div class="ai-company">Google</div>
+                            </div>
+                        </div>
+                        <span class="score">42%</span>
+                    </div>
+                </div>
+
+                <div class="match">
+                    <div class="match-number">Match 5</div>
+                    <div class="competitor active">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">GitHub Copilot</div>
+                                <div class="ai-company">Microsoft</div>
+                            </div>
+                        </div>
+                        <span class="score">--</span>
+                    </div>
+                    <div class="competitor active">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">Perplexity</div>
+                                <div class="ai-company">Perplexity AI</div>
+                            </div>
+                        </div>
+                        <span class="score">--</span>
+                    </div>
+                </div>
+
+                <div class="match">
+                    <div class="match-number">Match 6</div>
+                    <div class="competitor">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">GPT-4 Turbo</div>
+                                <div class="ai-company">OpenAI</div>
+                            </div>
+                        </div>
+                        <span class="score">--</span>
+                    </div>
+                    <div class="competitor">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">Llama 3 70B</div>
+                                <div class="ai-company">Meta</div>
+                            </div>
+                        </div>
+                        <span class="score">--</span>
+                    </div>
+                </div>
+
+                <div class="match">
+                    <div class="match-number">Match 7</div>
+                    <div class="competitor">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">Mistral Large</div>
+                                <div class="ai-company">Mistral</div>
+                            </div>
+                        </div>
+                        <span class="score">--</span>
+                    </div>
+                    <div class="competitor">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">Gemini Ultra</div>
+                                <div class="ai-company">Google</div>
+                            </div>
+                        </div>
+                        <span class="score">--</span>
+                    </div>
+                </div>
+
+                <div class="match">
+                    <div class="match-number">Match 8</div>
+                    <div class="competitor">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">Codeium</div>
+                                <div class="ai-company">Codeium</div>
+                            </div>
+                        </div>
+                        <span class="score">--</span>
+                    </div>
+                    <div class="competitor">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">Stable Code</div>
+                                <div class="ai-company">Stability AI</div>
+                            </div>
+                        </div>
+                        <span class="score">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quarter Finals -->
+            <div class="round">
+                <div class="round-title">Quarter Finals</div>
+                
+                <div class="match">
+                    <div class="match-number">QF 1</div>
+                    <div class="competitor winner">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">Claude 3.5 Sonnet</div>
+                                <div class="ai-company">Anthropic</div>
+                            </div>
+                        </div>
+                        <span class="score">69%</span>
+                    </div>
+                    <div class="competitor loser">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">GPT-4o</div>
+                                <div class="ai-company">OpenAI</div>
+                            </div>
+                        </div>
+                        <span class="score">31%</span>
+                    </div>
+                </div>
+
+                <div class="match">
+                    <div class="match-number">QF 2</div>
+                    <div class="competitor winner">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">Gemini Pro</div>
+                                <div class="ai-company">Google</div>
+                            </div>
+                        </div>
+                        <span class="score">55%</span>
+                    </div>
+                    <div class="competitor loser">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">Claude 3 Opus</div>
+                                <div class="ai-company">Anthropic</div>
+                            </div>
+                        </div>
+                        <span class="score">45%</span>
+                    </div>
+                </div>
+
+                <div class="match">
+                    <div class="match-number">QF 3</div>
+                    <div class="competitor">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">TBD</div>
+                                <div class="ai-company">---</div>
+                            </div>
+                        </div>
+                        <span class="score">--</span>
+                    </div>
+                    <div class="competitor">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">TBD</div>
+                                <div class="ai-company">---</div>
+                            </div>
+                        </div>
+                        <span class="score">--</span>
+                    </div>
+                </div>
+
+                <div class="match">
+                    <div class="match-number">QF 4</div>
+                    <div class="competitor">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">TBD</div>
+                                <div class="ai-company">---</div>
+                            </div>
+                        </div>
+                        <span class="score">--</span>
+                    </div>
+                    <div class="competitor">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">TBD</div>
+                                <div class="ai-company">---</div>
+                            </div>
+                        </div>
+                        <span class="score">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Semi Finals -->
+            <div class="round">
+                <div class="round-title">Semi Finals</div>
+                
+                <div class="match">
+                    <div class="match-number">SF 1</div>
+                    <div class="competitor active">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">Claude 3.5 Sonnet</div>
+                                <div class="ai-company">Anthropic</div>
+                            </div>
+                        </div>
+                        <span class="score">--</span>
+                    </div>
+                    <div class="competitor active">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">Gemini Pro</div>
+                                <div class="ai-company">Google</div>
+                            </div>
+                        </div>
+                        <span class="score">--</span>
+                    </div>
+                </div>
+
+                <div class="match">
+                    <div class="match-number">SF 2</div>
+                    <div class="competitor">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">TBD</div>
+                                <div class="ai-company">---</div>
+                            </div>
+                        </div>
+                        <span class="score">--</span>
+                    </div>
+                    <div class="competitor">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">TBD</div>
+                                <div class="ai-company">---</div>
+                            </div>
+                        </div>
+                        <span class="score">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Finals -->
+            <div class="round">
+                <div class="round-title">Grand Final</div>
+                
+                <div class="match">
+                    <div class="match-number">FINAL</div>
+                    <div class="competitor">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">TBD</div>
+                                <div class="ai-company">---</div>
+                            </div>
+                        </div>
+                        <span class="score">--</span>
+                    </div>
+                    <div class="competitor">
+                        <div class="ai-info">
+                            <span class="ai-avatar">🤖</span>
+                            <div>
+                                <div class="ai-name">TBD</div>
+                                <div class="ai-company">---</div>
+                            </div>
+                        </div>
+                        <span class="score">--</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Current Match Voting -->
+    <div class="vote-cta">
+        <h2 style="font-size: 2rem; margin-bottom: 20px; color: var(--gold);">
+            🔴 LIVE NOW: GitHub Copilot vs Perplexity 🔴
+        </h2>
+        <a href="battle-arena.html" class="vote-button">VOTE NOW</a>
+    </div>
+
+    <!-- Schedule -->
+    <div class="schedule-section">
+        <h2 class="schedule-title">📅 TOURNAMENT SCHEDULE</h2>
+        <div class="schedule-grid">
+            <div class="schedule-card">
+                <div class="schedule-date">Today - December 15 <span class="live-badge">LIVE</span></div>
+                <div class="schedule-matches">
+                    Match 5: GitHub Copilot vs Perplexity<br>
+                    Semi Final 1: Claude 3.5 vs Gemini Pro
+                </div>
+            </div>
+            <div class="schedule-card">
+                <div class="schedule-date">Tomorrow - December 16</div>
+                <div class="schedule-matches">
+                    Match 6: GPT-4 Turbo vs Llama 3 70B<br>
+                    Match 7: Mistral Large vs Gemini Ultra
+                </div>
+            </div>
+            <div class="schedule-card">
+                <div class="schedule-date">December 17</div>
+                <div class="schedule-matches">
+                    Match 8: Codeium vs Stable Code<br>
+                    Quarter Final 3: TBD vs TBD
+                </div>
+            </div>
+            <div class="schedule-card">
+                <div class="schedule-date">December 18</div>
+                <div class="schedule-matches">
+                    Quarter Final 4: TBD vs TBD<br>
+                    Semi Final 2: TBD vs TBD
+                </div>
+            </div>
+            <div class="schedule-card">
+                <div class="schedule-date">December 20</div>
+                <div class="schedule-matches">
+                    Bronze Match: 3rd Place Playoff<br>
+                    <strong>GRAND FINAL: Champion Crowning</strong>
+                </div>
+            </div>
+            <div class="schedule-card">
+                <div class="schedule-date">December 21</div>
+                <div class="schedule-matches">
+                    Awards Ceremony<br>
+                    Champion Victory Lap
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Champion Section -->
+    <div class="finals">
+        <div class="champion-section">
+            <h2 class="champion-title">Defending Champion</h2>
+            <div style="font-size: 5rem;">🏆</div>
+            <div class="champion-name">Claude 3 Opus</div>
+            <p style="font-size: 1.2rem; color: rgba(255, 255, 255, 0.8);">
+                2023 Tournament Winner<br>
+                Record: 15W - 0L<br>
+                Average Vote: 73%
+            </p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 The Vibe Awards - AI Championship Tournament</p>
+        <p style="margin-top: 10px; color: #666;">May the best algorithm win</p>
+    </footer>
+
+    <script>
+        // Animate live match
+        const liveMatches = document.querySelectorAll('.competitor.active');
+        let glow = true;
+        
+        setInterval(() => {
+            liveMatches.forEach(match => {
+                if (glow) {
+                    match.style.boxShadow = '0 0 30px rgba(212, 175, 55, 0.6)';
+                } else {
+                    match.style.boxShadow = '0 0 10px rgba(212, 175, 55, 0.3)';
+                }
+            });
+            glow = !glow;
+        }, 1000);
+
+        // Simulate live voting
+        const activeMatches = document.querySelectorAll('.match');
+        activeMatches.forEach(match => {
+            const competitors = match.querySelectorAll('.competitor.active');
+            if (competitors.length === 2) {
+                setInterval(() => {
+                    const vote1 = Math.floor(Math.random() * 100);
+                    const vote2 = 100 - vote1;
+                    competitors[0].querySelector('.score').textContent = vote1 + '%';
+                    competitors[1].querySelector('.score').textContent = vote2 + '%';
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>

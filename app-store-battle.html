@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Battle Arena - The Vibe Awards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #007AFF;
+            --apple-gray: #8E8E93;
+            --apple-light-gray: #F2F2F7;
+            --apple-dark: #1C1C1E;
+            --apple-green: #34C759;
+            --apple-red: #FF3B30;
+            --apple-orange: #FF9500;
+            --apple-purple: #AF52DE;
+            --gold: #D4AF37;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #FFFFFF;
+            color: var(--apple-dark);
+            line-height: 1.4;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 1000;
+            border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--apple-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--apple-gray);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 400;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--apple-blue);
+        }
+
+        .nav-link.active {
+            color: var(--apple-dark);
+            font-weight: 500;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #5856D6 0%, #007AFF 100%);
+            padding: 80px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-title {
+            font-size: 56px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 24px;
+            font-weight: 400;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Battle Section */
+        .battle-section {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .battle-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .battle-date {
+            color: var(--apple-gray);
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .battle-title {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 15px;
+        }
+
+        .battle-category {
+            display: inline-block;
+            padding: 8px 16px;
+            background: var(--apple-light-gray);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--apple-purple);
+        }
+
+        /* Apps Grid */
+        .apps-battle-grid {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr;
+            gap: 40px;
+            align-items: start;
+            margin: 60px 0;
+        }
+
+        .app-showcase {
+            background: #FFFFFF;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .app-showcase:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+
+        .app-screenshots {
+            position: relative;
+            height: 400px;
+            background: linear-gradient(135deg, #F2F2F7 0%, #E5E5EA 100%);
+            overflow: hidden;
+        }
+
+        .screenshot-main {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .app-icon {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        .app-details {
+            padding: 30px;
+        }
+
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+        }
+
+        .app-info {
+            flex: 1;
+        }
+
+        .app-name {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 5px;
+        }
+
+        .app-developer {
+            color: var(--apple-gray);
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .app-rating {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stars {
+            display: flex;
+            gap: 2px;
+        }
+
+        .star {
+            color: var(--apple-orange);
+            font-size: 14px;
+        }
+
+        .rating-number {
+            font-size: 14px;
+            color: var(--apple-gray);
+        }
+
+        .rating-count {
+            font-size: 14px;
+            color: var(--apple-gray);
+        }
+
+        .app-badges {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            background: var(--apple-light-gray);
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--apple-gray);
+        }
+
+        .badge.editors-choice {
+            background: var(--apple-blue);
+            color: white;
+        }
+
+        .badge.top-rated {
+            background: var(--apple-orange);
+            color: white;
+        }
+
+        .app-description {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--apple-dark);
+            margin-bottom: 25px;
+        }
+
+        .app-features {
+            margin-bottom: 25px;
+        }
+
+        .features-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--apple-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .feature-tag {
+            padding: 8px 14px;
+            background: var(--apple-light-gray);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .app-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--apple-light-gray);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--apple-dark);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--apple-gray);
+            margin-top: 4px;
+        }
+
+        .vote-button {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 20px;
+        }
+
+        .vote-red {
+            background: var(--apple-red);
+            color: white;
+        }
+
+        .vote-blue {
+            background: var(--apple-blue);
+            color: white;
+        }
+
+        .vote-button:hover {
+            transform: scale(1.02);
+        }
+
+        .vote-button:active {
+            transform: scale(0.98);
+        }
+
+        /* VS Divider */
+        .vs-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .vs-circle {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border: 3px solid var(--apple-light-gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--apple-gray);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Voting Progress */
+        .voting-progress {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 30px;
+            background: var(--apple-light-gray);
+            border-radius: 20px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .progress-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .total-votes {
+            color: var(--apple-gray);
+            font-size: 16px;
+        }
+
+        .progress-bar {
+            height: 40px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            display: flex;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .progress-red {
+            background: var(--apple-red);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 15px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .progress-blue {
+            background: var(--apple-blue);
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding-left: 15px;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* More Apps Section */
+        .more-apps {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .see-all {
+            color: var(--apple-blue);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+        }
+
+        .app-card {
+            display: flex;
+            gap: 15px;
+            padding: 20px;
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--apple-light-gray);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .app-card:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .app-card-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--apple-light-gray);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .app-card-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .app-card-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .app-card-category {
+            font-size: 14px;
+            color: var(--apple-gray);
+            margin-bottom: 8px;
+        }
+
+        .app-card-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+        }
+
+        .app-card-stats {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 12px;
+            color: var(--apple-gray);
+        }
+
+        .win-rate {
+            color: var(--apple-green);
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--apple-light-gray);
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        @media (max-width: 768px) {
+            .apps-battle-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .vs-divider {
+                margin: 30px 0;
+            }
+
+            .hero-title {
+                font-size: 40px;
+            }
+
+            .battle-title {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <span>🏆</span>
+                <span>The Vibe Awards</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="vibe-awards-clio.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="awards.html" class="nav-link">Awards</a></li>
+                <li><a href="winners.html" class="nav-link">Winners</a></li>
+                <li><a href="app-store-battle.html" class="nav-link active">App Battle</a></li>
+                <li><a href="submit.html" class="nav-link">Submit</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1 class="hero-title">App Battle Arena</h1>
+        <p class="hero-subtitle">Where the best apps compete for user votes and glory</p>
+    </div>
+
+    <!-- Battle Section -->
+    <div class="battle-section">
+        <div class="battle-header">
+            <div class="battle-date">Today's Battle • December 15, 2024</div>
+            <h2 class="battle-title">Healthcare Innovation Showdown</h2>
+            <span class="battle-category">Medical & Health</span>
+        </div>
+
+        <div class="apps-battle-grid">
+            <!-- App 1 -->
+            <div class="app-showcase">
+                <div class="app-screenshots">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%234A90E2'/%3E%3Cstop offset='100%25' style='stop-color:%237B68EE'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='400' fill='url(%23bg)'/%3E%3Ctext x='200' y='200' font-family='system-ui' font-size='120' fill='white' text-anchor='middle' dominant-baseline='middle'%3E🗣️%3C/text%3E%3C/svg%3E" class="screenshot-main" alt="TinkyBink AAC Screenshot">
+                    <div class="app-icon">🗣️</div>
+                </div>
+                <div class="app-details">
+                    <div class="app-header">
+                        <div class="app-info">
+                            <h3 class="app-name">TinkyBink AAC</h3>
+                            <p class="app-developer">Luke Kist</p>
+                            <div class="app-rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                                <span class="rating-number">4.9</span>
+                                <span class="rating-count">(2.4K Ratings)</span>
+                            </div>
+                            <div class="app-badges">
+                                <span class="badge editors-choice">Editor's Choice</span>
+                                <span class="badge top-rated">#1 in Medical</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="app-description">
+                        Revolutionary AI-powered Augmentative and Alternative Communication platform that transforms 
+                        speech therapy through predictive analytics and real-time family engagement. Features automated 
+                        IEP goal generation, breakthrough prediction algorithms, and seamless insurance billing integration.
+                    </p>
+
+                    <div class="app-features">
+                        <div class="features-title">Key Features</div>
+                        <div class="feature-list">
+                            <span class="feature-tag">AI-Powered</span>
+                            <span class="feature-tag">HIPAA Compliant</span>
+                            <span class="feature-tag">Real-time Sync</span>
+                            <span class="feature-tag">Family Portal</span>
+                            <span class="feature-tag">Auto Documentation</span>
+                        </div>
+                    </div>
+
+                    <div class="app-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">147</div>
+                            <div class="stat-label">Battles Won</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">89%</div>
+                            <div class="stat-label">Win Rate</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">2.4K</div>
+                            <div class="stat-label">Active Users</div>
+                        </div>
+                    </div>
+
+                    <button class="vote-button vote-red" onclick="vote('red')">
+                        Vote for TinkyBink AAC
+                    </button>
+                </div>
+            </div>
+
+            <!-- VS Divider -->
+            <div class="vs-divider">
+                <div class="vs-circle">VS</div>
+            </div>
+
+            <!-- App 2 -->
+            <div class="app-showcase">
+                <div class="app-screenshots">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Cdefs%3E%3ClinearGradient id='bg2' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2300C896'/%3E%3Cstop offset='100%25' style='stop-color:%2300A0DC'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='400' fill='url(%23bg2)'/%3E%3Ctext x='200' y='200' font-family='system-ui' font-size='120' fill='white' text-anchor='middle' dominant-baseline='middle'%3E🧠%3C/text%3E%3C/svg%3E" class="screenshot-main" alt="MindSync Pro Screenshot">
+                    <div class="app-icon">🧠</div>
+                </div>
+                <div class="app-details">
+                    <div class="app-header">
+                        <div class="app-info">
+                            <h3 class="app-name">MindSync Pro</h3>
+                            <p class="app-developer">Neural Labs Inc.</p>
+                            <div class="app-rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">☆</span>
+                                </div>
+                                <span class="rating-number">4.7</span>
+                                <span class="rating-count">(1.8K Ratings)</span>
+                            </div>
+                            <div class="app-badges">
+                                <span class="badge">Featured App</span>
+                                <span class="badge">#3 in Medical</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="app-description">
+                        Advanced mental health companion using AI-driven cognitive behavioral therapy techniques. 
+                        Features mood tracking, personalized meditation sessions, crisis intervention protocols, 
+                        and seamless integration with healthcare providers for comprehensive mental wellness support.
+                    </p>
+
+                    <div class="app-features">
+                        <div class="features-title">Key Features</div>
+                        <div class="feature-list">
+                            <span class="feature-tag">CBT Therapy</span>
+                            <span class="feature-tag">Mood Tracking</span>
+                            <span class="feature-tag">Crisis Support</span>
+                            <span class="feature-tag">Provider Connect</span>
+                            <span class="feature-tag">24/7 AI Support</span>
+                        </div>
+                    </div>
+
+                    <div class="app-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">98</div>
+                            <div class="stat-label">Battles Won</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">72%</div>
+                            <div class="stat-label">Win Rate</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">1.8K</div>
+                            <div class="stat-label">Active Users</div>
+                        </div>
+                    </div>
+
+                    <button class="vote-button vote-blue" onclick="vote('blue')">
+                        Vote for MindSync Pro
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Voting Progress -->
+        <div class="voting-progress">
+            <div class="progress-header">
+                <h3 class="progress-title">Live Voting Results</h3>
+                <span class="total-votes">Total Votes: <span id="totalVotes">18,432</span></span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="display: flex;">
+                    <div class="progress-red" id="redBar" style="width: 58%;">
+                        <span id="redPercent">58%</span>
+                    </div>
+                    <div class="progress-blue" id="blueBar" style="width: 42%;">
+                        <span id="bluePercent">42%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- More Apps Section -->
+    <div class="more-apps">
+        <div class="section-header">
+            <h2 class="section-title">More Apps in the Arena</h2>
+            <a href="#" class="see-all">See All →</a>
+        </div>
+        
+        <div class="apps-grid">
+            <div class="app-card">
+                <div class="app-card-icon">💊</div>
+                <div class="app-card-info">
+                    <div class="app-card-name">MediTrack AI</div>
+                    <div class="app-card-category">Medical</div>
+                    <div class="app-card-rating">
+                        <span class="stars">★★★★★</span>
+                        <span>4.8</span>
+                    </div>
+                </div>
+                <div class="app-card-stats">
+                    <span>76 Wins</span>
+                    <span class="win-rate">82% Rate</span>
+                </div>
+            </div>
+
+            <div class="app-card">
+                <div class="app-card-icon">🏃</div>
+                <div class="app-card-info">
+                    <div class="app-card-name">FitGenius Pro</div>
+                    <div class="app-card-category">Health & Fitness</div>
+                    <div class="app-card-rating">
+                        <span class="stars">★★★★☆</span>
+                        <span>4.6</span>
+                    </div>
+                </div>
+                <div class="app-card-stats">
+                    <span>64 Wins</span>
+                    <span class="win-rate">71% Rate</span>
+                </div>
+            </div>
+
+            <div class="app-card">
+                <div class="app-card-icon">📚</div>
+                <div class="app-card-info">
+                    <div class="app-card-name">StudyBuddy AI</div>
+                    <div class="app-card-category">Education</div>
+                    <div class="app-card-rating">
+                        <span class="stars">★★★★★</span>
+                        <span>4.9</span>
+                    </div>
+                </div>
+                <div class="app-card-stats">
+                    <span>91 Wins</span>
+                    <span class="win-rate">88% Rate</span>
+                </div>
+            </div>
+
+            <div class="app-card">
+                <div class="app-card-icon">💰</div>
+                <div class="app-card-info">
+                    <div class="app-card-name">WealthWise AI</div>
+                    <div class="app-card-category">Finance</div>
+                    <div class="app-card-rating">
+                        <span class="stars">★★★★☆</span>
+                        <span>4.5</span>
+                    </div>
+                </div>
+                <div class="app-card-stats">
+                    <span>55 Wins</span>
+                    <span class="win-rate">68% Rate</span>
+                </div>
+            </div>
+
+            <div class="app-card">
+                <div class="app-card-icon">🎨</div>
+                <div class="app-card-info">
+                    <div class="app-card-name">CreativeFlow</div>
+                    <div class="app-card-category">Graphics & Design</div>
+                    <div class="app-card-rating">
+                        <span class="stars">★★★★★</span>
+                        <span>4.7</span>
+                    </div>
+                </div>
+                <div class="app-card-stats">
+                    <span>102 Wins</span>
+                    <span class="win-rate">79% Rate</span>
+                </div>
+            </div>
+
+            <div class="app-card">
+                <div class="app-card-icon">🎵</div>
+                <div class="app-card-info">
+                    <div class="app-card-name">BeatMaker Studio</div>
+                    <div class="app-card-category">Music</div>
+                    <div class="app-card-rating">
+                        <span class="stars">★★★★★</span>
+                        <span>4.8</span>
+                    </div>
+                </div>
+                <div class="app-card-stats">
+                    <span>88 Wins</span>
+                    <span class="win-rate">85% Rate</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p style="color: var(--apple-gray); font-size: 14px;">
+            © 2024 The Vibe Awards. All rights reserved.<br>
+            <span style="font-size: 12px;">Where innovation meets competition</span>
+        </p>
+    </footer>
+
+    <script>
+        // Voting System
+        let redVoteCount = 10687;
+        let blueVoteCount = 7745;
+        let hasVoted = localStorage.getItem('hasVoted_today') === 'true';
+
+        function updateVoteDisplay() {
+            const total = redVoteCount + blueVoteCount;
+            const redPercent = Math.round((redVoteCount / total) * 100);
+            const bluePercent = Math.round((blueVoteCount / total) * 100);
+            
+            document.getElementById('redPercent').textContent = redPercent + '%';
+            document.getElementById('bluePercent').textContent = bluePercent + '%';
+            document.getElementById('redBar').style.width = redPercent + '%';
+            document.getElementById('blueBar').style.width = bluePercent + '%';
+            document.getElementById('totalVotes').textContent = total.toLocaleString();
+        }
+
+        function vote(team) {
+            if (hasVoted) {
+                alert('You\'ve already voted today! Come back tomorrow for the next battle.');
+                return;
+            }
+            
+            if (team === 'red') {
+                redVoteCount++;
+            } else {
+                blueVoteCount++;
+            }
+            
+            hasVoted = true;
+            localStorage.setItem('hasVoted_today', 'true');
+            updateVoteDisplay();
+            
+            // Animate the vote
+            const button = event.target;
+            button.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                button.style.transform = '';
+            }, 200);
+            
+            // Show confirmation
+            const appName = team === 'red' ? 'TinkyBink AAC' : 'MindSync Pro';
+            button.textContent = '✓ Voted for ' + appName;
+            button.disabled = true;
+            button.style.opacity = '0.8';
+        }
+
+        // Initialize
+        updateVoteDisplay();
+
+        // Simulate live voting
+        setInterval(() => {
+            if (Math.random() > 0.5) {
+                redVoteCount += Math.floor(Math.random() * 3) + 1;
+            } else {
+                blueVoteCount += Math.floor(Math.random() * 3) + 1;
+            }
+            updateVoteDisplay();
+        }, 5000);
+
+        // Reset at midnight
+        function checkNewDay() {
+            const lastVoteDate = localStorage.getItem('lastVoteDate');
+            const today = new Date().toDateString();
+            
+            if (lastVoteDate !== today) {
+                localStorage.removeItem('hasVoted_today');
+                localStorage.setItem('lastVoteDate', today);
+                hasVoted = false;
+            }
+        }
+
+        checkNewDay();
+    </script>
+</body>
+</html>

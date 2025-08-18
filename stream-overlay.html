@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Awards - Twitch Stream Overlay</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-pink: #FF10F0;
+            --neon-blue: #00FFF0;
+            --neon-purple: #9D00FF;
+            --neon-green: #39FF14;
+            --neon-orange: #FF6600;
+            --neon-yellow: #FFFF00;
+            --stream-dark: rgba(0, 0, 0, 0.85);
+            --stream-glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: transparent;
+            color: white;
+            width: 1920px;
+            height: 1080px;
+            position: relative;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Main Stream Area (where gameplay/coding would show) */
+        .main-stream-area {
+            position: absolute;
+            top: 120px;
+            left: 20px;
+            right: 400px;
+            bottom: 200px;
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, var(--neon-pink), var(--neon-blue)) 1;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        /* Top Bar - Challenge Info & Timer */
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: var(--stream-dark);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--neon-purple);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+
+        .vibe-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            animation: logoPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes logoPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(157, 0, 255, 0.5); }
+            50% { transform: scale(1.1); box-shadow: 0 0 40px rgba(157, 0, 255, 0.8); }
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(90deg, white, var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .challenge-info {
+            text-align: center;
+            flex: 1;
+        }
+
+        .challenge-type {
+            display: inline-block;
+            padding: 6px 16px;
+            background: linear-gradient(135deg, var(--neon-orange), var(--neon-pink));
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .challenge-name {
+            font-size: 24px;
+            font-weight: 700;
+            text-shadow: 0 0 20px rgba(0, 255, 240, 0.5);
+        }
+
+        .main-timer {
+            background: linear-gradient(135deg, rgba(255, 16, 240, 0.2), rgba(0, 255, 240, 0.2));
+            border: 2px solid var(--neon-blue);
+            border-radius: 15px;
+            padding: 15px 30px;
+            animation: timerGlow 1s ease-in-out infinite;
+        }
+
+        @keyframes timerGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 240, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(0, 255, 240, 0.8); }
+        }
+
+        .timer-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
+        }
+
+        .timer-value {
+            font-size: 36px;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            background: linear-gradient(90deg, var(--neon-yellow), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Right Sidebar - Teams & Voting */
+        .right-sidebar {
+            position: absolute;
+            top: 120px;
+            right: 20px;
+            width: 360px;
+            bottom: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: slideLeft 0.5s ease-out 0.2s both;
+        }
+
+        @keyframes slideLeft {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        /* Team Cards */
+        .teams-section {
+            background: var(--stream-dark);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--neon-purple);
+            border-radius: 20px;
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .teams-header {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .live-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            animation: livePulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .team-card {
+            background: var(--stream-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-card.active {
+            border-color: var(--neon-green);
+            background: linear-gradient(135deg, rgba(57, 255, 20, 0.1), rgba(0, 255, 240, 0.1));
+            animation: teamActive 2s ease-in-out infinite;
+        }
+
+        @keyframes teamActive {
+            0%, 100% { box-shadow: 0 0 20px rgba(57, 255, 20, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(57, 255, 20, 0.6); }
+        }
+
+        .team-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .team-name {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .team-progress {
+            font-size: 14px;
+            color: var(--neon-green);
+            font-weight: 600;
+        }
+
+        .team-members {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .member-badge {
+            padding: 4px 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+            animation: progressShine 2s linear infinite;
+        }
+
+        @keyframes progressShine {
+            0% { background-position: -200px; }
+            100% { background-position: 200px; }
+        }
+
+        /* Live Voting */
+        .voting-section {
+            background: var(--stream-dark);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--neon-orange);
+            border-radius: 20px;
+            padding: 20px;
+        }
+
+        .voting-header {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+            background: linear-gradient(90deg, var(--neon-orange), var(--neon-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .vote-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .vote-btn {
+            padding: 12px;
+            background: var(--stream-glass);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .vote-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        .vote-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .vote-label {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .vote-count {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--neon-yellow);
+        }
+
+        /* Bottom Bar - Live Stats & Chat Integration */
+        .bottom-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 180px;
+            background: var(--stream-dark);
+            backdrop-filter: blur(20px);
+            border-top: 2px solid var(--neon-purple);
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            animation: slideUp 0.5s ease-out 0.4s both;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        /* Live Activity Feed */
+        .activity-feed {
+            flex: 1;
+            background: var(--stream-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            overflow: hidden;
+        }
+
+        .activity-header {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--neon-blue);
+        }
+
+        .activity-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            animation: scrollUp 20s linear infinite;
+        }
+
+        @keyframes scrollUp {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-200px); }
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .activity-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            width: 400px;
+        }
+
+        .stat-card {
+            background: var(--stream-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+
+        /* Sponsor Zone */
+        .sponsor-zone {
+            background: var(--stream-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sponsor-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.5;
+            margin-bottom: 10px;
+        }
+
+        .sponsor-logos {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .sponsor-logo {
+            width: 60px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            opacity: 0.8;
+        }
+
+        /* Special Effects */
+        .elimination-flash {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, rgba(255, 55, 95, 0.3) 0%, transparent 70%);
+            pointer-events: none;
+            opacity: 0;
+            animation: eliminationFlash 1s ease-out;
+        }
+
+        @keyframes eliminationFlash {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* Chat Commands */
+        .chat-commands {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: var(--stream-dark);
+            border: 1px solid var(--neon-purple);
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .command {
+            color: var(--neon-green);
+            font-weight: 600;
+        }
+
+        /* Power-up Animation */
+        .powerup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 72px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-yellow), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: powerupAnimation 2s ease-out forwards;
+            pointer-events: none;
+            display: none;
+        }
+
+        @keyframes powerupAnimation {
+            0% {
+                transform: translate(-50%, -50%) scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.5) rotate(180deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Viewer Count */
+        .viewer-count {
+            position: absolute;
+            top: 120px;
+            left: 30px;
+            background: rgba(255, 0, 0, 0.9);
+            padding: 8px 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            z-index: 10;
+        }
+
+        .viewer-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: livePulse 1s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Stream Area (transparent for OBS) -->
+    <div class="main-stream-area"></div>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="vibe-logo">
+            <div class="logo-icon">🏆</div>
+            <div class="logo-text">VIBE AWARDS</div>
+        </div>
+        
+        <div class="challenge-info">
+            <div class="challenge-type">Weekend Sprint</div>
+            <div class="challenge-name">AI Music Visualizer Challenge</div>
+        </div>
+        
+        <div class="main-timer">
+            <div class="timer-label">Time Remaining</div>
+            <div class="timer-value" id="mainTimer">23:47:18</div>
+        </div>
+    </div>
+
+    <!-- Viewer Count -->
+    <div class="viewer-count">
+        <div class="viewer-dot"></div>
+        <span id="viewerCount">8,742</span> watching
+    </div>
+
+    <!-- Right Sidebar -->
+    <div class="right-sidebar">
+        <!-- Teams Section -->
+        <div class="teams-section">
+            <div class="teams-header">
+                <div class="live-dot"></div>
+                LIVE TEAMS
+            </div>
+            
+            <div class="team-card active">
+                <div class="team-header">
+                    <span class="team-name">Team Alpha</span>
+                    <span class="team-progress">68%</span>
+                </div>
+                <div class="team-members">
+                    <div class="member-badge">👨‍💻 Dev</div>
+                    <div class="member-badge">🎨 Design</div>
+                    <div class="member-badge">📈 Market</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 68%"></div>
+                </div>
+            </div>
+            
+            <div class="team-card">
+                <div class="team-header">
+                    <span class="team-name">Neural Squad</span>
+                    <span class="team-progress">52%</span>
+                </div>
+                <div class="team-members">
+                    <div class="member-badge">👨‍💻 Dev</div>
+                    <div class="member-badge">🎥 Video</div>
+                    <div class="member-badge">📊 Biz</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 52%"></div>
+                </div>
+            </div>
+            
+            <div class="team-card">
+                <div class="team-header">
+                    <span class="team-name">Pixel Pirates</span>
+                    <span class="team-progress">74%</span>
+                </div>
+                <div class="team-members">
+                    <div class="member-badge">🎨 Design</div>
+                    <div class="member-badge">👨‍💻 Dev</div>
+                    <div class="member-badge">🎥 Video</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 74%"></div>
+                </div>
+            </div>
+            
+            <div class="team-card">
+                <div class="team-header">
+                    <span class="team-name">Code Crusaders</span>
+                    <span class="team-progress">45%</span>
+                </div>
+                <div class="team-members">
+                    <div class="member-badge">👨‍💻 Dev</div>
+                    <div class="member-badge">👨‍💻 Dev</div>
+                    <div class="member-badge">📈 Market</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 45%"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Voting Section -->
+        <div class="voting-section">
+            <div class="voting-header">⚡ POWER-UP VOTE</div>
+            <div class="vote-options">
+                <div class="vote-btn">
+                    <div class="vote-icon">⏰</div>
+                    <div class="vote-label">+1 Hour</div>
+                    <div class="vote-count">234</div>
+                </div>
+                <div class="vote-btn">
+                    <div class="vote-icon">🔥</div>
+                    <div class="vote-label">2x Points</div>
+                    <div class="vote-count">189</div>
+                </div>
+                <div class="vote-btn">
+                    <div class="vote-icon">🎯</div>
+                    <div class="vote-label">Hint Drop</div>
+                    <div class="vote-count">167</div>
+                </div>
+                <div class="vote-btn">
+                    <div class="vote-icon">💣</div>
+                    <div class="vote-label">Chaos Mode</div>
+                    <div class="vote-count">412</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="bottom-bar">
+        <!-- Activity Feed -->
+        <div class="activity-feed">
+            <div class="activity-header">🔥 Live Activity</div>
+            <div class="activity-items">
+                <div class="activity-item">
+                    <div class="activity-icon">💻</div>
+                    <span><strong>Team Alpha</strong> pushed 47 commits</span>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">🎨</div>
+                    <span><strong>Neural Squad</strong> updated UI mockup</span>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">🚀</div>
+                    <span><strong>Pixel Pirates</strong> deployed to staging</span>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">📹</div>
+                    <span><strong>Code Crusaders</strong> started demo recording</span>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">⚡</div>
+                    <span><strong>Chat voted:</strong> Chaos Mode activated!</span>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">💰</div>
+                    <span><strong>@techVC</strong> donated $500 to prize pool</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="commitCount">847</div>
+                <div class="stat-label">Total Commits</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="linesCode">42K</div>
+                <div class="stat-label">Lines of Code</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">$8.5K</div>
+                <div class="stat-label">Prize Pool</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="chatVotes">12K</div>
+                <div class="stat-label">Chat Votes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">4/5</div>
+                <div class="stat-label">Teams Active</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="deployCount">7</div>
+                <div class="stat-label">Live Deploys</div>
+            </div>
+        </div>
+        
+        <!-- Sponsor Zone -->
+        <div class="sponsor-zone">
+            <div class="sponsor-label">Powered By</div>
+            <div class="sponsor-logos">
+                <div class="sponsor-logo">GOOGLE</div>
+                <div class="sponsor-logo">OPENAI</div>
+                <div class="sponsor-logo">YC</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Commands Helper -->
+    <div class="chat-commands">
+        <span class="command">!vote</span> • 
+        <span class="command">!team</span> • 
+        <span class="command">!donate</span> • 
+        <span class="command">!chaos</span>
+    </div>
+
+    <!-- Special Effects -->
+    <div class="elimination-flash"></div>
+    <div class="powerup" id="powerupText">CHAOS MODE!</div>
+
+    <script>
+        // Main Timer Countdown
+        function updateMainTimer() {
+            const timer = document.getElementById('mainTimer');
+            const parts = timer.textContent.split(':');
+            let hours = parseInt(parts[0]);
+            let minutes = parseInt(parts[1]);
+            let seconds = parseInt(parts[2]);
+            
+            seconds--;
+            if (seconds < 0) {
+                seconds = 59;
+                minutes--;
+                if (minutes < 0) {
+                    minutes = 59;
+                    hours--;
+                }
+            }
+            
+            timer.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Add urgency at certain thresholds
+            if (hours < 1) {
+                timer.style.color = '#FF375F';
+                timer.style.animation = 'timerUrgent 0.5s ease-in-out infinite';
+            }
+        }
+        setInterval(updateMainTimer, 1000);
+
+        // Simulate viewer count changes
+        function updateViewerCount() {
+            const viewer = document.getElementById('viewerCount');
+            const current = parseInt(viewer.textContent.replace(',', ''));
+            const change = Math.floor(Math.random() * 200) - 100;
+            const newCount = Math.max(5000, current + change);
+            viewer.textContent = newCount.toLocaleString();
+        }
+        setInterval(updateViewerCount, 3000);
+
+        // Simulate commit count
+        function updateCommits() {
+            const commits = document.getElementById('commitCount');
+            const current = parseInt(commits.textContent);
+            commits.textContent = current + Math.floor(Math.random() * 5);
+        }
+        setInterval(updateCommits, 5000);
+
+        // Simulate lines of code
+        function updateLinesCode() {
+            const lines = document.getElementById('linesCode');
+            const current = parseFloat(lines.textContent.replace('K', ''));
+            const newLines = (current + Math.random() * 0.5).toFixed(1);
+            lines.textContent = newLines + 'K';
+        }
+        setInterval(updateLinesCode, 4000);
+
+        // Simulate chat votes
+        function updateChatVotes() {
+            const votes = document.getElementById('chatVotes');
+            const current = parseFloat(votes.textContent.replace('K', ''));
+            const newVotes = (current + Math.random() * 0.2).toFixed(1);
+            votes.textContent = newVotes + 'K';
+        }
+        setInterval(updateChatVotes, 2000);
+
+        // Random team progress updates
+        function updateTeamProgress() {
+            const teams = document.querySelectorAll('.team-card');
+            const randomTeam = teams[Math.floor(Math.random() * teams.length)];
+            const progressBar = randomTeam.querySelector('.progress-fill');
+            const progressText = randomTeam.querySelector('.team-progress');
+            
+            const currentProgress = parseInt(progressBar.style.width);
+            const newProgress = Math.min(100, currentProgress + Math.floor(Math.random() * 5));
+            
+            progressBar.style.width = newProgress + '%';
+            progressText.textContent = newProgress + '%';
+            
+            // Flash active team
+            randomTeam.classList.add('active');
+            setTimeout(() => {
+                teams.forEach(t => t.classList.remove('active'));
+            }, 2000);
+        }
+        setInterval(updateTeamProgress, 8000);
+
+        // Simulate power-up activation
+        function activatePowerUp() {
+            const powerup = document.getElementById('powerupText');
+            const powerups = ['CHAOS MODE!', 'TIME BOOST!', 'DOUBLE XP!', 'HINT DROPPED!'];
+            
+            powerup.textContent = powerups[Math.floor(Math.random() * powerups.length)];
+            powerup.style.display = 'block';
+            
+            setTimeout(() => {
+                powerup.style.display = 'none';
+            }, 2000);
+        }
+        setInterval(activatePowerUp, 30000);
+
+        // Update deploy count
+        function updateDeploys() {
+            const deploys = document.getElementById('deployCount');
+            const current = parseInt(deploys.textContent);
+            if (Math.random() > 0.7) {
+                deploys.textContent = Math.min(10, current + 1);
+            }
+        }
+        setInterval(updateDeploys, 15000);
+
+        // CSS animation for urgency
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes timerUrgent {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started Hub - The Vibe Awards</title>
+    <link rel="stylesheet" href="css/apple-magic.css">
+    <link rel="stylesheet" href="css/brand-system.css">
+    <link rel="stylesheet" href="css/typography.css">
+    <link rel="stylesheet" href="css/mobile-responsive.css">
+    <script src="js/performance.js"></script>
+    <script src="js/accessibility.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --apple-blue: #0071E3;
+            --apple-gray: #86868B;
+            --apple-light-gray: #F5F5F7;
+            --apple-dark: #1D1D1F;
+            --apple-green: #30D158;
+            --apple-red: #FF375F;
+            --apple-orange: #FF9F0A;
+            --apple-purple: #BF5AF2;
+            --apple-teal: #5AC8FA;
+            --apple-indigo: #5856D6;
+            --apple-yellow: #FFD60A;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: #000000;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .page-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: radial-gradient(circle at 30% 20%, rgba(191, 90, 242, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(88, 86, 214, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 20% 70%, rgba(0, 113, 227, 0.08) 0%, transparent 50%);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 9999;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #F5F5F7;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-link {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #F5F5F7;
+        }
+
+        .nav-cta {
+            padding: 8px 20px;
+            background: var(--apple-blue);
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-cta:hover {
+            background: #005bb5;
+            transform: scale(1.05) translateY(-1px);
+            box-shadow: 0 8px 25px rgba(0, 113, 227, 0.3);
+        }
+
+        .nav-cta:active {
+            transform: scale(0.98) translateY(0px);
+            transition: all 0.1s ease;
+        }
+        
+        /* Dropdown Menu */
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown-toggle {
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-dropdown-toggle:hover {
+            color: #F5F5F7;
+        }
+
+        .nav-dropdown-toggle::after {
+            content: '▼';
+            font-size: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-dropdown:hover .nav-dropdown-toggle::after {
+            transform: rotate(180deg);
+        }
+
+        .nav-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(29, 29, 31, 0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 8px;
+            margin-top: 8px;
+            min-width: 180px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-50%) translateY(-10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-dropdown:hover .nav-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .nav-dropdown-item {
+            display: block;
+            padding: 10px 16px;
+            color: rgba(245, 245, 247, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #F5F5F7;
+        }
+
+        .nav-dropdown-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 8px 0;
+        }
+
+        /* Content Container */
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 24px 80px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 32px;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 24px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 48px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Section Grid */
+        .sections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+            margin-bottom: 80px;
+        }
+
+        /* Enhanced icon animations */
+        .section-icon {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .section-card:hover .section-icon {
+            transform: rotate(5deg) scale(1.1);
+            box-shadow: 0 10px 30px rgba(191, 90, 242, 0.3);
+        }
+
+        /* Staggered fade-in animation */
+        .section-card {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: cardFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes cardFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Progressive loading animation delays */
+        .section-card:nth-child(1) { animation-delay: 0.1s; }
+        .section-card:nth-child(2) { animation-delay: 0.2s; }
+        .section-card:nth-child(3) { animation-delay: 0.3s; }
+        .section-card:nth-child(4) { animation-delay: 0.4s; }
+        .section-card:nth-child(5) { animation-delay: 0.5s; }
+        .section-card:nth-child(6) { animation-delay: 0.6s; }
+        .section-card:nth-child(7) { animation-delay: 0.7s; }
+        .section-card:nth-child(8) { animation-delay: 0.8s; }
+        .section-card:nth-child(9) { animation-delay: 0.9s; }
+        .section-card:nth-child(10) { animation-delay: 1.0s; }
+
+        .section-card {
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .section-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 30px 60px rgba(0, 113, 227, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .section-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .section-card:active {
+            transform: translateY(-4px) scale(1.01);
+            transition: all 0.1s ease;
+        }
+
+        .section-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--apple-purple), var(--apple-indigo));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin-bottom: 24px;
+        }
+
+        .section-card-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #F5F5F7;
+        }
+
+        .section-card-description {
+            font-size: 16px;
+            color: rgba(245, 245, 247, 0.8);
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .section-card-link {
+            font-size: 14px;
+            color: var(--apple-blue);
+            font-weight: 500;
+        }
+
+        /* Quick Start CTA */
+        .quick-start-cta {
+            text-align: center;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, rgba(88, 86, 214, 0.1), rgba(191, 90, 242, 0.1));
+            border-radius: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cta-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .cta-subtitle {
+            font-size: 18px;
+            color: rgba(245, 245, 247, 0.8);
+            margin-bottom: 32px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--apple-blue), var(--apple-teal));
+            color: white;
+            text-decoration: none;
+            border-radius: 24px;
+            font-size: 17px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 20px 40px rgba(0, 113, 227, 0.4);
+        }
+
+        .cta-button:active {
+            transform: scale(0.98) translateY(0px);
+            transition: all 0.1s ease;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 12px 16px;
+            }
+            
+            .nav-menu {
+                gap: 16px;
+                flex-wrap: wrap;
+            }
+            
+            .nav-dropdown-menu {
+                min-width: 160px;
+                font-size: 13px;
+            }
+            
+            .content {
+                padding: 100px 16px 60px;
+            }
+
+            .hero-title {
+                font-size: 32px;
+                line-height: 1.1;
+            }
+            
+            .hero-subtitle {
+                font-size: 18px;
+                padding: 0 8px;
+            }
+
+            .sections-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .section-card {
+                padding: 24px;
+            }
+            
+            .section-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 28px;
+                margin-bottom: 16px;
+            }
+            
+            .section-card-title {
+                font-size: 20px;
+            }
+            
+            .section-card-description {
+                font-size: 14px;
+                line-height: 1.4;
+            }
+            
+            .quick-start-cta {
+                padding: 40px 24px;
+                margin: 0 -8px;
+            }
+            
+            .cta-title {
+                font-size: 24px;
+            }
+            
+            .cta-subtitle {
+                font-size: 16px;
+            }
+            
+            .cta-button {
+                padding: 14px 24px;
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .nav-menu {
+                gap: 12px;
+            }
+            
+            .nav-dropdown-toggle {
+                font-size: 13px;
+            }
+            
+            .content {
+                padding: 90px 12px 50px;
+            }
+            
+            .hero-title {
+                font-size: 28px;
+            }
+            
+            .hero-subtitle {
+                font-size: 16px;
+            }
+            
+            .section-card {
+                padding: 20px;
+                border-radius: 16px;
+            }
+            
+            .section-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+                border-radius: 12px;
+            }
+            
+            .section-card-title {
+                font-size: 18px;
+                margin-bottom: 8px;
+            }
+            
+            .section-card-description {
+                font-size: 13px;
+                margin-bottom: 12px;
+            }
+            
+            .quick-start-cta {
+                padding: 32px 16px;
+                border-radius: 20px;
+            }
+            
+            .cta-title {
+                font-size: 22px;
+            }
+            
+            .cta-subtitle {
+                font-size: 15px;
+                margin-bottom: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script src="js/animations.js"></script>
+    <script src="js/apple-magic-init.js"></script>
+    <!-- Animated Background -->
+    <div class="page-background"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index-magic.html" class="nav-logo">
+                <span>🏆</span>
+                <span>The Vibe Awards</span>
+            </a>
+            <div class="nav-menu">
+                <!-- Getting Started -->
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-toggle">Getting Started</span>
+                    <div class="nav-dropdown-menu">
+                        <a href="getting-started.html" class="nav-dropdown-item">🚀 Getting Started Hub</a>
+                        <a href="index.html" class="nav-dropdown-item">🏆 The Vibe Awards</a>
+                    </div>
+                </div>
+                
+                <!-- Toolkit / Hub -->
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-toggle">Toolkit Hub</span>
+                    <div class="nav-dropdown-menu">
+                        <a href="vibe-toolkit.html" class="nav-dropdown-item">🛠️ Vibe Toolkit</a>
+                        <a href="vibe-hub.html" class="nav-dropdown-item">🎯 Vibe Hub Central</a>
+                    </div>
+                </div>
+                
+                <!-- Profile / Messages -->
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-toggle">Profile</span>
+                    <div class="nav-dropdown-menu">
+                        <a href="profile.html" class="nav-dropdown-item">👤 My Profile</a>
+                        <a href="messages.html" class="nav-dropdown-item">💬 Messages</a>
+                        <a href="directory.html" class="nav-dropdown-item">🌐 Directory</a>
+                    </div>
+                </div>
+                
+                <!-- Battle Arena / Leaderboard / Team Up -->
+                <div class="nav-dropdown">
+                    <span class="nav-dropdown-toggle">Competition</span>
+                    <div class="nav-dropdown-menu">
+                        <a href="apple-magic-battle.html" class="nav-dropdown-item">⚔️ Battle Arena</a>
+                        <a href="leaderboard.html" class="nav-dropdown-item">📊 Leaderboard</a>
+                        <a href="team-up.html" class="nav-dropdown-item">🤝 Team Up</a>
+                    </div>
+                </div>
+                
+                <!-- Submit -->
+                <a href="submit-app.html" class="nav-link">Submit App</a>
+                <a href="signup.html" class="nav-cta">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="content">
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-badge">🚀 Vibe Coding Academy</div>
+            <h1 class="hero-title">Getting Started Hub</h1>
+            <p class="hero-subtitle">
+                Master the art of AI-assisted app development. Choose your path and start building amazing apps with vibe coding.
+            </p>
+        </div>
+
+        <!-- Sections Grid -->
+        <div class="sections-grid">
+            <a href="getting-started-intro.html" class="section-card">
+                <div class="section-icon">🎯</div>
+                <h3 class="section-card-title">What is Vibe Coding?</h3>
+                <p class="section-card-description">
+                    Learn the fundamentals of AI-assisted development and why vibe coding is revolutionizing app creation.
+                </p>
+                <span class="section-card-link">Start here →</span>
+            </a>
+
+            <a href="getting-started-quickstart.html" class="section-card">
+                <div class="section-icon">⚡</div>
+                <h3 class="section-card-title">3-Step Quick Start</h3>
+                <p class="section-card-description">
+                    Build your first app in the next 10 minutes with our step-by-step beginner guide.
+                </p>
+                <span class="section-card-link">Start building →</span>
+            </a>
+
+            <a href="getting-started-journey.html" class="section-card">
+                <div class="section-icon">🗺️</div>
+                <h3 class="section-card-title">Your Vibe Coding Journey</h3>
+                <p class="section-card-description">
+                    Master the art of AI-assisted app development and become a vibe coding wizard.
+                </p>
+                <span class="section-card-link">Start journey →</span>
+            </a>
+
+            <a href="getting-started-prompting.html" class="section-card">
+                <div class="section-icon">💬</div>
+                <h3 class="section-card-title">Vibe Prompting Principles</h3>
+                <p class="section-card-description">
+                    Master prompting strategies to get AI to build exactly what you envision.
+                </p>
+                <span class="section-card-link">Learn prompting →</span>
+            </a>
+
+            <a href="getting-started-platforms.html" class="section-card">
+                <div class="section-icon">🛠️</div>
+                <h3 class="section-card-title">AI Platforms Comparison</h3>
+                <p class="section-card-description">
+                    Choose the right AI tool for your vibe coding style and project type.
+                </p>
+                <span class="section-card-link">Compare platforms →</span>
+            </a>
+
+            <a href="getting-started-guides.html" class="section-card">
+                <div class="section-icon">📱</div>
+                <h3 class="section-card-title">Platform-Specific Guides</h3>
+                <p class="section-card-description">
+                    Master vibe coding for your preferred platform with targeted strategies.
+                </p>
+                <span class="section-card-link">Choose platform →</span>
+            </a>
+
+            <a href="getting-started-templates.html" class="section-card">
+                <div class="section-icon">📝</div>
+                <h3 class="section-card-title">Prompt Templates</h3>
+                <p class="section-card-description">
+                    Copy and customize proven prompt patterns for different types of projects.
+                </p>
+                <span class="section-card-link">Get templates →</span>
+            </a>
+
+            <a href="getting-started-architecture.html" class="section-card">
+                <div class="section-icon">🏗️</div>
+                <h3 class="section-card-title">App Architecture</h3>
+                <p class="section-card-description">
+                    Learn professional architecture patterns and avoid broken buttons and frustrated users.
+                </p>
+                <span class="section-card-link">Learn architecture →</span>
+            </a>
+
+            <a href="getting-started-professional.html" class="section-card">
+                <div class="section-icon">👨‍💻</div>
+                <h3 class="section-card-title">Senior Developer Prompting</h3>
+                <p class="section-card-description">
+                    Communicate with AI using professional development language and practices.
+                </p>
+                <span class="section-card-link">Level up →</span>
+            </a>
+
+            <a href="getting-started-example.html" class="section-card">
+                <div class="section-icon">🚀</div>
+                <h3 class="section-card-title">Complete Example</h3>
+                <p class="section-card-description">
+                    Follow a complete example from initial prompt to polished production app.
+                </p>
+                <span class="section-card-link">See example →</span>
+            </a>
+        </div>
+
+        <!-- New Features Section -->
+        <div class="hero" style="margin-top: 80px; margin-bottom: 48px;">
+            <div class="hero-badge">✨ New Vibe-Coding Features</div>
+            <h2 style="font-size: 48px; font-weight: 700; margin-bottom: 16px;">Your Vibe-Coding Arsenal</h2>
+            <p style="font-size: 20px; color: rgba(245, 245, 247, 0.8);">Everything you need to showcase your AI collaboration mastery</p>
+        </div>
+
+        <div class="sections-grid">
+            <a href="profile.html" class="section-card">
+                <div class="section-icon" style="background: linear-gradient(135deg, var(--apple-purple), var(--apple-teal));">👤</div>
+                <h3 class="section-card-title">Your Vibe-Coder Profile</h3>
+                <p class="section-card-description">
+                    Showcase your apps, track achievements, and display your vibe-coding journey. Drop links to instantly add apps to your portfolio.
+                </p>
+                <span class="section-card-link">View your profile →</span>
+            </a>
+
+            <a href="directory.html" class="section-card">
+                <div class="section-icon" style="background: linear-gradient(135deg, var(--apple-blue), var(--apple-green));">🌐</div>
+                <h3 class="section-card-title">Vibe-Coder Directory</h3>
+                <p class="section-card-description">
+                    Discover other AI collaboration pioneers. Filter by skills, find collaborators, and connect with the vibe-coding community.
+                </p>
+                <span class="section-card-link">Browse directory →</span>
+            </a>
+
+            <a href="messages.html" class="section-card">
+                <div class="section-icon" style="background: linear-gradient(135deg, var(--apple-teal), var(--apple-indigo));">💬</div>
+                <h3 class="section-card-title">Messaging System</h3>
+                <p class="section-card-description">
+                    Connect directly with other vibe-coders. Share techniques, collaborate on projects, and build your network.
+                </p>
+                <span class="section-card-link">Open messages →</span>
+            </a>
+
+            <a href="vibe-toolkit.html" class="section-card">
+                <div class="section-icon" style="background: linear-gradient(135deg, var(--apple-orange), var(--apple-red));">🛠️</div>
+                <h3 class="section-card-title">Vibe Toolkit</h3>
+                <p class="section-card-description">
+                    Professional AI-powered tools for vibe-coders. Generate UI components, optimize code, and accelerate your development.
+                </p>
+                <span class="section-card-link">Open toolkit →</span>
+            </a>
+
+            <a href="vibe-hub.html" class="section-card">
+                <div class="section-icon" style="background: linear-gradient(135deg, var(--apple-green), var(--apple-yellow));">🎯</div>
+                <h3 class="section-card-title">Vibe Hub Central</h3>
+                <p class="section-card-description">
+                    Your command center for all vibe-coding activities. Monitor battles, track progress, and manage your apps.
+                </p>
+                <span class="section-card-link">Enter hub →</span>
+            </a>
+
+            <a href="team-up.html" class="section-card">
+                <div class="section-icon" style="background: linear-gradient(135deg, var(--apple-indigo), var(--apple-purple));">🤝</div>
+                <h3 class="section-card-title">Team Up</h3>
+                <p class="section-card-description">
+                    Find your perfect vibe-coding partner. Match by skills, collaborate on projects, and build magical apps together.
+                </p>
+                <span class="section-card-link">Find teammates →</span>
+            </a>
+
+            <a href="showcase.html" class="section-card">
+                <div class="section-icon" style="background: linear-gradient(135deg, var(--apple-red), var(--apple-orange));">🏆</div>
+                <h3 class="section-card-title">App Showcase</h3>
+                <p class="section-card-description">
+                    Display your vibe-coded creations. Just drop a link and we'll automatically showcase your app with screenshots.
+                </p>
+                <span class="section-card-link">Add to showcase →</span>
+            </a>
+
+            <a href="submit-app.html" class="section-card">
+                <div class="section-icon" style="background: linear-gradient(135deg, var(--apple-teal), var(--apple-blue));">⚔️</div>
+                <h3 class="section-card-title">Submit to Battle</h3>
+                <p class="section-card-description">
+                    Enter your app in the daily battles. Compete for glory, win prizes, and prove your vibe-coding mastery.
+                </p>
+                <span class="section-card-link">Submit app →</span>
+            </a>
+
+            <a href="leaderboard.html" class="section-card">
+                <div class="section-icon" style="background: linear-gradient(135deg, var(--apple-yellow), var(--apple-green));">📊</div>
+                <h3 class="section-card-title">Leaderboard</h3>
+                <p class="section-card-description">
+                    Track your ranking among vibe-coders. See who's winning battles and climbing to legendary status.
+                </p>
+                <span class="section-card-link">View rankings →</span>
+            </a>
+        </div>
+
+        <!-- Quick Start CTA -->
+        <div class="quick-start-cta">
+            <h2 class="cta-title">Ready to Start Vibe Coding?</h2>
+            <p class="cta-subtitle">
+                Jump into our quick start guide and build your first app in the next 10 minutes
+            </p>
+            <a href="getting-started-quickstart.html" class="cta-button">Start Building Now</a>
+        </div>
+    </div>
+</body>
+</html>
