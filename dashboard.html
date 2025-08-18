@@ -529,6 +529,66 @@
             color: rgba(245, 245, 247, 0.5);
         }
 
+        /* Competition Dashboard Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+        }
+
+        .competition-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .competition-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .filter-btn {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--apple-blue) !important;
+            transform: scale(1.05);
+        }
+
+        .feed-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: var(--space-sm) 0;
+            transition: all 0.2s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .feed-item:hover {
+            background: rgba(255, 255, 255, 0.02);
+            padding-left: var(--space-sm);
+            margin-left: calc(-1 * var(--space-sm));
+            border-radius: 8px;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Real-time indicator styles */
+        .live-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--apple-red);
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 1s infinite;
+        }
+
         /* Responsive */
         @media (max-width: clamp(614px, 64rem, 1024px)) {
             .dashboard-container {
@@ -542,6 +602,15 @@
 
             .main-content {
                 order: 1;
+            }
+
+            .competition-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .live-status-bar {
+                flex-direction: column !important;
+                gap: var(--gap-sm) !important;
             }
         }
 
@@ -729,135 +798,135 @@
     <main role="main" class="main-content">
             <!-- Welcome Header -->
             <div class="welcome-header">
-                <h1 class="welcome-title" style="font-size: var(--fs-4xl);">Welcome back, John! 👋</h1>
-                <p class="welcome-subtitle">Your apps are performing well. Keep up the great work!</p>
+                <h1 class="welcome-title" style="font-size: var(--fs-4xl);">Competition Control Center 🎯</h1>
+                <p class="welcome-subtitle">Real-time tracking of all competitions, battles, and voting activity across The Vibe Awards</p>
+                
+                <!-- Live Status Bar -->
+                <div class="live-status-bar" style="display: flex; gap: var(--gap-md); margin-top: 20px; flex-wrap: wrap;">
+                    <div class="status-item" style="display: flex; align-items: center; gap: var(--gap-xs); padding: var(--space-xs) 16px; background: rgba(48, 209, 88, 0.2); border: 1px solid rgba(48, 209, 88, 0.3); border-radius: 20px;">
+                        <div class="pulse-dot" style="width: 8px; height: 8px; background: var(--apple-green); border-radius: 50%; animation: pulse 2s infinite;"></div>
+                        <span style="font-size: var(--fs-sm); color: var(--apple-green); font-weight: 600;">Live Competitions</span>
+                        <span class="live-count" style="background: var(--apple-green); color: black; padding: 2px 8px; border-radius: 12px; font-size: var(--fs-xs); font-weight: 700;">12</span>
+                    </div>
+                    <div class="status-item" style="display: flex; align-items: center; gap: var(--gap-xs); padding: var(--space-xs) 16px; background: rgba(255, 159, 10, 0.2); border: 1px solid rgba(255, 159, 10, 0.3); border-radius: 20px;">
+                        <div class="pulse-dot" style="width: 8px; height: 8px; background: var(--apple-orange); border-radius: 50%; animation: pulse 1.5s infinite;"></div>
+                        <span style="font-size: var(--fs-sm); color: var(--apple-orange); font-weight: 600;">Active Voting</span>
+                        <span class="voting-count" style="background: var(--apple-orange); color: black; padding: 2px 8px; border-radius: 12px; font-size: var(--fs-xs); font-weight: 700;">847</span>
+                    </div>
+                    <div class="status-item" style="display: flex; align-items: center; gap: var(--gap-xs); padding: var(--space-xs) 16px; background: rgba(191, 90, 242, 0.2); border: 1px solid rgba(191, 90, 242, 0.3); border-radius: 20px;">
+                        <div class="pulse-dot" style="width: 8px; height: 8px; background: var(--apple-purple); border-radius: 50%; animation: pulse 1s infinite;"></div>
+                        <span style="font-size: var(--fs-sm); color: var(--apple-purple); font-weight: 600;">Online Users</span>
+                        <span class="users-count" style="background: var(--apple-purple); color: white; padding: 2px 8px; border-radius: 12px; font-size: var(--fs-xs); font-weight: 700;">2.3K</span>
+                    </div>
+                </div>
             </div>
 
             <!-- Stats Grid -->
             <div class="stats-grid ultra-grid-responsive">
-                <div class="stat-card card-fluid">
-                    <div class="stat-icon">📱</div>
-                    <div class="stat-value">3</div>
-                    <div class="stat-label">Active Apps</div>
-                    <span class="stat-change">+1 this month</span>
+                <div class="stat-card card-fluid" onclick="showActiveCompetitions()">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-value" id="activeCompetitions">12</div>
+                    <div class="stat-label">Active Competitions</div>
+                    <span class="stat-change">+3 since yesterday</span>
                 </div>
 
-                <div class="stat-card card-fluid">
+                <div class="stat-card card-fluid" onclick="showLiveBattles()">
                     <div class="stat-icon">⚔️</div>
-                    <div class="stat-value">247</div>
-                    <div class="stat-label">Total Battles</div>
-                    <span class="stat-change">+12 this week</span>
+                    <div class="stat-value" id="liveBattles">8</div>
+                    <div class="stat-label">Live Battles</div>
+                    <span class="stat-change">4 starting soon</span>
                 </div>
 
-                <div class="stat-card card-fluid">
-                    <div class="stat-icon">🏆</div>
-                    <div class="stat-value">189</div>
-                    <div class="stat-label">Battles Won</div>
-                    <span class="stat-change">76.5% win rate</span>
-                </div>
-
-                <div class="stat-card card-fluid">
+                <div class="stat-card card-fluid" onclick="showVotingActivity()">
                     <div class="stat-icon">🗳️</div>
-                    <div class="stat-value">45.2K</div>
-                    <div class="stat-label">Total Votes</div>
-                    <span class="stat-change">+2.3K today</span>
+                    <div class="stat-value" id="totalVotes">847K</div>
+                    <div class="stat-label">Total Votes Today</div>
+                    <span class="stat-change">+12.3K last hour</span>
+                </div>
+
+                <div class="stat-card card-fluid" onclick="showParticipants()">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value" id="activeUsers">2.3K</div>
+                    <div class="stat-label">Active Participants</div>
+                    <span class="stat-change">Peak: 3.1K today</span>
                 </div>
             </div>
 
-            <!-- My Apps Section -->
+            <!-- Live Competition Tracking Section -->
             <div class="section-header container-fluid">
-                <h2 class="section-title" style="font-size: var(--fs-3xl);" style="font-size: var(--fs-3xl);">My Apps</h2>
-                <a href="submit-app.html" class="btn-primary btn-fluid">+ Add New App</a>
+                <h2 class="section-title" style="font-size: var(--fs-3xl);">Live Competition Tracking</h2>
+                <div style="display: flex; gap: var(--gap-sm);">
+                    <button class="btn-primary btn-fluid" onclick="startNewBattle()">⚔️ Start Battle</button>
+                    <button class="btn-primary btn-fluid" onclick="openVotingCenter()" style="background: var(--apple-purple);">🗳️ Voting Center</button>
+                </div>
             </div>
 
-            <div class="apps-list">
-                <div class="app-item">
-                    <div class="app-icon-wrapper">🗣️</div>
-                    <div class="app-info">
-                        <div class="app-name">TinkyBink AAC</div>
-                        <div class="app-status">
-                            <span class="status-badge live">Live</span>
-                            <span>Healthcare • Submitted Dec 10, 2024</span>
+            <div class="competition-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--gap-md); margin-bottom: 32px;">
+                <!-- Live Battle Card -->
+                <div class="competition-card" style="background: rgba(255, 55, 95, 0.1); border: 1px solid rgba(255, 55, 95, 0.3); border-radius: 20px; padding: var(--space-md); position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: 0; right: 0; background: var(--apple-red); color: white; padding: var(--space-xs) 12px; border-radius: 0 20px 0 12px; font-size: var(--fs-xs); font-weight: 700;">🔴 LIVE</div>
+                    <h3 style="font-size: var(--fs-xl); margin-bottom: 16px; color: var(--apple-red);">TinkyBink AAC vs MindSync Pro</h3>
+                    <div class="battle-progress" style="margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span style="font-weight: 600;">62%</span>
+                            <span style="color: rgba(245, 245, 247, 0.6);">38%</span>
+                        </div>
+                        <div class="progress-bar" style="height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 4px; overflow: hidden;">
+                            <div style="width: 62%; height: 100%; background: linear-gradient(90deg, var(--apple-green), var(--apple-teal)); transition: width 0.5s ease;"></div>
                         </div>
                     </div>
-                    <div class="app-stats">
-                        <div class="app-stat">
-                            <span class="app-stat-value">147</span>
-                            <span class="app-stat-label">Wins</span>
-                        </div>
-                        <div class="app-stat">
-                            <span class="app-stat-value">89%</span>
-                            <span class="app-stat-label">Win Rate</span>
-                        </div>
-                        <div class="app-stat">
-                            <span class="app-stat-value">#1</span>
-                            <span class="app-stat-label">Rank</span>
-                        </div>
-                    </div>
-                    <div class="app-actions">
-                        <div class="btn-icon btn-fluid">📊</div>
-                        <div class="btn-icon btn-fluid">✏️</div>
-                        <div class="btn-icon btn-fluid">👁️</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="color: rgba(245, 245, 247, 0.7);">12,547 votes • 2 min left</span>
+                        <button class="btn-primary" onclick="watchLive()" style="padding: var(--space-xs) 16px; font-size: var(--fs-sm);">👁️ Watch</button>
                     </div>
                 </div>
 
-                <div class="app-item">
-                    <div class="app-icon-wrapper">📚</div>
-                    <div class="app-info">
-                        <div class="app-name">StudyBuddy AI</div>
-                        <div class="app-status">
-                            <span class="status-badge live">Live</span>
-                            <span>Education • Submitted Nov 28, 2024</span>
-                        </div>
+                <!-- Starting Soon Card -->
+                <div class="competition-card" style="background: rgba(255, 159, 10, 0.1); border: 1px solid rgba(255, 159, 10, 0.3); border-radius: 20px; padding: var(--space-md);">
+                    <div style="display: flex; align-items: center; gap: var(--gap-xs); margin-bottom: 16px;">
+                        <div style="width: 8px; height: 8px; background: var(--apple-orange); border-radius: 50%; animation: pulse 1s infinite;"></div>
+                        <span style="color: var(--apple-orange); font-weight: 600; font-size: var(--fs-sm);">STARTING IN 5 MIN</span>
                     </div>
-                    <div class="app-stats">
-                        <div class="app-stat">
-                            <span class="app-stat-value">42</span>
-                            <span class="app-stat-label">Wins</span>
-                        </div>
-                        <div class="app-stat">
-                            <span class="app-stat-value">71%</span>
-                            <span class="app-stat-label">Win Rate</span>
-                        </div>
-                        <div class="app-stat">
-                            <span class="app-stat-value">#8</span>
-                            <span class="app-stat-label">Rank</span>
-                        </div>
-                    </div>
-                    <div class="app-actions">
-                        <div class="btn-icon btn-fluid">📊</div>
-                        <div class="btn-icon btn-fluid">✏️</div>
-                        <div class="btn-icon btn-fluid">👁️</div>
+                    <h3 style="font-size: var(--fs-xl); margin-bottom: 16px;">StudyBuddy AI vs EduGenius</h3>
+                    <div style="color: rgba(245, 245, 247, 0.7); margin-bottom: 20px;">Education Category • Round of 16</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="color: rgba(245, 245, 247, 0.7);">3,247 pre-votes</span>
+                        <button class="btn-primary" onclick="joinBattle()" style="background: var(--apple-orange); padding: var(--space-xs) 16px; font-size: var(--fs-sm);">🔔 Notify Me</button>
                     </div>
                 </div>
 
-                <div class="app-item">
-                    <div class="app-icon-wrapper">🎮</div>
-                    <div class="app-info">
-                        <div class="app-name">PixelQuest Pro</div>
-                        <div class="app-status">
-                            <span class="status-badge review">In Review</span>
-                            <span>Gaming • Submitted Dec 14, 2024</span>
-                        </div>
+                <!-- Voting Results Card -->
+                <div class="competition-card" style="background: rgba(48, 209, 88, 0.1); border: 1px solid rgba(48, 209, 88, 0.3); border-radius: 20px; padding: var(--space-md);">
+                    <div style="display: flex; align-items: center; gap: var(--gap-xs); margin-bottom: 16px;">
+                        <span style="color: var(--apple-green); font-weight: 600; font-size: var(--fs-sm);">✅ COMPLETED</span>
                     </div>
-                    <div class="app-stats">
-                        <div class="app-stat">
-                            <span class="app-stat-value">—</span>
-                            <span class="app-stat-label">Wins</span>
+                    <h3 style="font-size: var(--fs-xl); margin-bottom: 16px;">PixelQuest Pro vs GameForge</h3>
+                    <div style="margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span style="font-weight: 600; color: var(--apple-green);">Winner: PixelQuest Pro (74%)</span>
                         </div>
-                        <div class="app-stat">
-                            <span class="app-stat-value">—</span>
-                            <span class="app-stat-label">Win Rate</span>
-                        </div>
-                        <div class="app-stat">
-                            <span class="app-stat-value">—</span>
-                            <span class="app-stat-label">Rank</span>
-                        </div>
+                        <div style="color: rgba(245, 245, 247, 0.7); font-size: var(--fs-sm);">Final votes: 8,892</div>
                     </div>
-                    <div class="app-actions">
-                        <div class="btn-icon btn-fluid">✏️</div>
-                        <div class="btn-icon btn-fluid">👁️</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="color: rgba(245, 245, 247, 0.7);">Ended 10 min ago</span>
+                        <button class="btn-primary" onclick="viewResults()" style="background: var(--apple-green); padding: var(--space-xs) 16px; font-size: var(--fs-sm);">📊 Results</button>
                     </div>
+                </div>
+            </div>
+
+            <!-- Real-time Competition Feed -->
+            <div class="competition-feed" style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: var(--space-md);">
+                <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 24px;">
+                    <h3 style="font-size: var(--fs-xl);">Competition Feed</h3>
+                    <div style="display: flex; gap: var(--gap-xs);">
+                        <button class="filter-btn active" data-filter="all" style="padding: var(--space-xs) 12px; background: var(--apple-blue); color: white; border: none; border-radius: 8px; font-size: var(--fs-xs);">All</button>
+                        <button class="filter-btn" data-filter="battles" style="padding: var(--space-xs) 12px; background: rgba(255, 255, 255, 0.1); color: white; border: none; border-radius: 8px; font-size: var(--fs-xs);">Battles</button>
+                        <button class="filter-btn" data-filter="votes" style="padding: var(--space-xs) 12px; background: rgba(255, 255, 255, 0.1); color: white; border: none; border-radius: 8px; font-size: var(--fs-xs);">Votes</button>
+                    </div>
+                </div>
+                
+                <div class="feed-items" id="competitionFeed">
+                    <!-- Feed items will be dynamically populated -->
                 </div>
             </div>
 
@@ -909,69 +978,324 @@
     </div>
 
     <script>
-        // Check authentication
-        const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-        const userName = localStorage.getItem('userName') || 'User';
+        // Real-time Competition Dashboard
+        class CompetitionDashboard {
+            constructor() {
+                this.competitions = [];
+                this.feedItems = [];
+                this.isLive = false;
+                this.updateInterval = null;
+                this.init();
+            }
 
-        if (!isAuthenticated) {
-            window.location.href = 'signup.html';
+            init() {
+                this.loadInitialData();
+                this.setupEventListeners();
+                this.startRealTimeUpdates();
+                this.initializeFeed();
+            }
+
+            loadInitialData() {
+                // Simulate live competition data
+                this.competitions = [
+                    {
+                        id: 1,
+                        title: "TinkyBink AAC vs MindSync Pro",
+                        status: "live",
+                        votes: { a: 62, b: 38 },
+                        totalVotes: 12547,
+                        timeLeft: 120,
+                        category: "Healthcare"
+                    },
+                    {
+                        id: 2,
+                        title: "StudyBuddy AI vs EduGenius",
+                        status: "starting",
+                        timeToStart: 300,
+                        preVotes: 3247,
+                        category: "Education"
+                    },
+                    {
+                        id: 3,
+                        title: "PixelQuest Pro vs GameForge",
+                        status: "completed",
+                        winner: "PixelQuest Pro",
+                        winPercentage: 74,
+                        finalVotes: 8892,
+                        endedAt: "10 min ago"
+                    }
+                ];
+            }
+
+            setupEventListeners() {
+                // Filter buttons
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        this.filterFeed(e.target.dataset.filter);
+                    });
+                });
+
+                // Competition cards
+                document.querySelectorAll('.competition-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        card.style.transform = 'scale(0.98)';
+                        setTimeout(() => {
+                            card.style.transform = '';
+                        }, 150);
+                    });
+                });
+            }
+
+            startRealTimeUpdates() {
+                this.isLive = true;
+                this.updateInterval = setInterval(() => {
+                    this.updateLiveStats();
+                    this.updateLiveCompetitions();
+                    this.addRandomFeedItem();
+                }, 3000);
+
+                // Update status indicators more frequently
+                setInterval(() => {
+                    this.updateStatusCounts();
+                }, 1000);
+            }
+
+            updateLiveStats() {
+                // Simulate real-time stat updates
+                const stats = {
+                    activeCompetitions: Math.floor(Math.random() * 3) + 10,
+                    liveBattles: Math.floor(Math.random() * 2) + 7,
+                    totalVotes: this.formatNumber(847000 + Math.floor(Math.random() * 50000)),
+                    activeUsers: this.formatNumber(2300 + Math.floor(Math.random() * 200))
+                };
+
+                this.animateStatUpdate('activeCompetitions', stats.activeCompetitions);
+                this.animateStatUpdate('liveBattles', stats.liveBattles);
+                this.animateStatUpdate('totalVotes', stats.totalVotes);
+                this.animateStatUpdate('activeUsers', stats.activeUsers);
+            }
+
+            updateStatusCounts() {
+                // Update status bar counts with slight variations
+                document.querySelector('.live-count').textContent = Math.floor(Math.random() * 3) + 10;
+                document.querySelector('.voting-count').textContent = Math.floor(Math.random() * 50) + 800;
+                document.querySelector('.users-count').textContent = this.formatNumber(2300 + Math.floor(Math.random() * 200));
+            }
+
+            updateLiveCompetitions() {
+                // Update live battle progress
+                const liveCompetition = this.competitions.find(c => c.status === 'live');
+                if (liveCompetition) {
+                    // Simulate vote changes
+                    const variation = (Math.random() - 0.5) * 2;
+                    liveCompetition.votes.a = Math.max(0, Math.min(100, liveCompetition.votes.a + variation));
+                    liveCompetition.votes.b = 100 - liveCompetition.votes.a;
+                    liveCompetition.totalVotes += Math.floor(Math.random() * 50);
+                    liveCompetition.timeLeft -= 3;
+
+                    this.updateBattleProgress(liveCompetition);
+                }
+            }
+
+            updateBattleProgress(competition) {
+                const progressBar = document.querySelector('.progress-bar div');
+                const percentageElements = document.querySelectorAll('.battle-progress span');
+                const voteCountElement = document.querySelector('.competition-card span[style*="color: rgba(245, 245, 247, 0.7)"]');
+
+                if (progressBar) {
+                    progressBar.style.width = `${competition.votes.a}%`;
+                }
+
+                if (percentageElements.length >= 2) {
+                    percentageElements[0].textContent = `${Math.round(competition.votes.a)}%`;
+                    percentageElements[1].textContent = `${Math.round(competition.votes.b)}%`;
+                }
+
+                if (voteCountElement) {
+                    const minutes = Math.floor(competition.timeLeft / 60);
+                    const seconds = competition.timeLeft % 60;
+                    voteCountElement.textContent = `${competition.totalVotes.toLocaleString()} votes • ${minutes}:${seconds.toString().padStart(2, '0')} left`;
+                }
+            }
+
+            initializeFeed() {
+                this.feedItems = [
+                    { type: 'battle', text: 'TinkyBink AAC vs MindSync Pro battle started', time: 'now', icon: '⚔️' },
+                    { type: 'vote', text: '1,247 votes cast in the last minute', time: '30s ago', icon: '🗳️' },
+                    { type: 'battle', text: 'PixelQuest Pro won against GameForge (74%)', time: '1m ago', icon: '🏆' },
+                    { type: 'vote', text: 'StudyBuddy AI received 500 pre-votes', time: '2m ago', icon: '📊' },
+                    { type: 'battle', text: 'New battle scheduled: HealthTracker vs WellnessAI', time: '3m ago', icon: '📅' }
+                ];
+
+                this.renderFeed();
+            }
+
+            addRandomFeedItem() {
+                const feedTypes = ['battle', 'vote', 'user'];
+                const randomType = feedTypes[Math.floor(Math.random() * feedTypes.length)];
+                
+                const newItem = this.generateRandomFeedItem(randomType);
+                this.feedItems.unshift(newItem);
+                
+                // Keep only last 20 items
+                this.feedItems = this.feedItems.slice(0, 20);
+                
+                this.renderFeed();
+            }
+
+            generateRandomFeedItem(type) {
+                const items = {
+                    battle: [
+                        'CodeMaster vs DevWizard battle ending in 30 seconds',
+                        'AI Helper Pro advanced to the finals',
+                        'New healthcare category battle started'
+                    ],
+                    vote: [
+                        `${Math.floor(Math.random() * 500 + 100)} votes cast in the last minute`,
+                        `Voting surge detected: +${Math.floor(Math.random() * 200 + 50)} votes`,
+                        'Peak voting activity reached'
+                    ],
+                    user: [
+                        `${Math.floor(Math.random() * 50 + 10)} new users joined`,
+                        'Community milestone: 10K active voters',
+                        'Record participation in today\'s battles'
+                    ]
+                };
+
+                const icons = { battle: '⚔️', vote: '🗳️', user: '👥' };
+                const randomItem = items[type][Math.floor(Math.random() * items[type].length)];
+
+                return {
+                    type,
+                    text: randomItem,
+                    time: 'now',
+                    icon: icons[type]
+                };
+            }
+
+            renderFeed() {
+                const feedContainer = document.getElementById('competitionFeed');
+                feedContainer.innerHTML = '';
+
+                this.feedItems.forEach((item, index) => {
+                    const feedElement = document.createElement('div');
+                    feedElement.className = 'feed-item';
+                    feedElement.style.animationDelay = `${index * 0.1}s`;
+                    feedElement.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: var(--gap-sm);">
+                            <span style="font-size: var(--fs-lg);">${item.icon}</span>
+                            <div style="flex: 1;">
+                                <div style="font-size: var(--fs-sm); margin-bottom: 4px;">${item.text}</div>
+                                <div style="font-size: var(--fs-xs); color: rgba(245, 245, 247, 0.5);">${item.time}</div>
+                            </div>
+                        </div>
+                    `;
+                    feedContainer.appendChild(feedElement);
+                });
+            }
+
+            filterFeed(filter) {
+                const feedItems = document.querySelectorAll('.feed-item');
+                feedItems.forEach(item => {
+                    if (filter === 'all') {
+                        item.style.display = 'block';
+                    } else {
+                        // Simple filter implementation
+                        const itemType = filter === 'battles' ? '⚔️' : filter === 'votes' ? '🗳️' : '👥';
+                        const hasType = item.innerHTML.includes(itemType);
+                        item.style.display = hasType ? 'block' : 'none';
+                    }
+                });
+            }
+
+            animateStatUpdate(elementId, newValue) {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.style.transform = 'scale(1.1)';
+                    element.style.color = 'var(--apple-green)';
+                    setTimeout(() => {
+                        element.textContent = newValue;
+                        element.style.transform = 'scale(1)';
+                        element.style.color = '';
+                    }, 200);
+                }
+            }
+
+            formatNumber(num) {
+                if (num >= 1000) {
+                    return (num / 1000).toFixed(1) + 'K';
+                }
+                return num.toString();
+            }
+
+            // Public methods for button interactions
+            showActiveCompetitions() {
+                vibeInfo('Active Competitions', 'Viewing all 12 active competitions across different categories.');
+            }
+
+            showLiveBattles() {
+                vibeInfo('Live Battles', 'Currently 8 battles are live with real-time voting.');
+            }
+
+            showVotingActivity() {
+                vibeInfo('Voting Activity', 'Total of 847K votes cast today. Peak activity hour was 2-3 PM.');
+            }
+
+            showParticipants() {
+                vibeInfo('Active Participants', '2.3K users currently online and participating in competitions.');
+            }
         }
 
-        // Update user name
-        document.querySelectorAll('.user-name, .profile-name').forEach(el => {
-            if (el.textContent === 'John Doe' || el.textContent.includes('John')) {
-                el.textContent = el.textContent.replace('John Doe', userName).replace('John', userName);
-            }
-        });
+        // Competition Dashboard Functions
+        function startNewBattle() {
+            vibeSuccess('Battle Started!', 'New battle has been scheduled and will begin in 2 minutes.');
+        }
 
-        // Animate stats on load
+        function openVotingCenter() {
+            vibeInfo('Voting Center', 'Opening live voting interface for all active competitions.');
+        }
+
+        function watchLive() {
+            vibeSuccess('Joined Live Battle!', 'You are now watching the live battle. Vote to participate!');
+        }
+
+        function joinBattle() {
+            vibeSuccess('Notification Set!', 'You will be notified when this battle starts in 5 minutes.');
+        }
+
+        function viewResults() {
+            vibeInfo('Battle Results', 'PixelQuest Pro won with 74% of votes (8,892 total votes).');
+        }
+
+        // Initialize dashboard
+        const dashboard = new CompetitionDashboard();
+
+        // Expose methods globally for onclick handlers
+        window.showActiveCompetitions = () => dashboard.showActiveCompetitions();
+        window.showLiveBattles = () => dashboard.showLiveBattles();
+        window.showVotingActivity = () => dashboard.showVotingActivity();
+        window.showParticipants = () => dashboard.showParticipants();
+
+        // Page load animations
         window.addEventListener('load', () => {
-            const statValues = document.querySelectorAll('.stat-value');
-            statValues.forEach((stat, index) => {
+            // Animate stats cards
+            document.querySelectorAll('.stat-card').forEach((card, index) => {
                 setTimeout(() => {
-                    stat.style.animation = 'statPulse 0.5s ease';
+                    card.style.animation = 'statPulse 0.6s ease';
                 }, index * 100);
             });
-        });
 
-        // Add animation keyframe
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes statPulse {
-                0% { transform: scale(1); }
-                50% { transform: scale(1.1); }
-                100% { transform: scale(1); }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // User menu dropdown
-        document.querySelector('.user-menu').addEventListener('click', function() {
-            // Show logout confirmation modal
-            vibeConfirm(
-                'Sign Out',
-                'Are you sure you want to sign out? You\'ll need to log back in to access your dashboard.',
-                () => {
-                    localStorage.removeItem('isAuthenticated');
-                    localStorage.removeItem('userName');
-                    localStorage.removeItem('userRole');
-                    localStorage.removeItem('userSkillLevel');
-                    vibeInfo('Signed Out', 'You have been successfully signed out. See you next time!');
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 1500);
-                }
-            );
-        });
-
-        // Sidebar menu navigation
-        document.querySelectorAll('.menu-item').forEach(item => {
-            item.addEventListener('click', function(e) {
-                if (!this.href || this.href === '#') {
-                    e.preventDefault();
-                    document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-                    this.classList.add('active');
-                }
+            // Animate competition cards
+            document.querySelectorAll('.competition-card').forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 200 + (index * 150));
             });
         });
     </script>
