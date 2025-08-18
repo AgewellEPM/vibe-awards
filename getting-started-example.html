@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="enhanced-mobile-menu.css">
     <title>Complete Example - The Vibe Awards</title>
     <style>
         * {
@@ -430,6 +431,68 @@
         </div>
     </nav>
 
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-content">
+            <div class="mobile-menu-section">
+                <div class="mobile-menu-title">Competition</div>
+                <a href="competition.html" class="mobile-menu-link">Main Competition</a>
+                <a href="battle-arena.html" class="mobile-menu-link">Battle Arena</a>
+                <a href="app-battle-arena.html" class="mobile-menu-link">App Battles</a>
+                <a href="challenge-mode.html" class="mobile-menu-link">Challenge Mode</a>
+                <a href="tournament.html" class="mobile-menu-link">Tournament</a>
+                <a href="leaderboard.html" class="mobile-menu-link">Leaderboard</a>
+                <a href="winners.html" class="mobile-menu-link">Past Winners</a>
+            </div>
+
+            <div class="mobile-menu-section">
+                <div class="mobile-menu-title">Build</div>
+                <a href="vibe-forge.html" class="mobile-menu-link">Vibe Forge</a>
+                <a href="vibe-toolkit.html" class="mobile-menu-link">Vibe Toolkit</a>
+                <a href="getting-started.html" class="mobile-menu-link">Getting Started</a>
+                <a href="brainstorm-workspace.html" class="mobile-menu-link">Brainstorm</a>
+                <a href="backlog-synthesizer.html" class="mobile-menu-link">Backlog</a>
+                <a href="deploy-presets.html" class="mobile-menu-link">Deploy Presets</a>
+            </div>
+
+            <div class="mobile-menu-section">
+                <div class="mobile-menu-title">Community</div>
+                <a href="team-up.html" class="mobile-menu-link">Team Up</a>
+                <a href="vibe-hub.html" class="mobile-menu-link">Vibe Hub</a>
+                <a href="showcase.html" class="mobile-menu-link">Showcase</a>
+                <a href="gallery.html" class="mobile-menu-link">Gallery</a>
+                <a href="directory.html" class="mobile-menu-link">Builders Directory</a>
+                <a href="messages.html" class="mobile-menu-link">Messages</a>
+            </div>
+
+            <div class="mobile-menu-section">
+                <div class="mobile-menu-title">Live</div>
+                <a href="stream-dashboard.html" class="mobile-menu-link">Stream Dashboard</a>
+                <a href="awards-ceremony.html" class="mobile-menu-link">Awards Ceremony</a>
+                <a href="random-drop-lobby.html" class="mobile-menu-link">Random Drop</a>
+                <a href="voting-history.html" class="mobile-menu-link">Voting History</a>
+            </div>
+
+            <div class="mobile-menu-section">
+                <div class="mobile-menu-title">About</div>
+                <a href="about.html" class="mobile-menu-link">About Us</a>
+                <a href="vibe-manifesto.html" class="mobile-menu-link">Manifesto</a>
+                <a href="why-vibe-awards.html" class="mobile-menu-link">Why Vibe</a>
+                <a href="roadmap.html" class="mobile-menu-link">Roadmap</a>
+                <a href="contact.html" class="mobile-menu-link">Contact</a>
+            </div>
+
+            <div class="mobile-menu-actions">
+                <a href="submit-app.html" class="mobile-menu-cta">Submit App</a>
+                <div class="mobile-menu-secondary">
+                    <a href="notifications.html" class="mobile-menu-icon-btn" title="Notifications">🔔</a>
+                    <a href="profile.html" class="mobile-menu-icon-btn" title="Profile">👤</a>
+                    <a href="awards.html" class="mobile-menu-icon-btn" title="Awards">🏆</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="hero">
             <div class="hero-badge">🚀 Full Walkthrough</div>
             <h1 class="hero-title">Complete Example</h1>
@@ -674,7 +737,9 @@ Focus on user delight and organic growth through word-of-mouth."</pre>
         </div>
     </div>
 
-    <script>
+    
+    <script src="enhanced-mobile-menu.js"></script>
+<script>
         function copyToClipboard(elementId) {
             const element = document.getElementById(elementId);
             const text = element.textContent;
