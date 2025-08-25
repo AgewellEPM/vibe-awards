@@ -17,20 +17,141 @@
         }
 
         :root {
-            --apple-blue: #0071E3;
+            --apple-blue: #007AFF;
+            --apple-indigo: #5856D6;
+            --apple-purple: #AF52DE;
+            --apple-pink: #FF2D92;
+            --apple-red: #FF3B30;
+            --apple-orange: #FF9500;
+            --apple-yellow: #FFCC00;
             --apple-green: #30D158;
-            --apple-purple: #BF5AF2;
-            --apple-orange: #FF9F0A;
-            --apple-red: #FF375F;
-            --apple-gray: #86868B;
+            --apple-teal: #40E0D0;
+            --apple-cyan: #64D2FF;
+            --apple-gray: #8E8E93;
+            --apple-gray2: #636366;
+            --apple-gray3: #48484A;
+            --apple-gray4: #3A3A3C;
+            --apple-gray5: #2C2C2E;
+            --apple-gray6: #1C1C1E;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
-            background: #000000;
-            color: #F5F5F7;
+            background: radial-gradient(ellipse at top, #1a1a2e 0%, #16213e 30%, #0f0f23 100%);
+            color: #F2F2F7;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
             line-height: 1.47059;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background Layers */
+        .background-layers {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .bg-gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.4;
+            animation: float-glow 25s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--apple-purple) 0%, transparent 70%);
+            top: -400px;
+            left: -400px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--apple-cyan) 0%, transparent 70%);
+            top: 20%;
+            right: -300px;
+            animation-delay: 8s;
+        }
+
+        .orb-3 {
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, var(--apple-pink) 0%, transparent 70%);
+            bottom: -350px;
+            left: 10%;
+            animation-delay: 16s;
+        }
+
+        .orb-4 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--apple-green) 0%, transparent 70%);
+            top: 60%;
+            right: 20%;
+            animation-delay: 24s;
+        }
+
+        @keyframes float-glow {
+            0%, 100% { 
+                transform: translate(0, 0) scale(1);
+                opacity: 0.3;
+            }
+            25% { 
+                transform: translate(30px, -40px) scale(1.1);
+                opacity: 0.5;
+            }
+            50% { 
+                transform: translate(-20px, 30px) scale(0.9);
+                opacity: 0.4;
+            }
+            75% { 
+                transform: translate(40px, 20px) scale(1.05);
+                opacity: 0.45;
+            }
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: particle-float 20s linear infinite;
+        }
+
+        @keyframes particle-float {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px) scale(1);
+                opacity: 0;
+            }
         }
 
         /* Companies Bar at Top */
@@ -67,35 +188,76 @@
             100% { transform: translateX(-100%); }
         }
 
-        /* Navigation */
+        /* Navigation - Ultimate Glass */
         nav {
             position: fixed;
             top: 36px;
             width: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(20px);
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0.05) 50%,
+                rgba(255, 255, 255, 0.02) 100%);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.125);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
             z-index: 9999;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        nav::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.08) 0%,
+                transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        nav:hover::before {
+            opacity: 1;
         }
 
         .nav-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 22px;
-            height: 60px;
+            padding: 0 24px;
+            height: 64px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .nav-logo {
-            font-size: 24px;
-            font-weight: 800;
-            color: #F5F5F7;
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #F2F2F7 0%, rgba(255, 255, 255, 0.8) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-logo .logo-icon {
+            font-size: 32px;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+            animation: logo-glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes logo-glow {
+            from { filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3)); }
+            to { filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.6)); }
         }
 
         /* Main Content */
@@ -245,29 +407,88 @@
             color: rgba(245, 245, 247, 0.6);
         }
 
-        /* Form Fields */
+        /* Glass Form Container */
+        .form-section {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0.05) 50%,
+                rgba(255, 255, 255, 0.02) 100%);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.125);
+            border-radius: 24px;
+            padding: 48px 40px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .form-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+        }
+
+        .form-section:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 32px 64px rgba(0, 0, 0, 0.3),
+                0 16px 32px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        /* Form Fields with Glass Effect */
         .form-group {
-            margin-bottom: 24px;
+            margin-bottom: 32px;
+            position: relative;
         }
 
         .form-label {
             display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #F5F5F7;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #F2F2F7 0%, rgba(255, 255, 255, 0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .form-input,
         .form-textarea,
         .form-select {
             width: 100%;
-            padding: 16px 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            color: #F5F5F7;
+            padding: 18px 24px;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.08) 0%,
+                rgba(255, 255, 255, 0.03) 50%,
+                rgba(255, 255, 255, 0.01) 100%);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            color: #F2F2F7;
             font-size: 16px;
-            transition: all 0.3s ease;
+            font-weight: 500;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 400;
         }
 
         .form-input:focus,
@@ -275,8 +496,25 @@
         .form-select:focus {
             outline: none;
             border-color: var(--apple-blue);
-            box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
-            background: rgba(255, 255, 255, 0.08);
+            background: linear-gradient(135deg, 
+                rgba(0, 122, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0.08) 50%,
+                rgba(255, 255, 255, 0.04) 100%);
+            box-shadow: 
+                0 0 0 4px rgba(0, 122, 255, 0.15),
+                0 8px 32px rgba(0, 122, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-input:hover:not(:focus),
+        .form-textarea:hover:not(:focus),
+        .form-select:hover:not(:focus) {
+            border-color: rgba(255, 255, 255, 0.25);
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.12) 0%,
+                rgba(255, 255, 255, 0.06) 50%,
+                rgba(255, 255, 255, 0.03) 100%);
         }
 
         .form-textarea {
@@ -284,81 +522,176 @@
             min-height: 120px;
         }
 
-        /* Category Selection */
+        /* Glass Category Selection */
         .category-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-top: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 24px;
         }
 
         .category-option {
             position: relative;
         }
 
+        .category-option input[type="radio"] {
+            display: none;
+        }
+
         .category-card {
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+            padding: 28px 24px;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.06) 0%,
+                rgba(255, 255, 255, 0.02) 50%,
+                rgba(255, 255, 255, 0.01) 100%);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 18px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.2), 
+                transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .category-card:hover {
+            transform: translateY(-4px) scale(1.02);
             border-color: var(--apple-blue);
-            background: rgba(0, 113, 227, 0.05);
+            background: linear-gradient(135deg, 
+                rgba(0, 122, 255, 0.08) 0%,
+                rgba(255, 255, 255, 0.06) 50%,
+                rgba(255, 255, 255, 0.03) 100%);
+            box-shadow: 
+                0 20px 40px rgba(0, 122, 255, 0.15),
+                0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-card:hover::before {
+            opacity: 1;
         }
 
         .category-option input[type="radio"]:checked + .category-card {
             border-color: var(--apple-blue);
-            background: rgba(0, 113, 227, 0.1);
+            background: linear-gradient(135deg, 
+                rgba(0, 122, 255, 0.12) 0%,
+                rgba(255, 255, 255, 0.08) 50%,
+                rgba(255, 255, 255, 0.04) 100%);
+            box-shadow: 
+                0 0 0 2px rgba(0, 122, 255, 0.3),
+                0 16px 32px rgba(0, 122, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .category-option input[type="radio"]:checked + .category-card::before {
+            opacity: 1;
         }
 
         .category-icon {
-            font-size: 32px;
-            margin-bottom: 12px;
+            font-size: 40px;
+            margin-bottom: 16px;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
         }
 
         .category-name {
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 16px;
             margin-bottom: 8px;
+            background: linear-gradient(135deg, #F2F2F7 0%, rgba(255, 255, 255, 0.8) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .category-desc {
-            font-size: 14px;
-            color: rgba(245, 245, 247, 0.7);
+            font-size: 13px;
+            color: rgba(245, 245, 247, 0.6);
+            font-weight: 400;
+            line-height: 1.4;
         }
 
-        /* Submit Button */
+        /* Ultimate Glass Submit Button */
         .submit-section {
             text-align: center;
-            padding: 40px 0;
+            padding: 48px 0 24px;
         }
 
         .submit-btn {
-            background: linear-gradient(135deg, var(--apple-blue), var(--apple-purple));
+            position: relative;
+            background: linear-gradient(135deg, 
+                var(--apple-blue) 0%,
+                var(--apple-indigo) 50%,
+                var(--apple-purple) 100%);
             color: white;
             border: none;
-            padding: 20px 40px;
-            border-radius: 12px;
+            padding: 20px 48px;
+            border-radius: 50px;
             font-size: 18px;
-            font-weight: 600;
+            font-weight: 700;
+            letter-spacing: 0.5px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            min-width: 200px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 240px;
+            overflow: hidden;
+            box-shadow: 
+                0 8px 32px rgba(0, 122, 255, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.2), 
+                transparent);
+            transition: left 0.6s ease;
         }
 
         .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 113, 227, 0.3);
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 
+                0 20px 40px rgba(0, 122, 255, 0.4),
+                0 8px 16px rgba(88, 86, 214, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:active {
+            transform: translateY(-2px) scale(1.02);
         }
 
         .submit-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
+        }
+
+        .submit-btn:disabled:hover {
+            transform: none;
+            box-shadow: 0 8px 32px rgba(0, 122, 255, 0.3);
         }
 
         /* Repository Preview */
@@ -430,6 +763,17 @@
     </style>
 </head>
 <body>
+    <!-- Animated Background -->
+    <div class="background-layers">
+        <div class="bg-gradient-orb orb-1"></div>
+        <div class="bg-gradient-orb orb-2"></div>
+        <div class="bg-gradient-orb orb-3"></div>
+        <div class="bg-gradient-orb orb-4"></div>
+    </div>
+
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
     <!-- AI Companies Bar -->
     <div class="companies-bar">
         <div class="companies-track">
@@ -970,21 +1314,103 @@
             }, 2000);
         });
 
-        // Add slide-in animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 15;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random size
+                const size = Math.random() * 4 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                
+                // Random starting position
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Add beautiful focus rings to form elements
+        function enhanceFormInteractions() {
+            const formElements = document.querySelectorAll('.form-input, .form-textarea, .form-select');
+            
+            formElements.forEach(element => {
+                element.addEventListener('focus', function() {
+                    this.parentNode.style.transform = 'translateY(-2px)';
+                });
+                
+                element.addEventListener('blur', function() {
+                    this.parentNode.style.transform = 'translateY(0)';
+                });
+            });
+        }
+
+        // Add ripple effect to buttons and cards
+        function addRippleEffect() {
+            const rippleElements = document.querySelectorAll('.submit-btn, .category-card');
+            
+            rippleElements.forEach(element => {
+                element.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    ripple.style.position = 'absolute';
+                    ripple.style.borderRadius = '50%';
+                    ripple.style.background = 'rgba(255, 255, 255, 0.3)';
+                    ripple.style.pointerEvents = 'none';
+                    ripple.style.transform = 'scale(0)';
+                    ripple.style.animation = 'ripple 0.6s linear';
+                    
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.width = size + 'px';
+                    ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+        }
+
+        // Add ripple animation
+        const rippleStyle = document.createElement('style');
+        rippleStyle.textContent = `
+            @keyframes ripple {
                 from {
-                    opacity: 0;
-                    transform: translateY(20px);
+                    transform: scale(0);
+                    opacity: 1;
                 }
                 to {
-                    opacity: 1;
-                    transform: translateY(0);
+                    transform: scale(2);
+                    opacity: 0;
                 }
             }
+            
+            .form-group {
+                transition: transform 0.3s ease;
+            }
         `;
-        document.head.appendChild(style);
+        document.head.appendChild(rippleStyle);
+
+        // Initialize all enhancements
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            enhanceFormInteractions();
+            addRippleEffect();
+        });
     </script>
 </body>
 </html>
