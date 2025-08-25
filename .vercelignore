@@ -1,0 +1,56 @@
+# Backend and development files
+backend-files/
+node_modules/
+
+# Development scripts
+*test*.js
+*fix*.js
+*enhance*.js
+*migrate*.js
+*update*.js
+add-*.js
+
+# Backup and archive files
+*-backup.*
+*-old.*
+*backup*
+*.zip
+*.tar.gz
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Development tools
+enhanced-mobile-menu.*
+fix-mobile-menu.js
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+*.swp
+*.swo
+*~
+
+# Editor files
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# README and documentation (optional)
+*.md

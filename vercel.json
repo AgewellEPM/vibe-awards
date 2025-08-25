@@ -1,31 +1,211 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "**/*.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "**/*.css",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "js/**/*.js",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "**/*.{png,jpg,jpeg,gif,svg,ico,webp}",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "**/*.{woff,woff2,ttf,eot}",
-      "use": "@vercel/static"
-    }
-  ],
+  "public": true,
+  "trailingSlash": false,
+  "cleanUrls": true,
   "routes": [
     {
       "src": "/",
       "dest": "/index.html"
+    },
+    {
+      "src": "/about",
+      "dest": "/about.html"
+    },
+    {
+      "src": "/competition",
+      "dest": "/competition.html"
+    },
+    {
+      "src": "/awards",
+      "dest": "/awards.html"
+    },
+    {
+      "src": "/contact",
+      "dest": "/contact.html"
+    },
+    {
+      "src": "/submit",
+      "dest": "/submit.html"
+    },
+    {
+      "src": "/submit-app",
+      "dest": "/submit-app.html"
+    },
+    {
+      "src": "/leaderboard",
+      "dest": "/leaderboard.html"
+    },
+    {
+      "src": "/battle-arena",
+      "dest": "/battle-arena.html"
+    },
+    {
+      "src": "/app-battle-arena",
+      "dest": "/app-battle-arena.html"
+    },
+    {
+      "src": "/challenge-mode",
+      "dest": "/challenge-mode.html"
+    },
+    {
+      "src": "/tournament",
+      "dest": "/tournament.html"
+    },
+    {
+      "src": "/winners",
+      "dest": "/winners.html"
+    },
+    {
+      "src": "/vibe-forge",
+      "dest": "/vibe-forge.html"
+    },
+    {
+      "src": "/vibe-toolkit",
+      "dest": "/vibe-toolkit.html"
+    },
+    {
+      "src": "/getting-started",
+      "dest": "/getting-started.html"
+    },
+    {
+      "src": "/team-up",
+      "dest": "/team-up.html"
+    },
+    {
+      "src": "/vibe-hub",
+      "dest": "/vibe-hub.html"
+    },
+    {
+      "src": "/showcase",
+      "dest": "/showcase.html"
+    },
+    {
+      "src": "/gallery",
+      "dest": "/gallery.html"
+    },
+    {
+      "src": "/directory",
+      "dest": "/directory.html"
+    },
+    {
+      "src": "/messages",
+      "dest": "/messages.html"
+    },
+    {
+      "src": "/stream-dashboard",
+      "dest": "/stream-dashboard.html"
+    },
+    {
+      "src": "/awards-ceremony",
+      "dest": "/awards-ceremony.html"
+    },
+    {
+      "src": "/random-drop-lobby",
+      "dest": "/random-drop-lobby.html"
+    },
+    {
+      "src": "/voting-history",
+      "dest": "/voting-history.html"
+    },
+    {
+      "src": "/vibe-manifesto",
+      "dest": "/vibe-manifesto.html"
+    },
+    {
+      "src": "/why-vibe-awards",
+      "dest": "/why-vibe-awards.html"
+    },
+    {
+      "src": "/roadmap",
+      "dest": "/roadmap.html"
+    },
+    {
+      "src": "/notifications",
+      "dest": "/notifications.html"
+    },
+    {
+      "src": "/profile",
+      "dest": "/profile.html"
+    },
+    {
+      "src": "/brainstorm-workspace",
+      "dest": "/brainstorm-workspace.html"
+    },
+    {
+      "src": "/backlog-synthesizer",
+      "dest": "/backlog-synthesizer.html"
+    },
+    {
+      "src": "/deploy-presets",
+      "dest": "/deploy-presets.html"
+    },
+    {
+      "src": "/signup",
+      "dest": "/signup.html"
+    },
+    {
+      "src": "/dashboard",
+      "dest": "/dashboard.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    },
+    {
+      "source": "/js/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/css/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "*.css",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "*.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
     }
   ]
 }

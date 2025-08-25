@@ -1,6 +1,8 @@
 # Dependencies
 node_modules/
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Backend files (moved to backend-files/)
 backend-files/
@@ -9,12 +11,18 @@ backend-files/
 .env
 .env.local
 .env.production
+.env.development.local
+.env.test.local
+.env.production.local
 
 # Database
 *.db
+*.sqlite
+*.sqlite3
 
 # Logs
 *.log
+logs/
 
 # OS generated files
 .DS_Store
@@ -29,3 +37,34 @@ Thumbs.db
 dist/
 build/
 .vercel
+
+# Development files
+*test*.js
+*fix*.js
+*enhance*.js
+*migrate*.js
+*update*.js
+add-*.js
+enhanced-mobile-menu.*
+
+# Backup files
+*-backup.*
+*-old.*
+*backup*
+
+# Archive files
+*.zip
+*.tar.gz
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
